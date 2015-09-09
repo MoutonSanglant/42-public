@@ -25,12 +25,17 @@ echo "                                           .- :MMm /o/ oMM/         "
 echo "                                             /NMMM-   sMMMy         "
 echo "                                              .//-    -sys/         "
 echo "                                                                    "
-echo "                   KillTheFuckingMachine   v0.1                           "
+echo "                   KillTheFuckingMachine   vb.12                          "
 echo "                      by Thierry Defresne (tdefresn@student.42.fr)             "
 echo "                                                                    "
 echo "                                                                    "
 echo "                                                                    "
-
+echo "  ***Disclaimer***: aucun mouton ne peut être considéré responsable de vos mauvaises manipulations lors de l'utilisation de ce script (mais on essaie de vous empêcher au mieux de faire des bétises avec).         "
+echo "                                                                    "
+echo "  ***Warning***: si vous n'avez pas téléchargé ce script directement sur 'https://github.com/MoutonSanglant/42', vous êtes probablement victime d'un vilain troll.                                                                  "
+echo "                                                                    "
+echo "                                                                    "
+echo "                                                                    "
 
 function get_definitions () {
 while [ true  ]
@@ -38,6 +43,19 @@ do
 	printf "Quel jour ? (07 pour jour-07, q pour quitter)\n"
 	read day
 	if [[ $day == [01][0-9] ]]
+		if [[ -d "./jour-$day" ]]
+		then 
+		while [ true ]
+		do
+			echo "Un dossier './jour-$day' existe déjà, supprimer ? (x pour quitter)"
+			read  yn
+			if [[ $yn =~ ^[OoYy] ]]
+				then break
+			elif [[ $yn =~ ^[nNXx] ]]
+				then exit
+			fi
+		done
+		fi
 		then echo "Récupération des définitions..."
 		rm ./.$day 2> /dev/null
 		curl "https://raw.githubusercontent.com/MoutonSanglant/42/master/definitions/j$day" > ./.$day
@@ -102,9 +120,9 @@ done
 [ -s ./.config/f1 ]
 if [[ $? ]]
 	then
-		printf "Ajouter un projet dans %s ?\n" "${PWD##*/}"
+		printf "Ajouter un projet dans '%s' ?\n" "${PWD##*/}"
 	else
-		printf "Créer un projet dans %s ?\n" "${PWD##*/}"
+		printf "Créer un projet dans '%s' ?\n" "${PWD##*/}"
 	fi
 read  yn
 if [[ $yn =~ ^[OoYy] ]]
