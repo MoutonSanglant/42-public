@@ -8,12 +8,16 @@
 
 year=2015
 
-while [[ $# > 1 ]]
+while [[ $# > 0 ]]
 do
 key="$1"
 
 case $key in
-	-n|--norminette)
+        -h|--help)
+        printf "usage KTFM [OPTIONS]...\n\nOption\t\tGNU long option\t\tMeaning\n -n y\t\t--norminette\t\tUse 'norminette --CheckForbiddenSourceHeader'\n -h, -?\t\t--help\t\t\tThis help\n"
+        exit 0
+        ;;
+	-n|-?|--norminette)
 	NORMINETTE="$2"
 	shift # past argument
 	;;
