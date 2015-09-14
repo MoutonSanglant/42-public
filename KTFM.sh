@@ -11,24 +11,26 @@ year=2015
 while [[ $# > 0 ]]
 do
 key="$1"
-
+echo $key
 case $key in
-        -h|--help)
-        printf "usage KTFM [OPTIONS]...\n\nOption\t\tGNU long option\t\tMeaning\n -n y\t\t--norminette\t\tUse 'norminette --CheckForbiddenSourceHeader'\n -h, -?\t\t--help\t\t\tThis help\n"
-        exit 0
-        ;;
-	-n|-?|--norminette)
-	NORMINETTE="$2"
-	shift # past argument
-	;;
+    	-h|"-?"|--help)
+    	printf "usage KTFM [OPTIONS]...\n\nOption\t\tGNU long option\t\tMeaning\n -n y\t\t--norminette\t\tUse 'norminette --CheckForbiddenSourceHeader'\n -h, -?\t\t--help\t\t\tThis help\n"
+    	exit 0
+    	;;
+	-n|--norminette)
+		NORMINETTE="Y"
+		#shift # past argument
+		;;
 	-m|--moulinette)
-	MOULINETTE="$2"
-	shift # past argument
-	;;
+		MOULINETTE="Y"
+		#shift # past argument
+		;;
 	-g|--git)
-	GIT=Y
-	shift # past argument
-	;;
+		GIT="Y"
+		MOULINETTE="Y"
+		NORMINETTE="Y"
+		#shift # past argument
+		;;
 	*)
 	
 	;;
@@ -69,6 +71,83 @@ echo "  ***Warning***: si vous n'avez pas téléchargé ce script directement su
 echo "                                                                    "
 echo "                                                                    "
 echo "                                                                    "
+
+function get_day_filenames
+{
+	printf "Quel jour ? (07 pour le jour 07, q pour quitter)\n"
+	read day
+	if [[ $day == [01][0-9] || bypass -ne 0 ]]
+	then
+		echo "Récupération des définitions..."
+		rm ./.$day 2> /dev/null
+		curl "https://raw.githubusercontent.com/MoutonSanglant/42/master/definitions/j$day" > ./.$day
+		chmod 744 ./.$day
+		chown $USER:$GROUP ./.$day
+		if [[ $(cat ./.$day) == "Not Found" ]]
+			then echo "j$day innaccessible"
+		else
+			cp ./.$day ./.tmp
+			chmod 744 ./.tmp
+			chown $USER:$GROUP ./.tmp
+		fi
+	elif [[ $day == [Qq] ]]
+		then exit
+	fi
+}
+
+function workout_project_files
+{
+# exercice="./$1"
+exercice="./"
+if [ ! -d $exercice ]
+then
+	echo "ATTENTION !! Le fichier $exercice est manquant !!!"
+fi
+for ((j=1;j<100; j += 2));
+do
+	dir=$(cat ./.tmp | cut -d : -f $j)
+	file=$(cat ./.tmp | cut -d : -f $(($j+1)))
+	echo -e "\nTraitement du fichier ./$dir/$file\n============================"
+
+	if [[ $file == "" ]]
+	then
+		echo -e "\nFichier non trouve.\n\n"
+		break
+	fi
+
+
+	if [[ $MOULINETTE == "Y" ]]
+		then gcc -Werror -Wall -Wextra ./$dir/$file
+	fi
+	if [[ $NORMINETTE == "Y" ]]
+		then norminette --CheckForbiddenSourceHeader ./$dir/$file
+	fi
+	if [[ $GIT == "Y" ]]
+	then
+		git add ./$dir/$file.c
+	fi
+done
+
+#for ((i=1; i<10; i++));
+#do
+#	echo "FILES $files"
+#	file=$(echo $files | cut -d , -f $i)
+#	gcc -Werror -Wall -Wextra $exercice/$file
+#done
+}
+
+if [[ $MOULINETTE == "Y" || $NORMINETTE == "Y" || $GIT == "Y" ]]
+then
+	get_day_filenames
+	workout_project_files
+	# wortout_project_files ${PWD##*/}
+	if [[ $GIT == "Y" ]]
+	then
+		git commit -m "auto-commit KTFM"
+		git push
+	fi
+	exit
+fi
 
 function get_definitions () {
 while [ true  ]
@@ -208,7 +287,6 @@ do
 	chown $USER:$GROUP $exercice/$file
 done
 }
-
 
 [ -s ./.config/f1 ]
 if [[ $? ]]
