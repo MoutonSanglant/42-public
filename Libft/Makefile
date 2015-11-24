@@ -6,28 +6,31 @@
 #    By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/11/24 15:51:40 by tdefresn          #+#    #+#              #
-#    Updated: 2015/11/24 17:13:55 by tdefresn         ###   ########.fr        #
+#    Updated: 2015/11/24 18:52:45 by tdefresn         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-PROG	= libft
+NAME	= libft.a
 
 CC		= gcc
-CFLAGS	= -Wall -Werror -Wextra
+CFLAGS	= -Wall -Werror -Wextra -c
 # LDFLAGS = -L.
 # LDLIBS = -lft
 
-OBJS = bla.o
+SRC = src/*.c
 
-all: $(PROG)
+OBJS = *.o
 
-$(EXEC): $(OBJS)
-	$(CC) $(CFLAGS) -o $(EXEC) $(OBJS)
+all: $(NAME)
+
+$(NAME): $(OBJS)
+	$(CC) $(CFLAGS) -c $(SRC)
+	ar rc $(NAME) $(OBJS)
 
 clean:
-	rm ./*.o
+	/bin/rm -f *.o
 
 fclean: clean
-	rm $(EXEC)
+	/bin/rm -f $(NAME)
 
-re: fclean $(PROG)
+re: fclean all
