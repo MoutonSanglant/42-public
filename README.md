@@ -1,11 +1,10 @@
-42 - Mouton's tools
-===================
+42 - Le depot du Mouton
+=======================
 
-**Disclaimer**: aucun mouton ne peut être considéré responsable de vos mauvaises manipulations lors de l'utilisation de ce script (mais on essaie de vous empêcher au mieux de faire des bétises avec).
-**Warning**: si vous n'avez pas téléchargé ce script directement sur 'https://github.com/MoutonSanglant/42', vous êtes probablement victime d'un vilain troll.
+**Disclaimer**: aucun mouton ne peut être considéré responsable de vos mauvaises manipulations lors de l'utilisation de ces outils. Utilisez les avec precaution.
+**Warning**: si vous n'avez pas téléchargé ces outils directement depuis l'adresse 'https://github.com/MoutonSanglant/42', priez pour la vie de votre session.
 
-Some tools for 42's swiming pool (september 2015)
-- KTFM (Kill The Fucking Machine): outil d'automatisation de la gestion de projet
+- KTFM (Kill The Fucking Machine): outil d'automatisation de la gestion
 Téléchargement: https://raw.githubusercontent.com/MoutonSanglant/42/master/KTFM.sh
 
 options:
@@ -13,4 +12,5 @@ options:
 * **help** -h
 
 @TodoList
-- ajout d'une fonction compilation de masse
+- ajout' dune fonction compilation de masse
+t 
