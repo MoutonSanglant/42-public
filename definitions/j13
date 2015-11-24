@@ -1,1 +1,0 @@
-ex00:btree_create_node.c,ft_btree.h:ex01:btree_apply_prefix.c,ft_btree.h:ex02:btree_apply_infix.c,ft_btree.h:ex03:btree_apply_suffix.c,ft_btree.h:ex04:btree_insert_data.c,ft_btree.h:ex05:btree_search_item.c,ft_btree.h:ex06:btree_level_count.c,ft_btree.h:ex07:btree_apply_by_level.c,ft_btree.h:ex08:rb_insert.c,ft_btree_rb.h:ex09:rb_remove.c,ft_btree_rb.h:

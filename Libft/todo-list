@@ -1,0 +1,37 @@
+== memory ==
+• memset
+• bzero
+• memcpy
+• memccpy
+• memmove
+• memchr
+• memcmp
+
+== strings ==
+• strlen
+• strdup
+• strcpy
+• strncpy
+• strcat
+• strncat
+• strlcat
+• strchr
+• strrchr
+• strstr
+• strnstr
+• strcmp
+• strncmp
+
+== conversion ==
+• atoi
+
+== test ==
+• isalpha
+• isdigit
+• isalnum
+• isascii
+• isprint
+
+== strings ==
+• toupper
+• tolower
