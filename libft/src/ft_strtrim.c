@@ -14,38 +14,22 @@
 
 char	*ft_strtrim(char const *s)
 {
-	char const	*s_firstchar;
-	char		*str_new;
-	int			last_char;
-	size_t		len;
+	size_t		start;
+	size_t		end;
 	size_t		i;
 
-	s_firstchar = NULL;
-	last_char = 0;
-	len = 0;
-	while (*s != '\0')
+	start = 0;
+	end = 0;
+	i = 0;
+	while (s[i] != '\0')
 	{
-		if (!ft_isspace(*s))
+		if (!ft_isspace(s[i]))
 		{
-			if (s_firstchar == NULL)
-				s_firstchar = s;
-			last_char = (int)s;
-			len = 1;
+			if (start == 0)
+				start = i;
+			end = i;
 		}
-		s++;
+		i++;
 	}
-	len += last_char - ((int)s_firstchar);
-	str_new = ft_strnew(sizeof(char) * len);
-	if (str_new)
-	{
-		s = s_firstchar;
-		i = 0;
-		while (i < len)
-		{
-			str_new[i] = *s++;
-			i++;
-		}
-		str_new[i] = '\0';
-	}
-	return (str_new);
+	return (ft_strsub(s, start, ((end + 1) - start)));
 }
