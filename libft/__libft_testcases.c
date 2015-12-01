@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/24 17:24:21 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/11/24 18:37:19 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/01 12:31:50 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 // extra: printf
 #include <stdio.h>
 // strnstr
-#include <bsd/string.h>
+///#include <bsd/string.h>
 // is****
 #include <ctype.h>
 
@@ -194,8 +194,8 @@ void		test_strsplit()
 
 	ft_putendl("== strsplit ==");
 	//str = ft_strsplit("*super*chaine****de* *charactereres*", '*');
-	//str = ft_strsplit("*super*chaine****de* *charactereres", '*');
-	str = ft_strsplit("\0", '*');
+	str = ft_strsplit("*super*chaine****de* *charactereres", '*');
+	//str = ft_strsplit("\0", '*');
 	//str = ft_strsplit("***une* ****vache*_*bleue****", '*');
 	if (str == NULL)
 	{
@@ -255,10 +255,13 @@ void		test_strlen()
 
 	str = "test_string";
 	printf("== strlen ==\n");
-	ft_putstr(str);
-	ft_putstr("\nstring length: ");
-	// @todo: add ft_putnbr
-	ft_strlen(str);
+	ft_putendl(str);
+	ft_putstr("libc: ");
+	ft_putnbr(strlen(str));
+	ft_putchar('\n');
+
+	ft_putstr("libft: ");
+	ft_putnbr(ft_strlen(str));
 	ft_putchar('\n');
 	printf("============\n");	
 
@@ -306,6 +309,8 @@ void		test_memset()
 	int *nbr_array;
 	int i;
 
+	ft_putendl("== memset ==");
+	ft_putendl(">> libc");
 	str = (char *)malloc(sizeof(char) * MEMSET_LENGTH); //MEMSET_LENGTH);
 	if (str == NULL)
 	{
@@ -319,8 +324,6 @@ void		test_memset()
 		return;
 	}
 
-	ft_putendl("== memset ==");
-	ft_putendl(">> libc");
 	memset(str, FILL_CHAR, MEMSET_LENGTH);
 	memset(nbr_array, FILL_CHAR, MEMSET_LENGTH);
 	ft_putstr("string: ");
@@ -328,19 +331,69 @@ void		test_memset()
 	i = 0;
 	ft_putstr("int array: ");
 	while (i < MEMSET_LENGTH)
+	{
 		ft_putnbr(nbr_array[i++]);
-	ft_putendl("\n>> ft");
-	ft_memset(str, FILL_CHAR - 1, MEMSET_LENGTH - 2);
-	ft_memset(nbr_array, FILL_CHAR + 1, MEMSET_LENGTH - 2);
+		if (i < MEMSET_LENGTH - 1)
+			ft_putchar(',');
+	}
+	memset(str, FILL_CHAR - 1, MEMSET_LENGTH / 2);
+	memset(nbr_array, FILL_CHAR - 1, MEMSET_LENGTH / 2);
 	ft_putstr("string: ");
 	ft_putendl(str);
 	i = 0;
 	ft_putstr("int array: ");
 	while (i < MEMSET_LENGTH)
+	{
 		ft_putnbr(nbr_array[i++]);
-	ft_putendl("\n============");
-	free(nbr_array);
+		if (i < MEMSET_LENGTH - 1)
+			ft_putchar(',');
+	}
+
 	free(str);
+	free(nbr_array);
+	
+	ft_putendl("\n>> libft");
+	str = (char *)malloc(sizeof(char) * MEMSET_LENGTH); //MEMSET_LENGTH);
+	if (str == NULL)
+	{
+		ft_putendl("malloc: Something went bad, abort");
+		return;
+	}
+	nbr_array = (int *)malloc(sizeof(int) * MEMSET_LENGTH);
+	if (nbr_array == NULL)
+	{
+		ft_putendl("malloc: Something went bad, abort");
+		return;
+	}
+	ft_memset(str, FILL_CHAR, MEMSET_LENGTH);
+	ft_memset(nbr_array, FILL_CHAR, MEMSET_LENGTH);
+	ft_putstr("string: ");
+	ft_putendl(str);
+	i = 0;
+	ft_putstr("int array: ");
+	while (i < MEMSET_LENGTH)
+	{
+		ft_putnbr(nbr_array[i++]);
+		if (i < MEMSET_LENGTH - 1)
+			ft_putchar(',');
+	}
+
+	ft_memset(str, FILL_CHAR - 1, MEMSET_LENGTH / 2);
+	ft_memset(nbr_array, FILL_CHAR - 1, MEMSET_LENGTH / 2);
+	ft_putstr("string: ");
+	ft_putendl(str);
+	i = 0;
+	ft_putstr("int array: ");
+	while (i < MEMSET_LENGTH)
+	{
+		ft_putnbr(nbr_array[i++]);
+		if (i < MEMSET_LENGTH - 1)
+			ft_putchar(',');
+	}
+	free(str);
+	free(nbr_array);
+
+	ft_putendl("\n============");
 }
 
 void	test_bzero()
@@ -436,39 +489,49 @@ void	test_memmove()
 void	test_memchr()
 {
 	char	*str;
-	char	*s = "Une chaine*d*etoiles*";
+	char	*p;
 
 	ft_putendl("== memchr ==");
 	ft_putendl(">> libc");
-	str = ft_strnew(sizeof(char) * ft_strlen(s));
-	str = strcpy(str, s);
+	str = ft_strdup("Une chaine*d*etoiles*");
 	ft_putendl(str);
-	str = (char *)memchr(str, '*', 8);
-	if (str)
-		ft_putendl(str);
+	p = (char *)memchr(str, '*', 8);
+	if (p)
+		ft_putendl(p);
 	else
 		ft_putendl("character not found");
+	p = (char *)memchr(str, '*', 11);
+	if (p)
+		ft_putendl(p);
+	else
+		ft_putendl("character not found");
+	ft_strdel(&str);
 	ft_putendl(">> libft");
-	str = ft_strnew(sizeof(char) * ft_strlen(s));
-	str = ft_strcpy(str, s);
+	str = ft_strdup("Une chaine*d*etoiles*");
 	ft_putendl(str);
-	str = (char *)ft_memchr(str, '*', 8);
-	if (str)
-		ft_putendl(str);
+	p = (char *)ft_memchr(str, '*', 8);
+	if (p)
+		ft_putendl(p);
 	else
 		ft_putendl("character not found");
+	p = (char *)ft_memchr(str, '*', 11);
+	if (p)
+		ft_putendl(p);
+	else
+		ft_putendl("character not found");
+	ft_strdel(&str);
 	ft_putendl("====================");
 
 }
 
 void	test_memcmp()
 {
-	ft_putendl("== memchr ==");
+	ft_putendl("== memcmp ==");
 	ft_putendl(">> libc");
-	ft_putnbr(memcmp("banan*e", "bananae", 18));
+	ft_putnbr(memcmp("Hanane", "bananae", 1));
 	ft_putchar('\n');
 	ft_putendl(">> libft");
-	ft_putnbr(ft_memcmp("banan*e", "bananae", 18));
+	ft_putnbr(ft_memcmp("Hanane", "bananae", 1));
 	ft_putchar('\n');
 	ft_putendl("====================");
 }
@@ -603,6 +666,15 @@ void		test_strcat()
 	ft_putendl(str);
 	str = strncat(str, "Chapeau rouge", 5);
 	ft_putendl(str);
+
+	ft_putnbr(strlcat(str, "Tartinettos", 200));
+	ft_putchar('\n');
+	ft_putendl(str);
+	ft_putnbr(strlcat(str, " Un truc super long et chiant a lire, mais je ne vous oblige pas car de toute maniere tout ne va pas passer car la chaine de caracteres de destination ne fait pas plus de 200 caracteres et il me semble que cette chaine de caracteres en fait plus de 200.", 200));
+	ft_putchar('\n');
+	ft_putendl(str);
+
+
 	ft_strdel(&str);
 	ft_putendl(">> libc");
 	str = ft_strnew(sizeof(char) * 200);
@@ -616,7 +688,7 @@ void		test_strcat()
 	ft_putendl(str);
 	str = ft_strncat(str, "Chapeau rouge", 5);
 	ft_putendl(str);
-	ft_putnbr(ft_strlcat(str, "Tartinette", 200));
+	ft_putnbr(ft_strlcat(str, "Tartinettos", 200));
 	ft_putchar('\n');
 	ft_putendl(str);
 	ft_putnbr(ft_strlcat(str, " Un truc super long et chiant a lire, mais je ne vous oblige pas car de toute maniere tout ne va pas passer car la chaine de caracteres de destination ne fait pas plus de 200 caracteres et il me semble que cette chaine de caracteres en fait plus de 200.", 200));
@@ -624,6 +696,44 @@ void		test_strcat()
 	ft_putendl(str);
 	ft_strdel(&str);
 	ft_putendl("=============");
+}
+
+void	test_strchr()
+{
+	char	*str;
+	char	*p;
+
+	ft_putendl("== strchr / strrchr ==");
+	ft_putendl(">> libc");
+	str = ft_strdup("Une chaine*d*etoiles*bleues*");
+	ft_putendl(str);
+	p = strchr(str, '*');
+	if (p)
+		ft_putendl(p);
+	else
+		ft_putendl("character not found");
+	p = strrchr(str, '*');
+	if (p)
+		ft_putendl(p);
+	else
+		ft_putendl("character not found");
+	ft_strdel(&str);
+	ft_putendl(">> libft");
+	str = ft_strdup("Une chaine*d*etoiles*bleues*");
+	ft_putendl(str);
+	p = ft_strchr(str, '*');
+	if (p)
+		ft_putendl(p);
+	else
+		ft_putendl("character not found");
+	p = ft_strrchr(str, '*');
+	if (p)
+		ft_putendl(p);
+	else
+		ft_putendl("character not found");
+	ft_strdel(&str);
+	ft_putendl("====================");
+
 }
 
 #define STRSEARCH_STR "You know tht power ? Look at ththt * buddy !"
@@ -642,7 +752,7 @@ void		test_strsearch()
 	str = strstr(str, "tht *");
 	ft_putendl(str);
 	str = str_ptr;
-	str = strnstr(str, "tht *", 36);
+	str = strnstr(str, "tht *", 32); // 32, 36
 	if (str)
 		ft_putendl(str);
 	ft_strdel(&str_ptr);
@@ -653,7 +763,7 @@ void		test_strsearch()
 	str = ft_strstr(str, "tht *");
 	ft_putendl(str);
 	str = str_ptr;
-	str = ft_strnstr(str, "tht *", 36);
+	str = ft_strnstr(str, "tht *", 32); // 32, 36
 	if (str) 
 		ft_putendl(str);
 
@@ -687,9 +797,10 @@ void		test_strsearch()
 	ft_putchar('\n');
 	ft_putnbr(ft_strncmp("ghi", "ghi", STRCMP_N));
 	ft_putchar('\n');
-
 	ft_putendl("=============");
 }
+
+
 
 void		is_test(int c)
 {
@@ -765,8 +876,27 @@ void		is_test(int c)
 	ft_putnbr(ft_isupper(c));
 	ft_putchar('\n');
 	ft_putendl("-------------");
+	ft_putstr("tolower(");
+	ft_putchar(c);
+	ft_putendl(")");
+	ft_putstr("libc: ");
+	ft_putchar(tolower(c));
+	ft_putchar('\n');
+	ft_putstr("libft: ");
+	ft_putchar(ft_tolower(c));
+	ft_putchar('\n');
+	ft_putendl("-------------");
+	ft_putstr("toupper(");
+	ft_putchar(c);
+	ft_putendl(")");
+	ft_putstr("libc: ");
+	ft_putchar(toupper(c));
+	ft_putchar('\n');
+	ft_putstr("libft: ");
+	ft_putchar(ft_toupper(c));
+	ft_putchar('\n');
+	ft_putendl("-------------");
 #endif
-
 }
 
 int		main(int argc, char **argv)
@@ -786,36 +916,36 @@ int		main(int argc, char **argv)
 		is_test((int)argv[1][0]);
 #endif
 #ifdef STRING
-	//test_putnbr();
-	//test_putnbr_fd();
-	//test_putstr_fd();
-	//test_striter();
-	/*
+	test_putnbr();
+	test_putnbr_fd();
+	test_putstr_fd();
+	test_striter();
+	
 	test_strmap();
 	test_strequ();
 	test_strsub();
 	test_strjoin();
 	test_strtrim();
-	test_strsplit();
-	test_strcpy();
-	test_strcat();
-	*/
-	test_strsearch();
-	/*	
+	//test_strsplit();	
+		
 	test_putendl();
 	test_putendl_fd();
-	test_strlen();
 	test_putchar();	
 	test_putchar_fd();	
 	test_putstr();
 	test_putstr_fd();
+
+	test_strchr();
+	test_strsearch();
+	test_strcat();
+	test_strcpy();
 	test_strlen();
-	*/
+	
 #endif
 #ifdef MEM
-	//test_memalloc();
-	//test_strnew();
-	//test_strclr();
+	test_memalloc();
+	test_strnew();
+	test_strclr();
 	test_memset();
 	test_bzero();
 	test_memcpy();

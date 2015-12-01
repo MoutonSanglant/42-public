@@ -6,32 +6,26 @@
 #    By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/11/24 15:51:40 by tdefresn          #+#    #+#              #
-#    Updated: 2015/12/01 10:52:41 by tdefresn         ###   ########.fr        #
+#    Updated: 2015/12/01 13:23:46 by tdefresn         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-.PHONY: clean fclean
 
-NAME	= libft.a
-EXEC_ALL= ft_all
-EXEC_MEM= ft_mem
-EXEC_STR= ft_str
-EXEC_IS	= ft_is
+NAME		= libft.a
 
-CC	= gcc
-CFLAGS	= -Wall -Werror -Wextra -I./includes -D LIBFT_EXTRA
-LDFLAGS	= -L. -lft
-LDLIBS	= 
-#-lbsd
+CC			= gcc
+CFLAGS		= -Wall -Werror -Wextra -I. -D LIBFT_EXTRA
+LDFLAGS		=
+LDLIBS		=
 
-SRC_PREFIX = ./src/
+SRC_PREFIX = ./
 
-SRC   = memset bzero memcpy memccpy memmove memchr memcmp strdup strcpy strncpy \
-strcat strncat strlcat strchr strrchr strstr strnstr strcmp strncmp atoi \
+SRC   = memset bzero memcpy memccpy memmove memchr memcmp strdup strcpy \
+strncpy strcat strncat strlcat strchr strrchr strstr strnstr strcmp strncmp \
 isalpha isdigit isalnum isascii isprint toupper tolower memalloc memdel strnew \
 strdel strclr striter striteri strmap strmapi strequ strnequ strsub strjoin \
-strtrim strsplit itoa strlen putchar putstr putnbr putendl putchar_fd putstr_fd \
-putnbr_fd putendl_fd isupper islower
+strlen putchar putstr putnbr putendl putchar_fd putstr_fd putnbr_fd putendl_fd \
+isupper islower
 
 SRC := $(addsuffix .c, $(SRC))
 SRC := $(addprefix $(SRC_PREFIX)ft_, $(SRC))
@@ -40,21 +34,7 @@ OBJ = $(SRC:.c=.o)
 
 all: $(NAME) $(EXEC_ALL) $(EXEC_MEM) $(EXEC_STR) $(EXEC_IS)
 
-$(EXEC_ALL):
-	gcc -o $(EXEC_ALL) $(CFLAGS) __libft_testcases.c $(LDFLAGS) \
- $(LDLIBS) -D MEM -D STRING -D IS_TEST
-
-$(EXEC_MEM):
-	gcc -o $(EXEC_MEM) $(CFLAGS) __libft_testcases.c $(LDFLAGS) \
- $(LDLIBS) -D MEM
-
-$(EXEC_STR):
-	gcc -o $(EXEC_STR) $(CFLAGS) __libft_testcases.c $(LDFLAGS) \
- $(LDLIBS) -D STRING
-
-$(EXEC_IS):
-	gcc -o $(EXEC_IS) $(CFLAGS) __libft_testcases.c $(LDFLAGS) \
- $(LDLIBS) -D IS_TEST
+.PHONY: $(NAME) all clean fclean re
 
 $(NAME): $(OBJ)
 	ar rc $@ $^
@@ -68,6 +48,5 @@ clean:
 
 fclean: clean
 	/bin/rm -f $(NAME)
-	/bin/rm -f $(EXEC_ALL) $(EXEC_MEM) $(EXEC_STR) $(EXEC_IS)
 
 re: fclean all

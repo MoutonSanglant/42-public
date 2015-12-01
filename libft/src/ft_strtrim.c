@@ -1,33 +1,44 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_strtrim.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2015/12/01 12:34:09 by tdefresn          #+#    #+#             */
+/*   Updated: 2015/12/01 12:51:24 by tdefresn         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <libft.h>
 
 char	*ft_strtrim(char const *s)
 {
+	char const	*s_firstchar;
 	char		*str_new;
-	int		first_char;
-	int		last_char;
-	unsigned int	len;
-	unsigned int	i;
+	int			last_char;
+	size_t		len;
+	size_t		i;
 
-	first_char = 0;
+	s_firstchar = NULL;
 	last_char = 0;
-
 	len = 0;
 	while (*s != '\0')
 	{
 		if (*s != ' ' && *s != '\n' && *s != '\t')
 		{
-			if (first_char == 0)
-				first_char = (int) s;
-			last_char = (int) s;
+			if (s_firstchar == NULL)
+				s_firstchar = s;
+			last_char = (int)s;
 			len = 1;
 		}
 		s++;
 	}
-	len += last_char - first_char;
+	len += last_char - ((int)s_firstchar);
 	str_new = ft_strnew(sizeof(char) * len);
 	if (str_new)
 	{
-		s =(char *)first_char;
+		s = s_firstchar;
 		i = 0;
 		while (i < len)
 		{
@@ -36,5 +47,5 @@ char	*ft_strtrim(char const *s)
 		}
 		str_new[i] = '\0';
 	}
-	return(str_new);
+	return (str_new);
 }
