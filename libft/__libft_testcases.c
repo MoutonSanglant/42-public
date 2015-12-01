@@ -10,15 +10,19 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#define LINUX
+
 #include <libft.h>
 
 // extra: printf
 #include <stdio.h>
-// strnstr
-///#include <bsd/string.h>
 // is****
 #include <ctype.h>
 
+#ifdef LINUX
+// strnstr
+# include <bsd/string.h>
+#endif
 
 #define MEMSET_LENGTH 17
 #define FILL_CHAR 'X'
@@ -159,9 +163,9 @@ void		test_strtrim()
 		ft_putendl("=============");
 		return;
 	}
+	ft_putstr("test2: \"");
 	ft_putstr(str);
-	ft_putchar('_');
-	ft_putchar('\n');
+	ft_putendl("\"");
 	ft_strdel(&str);
 	str = ft_strtrim("  z      ");
 	if (str == NULL)
@@ -170,9 +174,9 @@ void		test_strtrim()
 		ft_putendl("=============");
 		return;
 	}
+	ft_putstr("test2: \"");
 	ft_putstr(str);
-	ft_putchar('_');
-	ft_putchar('\n');
+	ft_putendl("\"");
 	ft_strdel(&str);
 	str = ft_strtrim("  \t ");
 	if (str == NULL)
@@ -181,8 +185,9 @@ void		test_strtrim()
 		ft_putendl("=============");
 		return;
 	}
-
-	ft_putendl(str);
+	ft_putstr("test3: \"");
+	ft_putstr(str);
+	ft_putendl("\"");
 	ft_strdel(&str);
 	ft_putendl("=============");
 }
@@ -194,7 +199,7 @@ void		test_strsplit()
 
 	ft_putendl("== strsplit ==");
 	//str = ft_strsplit("*super*chaine****de* *charactereres*", '*');
-	str = ft_strsplit("*super*chaine****de* *charactereres", '*');
+	str = ft_strsplit("super*chaine****de* *charactereres***o", '*');
 	//str = ft_strsplit("\0", '*');
 	//str = ft_strsplit("***une* ****vache*_*bleue****", '*');
 	if (str == NULL)
@@ -667,13 +672,14 @@ void		test_strcat()
 	str = strncat(str, "Chapeau rouge", 5);
 	ft_putendl(str);
 
+#ifndef LINUX
 	ft_putnbr(strlcat(str, "Tartinettos", 200));
 	ft_putchar('\n');
 	ft_putendl(str);
 	ft_putnbr(strlcat(str, " Un truc super long et chiant a lire, mais je ne vous oblige pas car de toute maniere tout ne va pas passer car la chaine de caracteres de destination ne fait pas plus de 200 caracteres et il me semble que cette chaine de caracteres en fait plus de 200.", 200));
 	ft_putchar('\n');
 	ft_putendl(str);
-
+#endif
 
 	ft_strdel(&str);
 	ft_putendl(">> libc");
@@ -707,6 +713,7 @@ void	test_strchr()
 	ft_putendl(">> libc");
 	str = ft_strdup("Une chaine*d*etoiles*bleues*");
 	ft_putendl(str);
+
 	p = strchr(str, '*');
 	if (p)
 		ft_putendl(p);
@@ -717,8 +724,10 @@ void	test_strchr()
 		ft_putendl(p);
 	else
 		ft_putendl("character not found");
+
 	ft_strdel(&str);
 	ft_putendl(">> libft");
+
 	str = ft_strdup("Une chaine*d*etoiles*bleues*");
 	ft_putendl(str);
 	p = ft_strchr(str, '*');
@@ -732,6 +741,7 @@ void	test_strchr()
 	else
 		ft_putendl("character not found");
 	ft_strdel(&str);
+
 	ft_putendl("====================");
 
 }
@@ -752,9 +762,11 @@ void		test_strsearch()
 	str = strstr(str, "tht *");
 	ft_putendl(str);
 	str = str_ptr;
+#ifndef LINUX
 	str = strnstr(str, "tht *", 32); // 32, 36
 	if (str)
 		ft_putendl(str);
+#endif
 	ft_strdel(&str_ptr);
 	ft_putendl(">> libft");
 	str = ft_strdup(STRSEARCH_STR);
@@ -925,6 +937,7 @@ int		main(int argc, char **argv)
 		is_test((int)argv[1][0]);
 #endif
 #ifdef STRING
+	/*
 	test_putnbr();
 	test_putnbr_fd();
 	test_putstr_fd();
@@ -935,8 +948,9 @@ int		main(int argc, char **argv)
 	test_strsub();
 	test_strjoin();
 	test_strtrim();
-	//test_strsplit();	
-		
+*/
+	test_strsplit();
+/*		
 	test_putendl();
 	test_putendl_fd();
 	test_putchar();	
@@ -951,7 +965,7 @@ int		main(int argc, char **argv)
 	test_strlen();
 
 	test_atoi_itoa();
-
+*/
 #endif
 #ifdef MEM
 	test_memalloc();
