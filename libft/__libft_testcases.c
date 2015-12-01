@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/24 17:24:21 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/01 12:31:50 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/01 14:26:48 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -899,6 +899,15 @@ void		is_test(int c)
 #endif
 }
 
+void	test_atoi_itoa()
+{
+	ft_putendl("== atoi ======");
+	ft_putnbr(ft_atoi("    \
+			-998c37 "));
+	ft_putchar('\n');
+	ft_putendl("==============");
+}
+
 int		main(int argc, char **argv)
 {
 	if (argc < 0 || argv[0][0] == '\0')
@@ -940,7 +949,9 @@ int		main(int argc, char **argv)
 	test_strcat();
 	test_strcpy();
 	test_strlen();
-	
+
+	test_atoi_itoa();
+
 #endif
 #ifdef MEM
 	test_memalloc();

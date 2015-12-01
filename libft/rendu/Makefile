@@ -6,7 +6,7 @@
 #    By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/11/24 15:51:40 by tdefresn          #+#    #+#              #
-#    Updated: 2015/12/01 13:23:46 by tdefresn         ###   ########.fr        #
+#    Updated: 2015/12/01 14:28:09 by tdefresn         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ strncpy strcat strncat strlcat strchr strrchr strstr strnstr strcmp strncmp \
 isalpha isdigit isalnum isascii isprint toupper tolower memalloc memdel strnew \
 strdel strclr striter striteri strmap strmapi strequ strnequ strsub strjoin \
 strlen putchar putstr putnbr putendl putchar_fd putstr_fd putnbr_fd putendl_fd \
-isupper islower
+isupper islower isspace atoi
 
 SRC := $(addsuffix .c, $(SRC))
 SRC := $(addprefix $(SRC_PREFIX)ft_, $(SRC))

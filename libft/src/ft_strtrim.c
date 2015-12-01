@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/01 12:34:09 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/01 12:51:24 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/01 14:31:15 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ char	*ft_strtrim(char const *s)
 	len = 0;
 	while (*s != '\0')
 	{
-		if (*s != ' ' && *s != '\n' && *s != '\t')
+		if (!ft_isspace(*s))
 		{
 			if (s_firstchar == NULL)
 				s_firstchar = s;

@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/24 18:16:07 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/01 13:14:56 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/01 14:21:20 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,5 +80,6 @@ void			ft_putnbr_fd(int n, int fd);
 
 int				ft_isupper(int c);
 int				ft_islower(int c);
+int				ft_isspace(int c);
 # endif
 #endif
