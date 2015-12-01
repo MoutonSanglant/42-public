@@ -10,7 +10,18 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#ifndef LIBFT_H
+# define LIBFT_H
+
 #include <string.h>
+#include <stdlib.h>
+
+typedef struct		s_list
+{
+	void		*content;
+	size_t		content_size;
+	struct s_list	*next;
+}			t_list;
 
 void	*ft_memset(void *b, int c, size_t len);
 
@@ -115,3 +126,14 @@ void	ft_putstr_fd(char const *s, int fd);
 void	ft_putendl_fd(char const *s, int fd);
 
 void	ft_putnbr_fd(int n, int fd);
+
+
+# ifdef LIBFT_EXTRA
+
+int	ft_isupper(int c);
+
+int	ft_islower(int c);
+
+# endif
+
+#endif

@@ -1,37 +1,40 @@
+2/28
+
 == memory ==
 - memset
-• bzero
-• memcpy
-• memccpy
-• memmove
-• memchr
-• memcmp
+- bzero
+- memcpy
+- memccpy
+- memmove
+- memchr
+* memcmp (vérifier les valeurs retournées sous osx)
 
 == strings ==
 - strlen
-• strdup
-• strcpy
-• strncpy
-• strcat
-• strncat
-• strlcat
-• strchr
-• strrchr
-• strstr
-• strnstr
-• strcmp
-• strncmp
+* strdup
+- strcpy
+- strncpy
+- strcat
+- strncat
+* strlcat (tester sous osx)
+* strchr
+* strrchr
+- strstr
+* strnstr (tester sous osx)
+* strcmp (tester sous osx)
+* strncmp (tester sous osx)
 
 == conversion ==
 • atoi
 
+(tester sous osx:)
 == test ==
-• isalpha
-• isdigit
-• isalnum
-• isascii
-• isprint
+* isalpha
+* isdigit
+* isalnum
+* isascii
+* isprint
 
 == strings ==
-• toupper
-• tolower
+* toupper
+* tolower
