@@ -15,7 +15,7 @@
 - ft_strsub
 - ft_strjoin
 * ft_strtrim	(34 lignes)
-* ft_strsplit	(!!segfault!!)
+* ft_strsplit	segfault!!)
 • ft_itoa
 - ft_putchar
 - ft_putstr

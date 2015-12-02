@@ -6,11 +6,11 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/24 17:24:21 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/01 14:26:48 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/02 10:50:54 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#define LINUX
+#define LINU
 
 #include <libft.h>
 
@@ -199,7 +199,7 @@ void		test_strsplit()
 
 	ft_putendl("== strsplit ==");
 	//str = ft_strsplit("*super*chaine****de* *charactereres*", '*');
-	str = ft_strsplit("super*chaine****de* *charactereres***o", '*');
+	str = ft_strsplit("super*chaine****de* *charactereres***", '*');
 	//str = ft_strsplit("\0", '*');
 	//str = ft_strsplit("***une* ****vache*_*bleue****", '*');
 	if (str == NULL)
