@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/01 14:08:25 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/01 14:12:07 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/02 13:01:28 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ int		ft_atoi(char const *str)
 
 	r = 0;
 	sign = 1;
-	str = ft_strtrim(str);
+	while (ft_isspace(*str))
+		str++;
 	if (str[0] == '-')
 	{
 		sign = -1;
