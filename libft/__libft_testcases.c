@@ -6,11 +6,18 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/24 17:24:21 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/02 10:50:54 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/02 12:25:47 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#define LINU
+#ifdef TEST_ALL
+# define TEST_IS
+# define TEST_PUT
+# define TEST_STR
+# define TEST_MEM
+#endif
+
+#define LINU_
 
 #include <libft.h>
 
@@ -27,6 +34,56 @@
 #define MEMSET_LENGTH 17
 #define FILL_CHAR 'X'
 #define LONG_STR "Je suis une jolie pucelle qui se promene nue dans les champs."
+
+void		test_putchar()
+{
+	ft_putendl("== putchar / putchar_fd ==");
+	ft_putstr("putchar: ");
+	ft_putchar(FILL_CHAR);
+	ft_putendl(" (ok)");
+	ft_putstr_fd("putchar_fd on filedescriptor 1: ", 1);
+	ft_putchar_fd(FILL_CHAR, 1);
+	ft_putendl_fd(" (ok)", 1);
+	ft_putstr_fd("putchar_fd on filedescriptor 2: ", 2);
+	ft_putchar_fd(FILL_CHAR, 2);
+	ft_putendl_fd(" (ok)", 2);
+	ft_putchar('\n');
+}
+void		test_putstr()
+{
+	ft_putendl("== putstr / putstr_fd ==");
+	ft_putstr("putstr: ok\n");
+	ft_putstr_fd("putstr_fd on filedescriptor 1: ok\n", 1);
+	ft_putstr_fd("putstr_fd on filedescriptor 2: ok\n", 2);
+	ft_putstr_fd("putstr_fd on filedescriptor 3: ok\n", 3);
+	ft_putchar('\n');
+}
+
+
+void		test_putendl()
+{
+	ft_putendl("== putendl / putendl_fd ==");
+	ft_putendl("putendl: ok");
+	ft_putendl_fd("putendl_fd on filedescriptor 1: ok", 1);
+	ft_putendl_fd("putendl_fd on filedescriptor 2: ok", 2);
+	ft_putchar('\n');
+}
+void		test_putnbr()
+{
+	ft_putendl("== putnbr / putnbr_fd ==");
+	ft_putstr("putnbr(0): "); // 2147483648
+	ft_putnbr(0);
+	ft_putstr("\nputnbr(2147483647): "); 
+	ft_putnbr(2147483647);
+	ft_putstr("\nputnbr(-2147483648): ");
+	ft_putnbr(-2147483648);
+
+	ft_putstr_fd("\nputnbr_fd(1297320) on filedescriptor 2: ", 2);
+	ft_putnbr_fd(1297320, 2);
+	ft_putchar('\n');
+}
+
+
 
 void	putcharII(char *c)
 {
@@ -219,40 +276,6 @@ void		test_strsplit()
 	ft_putendl("=============");
 }
 
-void		test_putnbr_fd()
-{
-	ft_putnbr_fd(1297320, 1);
-	ft_putchar_fd('\n', 1);
-	ft_putnbr_fd(0, 2);
-	ft_putchar_fd('\n', 2);
-}
-
-void		test_putnbr()
-{
-	ft_putnbr(5567320);
-	ft_putchar('\n');
-	ft_putnbr(0);
-	ft_putchar('\n');
-	ft_putnbr(-32401);
-	ft_putchar('\n');
-}
-
-
-void		test_putendl_fd()
-{
-	ft_putendl_fd("putendl_fd on filedescriptor 1", 1);
-	ft_putendl_fd("putendl_fd on filedescriptor 2", 2);
-}
-
-void		test_putendl()
-{
-	char *str;
-
-	str = "test string";
-	printf("== putendl ==\n");
-	ft_putendl(str);
-	printf("============\n");
-}
 
 void		test_strlen()
 {
@@ -272,41 +295,6 @@ void		test_strlen()
 
 }
 
-void		test_putchar_fd()
-{
-	printf("== putchar_fd ==\n");
-	ft_putchar_fd(FILL_CHAR, 1);
-	ft_putchar_fd('\n', 1);
-	ft_putchar_fd(FILL_CHAR, 2);
-	ft_putchar_fd('\n', 2);
-	printf("============\n");
-}
-
-void		test_putchar()
-{
-	printf("== putchar ==\n");
-	ft_putchar(FILL_CHAR);
-	ft_putchar('\n');
-	printf("============\n");
-}
-
-void		test_putstr()
-{
-	printf("== putstr ==\n");
-	ft_putstr("string test\n");
-	printf("============\n");
-
-}
-
-void		test_putstr_fd()
-{
-	printf("== putstr_fd ==\n");
-	ft_putstr_fd("fd: 1\n", 1);
-	ft_putstr_fd("fd: 2\n", 2);
-	ft_putstr_fd("fd: 3\n", 3);
-	printf("============\n");
-
-}
 
 void		test_memset()
 {
@@ -924,8 +912,25 @@ int		main(int argc, char **argv)
 {
 	if (argc < 0 || argv[0][0] == '\0')
 		return (1);
+#ifdef TEST_MEM
+	test_memset();
+	test_bzero();
+	test_memcpy();
+	test_memmove();
+	test_memchr();
+	test_memcmp();
+#endif
 
-#ifdef IS_TEST
+#ifdef TEST_STR
+	test_strlen();
+	test_strdup();
+	test_strcpy();
+	test_strcat();
+	test_strchr();
+	test_strsearch();
+	test_atoi_itoa();
+#endif
+#ifdef TEST_IS
 	if (argc < 2)
 	{
 		ft_putendl_fd("parameter needed: char", 2);
@@ -936,11 +941,12 @@ int		main(int argc, char **argv)
 	else
 		is_test((int)argv[1][0]);
 #endif
-#ifdef STRING
-	/*
-	test_putnbr();
-	test_putnbr_fd();
-	test_putstr_fd();
+#ifdef TEST_MEM
+	test_memalloc();
+	test_strnew();
+	test_strclr();
+#endif
+#ifdef TEST_STR
 	test_striter();
 	
 	test_strmap();
@@ -948,34 +954,16 @@ int		main(int argc, char **argv)
 	test_strsub();
 	test_strjoin();
 	test_strtrim();
-*/
-	test_strsplit();
-/*		
-	test_putendl();
-	test_putendl_fd();
-	test_putchar();	
-	test_putchar_fd();	
-	test_putstr();
-	test_putstr_fd();
+	test_strsplit();	
 
-	test_strchr();
-	test_strsearch();
-	test_strcat();
-	test_strcpy();
-	test_strlen();
-
-	test_atoi_itoa();
-*/
+	
 #endif
-#ifdef MEM
-	test_memalloc();
-	test_strnew();
-	test_strclr();
-	test_memset();
-	test_bzero();
-	test_memcpy();
-	test_memmove();
-	test_memchr();
-	test_memcmp();
+
+#ifdef TEST_PUT
+	test_putchar();	
+	test_putstr();
+	test_putendl();
+	test_putnbr();
+
 #endif
 }
