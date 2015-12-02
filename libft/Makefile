@@ -18,6 +18,7 @@ EXEC_IS	= test_is
 EXEC_PUT= test_put
 EXEC_MEM= test_mem
 EXEC_STR= test_str
+EXEC_LST= test_lst
 
 CC	= gcc
 CFLAGS	= -Wall -Werror -Wextra -I./includes -D LIBFT_EXTRA
@@ -32,14 +33,14 @@ strcat strncat strlcat strchr strrchr strstr strnstr strcmp strncmp atoi \
 isalpha isdigit isalnum isascii isprint toupper tolower memalloc memdel strnew \
 strdel strclr striter striteri strmap strmapi strequ strnequ strsub strjoin \
 strtrim strsplit itoa strlen putchar putstr putnbr putendl putchar_fd putstr_fd \
-putnbr_fd putendl_fd isupper islower isspace
+putnbr_fd putendl_fd lstnew lstdelone lstdel lstadd lstiter lstmap isupper islower isspace
 
 SRC := $(addsuffix .c, $(SRC))
 SRC := $(addprefix $(SRC_PREFIX)ft_, $(SRC))
 
 OBJ = $(SRC:.c=.o)
 
-all: $(NAME) $(EXEC_ALL) $(EXEC_MEM) $(EXEC_STR) $(EXEC_IS) $(EXEC_PUT)
+all: $(NAME) $(EXEC_ALL) $(EXEC_MEM) $(EXEC_STR) $(EXEC_IS) $(EXEC_PUT) $(EXEC_LST)
 
 $(EXEC_ALL):
 	gcc -o $@ $(CFLAGS) __libft_testcases.c $(LDFLAGS) \
@@ -61,6 +62,10 @@ $(EXEC_PUT):
 	gcc -o $@ $(CFLAGS) __libft_testcases.c $(LDFLAGS) \
  $(LDLIBS) -D TEST_PUT
 
+$(EXEC_LST):
+	gcc -o $@ $(CFLAGS) __libft_testcases.c $(LDFLAGS) \
+ $(LDLIBS) -D TEST_LST
+
 $(NAME): $(OBJ)
 	ar rc $@ $^
 	ranlib $(NAME)
@@ -73,6 +78,6 @@ clean:
 
 fclean: clean
 	/bin/rm -f $(NAME)
-	/bin/rm -f $(EXEC_ALL) $(EXEC_MEM) $(EXEC_STR) $(EXEC_IS) $(EXEC_PUT)
+	/bin/rm -f $(EXEC_ALL) $(EXEC_MEM) $(EXEC_STR) $(EXEC_IS) $(EXEC_PUT) $(EXEC_LST)
 
 re: fclean all

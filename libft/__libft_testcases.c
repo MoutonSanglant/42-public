@@ -15,9 +15,10 @@
 # define TEST_PUT
 # define TEST_STR
 # define TEST_MEM
+# define TEST_LST
 #endif
 
-#define LINU_
+#define LINUX
 
 #include <libft.h>
 
@@ -33,7 +34,7 @@
 
 #define MEMSET_LENGTH 17
 #define FILL_CHAR 'X'
-#define LONG_STR "Je suis une jolie pucelle qui se promene nue dans les champs."
+#define LONG_STR "Je suis une jolie demoiselle qui se promene dans le metro."
 #define STRCPY_STR "La belle Huguette contait fleurette aux assiettes du Baron von Rocket"
 
 #define STRSEARCH_STR "Le petit toto, a fait un gros rotototo *."
@@ -959,6 +960,47 @@ void		test_strsplit()
 	ft_putendl("=============");
 }
 
+void		delone(void *content, size_t content_size)
+{
+	if (content_size > 0)
+		ft_memdel(&content);
+}
+
+void		putlst(t_list *elem)
+{
+	ft_putendl(elem->content);
+}
+
+t_list		setelem(t_list *elem)
+{
+	elem->content = "UU";
+	elem->content_size = 3;
+	return(*elem);
+}
+
+void		test_lst()
+{
+	t_list	*list;
+	t_list	*node;
+	t_list	*new_list;
+	
+	node = (t_list *)malloc(sizeof(t_list));
+	node->content_size = 9;
+	node->content = "Bouuuh !";
+	list = ft_lstnew("Trop facile", 12);
+	ft_lstadd(&list, node);
+	ft_lstiter(node, &putlst);
+	new_list = ft_lstmap(node, &setelem);
+	ft_lstiter(new_list, &putlst);
+	
+	//ft_putendl(node->next->content);
+	//ft_putendl(list->content);
+	//ft_lstdelone(&list, &delone);
+
+	//ft_lstdel(&list, &delone); <<--- ca crash !!
+	ft_lstdel(&new_list, &delone);
+}
+
 int		main(int argc, char **argv)
 {
 	if (argc < 0 || argv[0][0] == '\0')
@@ -1011,6 +1053,8 @@ int		main(int argc, char **argv)
 	test_putstr();
 	test_putendl();
 	test_putnbr();
-
+#endif
+#ifdef TEST_LST
+	test_lst();
 #endif
 }
