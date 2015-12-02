@@ -6,17 +6,18 @@
 #    By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/11/24 15:51:40 by tdefresn          #+#    #+#              #
-#    Updated: 2015/12/01 14:21:58 by tdefresn         ###   ########.fr        #
+#    Updated: 2015/12/02 12:11:07 by tdefresn         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 .PHONY: clean fclean
 
 NAME	= libft.a
-EXEC_ALL= ft_all
-EXEC_MEM= ft_mem
-EXEC_STR= ft_str
-EXEC_IS	= ft_is
+EXEC_ALL= test_all
+EXEC_IS	= test_is
+EXEC_PUT= test_put
+EXEC_MEM= test_mem
+EXEC_STR= test_str
 
 CC	= gcc
 CFLAGS	= -Wall -Werror -Wextra -I./includes -D LIBFT_EXTRA
@@ -38,23 +39,27 @@ SRC := $(addprefix $(SRC_PREFIX)ft_, $(SRC))
 
 OBJ = $(SRC:.c=.o)
 
-all: $(NAME) $(EXEC_ALL) $(EXEC_MEM) $(EXEC_STR) $(EXEC_IS)
+all: $(NAME) $(EXEC_ALL) $(EXEC_MEM) $(EXEC_STR) $(EXEC_IS) $(EXEC_PUT)
 
 $(EXEC_ALL):
-	gcc -o $(EXEC_ALL) $(CFLAGS) __libft_testcases.c $(LDFLAGS) \
- $(LDLIBS) -D MEM -D STRING -D IS_TEST
+	gcc -o $@ $(CFLAGS) __libft_testcases.c $(LDFLAGS) \
+ $(LDLIBS) -D TEST_ALL
 
 $(EXEC_MEM):
-	gcc -o $(EXEC_MEM) $(CFLAGS) __libft_testcases.c $(LDFLAGS) \
- $(LDLIBS) -D MEM
+	gcc -o $@ $(CFLAGS) __libft_testcases.c $(LDFLAGS) \
+ $(LDLIBS) -D TEST_MEM
 
 $(EXEC_STR):
-	gcc -o $(EXEC_STR) $(CFLAGS) __libft_testcases.c $(LDFLAGS) \
- $(LDLIBS) -D STRING
+	gcc -o $@ $(CFLAGS) __libft_testcases.c $(LDFLAGS) \
+ $(LDLIBS) -D TEST_STR
 
 $(EXEC_IS):
-	gcc -o $(EXEC_IS) $(CFLAGS) __libft_testcases.c $(LDFLAGS) \
- $(LDLIBS) -D IS_TEST
+	gcc -o $@ $(CFLAGS) __libft_testcases.c $(LDFLAGS) \
+ $(LDLIBS) -D TEST_IS
+
+$(EXEC_PUT):
+	gcc -o $@ $(CFLAGS) __libft_testcases.c $(LDFLAGS) \
+ $(LDLIBS) -D TEST_PUT
 
 $(NAME): $(OBJ)
 	ar rc $@ $^
@@ -68,6 +73,6 @@ clean:
 
 fclean: clean
 	/bin/rm -f $(NAME)
-	/bin/rm -f $(EXEC_ALL) $(EXEC_MEM) $(EXEC_STR) $(EXEC_IS)
+	/bin/rm -f $(EXEC_ALL) $(EXEC_MEM) $(EXEC_STR) $(EXEC_IS) $(EXEC_PUT)
 
 re: fclean all
