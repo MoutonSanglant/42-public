@@ -9,3 +9,12 @@
 
 > fonction qui print un message ainsi que son numero d’occurence pour quand tu place du debug tous au long de ton code tu sache qu’elle est l’erreur qui a peter :simple_smile:
 ​> fonction qui prend un string en paramettre pour afficher un message d’erreur (c’elle la tu en auras besoin sur tout tes projet de premiere année)
+
+
+
+
+BZERO
+STRTRIM
+
+
+
