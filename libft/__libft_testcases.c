@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/24 17:24:21 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/02 14:15:01 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/03 13:50:40 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # define TEST_LST
 #endif
 
-#define LINUX
+#define LINUX_
 
 #include <libft.h>
 
@@ -939,10 +939,7 @@ void		test_strsplit()
 	int i;
 
 	ft_putendl("== strsplit ==");
-	//str = ft_strsplit("*super*chaine****de* *charactereres*", '*');
 	str = ft_strsplit("super*chaine****de* *charactereres***", '*');
-	//str = ft_strsplit("\0", '*');
-	//str = ft_strsplit("***une* ****vache*_*bleue****", '*');
 	if (str == NULL)
 	{
 		ft_putendl_fd("Error: malloc failed", 2);
@@ -971,11 +968,36 @@ void		putlst(t_list *elem)
 	ft_putendl(elem->content);
 }
 
-t_list		setelem(t_list *elem)
+int g_i;
+
+t_list		*setelem(t_list *elem)
 {
-	elem->content = "UU";
-	elem->content_size = 3;
-	return(*elem);
+//	t_list	*new_elem;
+	int		l;
+	char	*str;
+
+	if (g_i > 1)
+	{
+		free(elem);
+		elem = NULL;
+		return (elem);
+	}
+	g_i++;
+
+//	new_elem = (t_list *) malloc(sizeof(t_list));
+
+	l = ft_strlen(elem->content) + 1;
+	if (elem->content)
+	{
+		l += 4;
+		str = ft_strnew(l);
+		str = ft_strcpy(str, elem->content);
+		str = ft_strcat(str, ": ok");
+		elem->content = str;
+	}
+	elem->content_size = l;
+	elem->next = NULL;
+	return (elem);
 }
 
 void		test_lst()
@@ -983,22 +1005,35 @@ void		test_lst()
 	t_list	*list;
 	t_list	*node;
 	t_list	*new_list;
+	t_list	*node2;
 	
 	node = (t_list *)malloc(sizeof(t_list));
 	node->content_size = 9;
 	node->content = "Bouuuh !";
+	node2 = ft_lstnew("Bizarre", 8);
 	list = ft_lstnew("Trop facile", 12);
 	ft_lstadd(&list, node);
-	ft_lstiter(node, &putlst);
-	new_list = ft_lstmap(node, &setelem);
-	ft_lstiter(new_list, &putlst);
+
+	ft_lstadd(&node, node2);
+	printf("old list (%p):\n", node2);
+	ft_lstiter(node2, &putlst);
+
+	new_list = ft_lstmap(node2, &setelem);
+	if (new_list)
+	{
+		printf("new list (%p):\n", new_list);
+		ft_lstiter(new_list, &putlst);
+	}
 	
+	printf("old list (%p):\n", node2);
+	ft_lstiter(node2, &putlst);
 	//ft_putendl(node->next->content);
 	//ft_putendl(list->content);
 	//ft_lstdelone(&list, &delone);
 
 	//ft_lstdel(&list, &delone); <<--- ca crash !!
-	ft_lstdel(&new_list, &delone);
+	if (new_list)
+		ft_lstdel(&new_list, &delone);
 }
 
 int		main(int argc, char **argv)

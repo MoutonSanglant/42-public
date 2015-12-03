@@ -6,7 +6,7 @@
 #    By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/11/24 15:51:40 by tdefresn          #+#    #+#              #
-#    Updated: 2015/12/02 12:11:07 by tdefresn         ###   ########.fr        #
+#    Updated: 2015/12/03 10:39:05 by tdefresn         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,6 +39,8 @@ SRC := $(addsuffix .c, $(SRC))
 SRC := $(addprefix $(SRC_PREFIX)ft_, $(SRC))
 
 OBJ = $(SRC:.c=.o)
+
+nolib: testclean $(EXEC_ALL) $(EXEC_MEM) $(EXEC_STR) $(EXEC_IS) $(EXEC_PUT) $(EXEC_LST)
 
 all: $(NAME) $(EXEC_ALL) $(EXEC_MEM) $(EXEC_STR) $(EXEC_IS) $(EXEC_PUT) $(EXEC_LST)
 
@@ -73,11 +75,13 @@ $(NAME): $(OBJ)
 %.o: %.c
 	$(CC) -o $@ -c $< $(CFLAGS)
 
+testclean:
+	/bin/rm -f $(EXEC_ALL) $(EXEC_MEM) $(EXEC_STR) $(EXEC_IS) $(EXEC_PUT) $(EXEC_LST)
+
 clean:
 	/bin/rm -f ${OBJ}
 
-fclean: clean
+fclean: clean testclean
 	/bin/rm -f $(NAME)
-	/bin/rm -f $(EXEC_ALL) $(EXEC_MEM) $(EXEC_STR) $(EXEC_IS) $(EXEC_PUT) $(EXEC_LST)
 
 re: fclean all
