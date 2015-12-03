@@ -6,17 +6,17 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/01 12:36:22 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/01 12:36:23 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/03 10:06:31 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-char	*ft_strcpy(char *dest, char const *src)
+char	*ft_strcpy(char *dst, char const *src)
 {
 	char *ptr;
 
-	ptr = dest;
+	ptr = dst;
 	while (*src)
 		*ptr++ = *src++;
 	*ptr = '\0';
-	return (dest);
+	return (dst);
 }
