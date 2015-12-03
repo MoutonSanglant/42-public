@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/01 12:36:17 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/01 12:42:21 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/03 16:16:08 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ char	*ft_strsub(char const *s, unsigned int start, size_t len)
 			str_new[i] = s[start + i];
 			i++;
 		}
+		str_new[i] = '\0';
 	}
 	return (str_new);
 }
