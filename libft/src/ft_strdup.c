@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/01 12:34:13 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/03 10:05:58 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/03 10:20:16 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ char	*ft_strdup(char const *s1)
 	char	*str_new;
 	char	*ptr;
 
-	str_new = (char *)malloc(sizeof(char) * ft_strlen(s1));
+	str_new = (char *)malloc(sizeof(char) * (ft_strlen(s1) + 1));
 	if (str_new)
 	{
 		ptr = str_new;

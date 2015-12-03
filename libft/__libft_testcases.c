@@ -6,301 +6,87 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/24 17:24:21 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/01 14:26:48 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/02 14:15:01 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#ifdef TEST_ALL
+# define TEST_IS
+# define TEST_PUT
+# define TEST_STR
+# define TEST_MEM
+# define TEST_LST
+#endif
+
+#define LINUX
 
 #include <libft.h>
 
 // extra: printf
 #include <stdio.h>
-// strnstr
-///#include <bsd/string.h>
 // is****
 #include <ctype.h>
 
+#ifdef LINUX
+// strnstr
+# include <bsd/string.h>
+#endif
 
 #define MEMSET_LENGTH 17
 #define FILL_CHAR 'X'
-#define LONG_STR "Je suis une jolie pucelle qui se promene nue dans les champs."
+#define LONG_STR "Je suis une jolie demoiselle qui se promene dans le metro."
+#define STRCPY_STR "La belle Huguette contait fleurette aux assiettes du Baron von Rocket"
 
-void	putcharII(char *c)
-{
-	ft_putchar(*c);
-}
-
-void	putchar_i(unsigned int idx, char *c)
-{
-	ft_putnbr(idx);
-	ft_putstr(": ");
-	ft_putchar(*c);
-	ft_putchar('\n');
-}
-
-char	putchar_map(char c)
-{
-	if (c == 'Z')
-		c = ' ';
-	else
-		c++;
-
-	ft_putchar(c);
-	return (c);
-}
-
-char	putchar_mapi(unsigned int idx, char c)
-{
-	if (c == 'Z')
-		c = ' ';
-	else
-		c++;
-
-	putchar_i(idx, &c);
-	return (c);
-}
-
-void		test_striter()
-{
-	ft_putendl("== striter ==");
-	ft_striter("Salut les mecs !\n", &putcharII);
-	ft_putendl("== striteri ==");
-	ft_striteri("Salut les mecs !\n", &putchar_i);
-	ft_putendl("=============");
-}
-
-void		test_strmap()
-{
-	char	*str;
-	
-	str = "R`ktsZkdrZldbr \t"; 
-	ft_putendl("== strmap ==");
-	ft_putendl(str);
-	str = ft_strmap(str, &putchar_map);
-	if (str == NULL)
-	{
-		ft_putendl_fd("map error", 2);
-		ft_putendl("============");
-		return;
-	}
-	free(str);
-	ft_putendl("== strmapi ==");
-	str = "R`ktsZkdrZldbr \t"; 
-	str = ft_strmapi(str, &putchar_mapi);
-	if (str == NULL)
-	{
-		ft_putendl_fd("map error", 2);
-		ft_putendl("============");
-		return;
-	}
-	ft_putendl(str);
-	free(str);
-	ft_putendl("=============");
-}
-
-void		test_strequ()
-{
-	char	*str1;
-	char	*str2;
-
-	ft_putendl("== strequ ==");
-	str1 = "Hello zougou !\n";
-	str2 = "Hello gros zougou !\n";
-	if (ft_strequ(str1, str2))
-		ft_putendl("Strings match");
-	else
-		ft_putendl("Strings doesn't match");
-	if (ft_strequ(str1, "Hello"))
-		ft_putendl("Strings match");
-	else
-		ft_putendl("Strings doesn't match");
-	ft_putendl("== strnequ ==");
-	if (ft_strnequ(str1, str2, 6))
-		ft_putendl("Strings match");
-	else
-		ft_putendl("Strings doesn't match");
-	if (ft_strnequ(str1, str2, 7))
-		ft_putendl("Strings match");
-	else
-		ft_putendl("Strings doesn't match");
-	ft_putendl("=============");
-}
-
-void		test_strsub()
-{
-	char	*str;
-
-	ft_putendl("== strsub ==");
-	str = ft_strsub(LONG_STR, 12, 15);
-	ft_putendl(str);
-	ft_strdel (&str);
-	ft_putendl("=============");
-}
-
-void		test_strjoin()
-{
-	char	*str;
-
-	ft_putendl("== strjoin ==");
-	str = ft_strjoin("Salut les ", "pancakes !");
-	ft_putendl(str);
-	ft_strdel(&str);
-	ft_putendl("=============");
-}
-
-void		test_strtrim()
-{
-	char	*str;
-
-	ft_putendl("== strtrim ==");
-	str = ft_strtrim("      \t\t  \t\n  Salut    \n\n\t\n  _\t les pancakes ! La forme ?    \t");
-	if (str == NULL)
-	{
-		ft_putendl_fd("Error: malloc failed", 2);
-		ft_putendl("=============");
-		return;
-	}
-	ft_putstr(str);
-	ft_putchar('_');
-	ft_putchar('\n');
-	ft_strdel(&str);
-	str = ft_strtrim("  z      ");
-	if (str == NULL)
-	{
-		ft_putendl_fd("Error: malloc failed", 2);
-		ft_putendl("=============");
-		return;
-	}
-	ft_putstr(str);
-	ft_putchar('_');
-	ft_putchar('\n');
-	ft_strdel(&str);
-	str = ft_strtrim("  \t ");
-	if (str == NULL)
-	{
-		ft_putendl_fd("Error: malloc failed", 2);
-		ft_putendl("=============");
-		return;
-	}
-
-	ft_putendl(str);
-	ft_strdel(&str);
-	ft_putendl("=============");
-}
-
-void		test_strsplit()
-{
-	char **str;
-	int i;
-
-	ft_putendl("== strsplit ==");
-	//str = ft_strsplit("*super*chaine****de* *charactereres*", '*');
-	str = ft_strsplit("*super*chaine****de* *charactereres", '*');
-	//str = ft_strsplit("\0", '*');
-	//str = ft_strsplit("***une* ****vache*_*bleue****", '*');
-	if (str == NULL)
-	{
-		ft_putendl_fd("Error: malloc failed", 2);
-		ft_putendl("=============");
-		return;
-	}
-	i = 0;
-	while (str[i][0] != '\0')
-	{
-		ft_putendl(str[i]);
-		ft_strdel(&str[i]);
-		i++;
-	}
-	ft_memdel((void**)&str);
-	ft_putendl("=============");
-}
-
-void		test_putnbr_fd()
-{
-	ft_putnbr_fd(1297320, 1);
-	ft_putchar_fd('\n', 1);
-	ft_putnbr_fd(0, 2);
-	ft_putchar_fd('\n', 2);
-}
-
-void		test_putnbr()
-{
-	ft_putnbr(5567320);
-	ft_putchar('\n');
-	ft_putnbr(0);
-	ft_putchar('\n');
-	ft_putnbr(-32401);
-	ft_putchar('\n');
-}
-
-
-void		test_putendl_fd()
-{
-	ft_putendl_fd("putendl_fd on filedescriptor 1", 1);
-	ft_putendl_fd("putendl_fd on filedescriptor 2", 2);
-}
-
-void		test_putendl()
-{
-	char *str;
-
-	str = "test string";
-	printf("== putendl ==\n");
-	ft_putendl(str);
-	printf("============\n");
-}
-
-void		test_strlen()
-{
-	char *str;
-
-	str = "test_string";
-	printf("== strlen ==\n");
-	ft_putendl(str);
-	ft_putstr("libc: ");
-	ft_putnbr(strlen(str));
-	ft_putchar('\n');
-
-	ft_putstr("libft: ");
-	ft_putnbr(ft_strlen(str));
-	ft_putchar('\n');
-	printf("============\n");	
-
-}
-
-void		test_putchar_fd()
-{
-	printf("== putchar_fd ==\n");
-	ft_putchar_fd(FILL_CHAR, 1);
-	ft_putchar_fd('\n', 1);
-	ft_putchar_fd(FILL_CHAR, 2);
-	ft_putchar_fd('\n', 2);
-	printf("============\n");
-}
+#define STRSEARCH_STR "Le petit toto, a fait un gros rotototo *."
+#define STRSEARCH_LAST 32
+#define STRCMP_N 2
 
 void		test_putchar()
 {
-	printf("== putchar ==\n");
+	ft_putendl("== putchar / putchar_fd ==");
+	ft_putstr("putchar: ");
 	ft_putchar(FILL_CHAR);
+	ft_putendl(" (ok)");
+	ft_putstr_fd("putchar_fd on filedescriptor 1: ", 1);
+	ft_putchar_fd(FILL_CHAR, 1);
+	ft_putendl_fd(" (ok)", 1);
+	ft_putstr_fd("putchar_fd on filedescriptor 2: ", 2);
+	ft_putchar_fd(FILL_CHAR, 2);
+	ft_putendl_fd(" (ok)", 2);
 	ft_putchar('\n');
-	printf("============\n");
 }
-
 void		test_putstr()
 {
-	printf("== putstr ==\n");
-	ft_putstr("string test\n");
-	printf("============\n");
-
+	ft_putendl("== putstr / putstr_fd ==");
+	ft_putstr("putstr: ok\n");
+	ft_putstr_fd("putstr_fd on filedescriptor 1: ok\n", 1);
+	ft_putstr_fd("putstr_fd on filedescriptor 2: ok\n", 2);
+	ft_putstr_fd("putstr_fd on filedescriptor 3: ok\n", 3);
+	ft_putchar('\n');
 }
 
-void		test_putstr_fd()
-{
-	printf("== putstr_fd ==\n");
-	ft_putstr_fd("fd: 1\n", 1);
-	ft_putstr_fd("fd: 2\n", 2);
-	ft_putstr_fd("fd: 3\n", 3);
-	printf("============\n");
 
+void		test_putendl()
+{
+	ft_putendl("== putendl / putendl_fd ==");
+	ft_putendl("putendl: ok");
+	ft_putendl_fd("putendl_fd on filedescriptor 1: ok", 1);
+	ft_putendl_fd("putendl_fd on filedescriptor 2: ok", 2);
+	ft_putchar('\n');
+}
+void		test_putnbr()
+{
+	ft_putendl("== putnbr / putnbr_fd ==");
+	ft_putstr("putnbr(0): "); // 2147483648
+	ft_putnbr(0);
+	ft_putstr("\nputnbr(2147483647): "); 
+	ft_putnbr(2147483647);
+	ft_putstr("\nputnbr(-2147483648): ");
+	ft_putnbr(-2147483648);
+
+	ft_putstr_fd("\nputnbr_fd(1297320) on filedescriptor 2: ", 2);
+	ft_putnbr_fd(1297320, 2);
+	ft_putchar('\n');
 }
 
 void		test_memset()
@@ -323,21 +109,11 @@ void		test_memset()
 		ft_putendl("malloc: Something went bad, abort");
 		return;
 	}
-
 	memset(str, FILL_CHAR, MEMSET_LENGTH);
 	memset(nbr_array, FILL_CHAR, MEMSET_LENGTH);
 	ft_putstr("string: ");
 	ft_putendl(str);
-	i = 0;
-	ft_putstr("int array: ");
-	while (i < MEMSET_LENGTH)
-	{
-		ft_putnbr(nbr_array[i++]);
-		if (i < MEMSET_LENGTH - 1)
-			ft_putchar(',');
-	}
 	memset(str, FILL_CHAR - 1, MEMSET_LENGTH / 2);
-	memset(nbr_array, FILL_CHAR - 1, MEMSET_LENGTH / 2);
 	ft_putstr("string: ");
 	ft_putendl(str);
 	i = 0;
@@ -348,11 +124,21 @@ void		test_memset()
 		if (i < MEMSET_LENGTH - 1)
 			ft_putchar(',');
 	}
-
+	ft_putchar('\n');
+	memset(nbr_array, FILL_CHAR - 1, MEMSET_LENGTH / 2);
+	i = 0;
+	ft_putstr("int array: ");
+	while (i < MEMSET_LENGTH)
+	{
+		ft_putnbr(nbr_array[i++]);
+		if (i < MEMSET_LENGTH - 1)
+			ft_putchar(',');
+	}
+	ft_putchar('\n');
 	free(str);
 	free(nbr_array);
 	
-	ft_putendl("\n>> libft");
+	ft_putendl(">> libft");
 	str = (char *)malloc(sizeof(char) * MEMSET_LENGTH); //MEMSET_LENGTH);
 	if (str == NULL)
 	{
@@ -369,19 +155,11 @@ void		test_memset()
 	ft_memset(nbr_array, FILL_CHAR, MEMSET_LENGTH);
 	ft_putstr("string: ");
 	ft_putendl(str);
-	i = 0;
-	ft_putstr("int array: ");
-	while (i < MEMSET_LENGTH)
-	{
-		ft_putnbr(nbr_array[i++]);
-		if (i < MEMSET_LENGTH - 1)
-			ft_putchar(',');
-	}
-
 	ft_memset(str, FILL_CHAR - 1, MEMSET_LENGTH / 2);
 	ft_memset(nbr_array, FILL_CHAR - 1, MEMSET_LENGTH / 2);
 	ft_putstr("string: ");
 	ft_putendl(str);
+
 	i = 0;
 	ft_putstr("int array: ");
 	while (i < MEMSET_LENGTH)
@@ -390,40 +168,52 @@ void		test_memset()
 		if (i < MEMSET_LENGTH - 1)
 			ft_putchar(',');
 	}
+	ft_putchar('\n');
+	i = 0;
+	ft_putstr("int array: ");
+	while (i < MEMSET_LENGTH)
+	{
+		ft_putnbr(nbr_array[i++]);
+		if (i < MEMSET_LENGTH - 1)
+			ft_putchar(',');
+	}
+	ft_putchar('\n');
 	free(str);
 	free(nbr_array);
-
-	ft_putendl("\n============");
+	ft_putchar('\n');
 }
 
 void	test_bzero()
 {
-	char	*str;
-	int	str_length;
+	char	*s1;
+	char	*s2;
 
-	str = "Je suis une chaine de test";
 	ft_putendl("== bzero ==");
 	ft_putendl(">> libc");
-	ft_putendl(str);
-	str_length = ft_strlen(str);
-	str = (char*)malloc(sizeof(char) * str_length);
-	str = memset(str, FILL_CHAR, str_length);
-	ft_putendl(str);
-	bzero(str, ft_strlen(str));
-	ft_putendl(str);
-	free(str);
+	s1 = "Je suis une chaine de test.";
+	ft_putstr("string: ");
+	ft_putendl(s1);
+	s2 = (char*)malloc(sizeof(char) * ft_strlen(s1));
+	s2 = strdup(s1);
+	s2 = memset(s2, FILL_CHAR, ft_strlen(s2));
+	ft_putstr("string: ");
+	ft_putendl(s2);
+	bzero(s2, ft_strlen(s2));
+	ft_putstr("string: ");
+	ft_putendl(s2);
+	free(s2);
 	ft_putendl(">> libft");
-	str = "Je suis une chaine de test";
-	str_length = ft_strlen(str);
-	ft_putendl(str);
-	str = ft_strnew(sizeof(char) * str_length);
-	//str = (char *)malloc(sizeof(char) * ft_strlen(str));
-	str = ft_memset(str, FILL_CHAR, str_length);
-	ft_putendl(str);
-	ft_bzero(str, str_length);
-	ft_putendl(str);
-	ft_strdel(&str);
-	ft_putendl("============");
+	ft_putstr("string: ");
+	ft_putendl(s1);
+	s2 = (char*)malloc(sizeof(char) * ft_strlen(s1));
+	s2 = ft_strdup(s1);
+	s2 = ft_memset(s2, FILL_CHAR, ft_strlen(s2));
+	ft_putstr("string: ");
+	ft_putendl(s2);
+	ft_bzero(s2, ft_strlen(s2));
+	ft_putstr("string: ");
+	ft_putendl(s2);
+	ft_putchar('\n');
 }
 
 void	test_memcpy()
@@ -431,8 +221,8 @@ void	test_memcpy()
 	char	*str;
 	char	*dst;
 	char	*to;
-	int	i;
-	int	l;
+	int		i;
+	int		l;
 
 	ft_putendl("== memcpy/memccpy ==");
 	str = "Je suis une autre chaine de test";
@@ -462,7 +252,7 @@ void	test_memcpy()
 		ft_putchar(dst[i++]);
 	ft_putchar('\n');
 	ft_strdel(&dst);
-	ft_putendl("============");
+	ft_putchar('\n');
 }
 
 void	test_memmove()
@@ -481,9 +271,7 @@ void	test_memmove()
 	str = ft_strcpy(str, s);
 	str = ft_memmove(&str[5], str, 22);
 	ft_putendl(str);
-	//str = ft_;
-	
-	ft_putendl("====================");
+	ft_putchar('\n');
 }
 
 void	test_memchr()
@@ -499,12 +287,12 @@ void	test_memchr()
 	if (p)
 		ft_putendl(p);
 	else
-		ft_putendl("character not found");
+		ft_putendl("le caractere * n'apparait pas dans les 8 premiers caracteres");
 	p = (char *)memchr(str, '*', 11);
 	if (p)
 		ft_putendl(p);
 	else
-		ft_putendl("character not found");
+		ft_putendl("le caractere * n'apparait pas dans les 11 premiers caracteres");
 	ft_strdel(&str);
 	ft_putendl(">> libft");
 	str = ft_strdup("Une chaine*d*etoiles*");
@@ -513,111 +301,62 @@ void	test_memchr()
 	if (p)
 		ft_putendl(p);
 	else
-		ft_putendl("character not found");
+		ft_putendl("le caractere * n'apparait pas dans les 8 premiers caracteres");
 	p = (char *)ft_memchr(str, '*', 11);
 	if (p)
 		ft_putendl(p);
 	else
-		ft_putendl("character not found");
+		ft_putendl("le caractere * n'apparait pas dans les 11 premiers caracteres");
 	ft_strdel(&str);
-	ft_putendl("====================");
-
+	ft_putchar('\n');
 }
 
 void	test_memcmp()
 {
 	ft_putendl("== memcmp ==");
 	ft_putendl(">> libc");
-	ft_putnbr(memcmp("Hanane", "bananae", 1));
+	ft_putstr("Banane / banane: ");
+	ft_putnbr(memcmp("Banane", "banane", 1));
 	ft_putchar('\n');
+	ft_putstr("banane / banane: ");
+	ft_putnbr(memcmp("banane", "banane", 1));
+	ft_putchar('\n');
+	ft_putstr("banana / banane: ");
+	ft_putnbr(memcmp("banana", "banane", 1));
+	ft_putchar('\n');
+
 	ft_putendl(">> libft");
-	ft_putnbr(ft_memcmp("Hanane", "bananae", 1));
+	ft_putstr("Banane / banane: ");
+	ft_putnbr(ft_memcmp("Banane", "banane", 1));
 	ft_putchar('\n');
-	ft_putendl("====================");
-}
-
-void		test_memalloc()
-{
-	char	*str;
-	int	*int_array;
-	int	i;
-	
-	ft_putstr("== memalloc/memdel ==\n");
-	str = (char *)ft_memalloc(MEMSET_LENGTH);
-	int_array = (int *)ft_memalloc(MEMSET_LENGTH * sizeof(int));
-	
-	if (str == NULL || int_array == NULL)
-	{
-		ft_putstr_fd("memalloc failed\n", 2);
-		ft_putstr("===============\n");
-		return;
-	}
-	ft_putendl(str);
-	i = 0;
-	while(i < MEMSET_LENGTH)
-		ft_putnbr(int_array[i++]);
+	ft_putstr("banane / banane: ");
+	ft_putnbr(ft_memcmp("banane", "banane", 1));
 	ft_putchar('\n');
-	i = 0;
-	while(i < MEMSET_LENGTH)
-	{
-		str[i] = FILL_CHAR;
-		int_array[i++] = 42;
-	}
-	ft_putendl(str);
-	i = 0;
-	while(i < MEMSET_LENGTH)
-		ft_putnbr(int_array[i++]);
+	ft_putstr("banana / banane: ");
+	ft_putnbr(ft_memcmp("banana", "banane", 1));
 	ft_putchar('\n');
-	ft_memdel((void**)&str);
-	ft_memdel((void**)&int_array);
-	if (!str)
-		ft_putendl("str is NULL");
-	if (!int_array)
-		ft_putendl("int_array is NULL");
-	ft_putendl("===============");
+	ft_putchar('\n');
 }
 
-void		test_strnew()
+void		test_strlen()
 {
-	char	*str;
-	int	i;
+	char *str;
 
-	ft_putendl("== strnew/strdel ==");
-	str = ft_strnew(MEMSET_LENGTH);
-	if (!str)
-	{
-		ft_putendl_fd("strnew failed", 2);
-		ft_putendl("=============");
-		return;
-	}
+	str = "test_string";
+	printf("== strlen ==\n");
 	ft_putendl(str);
-	i = 0;
-	while(i < MEMSET_LENGTH)
-		str[i++] = FILL_CHAR;
-	ft_putendl(str);
-	ft_strdel(&str);
-	if (!str)
-		ft_putendl("str is NULL");
-	ft_putendl("=============");
+	ft_putstr("libc: ");
+	ft_putnbr(strlen(str));
+	ft_putchar('\n');
+	ft_putstr("libft: ");
+	ft_putnbr(ft_strlen(str));
+	ft_putchar('\n');
+	ft_putchar('\n');
 }
 
-void		test_strclr()
+void		test_strdup()
 {
-	char	*str;
-	int	i;
-
-	ft_putendl("== strclr ==");
-	str = ft_strnew(MEMSET_LENGTH);
-	i = 0;
-	while (i < MEMSET_LENGTH)
-		str[i++] = FILL_CHAR;
-	ft_putendl(str);
-	ft_strclr(str);
-	ft_putendl(str);
-	ft_putendl("=============");
 }
-
-#define STRCPY_STR "La belle Huguette contait fleurette aux assiettes du Baron von Rocket"
 
 void		test_strcpy()
 {
@@ -628,7 +367,7 @@ void		test_strcpy()
 	str = ft_strnew(sizeof(char) * ft_strlen(STRCPY_STR));
 	str = strcpy(str, STRCPY_STR);
 	ft_putendl(str);
-	str = strncpy(str, "Truc vert", 6);
+	str = strncpy(str, "OOOOOOOOOOOOOOOO", 6);
 	ft_putendl(str);
 	str = strncpy(str, "Petit train", 18);
 	ft_putendl(str);
@@ -639,14 +378,14 @@ void		test_strcpy()
 	str = ft_strnew(sizeof(char) * ft_strlen(STRCPY_STR));
 	str = ft_strcpy(str, STRCPY_STR);
 	ft_putendl(str);
-	str = ft_strncpy(str, "Truc vert", 6);
+	str = ft_strncpy(str, "OOOOOOOOOOOOOOOO", 6);
 	ft_putendl(str);
 	str = ft_strncpy(str, "Petit train", 18);
 	ft_putendl(str);
 	str = ft_strncpy(str, "Chapeau rouge", 5);
 	ft_putendl(str);
 	ft_strdel(&str);
-	ft_putendl("=============");
+	ft_putchar('\n');
 }
 
 void		test_strcat()
@@ -658,31 +397,30 @@ void		test_strcat()
 	str = ft_strnew(sizeof(char) * 200);
 	str = strcpy(str, STRCPY_STR);
 	ft_putendl(str);
-	str = strcat(str, "Petit singe");
+	str = strcat(str, "_______");
 	ft_putendl(str);
-	str = strncat(str, "Truc vert", 6);
+	str = strncat(str, "Un camion", 6);
 	ft_putendl(str);
 	str = strncat(str, "Petit train", 18);
 	ft_putendl(str);
 	str = strncat(str, "Chapeau rouge", 5);
 	ft_putendl(str);
-
+#ifndef LINUX
 	ft_putnbr(strlcat(str, "Tartinettos", 200));
 	ft_putchar('\n');
 	ft_putendl(str);
 	ft_putnbr(strlcat(str, " Un truc super long et chiant a lire, mais je ne vous oblige pas car de toute maniere tout ne va pas passer car la chaine de caracteres de destination ne fait pas plus de 200 caracteres et il me semble que cette chaine de caracteres en fait plus de 200.", 200));
 	ft_putchar('\n');
 	ft_putendl(str);
-
-
+#endif
 	ft_strdel(&str);
 	ft_putendl(">> libc");
 	str = ft_strnew(sizeof(char) * 200);
 	str = ft_strcpy(str, STRCPY_STR);
 	ft_putendl(str);
-	str = ft_strcat(str, "Petit singe");
+	str = ft_strcat(str, "_______");
 	ft_putendl(str);
-	str = ft_strncat(str, "Truc vert", 6);
+	str = ft_strncat(str, "Un camion", 6);
 	ft_putendl(str);
 	str = ft_strncat(str, "Petit train", 18);
 	ft_putendl(str);
@@ -695,7 +433,7 @@ void		test_strcat()
 	ft_putchar('\n');
 	ft_putendl(str);
 	ft_strdel(&str);
-	ft_putendl("=============");
+	ft_putchar('\n');
 }
 
 void	test_strchr()
@@ -707,6 +445,7 @@ void	test_strchr()
 	ft_putendl(">> libc");
 	str = ft_strdup("Une chaine*d*etoiles*bleues*");
 	ft_putendl(str);
+
 	p = strchr(str, '*');
 	if (p)
 		ft_putendl(p);
@@ -717,8 +456,10 @@ void	test_strchr()
 		ft_putendl(p);
 	else
 		ft_putendl("character not found");
+
 	ft_strdel(&str);
 	ft_putendl(">> libft");
+
 	str = ft_strdup("Une chaine*d*etoiles*bleues*");
 	ft_putendl(str);
 	p = ft_strchr(str, '*');
@@ -732,12 +473,8 @@ void	test_strchr()
 	else
 		ft_putendl("character not found");
 	ft_strdel(&str);
-	ft_putendl("====================");
-
+	ft_putchar('\n');
 }
-
-#define STRSEARCH_STR "You know tht power ? Look at ththt * buddy !"
-#define STRCMP_N 2
 
 void		test_strsearch()
 {
@@ -749,58 +486,110 @@ void		test_strsearch()
 	str = strdup(STRSEARCH_STR);
 	str_ptr = str;
 	ft_putendl(str);
-	str = strstr(str, "tht *");
-	ft_putendl(str);
-	str = str_ptr;
-	str = strnstr(str, "tht *", 32); // 32, 36
+	str = strstr(str, "toto *");
 	if (str)
 		ft_putendl(str);
+	else
+		ft_putendl("\"toto *\" n'a pas ete trouve dans la chaine");
+	str = str_ptr;
+#ifndef LINUX
+	str = strnstr(str, "toto *", STRSEARCH_LAST);
+	if (str)
+		ft_putendl(str);
+	else
+		ft_putendl("\"toto *\" n'a pas ete trouve dans la chaine avant le dernier caractere");
+#endif
 	ft_strdel(&str_ptr);
 	ft_putendl(">> libft");
 	str = ft_strdup(STRSEARCH_STR);
 	str_ptr = str;
 	ft_putendl(str);
-	str = ft_strstr(str, "tht *");
-	ft_putendl(str);
+	str = ft_strstr(str, "toto *");
+	if (str)
+		ft_putendl(str);
+	else
+		ft_putendl("\"toto *\" n'a pas ete trouve dans la chaine");
 	str = str_ptr;
-	str = ft_strnstr(str, "tht *", 32); // 32, 36
+	str = ft_strnstr(str, "toto *", STRSEARCH_LAST);
 	if (str) 
 		ft_putendl(str);
-
+	else
+		ft_putendl("\"toto *\" n'a pas ete trouve dans la chaine avant le dernier caractere");
 	ft_strdel(&str_ptr);
-	//free(str_ptr);
-	ft_putendl("== strcmp/strncmp ==");
-	ft_putendl("strcmp");
-	ft_putnbr(strcmp("ghi", "ghz"));
 	ft_putchar('\n');
-	ft_putnbr(strcmp("ghi", "gha"));
+	ft_putendl("== strcmp ==");
+	ft_putendl("Libc // Libft");
+	ft_putstr("Banane / banane: ");
+	ft_putnbr(strcmp("Banane", "banane"));
+	ft_putstr(" // ");
+	ft_putnbr(ft_strcmp("Banane", "banane"));
 	ft_putchar('\n');
-	ft_putnbr(strcmp("ghi", "ghi"));
+	ft_putstr("banane / banane: ");
+	ft_putnbr(strcmp("banane", "banane"));
+	ft_putstr(" // ");
+	ft_putnbr(ft_strcmp("banane", "banane"));
 	ft_putchar('\n');
-	ft_putnbr(ft_strcmp("ghi", "ghz"));
+	ft_putstr("banane / banana: ");
+	ft_putnbr(strcmp("banane", "banana"));
+	ft_putstr(" // ");
+	ft_putnbr(ft_strcmp("banane", "banana"));
 	ft_putchar('\n');
-	ft_putnbr(ft_strcmp("ghi", "gha"));
+	ft_putendl("== strncmp ==");
+	ft_putendl("Libc // Libft");
+	ft_putstr("Banane / banane (");
+	ft_putnbr(STRCMP_N);
+	ft_putstr("): ");
+	ft_putnbr(strncmp("Banane", "banane", STRCMP_N));
+	ft_putstr(" // ");
+	ft_putnbr(ft_strncmp("Banane", "banane", STRCMP_N));
 	ft_putchar('\n');
-	ft_putnbr(ft_strcmp("ghi", "ghi"));
+	ft_putstr("banane / banane (");
+	ft_putnbr(STRCMP_N);
+	ft_putstr("): ");
+	ft_putnbr(strncmp("banane", "banane", STRCMP_N));
+	ft_putstr(" // ");
+	ft_putnbr(ft_strncmp("banane", "banane", STRCMP_N));
 	ft_putchar('\n');
-
-	ft_putendl("strncmp");
-	ft_putnbr(strncmp("ghi", "ghz", STRCMP_N));
+	ft_putstr("banane / banana (");
+	ft_putnbr(STRCMP_N);
+	ft_putstr("): ");
+	ft_putnbr(strncmp("banane", "banana", STRCMP_N));
+	ft_putstr(" // ");
+	ft_putnbr(ft_strncmp("banane", "banana", STRCMP_N));
 	ft_putchar('\n');
-	ft_putnbr(strncmp("ghi", "gha", STRCMP_N));
 	ft_putchar('\n');
-	ft_putnbr(strncmp("ghi", "ghi", STRCMP_N));
-	ft_putchar('\n');
-	ft_putnbr(ft_strncmp("ghi", "ghz", STRCMP_N));
-	ft_putchar('\n');
-	ft_putnbr(ft_strncmp("ghi", "gha", STRCMP_N));
-	ft_putchar('\n');
-	ft_putnbr(ft_strncmp("ghi", "ghi", STRCMP_N));
-	ft_putchar('\n');
-	ft_putendl("=============");
 }
 
+void	test_atoi()
+{
+	char	*nb;
 
+	ft_putendl("== atoi ==");
+	ft_putendl("Libc // Libft");
+	nb = "    \
+			-998c37 ";
+	ft_putnbr(atoi(nb));
+	ft_putstr(" // ");
+	ft_putnbr(ft_atoi(nb));
+	ft_putchar('\n');
+	ft_putnbr(atoi("0"));
+	ft_putstr(" // ");
+	ft_putnbr(ft_atoi("0"));
+	ft_putchar('\n');
+	ft_putnbr(atoi("871"));
+	ft_putstr(" // ");
+	ft_putnbr(ft_atoi("871"));
+	ft_putchar('\n');
+	ft_putnbr(atoi("2147483647"));
+	ft_putstr(" // ");
+	ft_putnbr(ft_atoi("2147483647"));
+	ft_putchar('\n');
+	ft_putnbr(atoi("-2147483648"));
+	ft_putstr(" // ");
+	ft_putnbr(ft_atoi("-2147483648"));
+	ft_putchar('\n');
+	ft_putchar('\n');
+}
 
 void		is_test(int c)
 {
@@ -899,21 +688,342 @@ void		is_test(int c)
 #endif
 }
 
-void	test_atoi_itoa()
+void		test_memalloc()
 {
-	ft_putendl("== atoi ======");
-	ft_putnbr(ft_atoi("    \
-			-998c37 "));
+	char	*str;
+	int	*int_array;
+	int	i;
+	
+	ft_putstr("== memalloc/memdel ==\n");
+	str = (char *)ft_memalloc(MEMSET_LENGTH);
+	int_array = (int *)ft_memalloc(MEMSET_LENGTH * sizeof(int));
+	
+	if (str == NULL || int_array == NULL)
+	{
+		ft_putstr_fd("memalloc failed\n", 2);
+		ft_putstr("===============\n");
+		return;
+	}
+	ft_putendl(str);
+	i = 0;
+	while(i < MEMSET_LENGTH)
+		ft_putnbr(int_array[i++]);
 	ft_putchar('\n');
-	ft_putendl("==============");
+	i = 0;
+	while(i < MEMSET_LENGTH)
+	{
+		str[i] = FILL_CHAR;
+		int_array[i++] = 42;
+	}
+	ft_putendl(str);
+	i = 0;
+	while(i < MEMSET_LENGTH)
+		ft_putnbr(int_array[i++]);
+	ft_putchar('\n');
+	ft_memdel((void**)&str);
+	ft_memdel((void**)&int_array);
+	if (!str)
+		ft_putendl("str is NULL");
+	if (!int_array)
+		ft_putendl("int_array is NULL");
+	ft_putendl("===============");
+}
+
+void		test_strnew()
+{
+	char	*str;
+	int	i;
+
+	ft_putendl("== strnew/strdel ==");
+	str = ft_strnew(MEMSET_LENGTH);
+	if (!str)
+	{
+		ft_putendl_fd("strnew failed", 2);
+		ft_putendl("=============");
+		return;
+	}
+	ft_putendl(str);
+	i = 0;
+	while(i < MEMSET_LENGTH)
+		str[i++] = FILL_CHAR;
+	ft_putendl(str);
+	ft_strdel(&str);
+	if (!str)
+		ft_putendl("str is NULL");
+	ft_putendl("=============");
+}
+
+void		test_strclr()
+{
+	char	*str;
+	int	i;
+
+	ft_putendl("== strclr ==");
+	str = ft_strnew(MEMSET_LENGTH);
+	i = 0;
+	while (i < MEMSET_LENGTH)
+		str[i++] = FILL_CHAR;
+	ft_putendl(str);
+	ft_strclr(str);
+	ft_putendl(str);
+	ft_putendl("=============");
+}
+
+void	putcharII(char *c)
+{
+	ft_putchar(*c);
+}
+
+void	putchar_i(unsigned int idx, char *c)
+{
+	ft_putnbr(idx);
+	ft_putstr(": ");
+	ft_putchar(*c);
+	ft_putchar('\n');
+}
+
+void		test_striter()
+{
+	ft_putendl("== striter ==");
+	ft_striter("Salut les mecs !\n", &putcharII);
+	ft_putendl("== striteri ==");
+	ft_striteri("Salut les mecs !\n", &putchar_i);
+	ft_putendl("=============");
+}
+
+char	putchar_map(char c)
+{
+	if (c == 'Z')
+		c = ' ';
+	else
+		c++;
+
+	ft_putchar(c);
+	return (c);
+}
+
+char	putchar_mapi(unsigned int idx, char c)
+{
+	if (c == 'Z')
+		c = ' ';
+	else
+		c++;
+
+	putchar_i(idx, &c);
+	return (c);
+}
+
+void		test_strmap()
+{
+	char	*str;
+	
+	str = "R`ktsZkdrZldbr \t"; 
+	ft_putendl("== strmap ==");
+	ft_putendl(str);
+	str = ft_strmap(str, &putchar_map);
+	if (str == NULL)
+	{
+		ft_putendl_fd("map error", 2);
+		ft_putendl("============");
+		return;
+	}
+	free(str);
+	ft_putendl("== strmapi ==");
+	str = "R`ktsZkdrZldbr \t"; 
+	str = ft_strmapi(str, &putchar_mapi);
+	if (str == NULL)
+	{
+		ft_putendl_fd("map error", 2);
+		ft_putendl("============");
+		return;
+	}
+	ft_putendl(str);
+	free(str);
+	ft_putendl("=============");
+}
+
+void		test_strequ()
+{
+	char	*str1;
+	char	*str2;
+
+	ft_putendl("== strequ ==");
+	str1 = "Hello zougou !\n";
+	str2 = "Hello gros zougou !\n";
+	if (ft_strequ(str1, str2))
+		ft_putendl("Strings match");
+	else
+		ft_putendl("Strings doesn't match");
+	if (ft_strequ(str1, "Hello"))
+		ft_putendl("Strings match");
+	else
+		ft_putendl("Strings doesn't match");
+	ft_putendl("== strnequ ==");
+	if (ft_strnequ(str1, str2, 6))
+		ft_putendl("Strings match");
+	else
+		ft_putendl("Strings doesn't match");
+	if (ft_strnequ(str1, str2, 7))
+		ft_putendl("Strings match");
+	else
+		ft_putendl("Strings doesn't match");
+	ft_putendl("=============");
+}
+
+void		test_strsub()
+{
+	char	*str;
+
+	ft_putendl("== strsub ==");
+	str = ft_strsub(LONG_STR, 12, 15);
+	ft_putendl(str);
+	ft_strdel (&str);
+	ft_putendl("=============");
+}
+
+void		test_strjoin()
+{
+	char	*str;
+
+	ft_putendl("== strjoin ==");
+	str = ft_strjoin("Salut les ", "pancakes !");
+	ft_putendl(str);
+	ft_strdel(&str);
+	ft_putendl("=============");
+}
+
+void		test_strtrim()
+{
+	char	*str;
+
+	ft_putendl("== strtrim ==");
+	str = ft_strtrim("      \t\t  \t\n  Salut    \n\n\t\n  _\t les pancakes ! La forme ?    \t");
+	if (str == NULL)
+	{
+		ft_putendl_fd("Error: malloc failed", 2);
+		ft_putendl("=============");
+		return;
+	}
+	ft_putstr("test2: \"");
+	ft_putstr(str);
+	ft_putendl("\"");
+	ft_strdel(&str);
+	str = ft_strtrim("  z      ");
+	if (str == NULL)
+	{
+		ft_putendl_fd("Error: malloc failed", 2);
+		ft_putendl("=============");
+		return;
+	}
+	ft_putstr("test2: \"");
+	ft_putstr(str);
+	ft_putendl("\"");
+	ft_strdel(&str);
+	str = ft_strtrim("  \t ");
+	if (str == NULL)
+	{
+		ft_putendl_fd("Error: malloc failed", 2);
+		ft_putendl("=============");
+		return;
+	}
+	ft_putstr("test3: \"");
+	ft_putstr(str);
+	ft_putendl("\"");
+	ft_strdel(&str);
+	ft_putendl("=============");
+}
+
+void		test_strsplit()
+{
+	char **str;
+	int i;
+
+	ft_putendl("== strsplit ==");
+	//str = ft_strsplit("*super*chaine****de* *charactereres*", '*');
+	str = ft_strsplit("super*chaine****de* *charactereres***", '*');
+	//str = ft_strsplit("\0", '*');
+	//str = ft_strsplit("***une* ****vache*_*bleue****", '*');
+	if (str == NULL)
+	{
+		ft_putendl_fd("Error: malloc failed", 2);
+		ft_putendl("=============");
+		return;
+	}
+	i = 0;
+	while (str[i][0] != '\0')
+	{
+		ft_putendl(str[i]);
+		ft_strdel(&str[i]);
+		i++;
+	}
+	ft_memdel((void**)&str);
+	ft_putendl("=============");
+}
+
+void		delone(void *content, size_t content_size)
+{
+	if (content_size > 0)
+		ft_memdel(&content);
+}
+
+void		putlst(t_list *elem)
+{
+	ft_putendl(elem->content);
+}
+
+t_list		setelem(t_list *elem)
+{
+	elem->content = "UU";
+	elem->content_size = 3;
+	return(*elem);
+}
+
+void		test_lst()
+{
+	t_list	*list;
+	t_list	*node;
+	t_list	*new_list;
+	
+	node = (t_list *)malloc(sizeof(t_list));
+	node->content_size = 9;
+	node->content = "Bouuuh !";
+	list = ft_lstnew("Trop facile", 12);
+	ft_lstadd(&list, node);
+	ft_lstiter(node, &putlst);
+	new_list = ft_lstmap(node, &setelem);
+	ft_lstiter(new_list, &putlst);
+	
+	//ft_putendl(node->next->content);
+	//ft_putendl(list->content);
+	//ft_lstdelone(&list, &delone);
+
+	//ft_lstdel(&list, &delone); <<--- ca crash !!
+	ft_lstdel(&new_list, &delone);
 }
 
 int		main(int argc, char **argv)
 {
 	if (argc < 0 || argv[0][0] == '\0')
 		return (1);
-
-#ifdef IS_TEST
+	ft_putchar('\n');
+#ifdef TEST_MEM
+	test_memset();
+	test_bzero();
+	test_memcpy();
+	test_memmove();
+	test_memchr();
+	test_memcmp();
+#endif
+#ifdef TEST_STR
+	test_strlen();
+	test_strdup();
+	test_strcpy();
+	test_strcat();
+	test_strchr();
+	test_strsearch();
+	test_atoi();
+#endif
+#ifdef TEST_IS
 	if (argc < 2)
 	{
 		ft_putendl_fd("parameter needed: char", 2);
@@ -924,44 +1034,27 @@ int		main(int argc, char **argv)
 	else
 		is_test((int)argv[1][0]);
 #endif
-#ifdef STRING
-	test_putnbr();
-	test_putnbr_fd();
-	test_putstr_fd();
-	test_striter();
-	
+#ifdef TEST_MEM
+	test_memalloc();
+	test_strnew();
+#endif
+#ifdef TEST_STR
+	test_strclr();
+	test_striter();	
 	test_strmap();
 	test_strequ();
 	test_strsub();
 	test_strjoin();
 	test_strtrim();
-	//test_strsplit();	
-		
-	test_putendl();
-	test_putendl_fd();
-	test_putchar();	
-	test_putchar_fd();	
-	test_putstr();
-	test_putstr_fd();
-
-	test_strchr();
-	test_strsearch();
-	test_strcat();
-	test_strcpy();
-	test_strlen();
-
-	test_atoi_itoa();
-
+	test_strsplit();	
 #endif
-#ifdef MEM
-	test_memalloc();
-	test_strnew();
-	test_strclr();
-	test_memset();
-	test_bzero();
-	test_memcpy();
-	test_memmove();
-	test_memchr();
-	test_memcmp();
+#ifdef TEST_PUT
+	test_putchar();
+	test_putstr();
+	test_putendl();
+	test_putnbr();
+#endif
+#ifdef TEST_LST
+	test_lst();
 #endif
 }
