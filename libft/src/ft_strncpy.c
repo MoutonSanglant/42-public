@@ -6,13 +6,13 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/01 12:35:49 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/01 12:44:29 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/03 10:07:04 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
 
-char	*ft_strncpy(char *dest, char const *src, size_t n)
+char	*ft_strncpy(char *dst, char const *src, size_t n)
 {
 	size_t	i;
 	size_t	max;
@@ -22,10 +22,10 @@ char	*ft_strncpy(char *dest, char const *src, size_t n)
 	while (i < n)
 	{
 		if (i < max)
-			dest[i] = src[i];
+			dst[i] = src[i];
 		else
-			dest[i] = '\0';
+			dst[i] = '\0';
 		i++;
 	}
-	return (dest);
+	return (dst);
 }

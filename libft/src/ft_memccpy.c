@@ -6,13 +6,13 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/01 12:37:29 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/01 12:56:17 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/03 10:03:19 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
 
-void	*ft_memccpy(void *dest, void const *src, int c, size_t n)
+void	*ft_memccpy(void *dst, void const *src, int c, size_t n)
 {
 	size_t	i;
 
@@ -20,8 +20,8 @@ void	*ft_memccpy(void *dest, void const *src, int c, size_t n)
 	while (i < n)
 	{
 		if (((char*)src)[i] == c)
-			return (&((char*)dest)[i + 1]);
-		((char*)dest)[i] = ((char*)src)[i];
+			return (&((char*)dst)[i + 1]);
+		((char*)dst)[i] = ((char*)src)[i];
 		i++;
 	}
 	return (NULL);

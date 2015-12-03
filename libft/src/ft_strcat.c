@@ -6,20 +6,20 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/01 12:36:33 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/01 12:53:02 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/03 10:07:57 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-char	*ft_strcat(char *dest, char const *src)
+char	*ft_strcat(char *s1, char const *s2)
 {
 	char	*ptr;
 
-	ptr = dest;
+	ptr = s1;
 	while (*ptr++)
 		;
 	ptr--;
-	while (*src)
-		*ptr++ = *src++;
+	while (*s2)
+		*ptr++ = *s2++;
 	*ptr = '\0';
-	return (dest);
+	return (s1);
 }
