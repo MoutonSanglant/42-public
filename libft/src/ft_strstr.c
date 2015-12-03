@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/01 12:36:14 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/03 10:10:57 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/03 10:35:04 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ char	*ft_strstr(char const *s1, char const *s2)
 			ptr_s1++;
 			ptr_s2++;
 		}
-		if (!*ptr)
+		if (!*ptr_s2)
 			return ((char *)s1);
 		s1++;
 	}
