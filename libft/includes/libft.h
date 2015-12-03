@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/24 18:16:07 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/03 12:47:26 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/03 18:21:45 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,18 @@ typedef struct	s_list
 	size_t			content_size;
 	struct s_list	*next;
 }				t_list;
+
+typedef struct	s_queue
+{
+	void			*content;
+	struct s_queue	*next;
+}				t_queue;
+
+typedef struct	s_stack
+{
+	void			*content;
+	struct s_stack	*next;
+}				t_stack;
 
 void			*ft_memset(void *b, int c, size_t len);
 void			ft_bzero(void *s, size_t n);
@@ -84,8 +96,10 @@ void			ft_lstiter(t_list *lst, void (*f)(t_list *elem));
 t_list			*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem));
 # ifdef LIBFT_EXTRA
 
+int				ft_isspace(int c);
 int				ft_isupper(int c);
 int				ft_islower(int c);
-int				ft_isspace(int c);
+t_queue			*ft_queuenew();
+t_stack			*ft_stacknew();
 # endif
 #endif

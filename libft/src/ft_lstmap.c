@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/03 10:30:36 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/03 13:50:59 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/03 17:37:29 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,6 @@ t_list			*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem))
 		if (!next)
 			return (NULL);
 	}
-	//new_list = f(ft_lstnew(lst->content, lst->content_size));
-	//new_list = (t_list *)malloc(sizeof(t_list));
 	new_list = ft_lstnew(lst->content, lst->content_size);
 	new_list = f(new_list);
 	if (new_list)
@@ -43,7 +41,6 @@ t_list			*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem))
 	{
 		if (next)
 			ft_lstdel(&next, &delelem);
-		
 		return (NULL);
 	}
 	return (new_list);

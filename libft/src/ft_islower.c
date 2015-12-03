@@ -6,11 +6,11 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/01 12:38:00 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/01 12:38:02 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/03 17:32:26 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_islower(int c)
+int		ft_islower(int c)
 {
 	return (c >= 'a' && c <= 'z');
 }

@@ -6,13 +6,13 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/01 12:35:51 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/01 12:35:52 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/03 17:26:01 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <string.h>
+#include <libft.h>
 
-int	ft_strnequ(char const *s1, char const *s2, size_t n)
+int		ft_strnequ(char const *s1, char const *s2, size_t n)
 {
 	unsigned int i;
 

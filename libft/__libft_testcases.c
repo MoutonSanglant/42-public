@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/24 17:24:21 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/03 13:50:40 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/03 18:25:33 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@
 #define MEMSET_LENGTH 17
 #define FILL_CHAR 'X'
 #define LONG_STR "Je suis une jolie demoiselle qui se promene dans le metro."
+//#define LONG_STR "Je s"
 #define STRCPY_STR "La belle Huguette contait fleurette aux assiettes du Baron von Rocket"
 
 #define STRSEARCH_STR "Le petit toto, a fait un gros rotototo *."
@@ -457,6 +458,7 @@ void	test_strchr()
 	else
 		ft_putendl("character not found");
 
+	printf("test with '\\0':\nlibc: %p\nlibft: %p\n", strchr(str, '\0'), ft_strchr(str, '\0'));
 	ft_strdel(&str);
 	ft_putendl(">> libft");
 
@@ -472,6 +474,7 @@ void	test_strchr()
 		ft_putendl(p);
 	else
 		ft_putendl("character not found");
+	printf("test with '\\0':\nlibc: %p\nlibft: %p\n", strrchr(str, '\0'), ft_strrchr(str, '\0'));
 	ft_strdel(&str);
 	ft_putchar('\n');
 }
@@ -536,12 +539,12 @@ void		test_strsearch()
 	ft_putchar('\n');
 	ft_putendl("== strncmp ==");
 	ft_putendl("Libc // Libft");
-	ft_putstr("Banane / banane (");
+	ft_putstr("banane / bAnane (");
 	ft_putnbr(STRCMP_N);
 	ft_putstr("): ");
-	ft_putnbr(strncmp("Banane", "banane", STRCMP_N));
+	ft_putnbr(strncmp("banane", "bAnane", STRCMP_N));
 	ft_putstr(" // ");
-	ft_putnbr(ft_strncmp("Banane", "banane", STRCMP_N));
+	ft_putnbr(ft_strncmp("banane", "bAnane", STRCMP_N));
 	ft_putchar('\n');
 	ft_putstr("banane / banane (");
 	ft_putnbr(STRCMP_N);
@@ -550,12 +553,12 @@ void		test_strsearch()
 	ft_putstr(" // ");
 	ft_putnbr(ft_strncmp("banane", "banane", STRCMP_N));
 	ft_putchar('\n');
-	ft_putstr("banane / banana (");
+	ft_putstr("banane / bbnana (");
 	ft_putnbr(STRCMP_N);
 	ft_putstr("): ");
-	ft_putnbr(strncmp("banane", "banana", STRCMP_N));
+	ft_putnbr(strncmp("banane", "bbnana", STRCMP_N));
 	ft_putstr(" // ");
-	ft_putnbr(ft_strncmp("banane", "banana", STRCMP_N));
+	ft_putnbr(ft_strncmp("banane", "bbnana", STRCMP_N));
 	ft_putchar('\n');
 	ft_putchar('\n');
 }
@@ -875,7 +878,7 @@ void		test_strsub()
 	char	*str;
 
 	ft_putendl("== strsub ==");
-	str = ft_strsub(LONG_STR, 12, 15);
+	str = ft_strsub(LONG_STR, 1, 4);
 	ft_putendl(str);
 	ft_strdel (&str);
 	ft_putendl("=============");
@@ -908,7 +911,7 @@ void		test_strtrim()
 	ft_putstr(str);
 	ft_putendl("\"");
 	ft_strdel(&str);
-	str = ft_strtrim("  z      ");
+	str = ft_strtrim("wz      ");
 	if (str == NULL)
 	{
 		ft_putendl_fd("Error: malloc failed", 2);

@@ -6,11 +6,11 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/01 12:38:06 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/01 12:38:07 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/03 17:32:14 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_isdigit(int c)
+int		ft_isdigit(int c)
 {
 	return (c >= '0' && c <= '9');
 }

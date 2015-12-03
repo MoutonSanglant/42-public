@@ -6,13 +6,13 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/01 12:36:01 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/02 11:25:43 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/03 17:34:59 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
 
-static void	cleartable(char **table, int last_idx)
+static void		cleartable(char **table, int last_idx)
 {
 	int i;
 
@@ -25,7 +25,7 @@ static void	cleartable(char **table, int last_idx)
 	}
 }
 
-static char	**setelem(char **table, int idx, char *str)
+static char		**setelem(char **table, int idx, char *str)
 {
 	table[idx] = str;
 	if (!table[idx])
@@ -37,7 +37,7 @@ static char	**setelem(char **table, int idx, char *str)
 	return (table);
 }
 
-static char	**split(char const *s, char c, size_t count)
+static char		**split(char const *s, char c, size_t count)
 {
 	char	**words_table;
 	char	*str;
@@ -63,7 +63,7 @@ static char	**split(char const *s, char c, size_t count)
 	return (words_table);
 }
 
-char		**ft_strsplit(char const *s, char c)
+char			**ft_strsplit(char const *s, char c)
 {
 	return (split(s, c, 0));
 }

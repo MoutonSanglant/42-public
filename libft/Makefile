@@ -6,11 +6,9 @@
 #    By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/11/24 15:51:40 by tdefresn          #+#    #+#              #
-#    Updated: 2015/12/03 10:39:05 by tdefresn         ###   ########.fr        #
+#    Updated: 2015/12/03 15:30:14 by tdefresn         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
-
-.PHONY: clean fclean
 
 NAME	= libft.a
 EXEC_ALL= test_all
@@ -19,6 +17,8 @@ EXEC_PUT= test_put
 EXEC_MEM= test_mem
 EXEC_STR= test_str
 EXEC_LST= test_lst
+
+.PHONY: clean fclean all $(NAME) re
 
 CC	= gcc
 CFLAGS	= -Wall -Werror -Wextra -I./includes -D LIBFT_EXTRA

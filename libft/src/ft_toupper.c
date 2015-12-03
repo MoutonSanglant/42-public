@@ -6,13 +6,13 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/01 12:34:00 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/01 12:34:02 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/03 17:31:27 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
 
-int	ft_toupper(int c)
+int		ft_toupper(int c)
 {
 	if (ft_islower(c))
 		return (c - 'a' + 'A');
