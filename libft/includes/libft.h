@@ -101,5 +101,6 @@ int				ft_isupper(int c);
 int				ft_islower(int c);
 t_queue			*ft_queuenew();
 t_stack			*ft_stacknew();
+int				ft_pow(int b, int e);
 # endif
 #endif
