@@ -21,7 +21,7 @@ EXEC_EXTRA	= test_extra
 
 EXEC = $(EXEC_ALL) $(EXEC_IS) $(EXEC_PUT) $(EXEC_MEM) $(EXEC_STR) $(EXEC_LST) $(EXEC_EXTRA)
 
-.PHONY: clean fclean all $(NAME) re
+.PHONY: all $(NAME) clean fclean re
 
 CC	= gcc
 CFLAGS	= -Wall -Werror -Wextra -I./includes -D LIBFT_EXTRA
@@ -43,9 +43,13 @@ SRC := $(addprefix $(SRC_PREFIX)ft_, $(SRC))
 
 OBJ = $(SRC:.c=.o)
 
+all: $(NAME) $(EXEC)
+
 nolib: testclean $(EXEC)
 
-all: $(NAME) $(EXEC)
+$(NAME): $(OBJ)
+	ar rc $@ $^
+	ranlib $(NAME)
 
 $(EXEC_ALL):
 	gcc -o $@ $(CFLAGS) __libft_testcases.c $(LDFLAGS) \
@@ -74,10 +78,6 @@ $(EXEC_LST):
 $(EXEC_EXTRA):
 	gcc -o $@ $(CFLAGS) __libft_testcases.c $(LDFLAGS) \
  $(LDLIBS) -D TEST_EXTRA
-
-$(NAME): $(OBJ)
-	ar rc $@ $^
-	ranlib $(NAME)
 
 %.o: %.c
 	$(CC) -o $@ -c $< $(CFLAGS)
