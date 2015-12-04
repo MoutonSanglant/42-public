@@ -18,7 +18,7 @@
 # define TEST_LST
 #endif
 
-#define LINUX_
+#define LINUX
 
 #include <libft.h>
 
@@ -413,9 +413,11 @@ void		test_strcat()
 	ft_putnbr(strlcat(str, " Un truc super long et chiant a lire, mais je ne vous oblige pas car de toute maniere tout ne va pas passer car la chaine de caracteres de destination ne fait pas plus de 200 caracteres et il me semble que cette chaine de caracteres en fait plus de 200.", 200));
 	ft_putchar('\n');
 	ft_putendl(str);
+#else
+	ft_putstr("Missing code: LINUX");
 #endif
 	ft_strdel(&str);
-	ft_putendl(">> libc");
+	ft_putendl(">> libft");
 	str = ft_strnew(sizeof(char) * 200);
 	str = ft_strcpy(str, STRCPY_STR);
 	ft_putendl(str);
@@ -501,6 +503,8 @@ void		test_strsearch()
 		ft_putendl(str);
 	else
 		ft_putendl("\"toto *\" n'a pas ete trouve dans la chaine avant le dernier caractere");
+#else
+	ft_putstr("Missing code: LINUX");
 #endif
 	ft_strdel(&str_ptr);
 	ft_putendl(">> libft");
@@ -536,6 +540,7 @@ void		test_strsearch()
 	ft_putnbr(strcmp("banane", "banana"));
 	ft_putstr(" // ");
 	ft_putnbr(ft_strcmp("banane", "banana"));
+	ft_putchar('\n');
 	ft_putchar('\n');
 	ft_putendl("== strncmp ==");
 	ft_putendl("Libc // Libft");
@@ -687,7 +692,6 @@ void		is_test(int c)
 	ft_putstr("libft: ");
 	ft_putchar(ft_toupper(c));
 	ft_putchar('\n');
-	ft_putendl("-------------");
 #endif
 }
 
@@ -697,17 +701,19 @@ void		test_memalloc()
 	int	*int_array;
 	int	i;
 	
-	ft_putstr("== memalloc/memdel ==\n");
+	ft_putendl("== memalloc/memdel ==");
 	str = (char *)ft_memalloc(MEMSET_LENGTH);
 	int_array = (int *)ft_memalloc(MEMSET_LENGTH * sizeof(int));
 	
 	if (str == NULL || int_array == NULL)
 	{
-		ft_putstr_fd("memalloc failed\n", 2);
-		ft_putstr("===============\n");
+		ft_putendl_fd("memalloc failed", 2);
+		ft_putchar('\n');
 		return;
 	}
+	ft_putstr("str: ");
 	ft_putendl(str);
+	ft_putstr("int: ");
 	i = 0;
 	while(i < MEMSET_LENGTH)
 		ft_putnbr(int_array[i++]);
@@ -718,7 +724,9 @@ void		test_memalloc()
 		str[i] = FILL_CHAR;
 		int_array[i++] = 42;
 	}
+	ft_putstr("str: ");
 	ft_putendl(str);
+	ft_putstr("int: ");
 	i = 0;
 	while(i < MEMSET_LENGTH)
 		ft_putnbr(int_array[i++]);
@@ -728,8 +736,8 @@ void		test_memalloc()
 	if (!str)
 		ft_putendl("str is NULL");
 	if (!int_array)
-		ft_putendl("int_array is NULL");
-	ft_putendl("===============");
+		ft_putendl("int is NULL");
+	ft_putchar('\n');
 }
 
 void		test_strnew()
@@ -742,18 +750,20 @@ void		test_strnew()
 	if (!str)
 	{
 		ft_putendl_fd("strnew failed", 2);
-		ft_putendl("=============");
+		ft_putchar('\n');
 		return;
 	}
+	ft_putstr("str: ");
 	ft_putendl(str);
 	i = 0;
 	while(i < MEMSET_LENGTH)
 		str[i++] = FILL_CHAR;
+	ft_putstr("str: ");
 	ft_putendl(str);
 	ft_strdel(&str);
 	if (!str)
 		ft_putendl("str is NULL");
-	ft_putendl("=============");
+	ft_putchar('\n');
 }
 
 void		test_strclr()
@@ -766,32 +776,36 @@ void		test_strclr()
 	i = 0;
 	while (i < MEMSET_LENGTH)
 		str[i++] = FILL_CHAR;
+	ft_putstr("str: ");
 	ft_putendl(str);
 	ft_strclr(str);
+	ft_putstr("str: ");
 	ft_putendl(str);
-	ft_putendl("=============");
+	ft_strdel(&str);
+	ft_putchar('\n');
 }
 
-void	putcharII(char *c)
+void	putchar_iter(char *c)
 {
 	ft_putchar(*c);
 }
 
-void	putchar_i(unsigned int idx, char *c)
+void	putchar_iteri(unsigned int idx, char *c)
 {
 	ft_putnbr(idx);
 	ft_putstr(": ");
 	ft_putchar(*c);
-	ft_putchar('\n');
+	ft_putstr(", ");
 }
 
 void		test_striter()
 {
 	ft_putendl("== striter ==");
-	ft_striter("Salut les mecs !\n", &putcharII);
+	ft_striter("Salut les mecs !\n", &putchar_iter);
+	ft_putchar('\n');
 	ft_putendl("== striteri ==");
-	ft_striteri("Salut les mecs !\n", &putchar_i);
-	ft_putendl("=============");
+	ft_striteri("Salut les mecs !\n", &putchar_iteri);
+	ft_putchar('\n');
 }
 
 char	putchar_map(char c)
@@ -812,7 +826,7 @@ char	putchar_mapi(unsigned int idx, char c)
 	else
 		c++;
 
-	putchar_i(idx, &c);
+	putchar_iteri(idx, &c);
 	return (c);
 }
 
@@ -822,27 +836,32 @@ void		test_strmap()
 	
 	str = "R`ktsZkdrZldbr \t"; 
 	ft_putendl("== strmap ==");
-	ft_putendl(str);
+	ft_putstr(str);
+	ft_putstr(" => ");
 	str = ft_strmap(str, &putchar_map);
 	if (str == NULL)
 	{
 		ft_putendl_fd("map error", 2);
-		ft_putendl("============");
+		ft_putchar('\n');
 		return;
 	}
 	free(str);
+	ft_putchar('\n');
 	ft_putendl("== strmapi ==");
 	str = "R`ktsZkdrZldbr \t"; 
+	ft_putstr(str);
+	ft_putstr(" => ");
 	str = ft_strmapi(str, &putchar_mapi);
 	if (str == NULL)
 	{
 		ft_putendl_fd("map error", 2);
-		ft_putendl("============");
+		ft_putchar('\n');
 		return;
 	}
+	ft_putchar('\n');
 	ft_putendl(str);
 	free(str);
-	ft_putendl("=============");
+	ft_putchar('\n');
 }
 
 void		test_strequ()
@@ -851,26 +870,42 @@ void		test_strequ()
 	char	*str2;
 
 	ft_putendl("== strequ ==");
-	str1 = "Hello zougou !\n";
-	str2 = "Hello gros zougou !\n";
+	str1 = "Hello zougou !";
+	str2 = "Hello gros zougou !";
+	ft_putstr(str1);
+	ft_putstr(" equ ");
+	ft_putstr(str2);
+	ft_putendl(" ?");
 	if (ft_strequ(str1, str2))
 		ft_putendl("Strings match");
 	else
 		ft_putendl("Strings doesn't match");
+	ft_putstr(str1);
+	ft_putstr(" equ HELLO");
+	ft_putendl(" ?");
 	if (ft_strequ(str1, "Hello"))
 		ft_putendl("Strings match");
 	else
 		ft_putendl("Strings doesn't match");
+	ft_putchar('\n');
 	ft_putendl("== strnequ ==");
+	ft_putstr(str1);
+	ft_putstr(" equ ");
+	ft_putstr(str2);
+	ft_putstr(" ? (6 chars max)");
 	if (ft_strnequ(str1, str2, 6))
 		ft_putendl("Strings match");
 	else
 		ft_putendl("Strings doesn't match");
+	ft_putstr(str1);
+	ft_putstr(" equ ");
+	ft_putstr(str2);
+	ft_putstr(" ? (7 chars max)");
 	if (ft_strnequ(str1, str2, 7))
 		ft_putendl("Strings match");
 	else
 		ft_putendl("Strings doesn't match");
-	ft_putendl("=============");
+	ft_putchar('\n');
 }
 
 void		test_strsub()
@@ -878,21 +913,31 @@ void		test_strsub()
 	char	*str;
 
 	ft_putendl("== strsub ==");
+	ft_putstr("strsub(start:1, length:4): ");
+	ft_putendl(LONG_STR);
 	str = ft_strsub(LONG_STR, 1, 4);
 	ft_putendl(str);
 	ft_strdel (&str);
-	ft_putendl("=============");
+	ft_putchar('\n');
 }
 
 void		test_strjoin()
 {
 	char	*str;
+	char	*strA;
+	char	*strB;
 
 	ft_putendl("== strjoin ==");
-	str = ft_strjoin("Salut les ", "pancakes !");
+	strA = "Salut les...";
+	strB = " pancakes !";
+	ft_putstr("strA: ");
+	ft_putendl(strA);
+	ft_putstr("strB: ");
+	ft_putendl(strB);
+	str = ft_strjoin(strA, strB);
 	ft_putendl(str);
 	ft_strdel(&str);
-	ft_putendl("=============");
+	ft_putchar('\n');
 }
 
 void		test_strtrim()
@@ -900,14 +945,14 @@ void		test_strtrim()
 	char	*str;
 
 	ft_putendl("== strtrim ==");
-	str = ft_strtrim("      \t\t  \t\n  Salut    \n\n\t\n  _\t les pancakes ! La forme ?    \t");
+	str = ft_strtrim("      \t\t  \t\n  Salut    \n\n\t  _\t les pancakes ! La forme ?    \t");
 	if (str == NULL)
 	{
 		ft_putendl_fd("Error: malloc failed", 2);
-		ft_putendl("=============");
+		ft_putchar('\n');
 		return;
 	}
-	ft_putstr("test2: \"");
+	ft_putstr("test1: \"");
 	ft_putstr(str);
 	ft_putendl("\"");
 	ft_strdel(&str);
@@ -915,7 +960,7 @@ void		test_strtrim()
 	if (str == NULL)
 	{
 		ft_putendl_fd("Error: malloc failed", 2);
-		ft_putendl("=============");
+		ft_putchar('\n');
 		return;
 	}
 	ft_putstr("test2: \"");
@@ -926,27 +971,32 @@ void		test_strtrim()
 	if (str == NULL)
 	{
 		ft_putendl_fd("Error: malloc failed", 2);
-		ft_putendl("=============");
+		ft_putchar('\n');
 		return;
 	}
 	ft_putstr("test3: \"");
 	ft_putstr(str);
 	ft_putendl("\"");
 	ft_strdel(&str);
-	ft_putendl("=============");
+	ft_putchar('\n');
 }
 
 void		test_strsplit()
 {
 	char **str;
+	char *s;
 	int i;
 
 	ft_putendl("== strsplit ==");
-	str = ft_strsplit("super*chaine****de* *charactereres***", '*');
+	s = "super*chaine****de* *charactereres***";
+	ft_putstr("str: ");
+	ft_putendl(s);
+	ft_putendl("-----------");
+	str = ft_strsplit(s, '*');
 	if (str == NULL)
 	{
 		ft_putendl_fd("Error: malloc failed", 2);
-		ft_putendl("=============");
+		ft_putchar('\n');
 		return;
 	}
 	i = 0;
@@ -956,8 +1006,29 @@ void		test_strsplit()
 		ft_strdel(&str[i]);
 		i++;
 	}
+	ft_putendl("-----------");
 	ft_memdel((void**)&str);
-	ft_putendl("=============");
+	s = "|||||||||";
+	ft_putstr("str: ");
+	ft_putendl(s);
+	ft_putendl("-----------");
+	str = ft_strsplit(s, '|');
+	if (str == NULL)
+	{
+		ft_putendl_fd("Error: malloc failed", 2);
+		ft_putchar('\n');
+		return;
+	}
+	i = 0;
+	while (str[i][0] != '\0')
+	{
+		ft_putendl(str[i]);
+		ft_strdel(&str[i]);
+		i++;
+	}
+	ft_putendl("-----------");
+	ft_memdel((void**)&str);
+	ft_putchar('\n');
 }
 
 void		delone(void *content, size_t content_size)
