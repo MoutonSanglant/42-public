@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/01 14:08:25 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/02 13:01:28 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/04 13:07:17 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ int		ft_atoi(char const *str)
 		sign = -1;
 		str++;
 	}
+	else if (str[0] == '+')
+		str++;
 	while (ft_isdigit(*str))
 	{
 		r *= 10;

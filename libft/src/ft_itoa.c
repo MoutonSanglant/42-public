@@ -6,13 +6,13 @@
 /*   By: exam <marvin@42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/09/18 19:52:19 by exam              #+#    #+#             */
-/*   Updated: 2015/12/03 17:39:27 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/04 17:19:17 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
 
-static int		nbrlength(int n)
+static int		nbrlength(long long int n)
 {
 	int		length;
 
@@ -27,11 +27,11 @@ static int		nbrlength(int n)
 	return (length);
 }
 
-static char		getat(int n, int idx)
+static char		getat(long long int n, int idx)
 {
-	char	c;
-	int		i;
-	int		lft;
+	char				c;
+	int					i;
+	long long int		lft;
 
 	i = 0;
 	while (i < idx)
@@ -49,27 +49,29 @@ static char		getat(int n, int idx)
 
 char			*ft_itoa(int n)
 {
-	char	*str;
-	int		size;
-	int		sign;
-	int		i;
+	char			*str;
+	int				size;
+	int				sign;
+	int				i;
+	long long int	nn;
 
+	nn = n;
 	sign = 0;
 	if (n < 0)
 	{
-		n *= -1;
+		nn *= -1;
 		sign = 1;
 	}
-	size = nbrlength(n);
-	str = malloc(sizeof(char) * size + 1 + sign);
+	size = nbrlength(nn);
+	str = malloc(sizeof(char) * (size + 1 + sign));
 	if (str == NULL)
 		return (NULL);
-	i = 0 + sign;
+	i = sign;
 	if (sign)
 		str[0] = '-';
 	while (i < size + sign)
 	{
-		str[i] = getat(n, (size - 1 + sign) - i);
+		str[i] = getat(nn, (size - 1 + sign) - i);
 		i++;
 	}
 	str[i] = '\0';
