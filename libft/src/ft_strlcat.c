@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/01 12:34:31 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/01 12:34:32 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/04 15:38:37 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 size_t	ft_strlcat(char *dst, char const *src, size_t size)
 {
 	char	*ptr;
-	size_t	i;
 	size_t	total_size;
 	size_t	max;
+	size_t	i;
 
 	total_size = ft_strlen(dst) + ft_strlen(src);
 	max = size - ft_strlen(dst) - 1 * sizeof(char);

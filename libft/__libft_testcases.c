@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/24 17:24:21 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/03 18:25:33 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/04 18:47:15 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # define TEST_EXTRA
 #endif
 
-#define LINUX
+#define LINUX__
 
 #include <libft.h>
 
@@ -40,7 +40,9 @@
 #define STRCPY_STR "La belle Huguette contait fleurette aux assiettes du Baron von Rocket"
 
 #define STRSEARCH_STR "Le petit toto, a fait un gros rotototo *."
-#define STRSEARCH_LAST 32
+#define STRSEARCH_LAST 39
+#define STRSEARCH_STR2 "un deux 9"
+#define STRSEARCH_LAST2 10
 #define STRCMP_N 2
 
 void		test_putchar()
@@ -460,7 +462,11 @@ void	test_strchr()
 		ft_putendl(p);
 	else
 		ft_putendl("character not found");
-
+	p = strrchr(str, '#');
+	if (p)
+		ft_putendl(p);
+	else
+		ft_putendl("character not found");
 	printf("test with '\\0':\nlibc: %p\nlibft: %p\n", strchr(str, '\0'), ft_strchr(str, '\0'));
 	ft_strdel(&str);
 	ft_putendl(">> libft");
@@ -477,6 +483,11 @@ void	test_strchr()
 		ft_putendl(p);
 	else
 		ft_putendl("character not found");
+	p = ft_strrchr(str, '#');
+	if (p)
+		ft_putendl(p);
+	else
+		ft_putendl("character not found");
 	printf("test with '\\0':\nlibc: %p\nlibft: %p\n", strrchr(str, '\0'), ft_strrchr(str, '\0'));
 	ft_strdel(&str);
 	ft_putchar('\n');
@@ -485,12 +496,16 @@ void	test_strchr()
 void		test_strsearch()
 {
 	char	*str;
+	char	*str2;
 	char	*str_ptr;
+	char	*str2_ptr;
 	
 	ft_putendl("== strstr/strnstr ==");
 	ft_putendl(">> libc");
 	str = strdup(STRSEARCH_STR);
+	str2 = strdup(STRSEARCH_STR2);
 	str_ptr = str;
+	str2_ptr = str2;
 	ft_putendl(str);
 	str = strstr(str, "toto *");
 	if (str)
@@ -504,13 +519,30 @@ void		test_strsearch()
 		ft_putendl(str);
 	else
 		ft_putendl("\"toto *\" n'a pas ete trouve dans la chaine avant le dernier caractere");
+	ft_putendl(str2);
+	str2 = strnstr(str2, "9", STRSEARCH_LAST2);
+	if (str2)
+		ft_putendl(str2);
+	else
+		ft_putendl("\"9\" n'a pas ete trouve");
+	str2 = str2_ptr;
+	str2[9] = '6';
+	str2 = strnstr(str2, "deux", 10);
+	if (str2)
+		ft_putendl(str2);
+	else
+		ft_putendl("\"deux\" n'a pas ete trouve");
+
 #else
 	ft_putstr("Missing code: LINUX");
 #endif
 	ft_strdel(&str_ptr);
+	ft_strdel(&str2_ptr);
 	ft_putendl(">> libft");
 	str = ft_strdup(STRSEARCH_STR);
+	str2 = ft_strdup(STRSEARCH_STR2);
 	str_ptr = str;
+	str2_ptr = str2;
 	ft_putendl(str);
 	str = ft_strstr(str, "toto *");
 	if (str)
@@ -523,7 +555,24 @@ void		test_strsearch()
 		ft_putendl(str);
 	else
 		ft_putendl("\"toto *\" n'a pas ete trouve dans la chaine avant le dernier caractere");
+	ft_putendl(str2);
+	str2 = ft_strnstr(str2, "9", STRSEARCH_LAST2);
+	if (str2)
+		ft_putendl(str2);
+	else
+		ft_putendl("\"9\" n'a pas ete trouve");
+	str2 = str2_ptr;
+	str2[9] = '6';
+	str2 = ft_strnstr(str2, "deux", 10);
+	if (str2)
+		ft_putendl(str2);
+	else
+		ft_putendl("\"deux\" n'a pas ete trouve");
+
+	str = str_ptr;
+	str2 = str2_ptr;
 	ft_strdel(&str_ptr);
+	ft_strdel(&str2_ptr);
 	ft_putchar('\n');
 	ft_putendl("== strcmp ==");
 	ft_putendl("Libc // Libft");
@@ -585,9 +634,9 @@ void	test_atoi()
 	ft_putstr(" // ");
 	ft_putnbr(ft_atoi("0"));
 	ft_putchar('\n');
-	ft_putnbr(atoi("871"));
+	ft_putnbr(atoi("+871"));
 	ft_putstr(" // ");
-	ft_putnbr(ft_atoi("871"));
+	ft_putnbr(ft_atoi("+871"));
 	ft_putchar('\n');
 	ft_putnbr(atoi("2147483647"));
 	ft_putstr(" // ");
@@ -699,13 +748,12 @@ void		is_test(int c)
 void		test_memalloc()
 {
 	char	*str;
-	int	*int_array;
-	int	i;
+	int		*int_array;
+	int		i;
 	
 	ft_putendl("== memalloc/memdel ==");
 	str = (char *)ft_memalloc(MEMSET_LENGTH);
-	int_array = (int *)ft_memalloc(MEMSET_LENGTH * sizeof(int));
-	
+	int_array = (int *)ft_memalloc(MEMSET_LENGTH * sizeof(int));	
 	if (str == NULL || int_array == NULL)
 	{
 		ft_putendl_fd("memalloc failed", 2);
@@ -732,6 +780,11 @@ void		test_memalloc()
 	while(i < MEMSET_LENGTH)
 		ft_putnbr(int_array[i++]);
 	ft_putchar('\n');
+	str = (char *)ft_memalloc(0);
+	if (str)
+		ft_putendl("str is not NULL");
+	else
+		ft_putendl("str is NULL");
 	ft_memdel((void**)&str);
 	ft_memdel((void**)&int_array);
 	if (!str)
@@ -1001,7 +1054,7 @@ void		test_strsplit()
 		return;
 	}
 	i = 0;
-	while (str[i][0] != '\0')
+	while (str[i])
 	{
 		ft_putendl(str[i]);
 		ft_strdel(&str[i]);
@@ -1021,7 +1074,7 @@ void		test_strsplit()
 		return;
 	}
 	i = 0;
-	while (str[i][0] != '\0')
+	while (str[i])
 	{
 		ft_putendl(str[i]);
 		ft_strdel(&str[i]);
@@ -1029,6 +1082,44 @@ void		test_strsplit()
 	}
 	ft_putendl("-----------");
 	ft_memdel((void**)&str);
+	s = "coucou";
+	ft_putstr("str: ");
+	ft_putendl(s);
+	ft_putendl("-----------");
+	str = ft_strsplit(s, '*');
+	if (str == NULL)
+	{
+		ft_putendl_fd("Error: malloc failed", 2);
+		ft_putchar('\n');
+		return;
+	}
+	i = 0;
+	while (str[i])
+	{
+		ft_putendl(str[i]);
+		ft_strdel(&str[i]);
+		i++;
+	}
+	ft_putendl("-----------");
+	ft_memdel((void**)&str);
+
+	ft_putchar('\n');
+}
+
+void	test_itoa()
+{
+	ft_putendl("== itoa ==");
+	ft_putendl("Libc // Libft");
+	ft_putstr(ft_itoa(435435));
+	ft_putchar('\n');
+	ft_putstr(ft_itoa(0));
+	ft_putchar('\n');
+	ft_putstr(ft_itoa(871));
+	ft_putchar('\n');
+	ft_putstr(ft_itoa(2147483647));
+	ft_putchar('\n');
+	ft_putstr(ft_itoa(-2147483648));
+	ft_putchar('\n');
 	ft_putchar('\n');
 }
 
@@ -1051,12 +1142,6 @@ t_list		*setelem(t_list *elem)
 	int		l;
 	char	*str;
 
-	if (g_i > 1)
-	{
-		free(elem);
-		elem = NULL;
-		return (elem);
-	}
 	g_i++;
 
 //	new_elem = (t_list *) malloc(sizeof(t_list));
@@ -1066,9 +1151,10 @@ t_list		*setelem(t_list *elem)
 	{
 		l += 4;
 		str = ft_strnew(l);
-		str = ft_strcpy(str, elem->content);
+		str = ft_strcpy(str, (char *) elem->content);
 		str = ft_strcat(str, ": ok");
-		elem->content = str;
+		free(elem->content);
+		elem->content = (void *) str;
 	}
 	elem->content_size = l;
 	elem->next = NULL;
@@ -1169,6 +1255,7 @@ int		main(int argc, char **argv)
 	test_strjoin();
 	test_strtrim();
 	test_strsplit();	
+	test_itoa();	
 #endif
 #ifdef TEST_PUT
 	test_putchar();
