@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/03 10:30:36 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/04 19:23:10 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/04 21:14:27 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,7 @@ t_list			*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem))
 		if (!next)
 			return (NULL);
 	}
-//	ft_putnbr(lst->content_size);
 	new_list = ft_lstnew(lst->content, lst->content_size);
-//	ft_putnbr(new_list->content_size);
 	new_list = f(new_list);
 	if (new_list)
 	{

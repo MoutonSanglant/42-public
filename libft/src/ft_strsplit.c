@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/01 12:36:01 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/04 18:07:53 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/04 21:18:31 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,11 +52,9 @@ static char		**split(char const *s, char c, size_t count)
 		if (words_table)
 			words_table = setelem(words_table, count,
 									ft_strsub(s, 0, ft_strlen(s)));
-		
 		if (words_table)
 		{
-			if (*s)
-				count++;
+			count += (*s) ? 1 : 0;
 			words_table[count] = NULL;
 		}
 		return (words_table);
