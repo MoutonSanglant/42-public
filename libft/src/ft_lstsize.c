@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/07 17:14:37 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/07 17:31:16 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/07 17:39:47 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int		ft_lstsize(t_list *lst)
 {
 	t_list	*first;
-	int i;
+	int		i;
 
 	first = lst;
 	i = 0;
