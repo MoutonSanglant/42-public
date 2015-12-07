@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/24 18:16:07 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/03 18:21:45 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/07 17:32:12 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,14 @@ typedef struct	s_list
 	size_t			content_size;
 	struct s_list	*next;
 }				t_list;
+
+typedef struct	s_dl_list
+{
+	void				*content;
+	size_t				content_size;
+	struct s_dl_list	*prev;
+	struct s_dl_list	*next;
+}				t_dl_list;
 
 typedef struct	s_queue
 {
@@ -99,8 +107,33 @@ t_list			*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem));
 int				ft_isspace(int c);
 int				ft_isupper(int c);
 int				ft_islower(int c);
-t_queue			*ft_queuenew();
-t_stack			*ft_stacknew();
+int				ft_lstsize(t_list *lst);
+t_dl_list		*ft_dl_lstnew(void const *constent, size_t content_size);
+t_dl_list		*ft_dl_lstfront(t_dl_list *lst);
+t_dl_list		*ft_dl_lstback(t_dl_list *lst);
+void			ft_dl_lstpushfront(t_dl_list **alst, t_dl_list *new);
+void			ft_dl_lstpushback(t_dl_list *lst, t_dl_list *new);
+void			ft_dl_lstpopfront(t_dl_list **alst);
+void			ft_dl_lstpopback(t_dl_list *lst);
+void			ft_dl_lstiter(t_dl_list *lst, void (*f)(t_dl_list *elem));
+t_dl_list		*ft_dl_lstmap(t_dl_list *lst, t_dl_list *(*f)(t_dl_list *elem));
+int				ft_dl_lstsize(t_dl_list *lst);
+/*
+t_queue			*ft_queuenew(void const *constent, size_t content_size);
+void			ft_queuedelone(t_list **alst, void (*del)(void *, size_t));
+void			ft_queuedel(t_list **alst, void (*del)(void *, size_t));
+void			ft_queueadd(t_list **alst, t_list *new);
+void			ft_queueiter(t_list *lst, void (*f)(t_list *elem));
+t_list			*ft_queuemap(t_list *lst, t_list *(*f)(t_list *elem));
+
+t_stack			*ft_stacknew(void const *constent, size_t content_size);
+void			ft_stackdelone(t_list **alst, void (*del)(void *, size_t));
+void			ft_stackdel(t_list **alst, void (*del)(void *, size_t));
+void			ft_stackadd(t_list **alst, t_list *new);
+void			ft_stackiter(t_list *lst, void (*f)(t_list *elem));
+t_list			*ft_stackmap(t_list *lst, t_list *(*f)(t_list *elem));
+*/
+
 int				ft_pow(int b, int e);
 # endif
 #endif
