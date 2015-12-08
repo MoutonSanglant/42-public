@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/24 17:24:21 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/07 16:18:18 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/08 14:41:30 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # define TEST_EXTRA
 #endif
 
-#define LINUX
+#define LINUX__
 
 #include <libft.h>
 
@@ -1253,7 +1253,7 @@ void		test_lst()
 
 	if (new_list)
 		ft_lstdel(&new_list, &delone);
-//	free(node);
+	free(node);
 }
 
 void		putdllst(t_dl_list *elem)
@@ -1268,6 +1268,12 @@ void		test_extra()
 {
 	t_dl_list	*list1;
 	t_dl_list	*list2;
+
+	t_stack		*stack1;
+	t_stack		*stack2;
+
+	t_queue		*queue1;
+	t_queue		*queue2;
 
 	ft_putendl("== pow ==");
 	ft_putstr("3^4: ");
@@ -1303,17 +1309,78 @@ void		test_extra()
 	ft_dl_lstpushfront(&list1, list2);
 
 	ft_dl_lstiter(list1, &putdllst);
-
+	ft_putchar('\n');
 	ft_putstr("last element: ");
 	ft_putendl(ft_dl_lstback(list2)->content);
 	ft_putstr("first element: ");
 	ft_putendl(ft_dl_lstfront(list2)->content);
+	ft_putchar('\n');
 	ft_putendl("pop first element");
 	ft_dl_lstpopfront(&list1);
 	ft_dl_lstiter(list1, &putdllst);
+	ft_putchar('\n');
 	ft_putendl("pop last element");
 	ft_dl_lstpopback(&list1);
 	ft_dl_lstiter(list1, &putdllst);
+
+	stack1 = ft_stacknew("Last", 6);
+	stack2 = ft_stacknew("in", 3);
+	ft_stackpush(&stack1, stack2);
+	stack2 = ft_stacknew("first", 6);
+	ft_stackpush(&stack1, stack2);
+	stack2 = ft_stacknew("out", 3);
+	ft_stackpush(&stack1, stack2);
+
+	stack2 = stack1;
+	ft_putchar('\n');
+	ft_putstr("Stack size: ");
+	ft_putnbr(ft_stacksize(stack1));
+	ft_putchar('\n');
+	ft_putendl("Stack parse:");
+	while(stack2)
+	{
+		ft_putendl(stack2->content);
+		stack2 = stack2->prev;
+	}
+	ft_stackpop(&stack1);
+	stack2 = stack1;
+	ft_putchar('\n');
+	ft_putendl("Stack again parse after pop:");
+	while(stack2)
+	{
+		ft_putendl(stack2->content);
+		stack2 = stack2->prev;
+	}
+
+	queue1 = ft_queuenew("First", 6);
+	queue2 = ft_queuenew("in", 3);
+	ft_queuepush(queue1, queue2);
+	queue2 = ft_queuenew("first", 6);
+	ft_queuepush(queue1, queue2);
+	queue2 = ft_queuenew("out", 3);
+	ft_queuepush(queue1, queue2);
+
+	queue2 = queue1;
+	ft_putchar('\n');
+	ft_putstr("queue size: ");
+	ft_putnbr(ft_queuesize(queue1));
+	ft_putchar('\n');
+	ft_putendl("queue parse:");
+	while(queue2)
+	{
+		ft_putendl(queue2->content);
+		queue2 = queue2->next;
+	}
+	ft_queuepop(&queue1);
+	queue2 = queue1;
+	ft_putchar('\n');
+	ft_putendl("queue again parse after pop:");
+	while(queue2)
+	{
+		ft_putendl(queue2->content);
+		queue2 = queue2->next;
+	}
+
 
 	ft_putchar('\n');
 	ft_putchar('\n');
