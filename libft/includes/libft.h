@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/24 18:16:07 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/07 17:32:12 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/08 14:43:02 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ typedef struct	s_dl_list
 typedef struct	s_queue
 {
 	void			*content;
-	size_t				content_size;
+	size_t			content_size;
 	struct s_queue	*prev;
 	struct s_queue	*next;
 }				t_queue;
@@ -43,7 +43,7 @@ typedef struct	s_queue
 typedef struct	s_stack
 {
 	void			*content;
-	size_t				content_size;
+	size_t			content_size;
 	struct s_stack	*prev;
 }				t_stack;
 
@@ -112,7 +112,7 @@ int				ft_isspace(int c);
 int				ft_isupper(int c);
 int				ft_islower(int c);
 int				ft_lstsize(t_list *lst);
-t_dl_list		*ft_dl_lstnew(void const *constent, size_t content_size);
+t_dl_list		*ft_dl_lstnew(void const *content, size_t content_size);
 void			ft_dl_lstclear(t_dl_list **alst);
 t_dl_list		*ft_dl_lstfront(t_dl_list *lst);
 t_dl_list		*ft_dl_lstback(t_dl_list *lst);
@@ -123,13 +123,13 @@ void			ft_dl_lstpopback(t_dl_list **alst);
 void			ft_dl_lstiter(t_dl_list *lst, void (*f)(t_dl_list *elem));
 t_dl_list		*ft_dl_lstmap(t_dl_list *lst, t_dl_list *(*f)(t_dl_list *elem));
 int				ft_dl_lstsize(t_dl_list *lst);
-t_queue			*ft_queuenew(void const *constent, size_t content_size);
-t_queue		*ft_queuefront(t_queue *queue);
-t_queue		*ft_queueback(t_queue *queue);
+t_queue			*ft_queuenew(void const *content, size_t content_size);
+t_queue			*ft_queuefront(t_queue *queue);
+t_queue			*ft_queueback(t_queue *queue);
 void			ft_queuepush(t_queue *queue, t_queue *new);
 void			ft_queuepop(t_queue **aqueue);
 int				ft_queuesize(t_queue *queue);
-t_stack			*ft_stacknew(void const *constent, size_t content_size);
+t_stack			*ft_stacknew(void const *content, size_t content_size);
 void			ft_stackpush(t_stack **astack, t_stack *new);
 void			ft_stackpop(t_stack **astack);
 int				ft_stacksize(t_stack *stack);
