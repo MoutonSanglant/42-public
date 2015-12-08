@@ -31,6 +31,7 @@ t_dl_list	*ft_dl_lstnew(void const *content, size_t content_size)
 			list->content_size = 0;
 		}
 		list->next = NULL;
+		list->prev = NULL;
 	}
 	return (list);
 }

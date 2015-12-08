@@ -12,7 +12,16 @@
 
 #include <libft.h>
 
-void	ft_dl_lstpopback(t_dl_list *lst)
+void	ft_dl_lstpopback(t_dl_list **alst)
 {
-	ft_memdel((void *)ft_dl_lstback(lst));
+	t_dl_list	*last;
+
+	last = ft_dl_lstback(*alst);
+	if (last->prev)
+	{
+		last->prev->next = NULL;
+		ft_memdel((void *)&last);
+	}
+	else
+		ft_dl_lstclear(alst);
 }
