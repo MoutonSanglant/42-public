@@ -17,6 +17,12 @@ void	ft_dl_lstpopfront(t_dl_list **alst)
 	t_dl_list	*first;
 
 	first = ft_dl_lstfront(*alst);
-	*alst = first->next;
-	ft_memdel((void *)first);
+	if (first->next)
+	{
+		*alst = first->next;
+		(*alst)->prev = NULL;
+		ft_memdel((void *)&first);
+	}
+	else
+		ft_dl_lstclear(alst);
 }

@@ -38,7 +38,9 @@ strdel strclr striter striteri strmap strmapi strequ strnequ strsub strjoin \
 strtrim strsplit itoa strlen putchar putstr putnbr putendl putchar_fd putstr_fd \
 putnbr_fd putendl_fd lstnew lstdelone lstdel lstadd lstiter lstmap isupper \
 islower isspace pow lstsize dl_lstnew dl_lstfront dl_lstback dl_lstpushfront \
-dl_lstpushback dl_lstpopfront dl_lstpopback dl_lstiter dl_lstmap dl_lstsize
+dl_lstpushback dl_lstpopfront dl_lstpopback dl_lstiter dl_lstmap dl_lstsize \
+dl_lstclear queuenew queuefront queueback queuepush queuepop queuesize \
+stacknew stackpush stackpop stacksize
 
 SRC := $(addsuffix .c, $(SRC))
 SRC := $(addprefix $(SRC_PREFIX)ft_, $(SRC))

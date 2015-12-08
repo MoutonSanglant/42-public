@@ -19,7 +19,7 @@
 # define TEST_EXTRA
 #endif
 
-#define LINUX__
+#define LINUX
 
 #include <libft.h>
 
@@ -441,7 +441,7 @@ void		test_strcat()
 	ft_strdel(&str);
 	ft_putchar('\n');
 	ft_putendl("== strlcat ==");
-
+#ifndef LINUX
 	char    buf[10];
 
     bzero(buf, 10);
@@ -452,7 +452,7 @@ void		test_strcat()
 	ft_putendl(buf);
     bzero(buf, 10);
     strcpy(buf, "abc");
-    strcmp(buf, "abcabcdef");
+    //strcmp(buf, "abcabcdef");
     ft_putnbr(strlcat(buf, "abcd", 2));
 	ft_putstr(" - ");
 	ft_putendl(buf);
@@ -470,6 +470,9 @@ void		test_strcat()
 	ft_putendl(buf);
 
 	ft_putchar('\n');
+#else
+	ft_putstr("Missing code: LINUX");
+#endif
 
 	char    buf2[10];
 
@@ -481,7 +484,7 @@ void		test_strcat()
 	ft_putendl(buf2);
     bzero(buf2, 10);
     strcpy(buf2, "abc");
-    strcmp(buf2, "abcabcdef");
+    //strcmp(buf2, "abcabcdef");
     ft_putnbr(ft_strlcat(buf2, "abcd", 2));
 	ft_putstr(" - ");
 	ft_putendl(buf2);
@@ -1253,14 +1256,65 @@ void		test_lst()
 //	free(node);
 }
 
+void		putdllst(t_dl_list *elem)
+{
+	ft_putstr(elem->content);
+	ft_putstr(" (");
+	ft_putnbr(elem->content_size);
+	ft_putendl(")");
+}
+
 void		test_extra()
 {
+	t_dl_list	*list1;
+	t_dl_list	*list2;
+
 	ft_putendl("== pow ==");
 	ft_putstr("3^4: ");
 	ft_putnbr(ft_pow(3, 4));
 	ft_putchar('\n');
 	ft_putstr("12^7: ");
 	ft_putnbr(ft_pow(12, 7));
+	ft_putchar('\n');
+	ft_putchar('\n');
+	ft_putendl("== dl_lst ==");
+	ft_putendl("Build the list");
+	ft_putendl("expected: abc -> def -> ghi");
+	list1 = ft_dl_lstnew("abc", 4);
+	list2 = ft_dl_lstnew("def", 4);
+	ft_dl_lstpushback(list1, list2);
+	list2 = ft_dl_lstnew("ghi", 4);
+	ft_dl_lstpushback(list1, list2);
+	ft_dl_lstiter(list1, &putdllst);
+	ft_dl_lstclear(&list1);
+	list1 = ft_dl_lstnew("Tarte", 6);
+	list2 = ft_dl_lstnew("a", 2);
+	ft_dl_lstpushfront(&list1, list2);
+	list2 = ft_dl_lstnew("la", 3);
+	ft_dl_lstpushfront(&list1, list2);
+
+	list2 = ft_dl_lstnew("creme", 6);
+	ft_dl_lstpushfront(&list1, list2);
+	list2 = ft_dl_lstnew("et", 3);
+	ft_dl_lstpushfront(&list1, list2);
+	list2 = ft_dl_lstnew("aux", 4);
+	ft_dl_lstpushfront(&list1, list2);
+	list2 = ft_dl_lstnew("framboises", 11);
+	ft_dl_lstpushfront(&list1, list2);
+
+	ft_dl_lstiter(list1, &putdllst);
+
+	ft_putstr("last element: ");
+	ft_putendl(ft_dl_lstback(list2)->content);
+	ft_putstr("first element: ");
+	ft_putendl(ft_dl_lstfront(list2)->content);
+	ft_putendl("pop first element");
+	ft_dl_lstpopfront(&list1);
+	ft_dl_lstiter(list1, &putdllst);
+	ft_putendl("pop last element");
+	ft_dl_lstpopback(&list1);
+	ft_dl_lstiter(list1, &putdllst);
+
 	ft_putchar('\n');
 	ft_putchar('\n');
 }
