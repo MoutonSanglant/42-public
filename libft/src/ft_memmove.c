@@ -6,30 +6,96 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/01 12:37:16 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/03 10:04:10 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/09 19:03:56 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
 
-void	*ft_memmove(void *dst, void const *src, size_t len)
+static size_t	copy_forward(char *ptr_dst, const char *ptr_src, size_t t)
 {
-	size_t	i;
-	char	*buffer;
+	if (t)
+		while (t--)
+			*ptr_dst++ = *ptr_src++;
+	return (t);
+}
 
-	buffer = (char *)malloc(sizeof(char) * len);
-	i = 0;
-	while (i < len)
+static void		move_forward(char *ptr_dst, const char *ptr_src,
+								size_t len, size_t t)
+{
+	t = (int)ptr_src;
+	if ((t | (int)ptr_dst) & (sizeof(int) - 1))
 	{
-		buffer[i] = ((char*)src)[i];
-		i++;
+		if ((t ^ (int)ptr_dst) & (sizeof(int) - 1) || len < sizeof(int))
+			t = len;
+		else
+			t = sizeof(int);
+		len -= t;
+		t = copy_forward(ptr_dst, ptr_src, t);
 	}
-	i = 0;
-	while (i < len)
+	t = len / sizeof(int);
+	if (t)
 	{
-		((char*)dst)[i] = buffer[i];
-		i++;
+		while (t--)
+		{
+			*(int *)ptr_dst = *(int *)ptr_src;
+			ptr_src += sizeof(int);
+			ptr_dst += sizeof(int);
+		}
 	}
-	free(buffer);
+	t = len & sizeof(int);
+	t = copy_forward(ptr_dst, ptr_src, t);
+}
+
+static size_t	copy_backward(char *ptr_dst, const char *ptr_src, size_t t)
+{
+	if (t)
+		while (t--)
+			*--ptr_dst = *--ptr_src;
+	return (t);
+}
+
+static void		move_backward(char *ptr_dst, const char *ptr_src,
+								size_t len, size_t t)
+{
+	ptr_src += len;
+	ptr_dst += len;
+	t = (int)ptr_src;
+	if ((t | (int)ptr_dst) & (sizeof(int) - 1))
+	{
+		if ((t ^ (int)ptr_dst) & (sizeof(int) - 1) || len <= sizeof(int))
+			t = len;
+		else
+			t &= (sizeof(int) - 1);
+		len -= t;
+		t = copy_backward(ptr_dst, ptr_src, t);
+	}
+	t = len / sizeof(int);
+	if (t)
+	{
+		while (t--)
+		{
+			ptr_src -= sizeof(int);
+			ptr_dst -= sizeof(int);
+			*(int *)ptr_dst = *(int *)ptr_src;
+		}
+	}
+	t = len & (sizeof(int) - 1);
+	t = copy_backward(ptr_dst, ptr_src, t);
+}
+
+void			*ft_memmove(void *dst, void const *src, size_t len)
+{
+	char		*ptr_dst;
+	const char	*ptr_src;
+
+	if (len == 0 || dst == src)
+		return (dst);
+	ptr_dst = (char *)dst;
+	ptr_src = (const char *)src;
+	if ((unsigned long)ptr_dst < (unsigned long)ptr_src)
+		move_forward(ptr_dst, ptr_src, len, 0);
+	else
+		move_backward(ptr_dst, ptr_src, len, 0);
 	return (dst);
 }

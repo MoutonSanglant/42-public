@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/24 17:24:21 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/09 15:08:32 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/09 18:48:56 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -268,20 +268,43 @@ void	test_memcpy()
 
 void	test_memmove()
 {
-	char *str;
-	char *s = "abcdefghijklmnopqrstuvwxyz";
+	char	*str;
+	char	*s = "abcdef";
+	char	*ptr;
 
 	ft_putendl("== memmove ==");
 	ft_putendl(">> libc");
+	ft_putendl("Test: source is before dest in memory");
 	str = ft_strnew(ft_strlen(s));
+	ptr = str;
 	str = strcpy(str, s);
-	str = memmove(&str[5], str, 22);
+	memmove(str + 1, str, 5);
 	ft_putendl(str);
-	ft_putendl(">> libft");
+	ft_putendl("Test: source is after dest in memory");
+	ft_strdel(&ptr);
 	str = ft_strnew(ft_strlen(s));
+	ptr = str;
 	str = ft_strcpy(str, s);
-	str = ft_memmove(&str[5], str, 22);
+	memmove(str + 1, str, 0);
 	ft_putendl(str);
+	ft_strdel(&ptr);
+
+	ft_putendl(">> libft");
+	ft_putendl("Test: source is before dest in memory");
+	str = ft_strnew(ft_strlen(s));
+	ptr = str;
+	str = ft_strcpy(str, s);
+	ft_memmove(str + 1, str, 5);
+	ft_putendl(str);
+	ft_strdel(&ptr);
+	ft_putendl("Test: source is after dest in memory");
+	str = ft_strnew(ft_strlen(s));
+	ptr = str;
+	str = ft_strcpy(str, s);
+	ft_memmove(str + 1, str, 0);
+	ft_putendl(str);
+	ft_strdel(&ptr);
+
 	ft_putchar('\n');
 }
 

@@ -1,32 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strmapi.c                                       :+:      :+:    :+:   */
+/*   ft_memmove.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/12/01 12:35:40 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/09 15:05:17 by tdefresn         ###   ########.fr       */
+/*   Created: 2015/12/01 12:37:16 by tdefresn          #+#    #+#             */
+/*   Updated: 2015/12/03 10:04:10 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
 
-char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
+void	*ft_memmove(void *dst, void const *src, size_t len)
 {
-	char	*new_str;
-	int		i;
+	size_t	i;
+	char	*buffer;
 
-	new_str = ft_strnew(sizeof(char) * ft_strlen(s));
-	if (new_str)
+	buffer = (char *)malloc(sizeof(char) * len);
+	i = 0;
+	while (i < len)
 	{
-		i = 0;
-		while (s[i] != '\0')
-		{
-			new_str[i] = f(i, s[i]);
-			i++;
-		}
-		new_str[i] = '\0';
+		buffer[i] = ((char*)src)[i];
+		i++;
 	}
-	return (new_str);
+	i = 0;
+	while (i < len)
+	{
+		((char*)dst)[i] = buffer[i];
+		i++;
+	}
+	free(buffer);
+	return (dst);
 }
