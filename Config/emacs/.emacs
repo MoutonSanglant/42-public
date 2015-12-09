@@ -7,9 +7,9 @@
 (define-key global-map (kbd "RET") 'newline-and-indent)
 (set-language-environment "UTF-8")
 (setq-default c-default-style "linux"
-			  c-basic-offset 4
-			  tab-width 4
-			  indent-tabs-mode t)
+			c-basic-offset 4
+			tab-width 4
+			indent-tabs-mode t)
 
 ;; Write '()'
 (defun pair-parenthesis ()
@@ -24,15 +24,15 @@
 
 ;; Return path of the backup file
 (defun my-backup-file-name (fpath)
-  (let* (
-		 (backupRootDir "~/.emacs.d/backup")
-		 (filePath (replace-regexp-in-string "[A-Za-z]:" "" fpath ))
-		 (backupFilePath (replace-regexp-in-string "//" "/" (concat backupRootDir filePath "~") ))
-		 )
+	(let* (
+		(backupRootDir "~/.emacs.d/backup")
+		(filePath (replace-regexp-in-string "[A-Za-z]:" "" fpath ))
+		(backupFilePath (replace-regexp-in-string "//" "/" (concat backupRootDir filePath "~") ))
+		)
 	(make-directory (file-name-directory backupFilePath) (file-name-directory backupFilePath))
 	backupFilePath
 	)
-  )
+)
 
 ;; Set backup file
 (setq make-backup-file-name-function 'my-backup-file-name)
@@ -50,4 +50,7 @@
 ;; Highlight double spaces and EOL spaces
 (add-hook 'c-mode-common-hook
 		(lambda () (highlight-regexp " \\( \\|$\\)" 'trailing-whitespace)
-		))	
+		))
+(add-hook 'c-mode-common-hook
+		(lambda () (highlight-regexp "^\\//*.*" 'header-line)
+		))

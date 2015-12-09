@@ -6,20 +6,20 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/08 17:43:58 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/08 17:44:04 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/08 17:50:57 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-NAME	= libft.a
+NAME	= fillit
 
 CC	= gcc
-CFLAGS	= -Wall -Werror -Wextra -I./includes -D LIBFT_EXTRA
+CFLAGS	= -Wall -Werror -Wextra -I./includes
 LDFLAGS	= -L. -lft
-LDLIBS	= 
+LDLIBS	=
 
 SRC_PREFIX = ./src/
 
-SRC   =
+SRC		=
 
 SRC := $(addsuffix .c, $(SRC))
 SRC := $(addprefix $(SRC_PREFIX)ft_, $(SRC))
@@ -31,8 +31,7 @@ OBJ = $(SRC:.c=.o)
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	ar rc $@ $^
-	ranlib $(NAME)
+	gcc -o $@ $(CFLAGS) $(NAME) $(LDFLAGS) $(LDLIBS)
 
 %.o: %.c
 	$(CC) -o $@ -c $< $(CFLAGS)
