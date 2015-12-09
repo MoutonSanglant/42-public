@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/01 12:36:14 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/09 13:36:06 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/09 15:16:32 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@ char	*ft_strstr(char const *s1, char const *s2)
 	char const	*ptr_s1;
 	char const	*ptr_s2;
 
-	if (!*s2) 
-		return ((char *)s1); 
+	if (!*s2)
+		return ((char *)s1);
 	ptr_s1 = s1;
 	ptr_s2 = s2;
 	while (*s1)
