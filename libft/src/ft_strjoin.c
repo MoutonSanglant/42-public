@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/01 12:34:28 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/01 12:34:29 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/09 15:09:14 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	char	*str_new;
 	char	*ptr;
 
-	str_new = ft_strnew(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
+	str_new = ft_strnew(ft_strlen(s1) + ft_strlen(s2));
 	if (str_new)
 	{
 		ptr = str_new;

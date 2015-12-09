@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/01 12:35:40 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/01 12:45:29 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/09 15:06:16 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 	char	*new_str;
 	int		i;
 
-	new_str = ft_strnew(sizeof(char) * (ft_strlen(s) + 1));
+	new_str = ft_strnew(ft_strlen(s));
 	if (new_str)
 	{
 		i = 0;
