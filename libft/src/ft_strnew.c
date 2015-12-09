@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/01 12:35:54 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/01 12:56:45 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/09 15:06:09 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ char	*ft_strnew(size_t size)
 	char	*str;
 	size_t	i;
 
-	str = (char *)malloc(size + 1);
+	str = (char *)malloc(sizeof(char) * size + 1);
 	if (str)
 	{
 		i = 0;

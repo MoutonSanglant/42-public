@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/24 17:24:21 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/09 10:44:05 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/09 15:08:32 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,8 @@
 #define STRCPY_STR "La belle Huguette contait fleurette aux assiettes du Baron von Rocket"
 
 //#define STRSEARCH_STR "Le petit toto, a fait un gros rotototo *."
-#define STRSEARCH_STR "Ceci n'est pas une pipe."
-#define STRSEARCH_LAST 39
+#define STRSEARCH_STR ""
+#define STRSEARCH_LAST 0
 #define STRSEARCH_STR2 "un deux 9"
 #define STRSEARCH_LAST2 10
 #define STRCMP_N 2
@@ -142,7 +142,7 @@ void		test_memset()
 	ft_putchar('\n');
 	free(str);
 	free(nbr_array);
-	
+
 	ft_putendl(">> libft");
 	str = (char *)malloc(sizeof(char) * MEMSET_LENGTH); //MEMSET_LENGTH);
 	if (str == NULL)
@@ -228,28 +228,34 @@ void	test_memcpy()
 	char	*to;
 	int		i;
 	int		l;
+	unsigned char c;
 
+	c = (unsigned char) 220; 
 	ft_putendl("== memcpy/memccpy ==");
-	str = "Je suis une autre chaine de test";
+	str = strdup("Je suis une autre chaine de test");
 	dst = (char *)malloc(sizeof(char) * ft_strlen(str));
 	ft_putendl(">> libc");
 	ft_putendl(str);
 	dst = memcpy(dst, str, 17);
+	str[9] = c;
 	ft_putendl(dst);
-	to = memccpy(dst, str, 't', 17);
+	to = memccpy(dst, str, (int)c , 17);
 	l = (int)to - (int)dst;
 	i = 0;
 	while (i < l)
 		ft_putchar(dst[i++]);
 	ft_putchar('\n');
 	free(dst);
-	
+	free(str);
+
 	ft_putendl(">> libft");
-	dst = ft_strnew(sizeof(char) * ft_strlen(str));
+	str = strdup("Je suis une autre chaine de test");
+	dst = ft_strnew(ft_strlen(str));
 	ft_putendl(str);
 	dst = ft_memcpy(dst, str, 17);
+	str[9] = c;
 	ft_putendl(dst);
-	to = ft_memccpy(dst, str, 't', 17);
+	to = ft_memccpy(dst, str, (int)c, 17);
 	//printf("dst: %p, to: %p", dst, to);
 	l = (int)to - (int)dst;
 	i = 0;
@@ -264,15 +270,15 @@ void	test_memmove()
 {
 	char *str;
 	char *s = "abcdefghijklmnopqrstuvwxyz";
-	
+
 	ft_putendl("== memmove ==");
 	ft_putendl(">> libc");
-	str = ft_strnew(sizeof(char) * ft_strlen(s));
+	str = ft_strnew(ft_strlen(s));
 	str = strcpy(str, s);
 	str = memmove(&str[5], str, 22);
 	ft_putendl(str);
 	ft_putendl(">> libft");
-	str = ft_strnew(sizeof(char) * ft_strlen(s));
+	str = ft_strnew(ft_strlen(s));
 	str = ft_strcpy(str, s);
 	str = ft_memmove(&str[5], str, 22);
 	ft_putendl(str);
@@ -369,7 +375,7 @@ void		test_strcpy()
 
 	ft_putendl("== strcpy / strncpy ==");
 	ft_putendl(">> libc");
-	str = ft_strnew(sizeof(char) * ft_strlen(STRCPY_STR));
+	str = ft_strnew(ft_strlen(STRCPY_STR));
 	str = strcpy(str, STRCPY_STR);
 	ft_putendl(str);
 	str = strncpy(str, "OOOOOOOOOOOOOOOO", 6);
@@ -380,7 +386,7 @@ void		test_strcpy()
 	ft_putendl(str);
 	ft_strdel(&str);
 	ft_putendl(">> libc");
-	str = ft_strnew(sizeof(char) * ft_strlen(STRCPY_STR));
+	str = ft_strnew(ft_strlen(STRCPY_STR));
 	str = ft_strcpy(str, STRCPY_STR);
 	ft_putendl(str);
 	str = ft_strncpy(str, "OOOOOOOOOOOOOOOO", 6);
@@ -399,7 +405,7 @@ void		test_strcat()
 
 	ft_putendl("== strcat / strncat / strlcat ==");
 	ft_putendl(">> libc");
-	str = ft_strnew(sizeof(char) * 200);
+	str = ft_strnew(200);
 	str = strcpy(str, STRCPY_STR);
 	ft_putendl(str);
 	str = strcat(str, "_______");
@@ -422,7 +428,7 @@ void		test_strcat()
 #endif
 	ft_strdel(&str);
 	ft_putendl(">> libft");
-	str = ft_strnew(sizeof(char) * 200);
+	str = ft_strnew(200);
 	str = ft_strcpy(str, STRCPY_STR);
 	ft_putendl(str);
 	str = ft_strcat(str, "_______");
@@ -443,30 +449,30 @@ void		test_strcat()
 	ft_putchar('\n');
 	ft_putendl("== strlcat ==");
 #ifndef LINUX
-	char    buf[10];
+	char	buf[10];
 
-    bzero(buf, 10);
-    strcpy(buf, "abc");
+	bzero(buf, 10);
+	strcpy(buf, "abc");
 	ft_putendl(buf);
-    ft_putnbr(strlcat(buf, "abcdefghijklmnop", 10));
+	ft_putnbr(strlcat(buf, "abcdefghijklmnop", 10));
 	ft_putstr(" - ");
 	ft_putendl(buf);
-    bzero(buf, 10);
-    strcpy(buf, "abc");
-    //strcmp(buf, "abcabcdef");
-    ft_putnbr(strlcat(buf, "abcd", 2));
+	bzero(buf, 10);
+	strcpy(buf, "abc");
+	//strcmp(buf, "abcabcdef");
+	ft_putnbr(strlcat(buf, "abcd", 2));
 	ft_putstr(" - ");
 	ft_putendl(buf);
-    bzero(buf, 10);
-    ft_putnbr(strlcat(buf, "abc", 10));
+	bzero(buf, 10);
+	ft_putnbr(strlcat(buf, "abc", 10));
 	ft_putstr(" - ");
 	ft_putendl(buf);
-    ft_putnbr(strlcat(buf, "def", 10));
+	ft_putnbr(strlcat(buf, "def", 10));
 	ft_putstr(" - ");
 	ft_putendl(buf);
-    bzero(buf, 10);
-    memset(buf, 'a', 10);
-    ft_putnbr(strlcat(buf, "ccc", 10));
+	bzero(buf, 10);
+	memset(buf, 'a', 10);
+	ft_putnbr(strlcat(buf, "ccc", 10));
 	ft_putstr(" - ");
 	ft_putendl(buf);
 
@@ -477,28 +483,28 @@ void		test_strcat()
 
 	char    buf2[10];
 
-    bzero(buf2, 10);
-    strcpy(buf2, "abc");
+	bzero(buf2, 10);
+	strcpy(buf2, "abc");
 	ft_putendl(buf2);
-    ft_putnbr(ft_strlcat(buf2, "abcdefghijklmnop", 10));
+	ft_putnbr(ft_strlcat(buf2, "abcdefghijklmnop", 10));
 	ft_putstr(" - ");
 	ft_putendl(buf2);
-    bzero(buf2, 10);
-    strcpy(buf2, "abc");
-    //strcmp(buf2, "abcabcdef");
-    ft_putnbr(ft_strlcat(buf2, "abcd", 2));
+	bzero(buf2, 10);
+	strcpy(buf2, "abc");
+	//strcmp(buf2, "abcabcdef");
+	ft_putnbr(ft_strlcat(buf2, "abcd", 2));
 	ft_putstr(" - ");
 	ft_putendl(buf2);
-    bzero(buf2, 10);
-    ft_putnbr(ft_strlcat(buf2, "abc", 10));
+	bzero(buf2, 10);
+	ft_putnbr(ft_strlcat(buf2, "abc", 10));
 	ft_putstr(" - ");
 	ft_putendl(buf2);
-    ft_putnbr(ft_strlcat(buf2, "def", 10));
+	ft_putnbr(ft_strlcat(buf2, "def", 10));
 	ft_putstr(" - ");
 	ft_putendl(buf2);
-    bzero(buf2, 10);
-    memset(buf2, 'a', 10);
-    ft_putnbr(ft_strlcat(buf2, "ccc", 10));
+	bzero(buf2, 10);
+	memset(buf2, 'a', 10);
+	ft_putnbr(ft_strlcat(buf2, "ccc", 10));
 	ft_putstr(" - ");
 	ft_putendl(buf2);
 
@@ -563,7 +569,7 @@ void		test_strsearch()
 	char	*str2;
 	char	*str_ptr;
 	char	*str2_ptr;
-	
+
 	ft_putendl("== strstr/strnstr ==");
 	ft_putendl(">> libc");
 	str = strdup(STRSEARCH_STR);
@@ -571,11 +577,11 @@ void		test_strsearch()
 	str_ptr = str;
 	str2_ptr = str2;
 	ft_putendl(str);
-	str = strstr(str, ".");
+	str = strstr(str, "");
 	if (str)
 		ft_putendl(str);
 	else
-		ft_putendl("\".\" n'a pas ete trouve dans la chaine");
+		ft_putendl("\"\" n'a pas ete trouve dans la chaine");
 	str = str_ptr;
 #ifndef LINUX
 	str = strnstr(str, "toto *", STRSEARCH_LAST);
@@ -608,14 +614,14 @@ void		test_strsearch()
 	str_ptr = str;
 	str2_ptr = str2;
 	ft_putendl(str);
-	str = ft_strstr(str, ".");
+	str = ft_strstr(str, "");
 	if (str)
 		ft_putendl(str);
 	else
-		ft_putendl("\".\" n'a pas ete trouve dans la chaine");
+		ft_putendl("\"\" n'a pas ete trouve dans la chaine");
 	str = str_ptr;
 	str = ft_strnstr(str, "toto *", STRSEARCH_LAST);
-	if (str) 
+	if (str)
 		ft_putendl(str);
 	else
 		ft_putendl("\"toto *\" n'a pas ete trouve dans la chaine avant le dernier caractere");
@@ -689,7 +695,7 @@ void	test_atoi()
 	ft_putendl("== atoi ==");
 	ft_putendl("Libc // Libft");
 	nb = "    \
-			-998c37 ";
+		  -998c37 ";
 	ft_putnbr(atoi(nb));
 	ft_putstr(" // ");
 	ft_putnbr(ft_atoi(nb));
@@ -814,7 +820,7 @@ void		test_memalloc()
 	char	*str;
 	int		*int_array;
 	int		i;
-	
+
 	ft_putendl("== memalloc/memdel ==");
 	str = (char *)ft_memalloc(MEMSET_LENGTH);
 	int_array = (int *)ft_memalloc(MEMSET_LENGTH * sizeof(int));	
@@ -951,7 +957,7 @@ char	putchar_mapi(unsigned int idx, char c)
 void		test_strmap()
 {
 	char	*str;
-	
+
 	str = "R`ktsZkdrZldbr \t"; 
 	ft_putendl("== strmap ==");
 	ft_putstr(str);
@@ -1208,12 +1214,11 @@ t_list		*setelem(t_list *elem)
 	t_list	*l2;
 
 	g_i++;
-	/*
-	if (g_i > 2)
-	{
-		return (NULL);
-	}
-	*/
+	
+	//if (g_i > 2)
+	//{
+	//return (NULL);
+	//}
 
 	l2 = (t_list *)malloc(sizeof(t_list));
 	bzero(l2, sizeof(t_list));
@@ -1229,7 +1234,7 @@ void		test_lst()
 	t_list	*node;
 	t_list	*new_list;
 	t_list	*node2;
-	
+
 	g_i = 0;
 	node = (t_list *)malloc(sizeof(t_list));
 	node->content_size = 9;
@@ -1248,7 +1253,7 @@ void		test_lst()
 		printf("new list (%p):\n", new_list);
 		ft_lstiter(new_list, &putlst);
 	}
-	
+
 	printf("old list (%p):\n", node);
 	ft_lstiter(node, &putlst);
 
