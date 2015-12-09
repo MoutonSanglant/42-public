@@ -6,13 +6,13 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/01 12:37:16 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/09 19:03:56 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/09 19:22:36 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
 
-static size_t	copy_forward(char *ptr_dst, const char *ptr_src, size_t t)
+static size_t	copy_forward_if_t(char *ptr_dst, const char *ptr_src, size_t t)
 {
 	if (t)
 		while (t--)
@@ -29,9 +29,10 @@ static void		move_forward(char *ptr_dst, const char *ptr_src,
 		if ((t ^ (int)ptr_dst) & (sizeof(int) - 1) || len < sizeof(int))
 			t = len;
 		else
-			t = sizeof(int);
+			t = sizeof(int) - (t & (sizeof(int) - 1));
 		len -= t;
-		t = copy_forward(ptr_dst, ptr_src, t);
+		while (t--)
+			*ptr_dst++ = *ptr_src++;
 	}
 	t = len / sizeof(int);
 	if (t)
@@ -44,10 +45,10 @@ static void		move_forward(char *ptr_dst, const char *ptr_src,
 		}
 	}
 	t = len & sizeof(int);
-	t = copy_forward(ptr_dst, ptr_src, t);
+	t = copy_forward_if_t(ptr_dst, ptr_src, t);
 }
 
-static size_t	copy_backward(char *ptr_dst, const char *ptr_src, size_t t)
+static size_t	copy_backward_if_t(char *ptr_dst, const char *ptr_src, size_t t)
 {
 	if (t)
 		while (t--)
@@ -68,7 +69,8 @@ static void		move_backward(char *ptr_dst, const char *ptr_src,
 		else
 			t &= (sizeof(int) - 1);
 		len -= t;
-		t = copy_backward(ptr_dst, ptr_src, t);
+		while (t--)
+			*--ptr_dst = *--ptr_src;
 	}
 	t = len / sizeof(int);
 	if (t)
@@ -81,7 +83,7 @@ static void		move_backward(char *ptr_dst, const char *ptr_src,
 		}
 	}
 	t = len & (sizeof(int) - 1);
-	t = copy_backward(ptr_dst, ptr_src, t);
+	t = copy_backward_if_t(ptr_dst, ptr_src, t);
 }
 
 void			*ft_memmove(void *dst, void const *src, size_t len)
