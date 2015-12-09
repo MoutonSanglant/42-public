@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/01 12:33:51 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/04 21:14:45 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/09 15:15:48 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 char	*ft_strrchr(const char *s, int c)
 {
-	int	i;
+	long long int	i;
 
 	i = ft_strlen(s);
 	if ((char)c == '\0')
