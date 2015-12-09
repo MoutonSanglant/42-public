@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/24 17:24:21 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/09 18:48:56 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/09 19:14:52 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -270,7 +270,11 @@ void	test_memmove()
 {
 	char	*str;
 	char	*s = "abcdef";
+	char	*s2 = "this is a good nyancat !\r\n";
 	char	*ptr;
+	char	dst1[0xf0];
+	char	dst2[0xf0];
+	int		size = ft_strlen(s2);
 
 	ft_putendl("== memmove ==");
 	ft_putendl(">> libc");
@@ -288,6 +292,10 @@ void	test_memmove()
 	memmove(str + 1, str, 0);
 	ft_putendl(str);
 	ft_strdel(&ptr);
+	ft_putendl("Test: opentester test");
+	memmove(dst1, s2, size);
+	ft_putendl(dst1);
+	ft_putchar('\n');
 
 	ft_putendl(">> libft");
 	ft_putendl("Test: source is before dest in memory");
@@ -304,6 +312,10 @@ void	test_memmove()
 	ft_memmove(str + 1, str, 0);
 	ft_putendl(str);
 	ft_strdel(&ptr);
+	ft_putendl("Test: opentester test");
+	ft_memmove(dst2, s2, size);
+	ft_putendl(dst2);
+	ft_putchar('\n');
 
 	ft_putchar('\n');
 }
