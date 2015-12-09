@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/24 17:24:21 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/08 14:41:30 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/08 18:26:05 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,8 @@
 //#define LONG_STR "Je s"
 #define STRCPY_STR "La belle Huguette contait fleurette aux assiettes du Baron von Rocket"
 
-#define STRSEARCH_STR "Le petit toto, a fait un gros rotototo *."
+//#define STRSEARCH_STR "Le petit toto, a fait un gros rotototo *."
+#define STRSEARCH_STR "Ceci n'est pas une pipe."
 #define STRSEARCH_LAST 39
 #define STRSEARCH_STR2 "un deux 9"
 #define STRSEARCH_LAST2 10
@@ -570,11 +571,11 @@ void		test_strsearch()
 	str_ptr = str;
 	str2_ptr = str2;
 	ft_putendl(str);
-	str = strstr(str, "toto *");
+	str = strstr(str, ".");
 	if (str)
 		ft_putendl(str);
 	else
-		ft_putendl("\"toto *\" n'a pas ete trouve dans la chaine");
+		ft_putendl("\".\" n'a pas ete trouve dans la chaine");
 	str = str_ptr;
 #ifndef LINUX
 	str = strnstr(str, "toto *", STRSEARCH_LAST);
@@ -607,11 +608,11 @@ void		test_strsearch()
 	str_ptr = str;
 	str2_ptr = str2;
 	ft_putendl(str);
-	str = ft_strstr(str, "toto *");
+	str = ft_strstr(str, ".");
 	if (str)
 		ft_putendl(str);
 	else
-		ft_putendl("\"toto *\" n'a pas ete trouve dans la chaine");
+		ft_putendl("\".\" n'a pas ete trouve dans la chaine");
 	str = str_ptr;
 	str = ft_strnstr(str, "toto *", STRSEARCH_LAST);
 	if (str) 
