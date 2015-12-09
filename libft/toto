@@ -6,9 +6,11 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/08 21:48:42 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/09 03:51:58 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/09 01:54:07 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+
 
 #include <libft.h>
 
@@ -16,6 +18,22 @@ int		ft_atoi(char const *str)
 {
 	int		sign;
 	int		r;
+      s  z d
+	      za
+	        s;
+	 a;  
+	 if     ();
+	 { 
+		 "hello les amis !!"
+	@begin=cpp@
+	_eeeee_ 
+	if ()
+	{
+	} 	
+	@end=cpp@
+	 }
+	 
+
 
 	r = 0;
 	sign = 1;
