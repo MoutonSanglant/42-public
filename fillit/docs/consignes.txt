@@ -1,0 +1,50 @@
+Fonctions autorisees
+====================
+exit
+open
+close
+write
+read
+malloc
+free
+
+
+Makefile
+========
+all, clean, fclean, re
+
+
+Compilation
+===========
+Wall, Werror, Wextra
+tout autre flag interdit
+l'executable doit s'appeler 'fillit' et a la racine du depot
+
+
+Fillit
+======
+
+Entree
+------
+Parametres d'entree: 1 fichier (maximum) decrivant les tetriminos
+1 tetriminos est represente sur 4 lignes et 1 ligne vide entre chaque tetriminos
+
+MAX: 26 tetriminos
+
+Motif
+-----
+4x4 rempli par 4 blocs (#) sequents et de points (.)
+la position du tetriminos n'a pas d'importance mais sa rotation si
+
+Resolution
+----------
+Former le plus petit carre, il peut y avoir des trous
+Les tetriminos sont places dans l'ordre d'apparition du fichier
+Le plus en haut a gauche
+
+Sortie
+------
+Assigner lettre majuscule a chaque ttriminos dans l'ordre d'apparition (A, B, ...)
+Afficher:
+"error\n" en cas d'erreur
+Le carre de tetriminos en cas de reussite

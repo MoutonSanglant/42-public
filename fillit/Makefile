@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   Makefile                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/12/08 17:43:58 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/08 17:50:57 by tdefresn         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 NAME	= fillit
 
 CC	= gcc
@@ -19,10 +7,10 @@ LDLIBS	=
 
 SRC_PREFIX = ./src/
 
-SRC		=
+SRC		= main
 
 SRC := $(addsuffix .c, $(SRC))
-SRC := $(addprefix $(SRC_PREFIX)ft_, $(SRC))
+SRC := $(addprefix $(SRC_PREFIX), $(SRC))
 
 OBJ = $(SRC:.c=.o)
 
@@ -31,7 +19,7 @@ OBJ = $(SRC:.c=.o)
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	gcc -o $@ $(CFLAGS) $(NAME) $(LDFLAGS) $(LDLIBS)
+	gcc -o $@ $^ $(CFLAGS) $(LDFLAGS) $(LDLIBS)
 
 %.o: %.c
 	$(CC) -o $@ -c $< $(CFLAGS)
@@ -39,7 +27,7 @@ $(NAME): $(OBJ)
 clean:
 	/bin/rm -f ${OBJ}
 
-fclean: clean testclean
+fclean: clean
 	/bin/rm -f $(NAME)
 
 re: fclean all
