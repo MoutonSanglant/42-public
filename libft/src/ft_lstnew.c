@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/03 10:30:39 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/04 19:21:45 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/10 13:57:40 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,13 @@ t_list	*ft_lstnew(void const *content, size_t content_size)
 		if (content)
 		{
 			list->content = ft_memalloc(content_size);
-			list->content = ft_memcpy(list->content, content, content_size);
-			list->content_size = content_size;
+			if (list->content)
+			{
+				list->content = ft_memcpy(list->content, content, content_size);
+				list->content_size = content_size;
+			}
+			else
+				ft_memdel((void **) &list);
 		}
 		else
 		{
