@@ -5,8 +5,8 @@ syn on
 set nu
 
 filetype plugin indent on
-inoremap ( () <Esc>i
-inoremap { {} <Esc>i
+inoremap ( ()<Esc>i
+inoremap { {}<Esc>i
 set ruler
 
 "set filetype	=c
@@ -21,7 +21,8 @@ highlight ExtraWhitespace ctermbg=red guibg=red
 " highlight extra whitespace
 match ExtraWhitespace /\(^\t*\ \+\| \_s\+\)/
 " remove header highlighting
-2match FtHeader /\(\_^\/\*.*\)\{0,1\}\*\/\_s/
+"2match FtHeader /\(\_^\/\*.*\)\{0,1\}\*\/\_s/
+2match FtHeader /\(\_^\/\* .*\)\{0,1\}\n/
 
 set backupdir	=~/.vim/.backup//,.,/tmp
 set directory	=~/.vim/.swp//,.,/tmp
