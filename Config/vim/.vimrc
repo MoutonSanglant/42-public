@@ -23,7 +23,7 @@ inoremap } <Esc>:call g:MatchCursorCharacter('}', '0')<CR>i<Right>}
 inoremap [ []<Esc>i
 inoremap ] <Esc>:call g:MatchCursorCharacter(']', '0')<CR>i<Right>]
 inoremap " <Esc>:call g:MatchCursorCharacter('"', '1')<CR>i<Right>""<Left>
-inoremap ' <Esc>:call g:MatchCursorCharacter(''', '1')<CR>i<Right>''<Left>
+inoremap ' <Esc>:call g:MatchCursorCharacter("'", '1')<CR>i<Right>''<Left>
 set ruler
 
 "set filetype	=c

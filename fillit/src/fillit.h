@@ -28,21 +28,11 @@ typedef struct		s_tetriminos
 	char	pattern_id;
 }			t_tetriminos;
 
-void	fillit_error(void);
-void	get_tetriminos();
+char	*read_tetri_file(char *);
+void	get_tetriminos_from_buffer(char *);
+void	buffer_error(char *);
+void	error(void);
 
-char ***g_tetri_table = {
-	{ "##", "##", "" },
-	{ "####", "" },
-	{ "#", "#", "#", "#", "" },
-	{ ".##", "##.", "" },
-	{ "#.", "##", ".#", "" },
-	{ "##.", ".##", "" },
-	{ ".#", "##", "#.", "" },
-	{ "" }
-	{ "###", ".#.", "" },
-	{ "#.",	"##", "#.", "" },
-	{ }
-}
+extern char *g_pattern_table[18][5];
 
 #endif

@@ -1,13 +1,14 @@
 NAME	= fillit
 
 CC	= gcc
-CFLAGS	= -Wall -Werror -Wextra -I./includes
-LDFLAGS	= -L. -lft
+CFLAGS	= -Wall -Werror -Wextra -I./include
+LDFLAGS	= -L./lib -lft
 LDLIBS	=
 
 SRC_PREFIX = ./src/
 
-SRC		= main
+SRC		= main read_tetri_file get_tetriminos_from_buffer \
+		buffer_error error
 
 SRC := $(addsuffix .c, $(SRC))
 SRC := $(addprefix $(SRC_PREFIX), $(SRC))
@@ -21,7 +22,7 @@ all: $(NAME)
 $(NAME): $(OBJ)
 	gcc -o $@ $^ $(CFLAGS) $(LDFLAGS) $(LDLIBS)
 
-%.o: %.c
+bin/%.o: %.c
 	$(CC) -o $@ -c $< $(CFLAGS)
 
 clean:
