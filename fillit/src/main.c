@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/10 15:19:26 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/10 16:29:22 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/11 02:07:27 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,9 @@ void	read_file(char *path)
 		bcount = read(fd, buffer, BUFSIZE);
 		if (bcount > 0 && bcount < BUFSIZE)
 		{
-			//if (bcount >= BUFSIZE)
-			//	fillit_error();
 			buffer[bcount] = '\0';
-			ft_putendl(buffer);
+			
+			//ft_putendl(buffer);
 		}
 		else
 			fillit_error();

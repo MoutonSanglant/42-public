@@ -4,9 +4,26 @@ let $MAIL = $USER . '@student.42.fr'
 syn on
 set nu
 
+function g:MatchCursorCharacter (c, bs)
+	let l:tt = col('.') + 1
+	let l:test = matchstr(getline('.'), '\%' . l:tt . 'c.') == a:c
+	if l:test
+		if a:bs == '1'
+			call feedkeys("\<Backspace>\<Right>")
+		endif
+		call feedkeys("\<Del>")
+	endif
+endfunction
+
 filetype plugin indent on
 inoremap ( ()<Esc>i
+inoremap ) <Esc>:call g:MatchCursorCharacter(')', '0')<CR>i<Right>)
 inoremap { {}<Esc>i
+inoremap } <Esc>:call g:MatchCursorCharacter('}', '0')<CR>i<Right>}
+inoremap [ []<Esc>i
+inoremap ] <Esc>:call g:MatchCursorCharacter(']', '0')<CR>i<Right>]
+inoremap " <Esc>:call g:MatchCursorCharacter('"', '1')<CR>i<Right>""<Left>
+inoremap ' <Esc>:call g:MatchCursorCharacter(''', '1')<CR>i<Right>''<Left>
 set ruler
 
 "set filetype	=c

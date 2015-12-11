@@ -6,13 +6,14 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/07 16:30:01 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/10 17:00:03 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/10 20:38:24 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
 
-t_dl_list		*ft_dl_lstmap(t_dl_list *lst, t_dl_list *(*f)(t_dl_list *elem))
+t_dl_list		*ft_dl_lstmap(t_dl_list *lst,
+					t_dl_list *(*f)(t_dl_list *elem))
 {
 	t_dl_list	*new_list;
 
@@ -25,8 +26,8 @@ t_dl_list		*ft_dl_lstmap(t_dl_list *lst, t_dl_list *(*f)(t_dl_list *elem))
 			if (!new_list->next)
 			{
 				if (new_list->content)
-					ft_memdel((void **)&newlist->content);
-				ft_memdel((void **)&newlist);
+					ft_memdel((void **)&new_list->content);
+				ft_memdel((void **)&new_list);
 			}
 		}
 	}
