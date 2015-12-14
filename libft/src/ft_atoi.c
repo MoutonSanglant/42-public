@@ -6,11 +6,11 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/08 21:48:42 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/09 03:51:58 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/14 11:45:22 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <libft.h>
+#include "libft.h"
 
 int		ft_atoi(char const *str)
 {

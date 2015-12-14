@@ -24,14 +24,14 @@ EXEC = $(EXEC_ALL) $(EXEC_IS) $(EXEC_PUT) $(EXEC_MEM) $(EXEC_STR) $(EXEC_LST) $(
 .PHONY: all $(NAME) clean fclean re
 
 CC	= gcc
-CFLAGS	= -Wall -Werror -Wextra -I./includes -D LIBFT_EXTRA
+CFLAGS	= -Wall -Werror -Wextra -D LIBFT_EXTRA
 LDFLAGS	= -L. -lft
-LDLIBS	= 
+LDLIBS	=
 #-lbsd
 
 SRC_PREFIX = ./src/
 
-SRC   = memset bzero memcpy memccpy memmove memchr memcmp strdup strcpy strncpy \
+SRC		= memset bzero memcpy memccpy memmove memchr memcmp strdup strcpy strncpy \
 strcat strncat strlcat strchr strrchr strstr strnstr strcmp strncmp atoi \
 isalpha isdigit isalnum isascii isprint toupper tolower memalloc memdel strnew \
 strdel strclr striter striteri strmap strmapi strequ strnequ strsub strjoin \

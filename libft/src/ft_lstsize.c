@@ -6,11 +6,11 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/07 17:14:37 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/07 17:39:47 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/14 11:48:25 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <libft.h>
+#include "libft.h"
 
 int		ft_lstsize(t_list *lst)
 {
