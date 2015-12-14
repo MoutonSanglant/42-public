@@ -1,19 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putendl_fd.c                                    :+:      :+:    :+:   */
+/*   get_pattern_id.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/12/01 12:37:02 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/14 11:51:53 by tdefresn         ###   ########.fr       */
+/*   Created: 2015/12/12 14:15:20 by tdefresn          #+#    #+#             */
+/*   Updated: 2015/12/12 14:25:51 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "fillit.h"
 
-void	ft_putendl_fd(char const *s, int fd)
+char	get_pattern_id(unsigned short mask)
 {
-	ft_putstr_fd(s, fd);
-	write(fd, "\n", 1);
+	int	i;
+	int	j;
+
+	i = 0;
+	while (i < 19)
+	{
+		j = 0;
+		while (j < 9)
+		{
+			if (g_mask_table[i][j] == mask)
+				return (i);
+			j++;
+		}
+		i++;
+	}
+	error();
+	return (-1);
 }

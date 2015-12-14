@@ -6,11 +6,11 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/01 12:37:16 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/09 19:22:36 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/14 11:51:53 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <libft.h>
+#include "libft.h"
 
 static size_t	copy_forward_if_t(char *ptr_dst, const char *ptr_src, size_t t)
 {

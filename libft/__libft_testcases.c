@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/24 17:24:21 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/09 19:14:52 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/14 11:54:03 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 
 #define LINUX__
 
-#include <libft.h>
+#include "src/libft.h"
 
 // extra: printf
 #include <stdio.h>
@@ -436,51 +436,52 @@ void		test_strcpy()
 
 void		test_strcat()
 {
-	char	*str;
+	char	*s1;
+	char	*s2;
 
 	ft_putendl("== strcat / strncat / strlcat ==");
 	ft_putendl(">> libc");
-	str = ft_strnew(200);
-	str = strcpy(str, STRCPY_STR);
-	ft_putendl(str);
-	str = strcat(str, "_______");
-	ft_putendl(str);
-	str = strncat(str, "Un camion", 6);
-	ft_putendl(str);
-	str = strncat(str, "Petit train", 18);
-	ft_putendl(str);
-	str = strncat(str, "Chapeau rouge", 5);
-	ft_putendl(str);
+	s1 = ft_strnew(200);
+	s1 = strcpy(s1, STRCPY_STR);
+	ft_putendl(s1);
+	s1 = strcat(s1, "_______");
+	ft_putendl(s1);
+	s1 = strncat(s1, "Un camion", 6);
+	ft_putendl(s1);
+	s1 = strncat(s1, "Petit train", 18);
+	ft_putendl(s1);
+	s1 = strncat(s1, "Chapeau rouge", 5);
+	ft_putendl(s1);
 #ifndef LINUX
-	ft_putnbr(strlcat(str, "Tartinettos", 200));
+	ft_putnbr(strlcat(s1, "Tartinettos", 200));
 	ft_putchar('\n');
-	ft_putendl(str);
-	ft_putnbr(strlcat(str, " Un truc super long et chiant a lire, mais je ne vous oblige pas car de toute maniere tout ne va pas passer car la chaine de caracteres de destination ne fait pas plus de 200 caracteres et il me semble que cette chaine de caracteres en fait plus de 200.", 200));
+	ft_putendl(s1);
+	ft_putnbr(strlcat(s1, " Un truc super long et chiant a lire, mais je ne vous oblige pas car de toute maniere tout ne va pas passer car la chaine de caracteres de destination ne fait pas plus de 200 caracteres et il me semble que cette chaine de caracteres en fait plus de 200.", 200));
 	ft_putchar('\n');
-	ft_putendl(str);
+	ft_putendl(s1);
 #else
 	ft_putstr("Missing code: LINUX");
 #endif
-	ft_strdel(&str);
+	ft_strdel(&s1);
 	ft_putendl(">> libft");
-	str = ft_strnew(200);
-	str = ft_strcpy(str, STRCPY_STR);
-	ft_putendl(str);
-	str = ft_strcat(str, "_______");
-	ft_putendl(str);
-	str = ft_strncat(str, "Un camion", 6);
-	ft_putendl(str);
-	str = ft_strncat(str, "Petit train", 18);
-	ft_putendl(str);
-	str = ft_strncat(str, "Chapeau rouge", 5);
-	ft_putendl(str);
-	ft_putnbr(ft_strlcat(str, "Tartinettos", 200));
+	s2 = ft_strnew(200);
+	s2 = ft_strcpy(s2, STRCPY_STR);
+	ft_putendl(s2);
+	s2 = ft_strcat(s2, "_______");
+	ft_putendl(s2);
+	s2 = ft_strncat(s2, "Un camion", 6);
+	ft_putendl(s2);
+	s2 = ft_strncat(s2, "Petit train", 18);
+	ft_putendl(s2);
+	s2 = ft_strncat(s2, "Chapeau rouge", 5);
+	ft_putendl(s2);
+	ft_putnbr(ft_strlcat(s2, "Tartinettos", 200));
 	ft_putchar('\n');
-	ft_putendl(str);
-	ft_putnbr(ft_strlcat(str, " Un truc super long et chiant a lire, mais je ne vous oblige pas car de toute maniere tout ne va pas passer car la chaine de caracteres de destination ne fait pas plus de 200 caracteres et il me semble que cette chaine de caracteres en fait plus de 200.", 200));
+	ft_putendl(s2);
+	ft_putnbr(ft_strlcat(s2, " Un truc super long et chiant a lire, mais je ne vous oblige pas car de toute maniere tout ne va pas passer car la chaine de caracteres de destination ne fait pas plus de 200 caracteres et il me semble que cette chaine de caracteres en fait plus de 200.", 200));
 	ft_putchar('\n');
-	ft_putendl(str);
-	ft_strdel(&str);
+	ft_putendl(s2);
+	ft_strdel(&s2);
 	ft_putchar('\n');
 	ft_putendl("== strlcat ==");
 #ifndef LINUX
