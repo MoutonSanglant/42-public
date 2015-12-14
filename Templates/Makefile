@@ -1,32 +1,19 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   Makefile                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/12/08 17:43:58 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/08 17:44:04 by tdefresn         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+NAME	=
 
-NAME	= libft.a
-
-CC	= gcc
-CFLAGS	= -Wall -Werror -Wextra -I./includes -D LIBFT_EXTRA
-LDFLAGS	= -L. -lft
-LDLIBS	= 
+CC		= gcc
+CFLAGS	= -Wall -Werror -Wextra -I.
 
 SRC_PREFIX = ./src/
 
-SRC   =
+SRC	=
 
 SRC := $(addsuffix .c, $(SRC))
 SRC := $(addprefix $(SRC_PREFIX)ft_, $(SRC))
 
 OBJ = $(SRC:.c=.o)
 
-.PHONY: all $(NAME) clean fclean re
+.SILENT: $(OBJ)
+.PHONY: all clean fclean re
 
 all: $(NAME)
 
