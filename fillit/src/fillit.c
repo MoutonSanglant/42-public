@@ -6,11 +6,13 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/13 17:05:24 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/13 22:33:55 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/14 12:36:12 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fillit.h"
+
+#define OVERLAP(a, b) a & b
 
 void	print_grid(unsigned long long int grid, int w)
 {
@@ -71,36 +73,32 @@ unsigned long long int	convert_to(unsigned long long int n, int w)
 		tmp = n & (1 << i);
 		if (tmp)
 			r += tmp << h * d;
-	//		r += tmp << h;
 		i++;
 	}
 
 	return (r);
 }
 
-int	iscolliding(unsigned long long int a, unsigned long long int b)
-{
-	return (a & b);
-}
-
 void	fillit(t_list *tetri_list)
 {
 	unsigned long long int	grid;
-	int	id;
-	int	grid_size;
-	t_tetriminos *tetri;
+	int	smallest_grid_size;
 
 	grid = 0;
-	grid_size = biggest_square(ft_lstsize(tetri_list) * 4);
-	tetri = (t_tetriminos *)tetri_list->content;
-	id = (int)tetri->pattern_id;
-	grid += convert_to(g_mask_table[id][0], grid_size) << (grid_size * 0 + 1);
+	smallest_grid_size = biggest_square(ft_lstsize(tetri_list) * 4);
+	ft_putendl("Here lies the bruteforce loop.");
+	
 	/*
-	** here lie's the bruteforce loop
+	** t_tetriminos *tetri;
+	** int	id;
+	**
+	** tetri = (t_tetriminos *)tetri_list->content;
+	** id = (int)tetri->pattern_id;
+	** grid += convert_to(g_mask_table[id][0], grid_size) << (grid_size * 0 + 1);
+	** id = (int) ((t_tetriminos *)tetri_list->next->content)->pattern_id;
+	** if (OVERLAP(grid, convert_to(g_mask_table[id][0], grid_size)))
+	**		ft_putchar('@');
 	*/
-	id = (int) ((t_tetriminos *)tetri_list->next->content)->pattern_id;
-	if (iscolliding(grid, convert_to(g_mask_table[id][0], grid_size)))
-		ft_putchar('@');
 
-	print_grid(grid, grid_size);
+	print_grid(grid, smallest_grid_size);
 }
