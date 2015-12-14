@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/24 17:24:21 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/14 11:54:03 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/14 16:36:54 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -487,27 +487,32 @@ void		test_strcat()
 #ifndef LINUX
 	char	buf[10];
 
-	bzero(buf, 10);
-	strcpy(buf, "abc");
+	ft_bzero(buf, 10);
+	ft_strcpy(buf, "abc");
 	ft_putendl(buf);
+	ft_putnbr(strlcat(buf, "abcdefghijklmnop", 3));
+	ft_putstr(" - ");
+	ft_putendl(buf);
+	ft_bzero(buf, 10);
+	ft_strcpy(buf, "abc");
 	ft_putnbr(strlcat(buf, "abcdefghijklmnop", 10));
 	ft_putstr(" - ");
 	ft_putendl(buf);
-	bzero(buf, 10);
-	strcpy(buf, "abc");
+	ft_bzero(buf, 10);
+	ft_strcpy(buf, "abc");
 	//strcmp(buf, "abcabcdef");
 	ft_putnbr(strlcat(buf, "abcd", 2));
 	ft_putstr(" - ");
 	ft_putendl(buf);
-	bzero(buf, 10);
+	ft_bzero(buf, 10);
 	ft_putnbr(strlcat(buf, "abc", 10));
 	ft_putstr(" - ");
 	ft_putendl(buf);
 	ft_putnbr(strlcat(buf, "def", 10));
 	ft_putstr(" - ");
 	ft_putendl(buf);
-	bzero(buf, 10);
-	memset(buf, 'a', 10);
+	ft_bzero(buf, 10);
+	ft_memset(buf, 'a', 10);
 	ft_putnbr(strlcat(buf, "ccc", 10));
 	ft_putstr(" - ");
 	ft_putendl(buf);
@@ -517,29 +522,34 @@ void		test_strcat()
 	ft_putstr("Missing code: LINUX");
 #endif
 
-	char    buf2[10];
+	char	buf2[10];
 
-	bzero(buf2, 10);
-	strcpy(buf2, "abc");
+	ft_bzero(buf2, 10);
+	ft_strcpy(buf2, "abc");
 	ft_putendl(buf2);
-	ft_putnbr(ft_strlcat(buf2, "abcdefghijklmnop", 10));
+	ft_putnbr(ft_strlcat(buf2, "abcdefghijklmnop", 3));
 	ft_putstr(" - ");
 	ft_putendl(buf2);
-	bzero(buf2, 10);
-	strcpy(buf2, "abc");
+	ft_bzero(buf, 10);
+	ft_strcpy(buf, "abc");
+	ft_putnbr(ft_strlcat(buf, "abcdefghijklmnop", 10));
+	ft_putstr(" - ");
+	ft_putendl(buf);
+	ft_bzero(buf2, 10);
+	ft_strcpy(buf2, "abc");
 	//strcmp(buf2, "abcabcdef");
 	ft_putnbr(ft_strlcat(buf2, "abcd", 2));
 	ft_putstr(" - ");
 	ft_putendl(buf2);
-	bzero(buf2, 10);
+	ft_bzero(buf2, 10);
 	ft_putnbr(ft_strlcat(buf2, "abc", 10));
 	ft_putstr(" - ");
 	ft_putendl(buf2);
 	ft_putnbr(ft_strlcat(buf2, "def", 10));
 	ft_putstr(" - ");
 	ft_putendl(buf2);
-	bzero(buf2, 10);
-	memset(buf2, 'a', 10);
+	ft_bzero(buf2, 10);
+	ft_memset(buf2, 'a', 10);
 	ft_putnbr(ft_strlcat(buf2, "ccc", 10));
 	ft_putstr(" - ");
 	ft_putendl(buf2);

@@ -21,7 +21,7 @@ EXEC_EXTRA	= test_extra
 
 EXEC = $(EXEC_ALL) $(EXEC_IS) $(EXEC_PUT) $(EXEC_MEM) $(EXEC_STR) $(EXEC_LST) $(EXEC_EXTRA)
 
-.PHONY: all $(NAME) clean fclean re
+.PHONY: all clean fclean re
 
 CC	= gcc
 CFLAGS	= -Wall -Werror -Wextra -D LIBFT_EXTRA
