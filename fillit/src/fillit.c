@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/13 17:05:24 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/14 12:36:12 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/14 14:05:48 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,9 @@ void	print_grid(unsigned long long int grid, int w)
 
 		if (grid & a)
 		{
+			/*
+			** TODO: replace # with tetri letter
+			*/
 			ft_putchar('#');
 		}
 		else
@@ -82,11 +85,13 @@ unsigned long long int	convert_to(unsigned long long int n, int w)
 void	fillit(t_list *tetri_list)
 {
 	unsigned long long int	grid;
-	int	smallest_grid_size;
+	int		smallest_grid_size;
 
 	grid = 0;
 	smallest_grid_size = biggest_square(ft_lstsize(tetri_list) * 4);
-	ft_putendl("Here lies the bruteforce loop.");
+	// ft_putendl("Here lies the bruteforce loop.");
+
+	
 	
 	/*
 	** t_tetriminos *tetri;

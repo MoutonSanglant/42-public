@@ -6,12 +6,15 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/11 14:12:33 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/13 18:56:47 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/14 14:08:03 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fillit.h"
 
+/*
+** TODO: free all the mallocs and ft_lstnew !!
+*/
 t_list *get_tetriminos_from_buffer(char *buffer)
 {
 	unsigned short	width;
@@ -54,11 +57,8 @@ t_list *get_tetriminos_from_buffer(char *buffer)
 		if (*buffer == '\n')
 		{
 			/*
-			** logic missing: if there are too
-			** much \n between patterns
+			** TODO: check if there is more than one \n between patterns
 			*/
-			//ft_putnbr_fd(mask, 2);
-			//ft_putchar_fd('\n', 2);
 			tetriminos = (t_tetriminos *)malloc(sizeof(t_tetriminos));
 			tetriminos->letter = letter;
 			tetriminos->pattern_id = get_pattern_id(mask);
