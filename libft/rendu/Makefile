@@ -19,7 +19,7 @@ LDLIBS		=
 
 SRC_PREFIX = ./
 
-SRC   = memset bzero memcpy memccpy memmove memchr memcmp strdup strcpy \
+SRC	= memset bzero memcpy memccpy memmove memchr memcmp strdup strcpy \
 		strncpy strcat strncat strlcat strchr strrchr strstr strnstr strcmp \
 		strncmp atoi isalpha isdigit isalnum isascii isprint toupper tolower \
 		memalloc memdel strnew strdel strclr striter striteri strmap strmapi \
@@ -37,7 +37,7 @@ SRC := $(addprefix $(SRC_PREFIX)ft_, $(SRC))
 OBJ = $(SRC:.c=.o)
 
 .SILENT: $(OBJ)
-.PHONY: all $(NAME) clean fclean re
+.PHONY: all clean fclean re
 
 all: $(NAME)
 
