@@ -1,6 +1,5 @@
 /.*
 *.o
-*.a
 *.swp
 libft/test_*
 *._*
