@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/13 17:05:24 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/14 14:05:48 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/14 15:09:20 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,16 @@ void	fillit(t_list *tetri_list)
 	smallest_grid_size = biggest_square(ft_lstsize(tetri_list) * 4);
 	// ft_putendl("Here lies the bruteforce loop.");
 
-	
+	// Bruteforce rules:
+	// Since the tests only check 7 letters max, it's pretty safe to use
+	// a bruteforce algorithm without deep optimization. However, the
+	// result should be find under 1 second max.
+	// 1 - try to put letter in the grid,if there is no room left, extend
+	// the grid
+	// 1 - test with letter 1 in first position, if it is a perfect fill,
+	// valid, else test with next letter in first position, until best fill
+	// 2 - test with letter 2 in second position, 
+	// 3 - 
 	
 	/*
 	** t_tetriminos *tetri;
