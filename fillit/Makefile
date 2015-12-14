@@ -15,7 +15,7 @@ SRC := $(addprefix $(SRC_PREFIX), $(SRC))
 
 OBJ = $(SRC:.c=.o)
 
-.PHONY: all $(NAME) clean fclean re
+.PHONY: all clean fclean re
 
 all: $(NAME)
 
