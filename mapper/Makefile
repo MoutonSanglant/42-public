@@ -1,4 +1,4 @@
-NAME	= fillit
+NAME	= mapper
 
 CC	= gcc
 CFLAGS	= -Wall -Werror -Wextra -I./include
@@ -7,8 +7,7 @@ LDLIBS	=
 
 SRC_PREFIX = ./src/
 
-SRC		= main read_tetri_file get_tetriminos_from_buffer \
-		get_pattern_id fillit buffer_error error
+SRC		= main
 
 SRC := $(addsuffix .c, $(SRC))
 SRC := $(addprefix $(SRC_PREFIX), $(SRC))

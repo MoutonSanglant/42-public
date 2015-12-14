@@ -26,13 +26,17 @@ typedef struct		s_tetriminos
 {
 	char	letter;
 	char	pattern_id;
+	char	position;
 }			t_tetriminos;
 
+void	fillit(t_list *tetri_list);
 char	*read_tetri_file(char *);
-void	get_tetriminos_from_buffer(char *);
+t_list	*get_tetriminos_from_buffer(char *);
+char	get_pattern_id(unsigned short mask);
 void	buffer_error(char *);
 void	error(void);
 
-extern char *g_pattern_table[18][5];
+extern unsigned short g_mask_table[19][9];
+extern char *g_pattern_table[19][5];
 
 #endif
