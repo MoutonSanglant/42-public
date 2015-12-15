@@ -26,6 +26,8 @@ typedef struct		s_tetriminos
 {
 	char	letter;
 	char	pattern_id;
+	char	w;
+	char	h;
 	char	position;
 }			t_tetriminos;
 
@@ -36,7 +38,7 @@ char	get_pattern_id(unsigned short mask);
 void	buffer_error(char *);
 void	error(void);
 
-extern unsigned short g_mask_table[19][9];
-extern char *g_pattern_table[19][5];
+extern unsigned short	g_mask_table[19][9];
+extern char				*g_pattern_table[19][5];
 
 #endif
