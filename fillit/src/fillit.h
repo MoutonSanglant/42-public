@@ -17,20 +17,21 @@
 # include <fcntl.h>
 # include <unistd.h>
 
+typedef long long unsigned int t_mask;
+
 /*
 ** Since we know all the possible patterns, we can set a pattern
 ** map and pull from this map whenever a tetrimino is needed
 ** according to an id.
 */
-typedef struct		s_tetriminos
+typedef struct		s_tetrimino
 {
 	char	letter;
 	char	pattern_id;
 	unsigned char	h_shift;
 	unsigned char	v_shift;
-}			t_tetriminos;
+}			t_tetrimino;
 
-typedef long long unsigned int t_mask;
 
 void	fillit(t_list *tetri_list);
 char	*read_tetri_file(char *);
