@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/11 14:12:33 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/16 11:59:40 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/16 16:14:38 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ t_list *get_tetriminos_from_buffer(char *buffer)
 	char	*buffer_start;
 	t_list	*list;
 	t_list	*list_start;
-	t_tetriminos	*tetriminos;
+	t_tetrimino	*tetrimino;
 	char	letter;
 
 	/*
@@ -60,19 +60,19 @@ t_list *get_tetriminos_from_buffer(char *buffer)
 			/*
 			** TODO: check if there is more than one \n between patterns
 			*/
-			tetriminos = (t_tetriminos *)malloc(sizeof(t_tetriminos));
-			tetriminos->letter = letter;
-			tetriminos->pattern_id = get_pattern_id(mask);
-			tetriminos->h_shift = 0;
-			tetriminos->v_shift = 0;
+			tetrimino = (t_tetrimino *)malloc(sizeof(t_tetrimino));
+			tetrimino->letter = letter;
+			tetrimino->pattern_id = get_pattern_id(mask);
+			tetrimino->h_shift = 0;
+			tetrimino->v_shift = 0;
 			if (list)
 			{
-				list->next = ft_lstnew(tetriminos, sizeof(*tetriminos));
+				list->next = ft_lstnew(tetrimino, sizeof(*tetrimino));
 				list = list->next;
 			}
 			else
 			{
-				list = ft_lstnew(tetriminos, sizeof(*tetriminos));
+				list = ft_lstnew(tetrimino, sizeof(*tetrimino));
 				list_start = list;
 			}
 			letter++;
@@ -81,16 +81,16 @@ t_list *get_tetriminos_from_buffer(char *buffer)
 			buffer++;
 		}
 	}
-	tetriminos = (t_tetriminos *)malloc(sizeof(t_tetriminos));
-	tetriminos->letter = letter;
-	tetriminos->pattern_id = get_pattern_id(mask);
+	tetrimino = (t_tetrimino *)malloc(sizeof(t_tetrimino));
+	tetrimino->letter = letter;
+	tetrimino->pattern_id = get_pattern_id(mask);
 	if (list)
 	{
-		list->next = ft_lstnew(tetriminos, sizeof(*tetriminos));
+		list->next = ft_lstnew(tetrimino, sizeof(*tetrimino));
 		list = list->next;
 	}
 	else
-		list = ft_lstnew(tetriminos, sizeof(*tetriminos));
+		list = ft_lstnew(tetrimino, sizeof(*tetrimino));
 
 	if (!list_start)
 		list_start = list;
