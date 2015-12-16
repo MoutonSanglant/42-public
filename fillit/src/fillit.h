@@ -26,10 +26,11 @@ typedef struct		s_tetriminos
 {
 	char	letter;
 	char	pattern_id;
-	char	w;
-	char	h;
-	char	position;
+	unsigned char	h_shift;
+	unsigned char	v_shift;
 }			t_tetriminos;
+
+typedef long long unsigned int t_mask;
 
 void	fillit(t_list *tetri_list);
 char	*read_tetri_file(char *);

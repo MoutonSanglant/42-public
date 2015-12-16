@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/10 15:19:26 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/13 18:57:07 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/16 12:01:10 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,9 +117,6 @@ int		main(int argc, char **argv)
 	tetri_list = get_tetriminos_from_buffer(file_buffer);
 	ft_memdel((void **)&file_buffer);
 	if (tetri_list)
-	{
-		//ft_lstiter(tetri_list, &__print_patterns);
 		fillit(tetri_list);
-	}
 	return (0);
 }

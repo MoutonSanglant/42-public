@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/13 17:05:24 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/15 12:45:45 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/16 13:41:56 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 #define OVERLAP(a, b) (a & b) != 0
 
-void	print_grid(unsigned long long int grid, unsigned long long int bounds, int w)
+void	print_grid(t_mask grid, t_mask bounds, int w)
 {
 	int i;
-	unsigned long long int a;
+	t_mask a;
 
 	a = 1;
 	i = 0;
@@ -52,7 +52,7 @@ int	biggest_square(int n)
 {
 	int	i;
 
-	i = 0;
+	i = 1;
 	while (i * i < n)
 		i++;
 
@@ -60,35 +60,42 @@ int	biggest_square(int n)
 }
 
 /*
-** Convert the 4*4 bits value of the pattern to a
-** n*n bits value. Be aware of the bound !
+** Convert a 16bit pattern bitmask to a 64bit pattern bitmask
+** applying a delta
 */
-unsigned long long int	convert_to(unsigned long long int n, int w)
+t_mask	convert_to(unsigned short pattern_mask, int delta)
 {
-	int i;
-	int h;
-	unsigned long long r;
-	unsigned long long tmp;
-	int d;
+	t_mask mask;
+	size_t bitshift;
+	size_t lineshift;
 
-	d = w - 4;
-	i = 0;
-	h = 0;
-	r = 0;
-	while (i < 16)
+	mask = 0;
+	bitshift = 0;
+	lineshift = 0;
+	if (delta > 0)
 	{
-		if (i > 0 && i % 4 == 0)
-			h++;
-		tmp = n & (1 << i);
-		if (tmp)
-			r += tmp << h * d;
-		i++;
+		while (bitshift < 16)
+		{
+			if (bitshift > 0 && bitshift % 4 == 0)
+				lineshift += delta;
+			mask |= (pattern_mask & (1 << bitshift)) << lineshift;
+			bitshift++;
+		}
 	}
-
-	return (r);
+	else
+	{
+		while (bitshift < 16)
+		{
+			if (bitshift > 0 && bitshift % 4 == 0)
+				lineshift -= delta;
+			mask |= (pattern_mask & (1 << bitshift)) >> lineshift;
+			bitshift++;
+		}
+	}
+	return (mask);
 }
 
-unsigned long long int ullpow(int b, int e)
+t_mask ullpow(int b, int e)
 {
 	if (e > 0)
 		return (b * ullpow(b, e - 1));
@@ -98,8 +105,9 @@ unsigned long long int ullpow(int b, int e)
 #include <stdio.h>
 void	fillit(t_list *tetri_list)
 {
-	unsigned long long int	grid;
-	unsigned long long int	bounds;
+	t_mask	grid;
+	t_mask	bounds;
+	t_mask	forbidden_mask;
 	size_t		grid_size;
 	size_t		i;
 
@@ -109,47 +117,61 @@ void	fillit(t_list *tetri_list)
 	// Remember: a grid can't be bigger than 7*7, so the biggest
 	// number of tetriminos is 12 with a regular grid, but we could use
 	// a splitted grid for bigger number of tetriminos
-	//grid_size = biggest_square(ft_lstsize(tetri_list) * 4) + 1;
-	grid_size = 7 + 1;
-
+	grid_size = biggest_square(ft_lstsize(tetri_list) * 4) + 1;
+	//grid_size += 2;
+	
 	i = -1;
-	while (++i <= grid_size * grid_size + grid_size)
+	while (++i < grid_size * grid_size + grid_size)
 		if (i < grid_size || i >= (grid_size * grid_size) || i % grid_size == 0)
 			bounds += ullpow(2, i);
-
-	// ft_putendl("Here lies the bruteforce loop.");
-
-	// Problem 1:
-	// - the tetrimino is out of bound
-	// - since we never ask it to be out of bound it should be fine
-
-	// Bruteforce rules:
-	// Since the tests only check 7 letters max, it's pretty safe to use
-	// a bruteforce algorithm without deep optimization. However, the
-	// result should be find under 1 second max.
-	// 1 - try to put letter in the grid,if there is no room left, extend
-	// the grid
-	// 1 - test with letter 1 in first position, if it is a perfect fill,
-	// valid, else test with next letter in first position, until best fill
-	// 2 - test with letter 2 in second position,
-	// 3 -
 
 	t_tetriminos *tetri;
 	int	id;
 
+	t_mask shift;
+	t_mask tetri_mask;
+	t_mask shifted_tetri_mask;
+
+	//t_list	best_match; // A copy of the first best match
+
 	tetri = (t_tetriminos *)tetri_list->content;
 	id = (int)tetri->pattern_id;
+	//id = (int)tetri->pattern_id + 4;
+
+	
+	while (1)
+	{
+		tetri_mask = convert_to(g_mask_table[id][0], grid_size - 4);
+		forbidden_mask = grid | bounds;
+		while (OVERLAP(forbidden_mask, shifted_tetri_mask))
+		{
+			shift = grid_size + grid_size * tetri->v_shift + tetri->h_shift;
+			shifted_tetri_mask = tetri_mask << shift;
+			
+			tetri->h_shift++;
+			if (tetri->h_shift > grid_size)
+			{
+				tetri->v_shift++;
+				tetri->h_shift = 0;
+				if (tetri->v_shift >= grid_size)
+				{
+					ft_putendl("grid too small");
+					error();
+				}
+			}
+		
+			// TODO: logic when grid size is 7
+			
+		}
+		grid |= shifted_tetri_mask;
+		//grid |= tetri_mask;
+		break;
+	}
 	
 
-	unsigned long long int shift;
-	unsigned long long int tetri_mask;
-	unsigned long long int shifted_tetri_mask;
-
-	size_t a;
-	size_t b;
-
-	a = -1;
-	b = 0;
+	/*
+	size_t a = -1;
+	size_t b = 0;
 	i = 0;
 	// Count how many tetrimino can be suited in the grid
 	while (b < grid_size)
@@ -182,21 +204,7 @@ void	fillit(t_list *tetri_list)
 	ft_putstr("Avaible positions for this terimino: ");
 	ft_putnbr(i);
 	ft_putchar('\n');
-	
-	//if (OVERLAP(grid, convert_to(g_mask_table[id][0], grid_size)))
-	//	ft_putchar('@');
-
-	/*
-	** t_tetriminos *tetri;
-	** int	id;
-	**
-	** tetri = (t_tetriminos *)tetri_list->content;
-	** id = (int)tetri->pattern_id;
-	** grid += convert_to(g_mask_table[id][0], grid_size) << (grid_size * 0 + 1);
-	** id = (int) ((t_tetriminos *)tetri_list->next->content)->pattern_id;
-	** if (OVERLAP(grid, convert_to(g_mask_table[id][0], grid_size)))
-	**		ft_putchar('@');
-	*/
-
+	*/	
 	print_grid(grid, bounds, grid_size);
+	//print_grid(grid, 0, grid_size);
 }
