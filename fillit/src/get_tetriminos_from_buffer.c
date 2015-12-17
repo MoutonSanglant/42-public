@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/11 14:12:33 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/16 16:14:38 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/17 18:18:03 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,10 @@ t_list *get_tetriminos_from_buffer(char *buffer)
 	t_list	*list;
 	t_list	*list_start;
 	t_tetrimino	*tetrimino;
-	char	letter;
 
 	/*
 	** Detect a tetrimino
 	*/
-	letter = 'A';
 	list = NULL;
 	mask = 0;
 	height = 0;
@@ -59,9 +57,11 @@ t_list *get_tetriminos_from_buffer(char *buffer)
 		{
 			/*
 			** TODO: check if there is more than one \n between patterns
+			** TODO: also check if there are extra \n after last pattern
 			*/
 			tetrimino = (t_tetrimino *)malloc(sizeof(t_tetrimino));
-			tetrimino->letter = letter;
+			if (!tetrimino)
+				error();
 			tetrimino->pattern_id = get_pattern_id(mask);
 			tetrimino->h_shift = 0;
 			tetrimino->v_shift = 0;
@@ -75,14 +75,14 @@ t_list *get_tetriminos_from_buffer(char *buffer)
 				list = ft_lstnew(tetrimino, sizeof(*tetrimino));
 				list_start = list;
 			}
-			letter++;
 			mask = 0;
 			height = 0;
 			buffer++;
 		}
 	}
 	tetrimino = (t_tetrimino *)malloc(sizeof(t_tetrimino));
-	tetrimino->letter = letter;
+	if (!tetrimino)
+		error();
 	tetrimino->pattern_id = get_pattern_id(mask);
 	if (list)
 	{

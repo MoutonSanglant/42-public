@@ -13,6 +13,8 @@
 #ifndef FILLIT_H
 # define FILLIT_H
 
+#define DEBUG 1
+
 # include <libft.h>
 # include <fcntl.h>
 # include <unistd.h>
@@ -26,10 +28,11 @@ typedef long long unsigned int t_mask;
 */
 typedef struct		s_tetrimino
 {
-	char	letter;
-	char	pattern_id;
+	unsigned char	pattern_id;
 	unsigned char	h_shift;
 	unsigned char	v_shift;
+	unsigned char	w;
+	unsigned char	h;
 }			t_tetrimino;
 
 

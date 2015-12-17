@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/10 15:19:26 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/16 16:12:11 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/17 16:35:58 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,31 +78,6 @@ char *g_pattern_table[19][5] = {
 	{ ".#.", "###", NULL },
 	{ "#.", "##", "#.", NULL }
 };
-
-void	__print_patterns(t_list *elem)
-{
-	t_tetrimino	*tetri;
-	int	i;
-	char	*str;
-	
-	tetri = (t_tetrimino *)elem->content;
-	i = 0;
-	while ((str = g_pattern_table[(int)tetri->pattern_id][i]))
-	{
-		while (*str)
-		{
-			if (*str == '#')
-				ft_putchar(tetri->letter);
-			else
-				ft_putchar('.');
-			str++;
-		}
-		ft_putchar('\n');
-		//ft_putendl(str);
-		i++;
-	}
-	ft_putchar('\n');
-}
 
 int		main(int argc, char **argv)
 {
