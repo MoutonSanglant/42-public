@@ -8,7 +8,7 @@ LDLIBS	=
 SRC_PREFIX = ./src/
 
 SRC		= main read_tetri_file get_tetriminos_from_buffer \
-		get_pattern_id fillit errors
+		get_pattern_id print_grid bruteforce fillit errors
 
 SRC := $(addsuffix .c, $(SRC))
 SRC := $(addprefix $(SRC_PREFIX), $(SRC))

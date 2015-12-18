@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/12/11 14:12:33 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/17 18:18:03 by tdefresn         ###   ########.fr       */
+/*   Created: 2015/12/18 19:56:10 by tdefresn          #+#    #+#             */
+/*   Updated: 2015/12/18 21:01:58 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,6 @@ t_list *get_tetriminos_from_buffer(char *buffer)
 	t_list	*list_start;
 	t_tetrimino	*tetrimino;
 
-	/*
-	** Detect a tetrimino
-	*/
 	list = NULL;
 	mask = 0;
 	height = 0;
@@ -40,10 +37,6 @@ t_list *get_tetriminos_from_buffer(char *buffer)
 		{
 			if (width > 3 || height > 3)
 				buffer_error(buffer_start);
-			/*
-			** add a logic so that if # doesn't appears
-			** exactly 4 times, this isn't a valid tetriminos
-			*/
 			if (*buffer == '#')
 				mask |= 1 << (width + (height * 4));
 			else if (*buffer != '.')
@@ -84,6 +77,8 @@ t_list *get_tetriminos_from_buffer(char *buffer)
 	if (!tetrimino)
 		error();
 	tetrimino->pattern_id = get_pattern_id(mask);
+	tetrimino->h_shift = 0;
+	tetrimino->v_shift = 0;
 	if (list)
 	{
 		list->next = ft_lstnew(tetrimino, sizeof(*tetrimino));
