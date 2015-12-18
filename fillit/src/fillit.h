@@ -13,7 +13,7 @@
 #ifndef FILLIT_H
 # define FILLIT_H
 
-#define DEBUG 1
+#define DEBUG 0
 
 # include <libft.h>
 # include <fcntl.h>
@@ -31,15 +31,26 @@ typedef struct		s_tetrimino
 	unsigned char	pattern_id;
 	unsigned char	h_shift;
 	unsigned char	v_shift;
-	unsigned char	w;
-	unsigned char	h;
 }			t_tetrimino;
 
+typedef struct		s_bruteforce_params
+{
+	t_list	*final_list;
+	t_mask	grid_mask;
+	t_mask	right_mask;
+	t_mask	bottom_mask;
+	t_mask	full_mask;
+}			t_bruteforce_params;
+
+void	delelem(void *content, size_t content_size);
 
 void	fillit(t_list *tetri_list);
+t_mask	bruteforce(t_bruteforce_params *, size_t, t_list*);
 char	*read_tetri_file(char *);
 t_list	*get_tetriminos_from_buffer(char *);
 char	get_pattern_id(unsigned short mask);
+void	print_grid(size_t w, t_list *final_list);
+
 void	buffer_error(char *);
 void	error(void);
 
