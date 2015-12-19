@@ -6,13 +6,13 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/12 14:15:20 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/12 14:25:51 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/19 11:33:38 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fillit.h"
 
-char	get_pattern_id(unsigned short mask)
+char	get_pattern_id(t_mask16 mask)
 {
 	int	i;
 	int	j;
