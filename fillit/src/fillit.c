@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/13 17:05:24 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/19 00:18:49 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/19 12:20:40 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static int	biggest_square(int n)
 	return (i);
 }
 
-static t_mask ullpow(int b, int e)
+static t_mask64 ullpow(int b, int e)
 {
 	if (e > 0)
 		return (b * ullpow(b, e - 1));
@@ -30,34 +30,35 @@ static t_mask ullpow(int b, int e)
 		return (1);
 }
 
-static t_bruteforce_params	*init_bruteforce()
+static t_bf_params	*init_bruteforce()
 {
-	t_bruteforce_params	*p;
+	t_bf_params	*p;
 
-	p = (t_bruteforce_params *)malloc(sizeof(t_bruteforce_params));
+	p = (t_bf_params *)malloc(sizeof(t_bf_params));
 	if (!p)
 		error();
-	p->final_list = ft_lstnew(NULL, 0);
+	p->result_list = ft_lstnew(NULL, 0);
 	return(p);
 }
 
-static void	resize_masks(t_bruteforce_params **p, size_t grid_size)
+static void	resize_masks(t_bf_params **p, size_t grid_size)
 {
 	size_t	i;
 
-	(*p)->grid_mask = 0;
-	(*p)->right_mask = 0;
-	(*p)->bottom_mask = 0;
-	(*p)->full_mask = 0;
+	(*p)->grid = (t_grid_mask *)malloc(sizeof(t_grid_mask));
+	(*p)->grid->tetri = 0;
+	(*p)->grid->right = 0;
+	(*p)->grid->bottom = 0;
+	(*p)->grid->fill = 0;
 	i = 0;
 	while (++i <= grid_size)
-		(*p)->right_mask += ullpow(2, grid_size * i - 1);
+		(*p)->grid->right += ullpow(2, grid_size * i - 1);
 	i = 0;
 	while (i++ < grid_size )
-		(*p)->bottom_mask += ullpow(2, grid_size * grid_size - grid_size + i);
+		(*p)->grid->bottom += ullpow(2, grid_size * grid_size - grid_size + i);
 	i = 0;
 	while (i < grid_size * grid_size)
-		(*p)->full_mask += ullpow(2, i++);
+		(*p)->grid->fill += ullpow(2, i++);
 }
 
 void	delelem(void *content, size_t content_size)
@@ -71,15 +72,15 @@ void	delelem(void *content, size_t content_size)
 
 void	fillit(t_list *tetri_list)
 {
-	t_mask			grid;
+	t_mask64			grid;
 	size_t			grid_size;
-	t_bruteforce_params	*p;
-	t_list			*final_list;
+	t_bf_params	*p;
+	t_list			*result_list;
 
 	grid = 0;
 	grid_size = biggest_square(ft_lstsize(tetri_list) * 4);
 	p = init_bruteforce(tetri_list);
-	final_list = p->final_list;
+	result_list = p->result_list;
 	while (!grid)
 	{
 #if DEBUG == 1
@@ -88,24 +89,25 @@ void	fillit(t_list *tetri_list)
 #endif
 		if (grid_size > 8)
 			break ;
-		ft_bzero(p->final_list, sizeof(t_mask));
+		ft_bzero(p->result_list, sizeof(t_mask64));
 		resize_masks(&p, grid_size);
 		grid = bruteforce(p, grid_size, tetri_list);
 		if (grid == 0)
 		{
-			p->final_list = final_list;
-			ft_lstdel(&p->final_list, &delelem);
-			p->final_list = ft_lstnew(NULL, 0);
-			//final_list = p->final_list;
+			p->result_list = result_list;
+			ft_lstdel(&p->result_list, &delelem);
+			p->result_list = ft_lstnew(NULL, 0);
+			//result_list = p->result_list;
 			grid_size++;
 		}
 	}
 #if DEBUG == 1
 	ft_putchar('\n');
 #endif
-	if (!p->final_list)
+	if (!p->result_list)
 		error();
-	print_grid(grid_size, final_list);
-	ft_lstdel(&p->final_list, &delelem);
+	print_grid(grid_size, result_list);
+	ft_lstdel(&p->result_list, &delelem);
+	ft_memdel((void **)&p->grid);
 	ft_memdel((void **)&p);
 }

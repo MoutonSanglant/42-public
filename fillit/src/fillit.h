@@ -19,7 +19,8 @@
 # include <fcntl.h>
 # include <unistd.h>
 
-typedef long long unsigned int t_mask;
+typedef unsigned short t_mask16;
+typedef long long unsigned int t_mask64;
 
 /*
 ** Since we know all the possible patterns, we can set a pattern
@@ -33,28 +34,42 @@ typedef struct		s_tetrimino
 	unsigned char	v_shift;
 }			t_tetrimino;
 
-typedef struct		s_bruteforce_params
+typedef struct		s_tetri_masks
 {
-	t_list	*final_list;
-	t_mask	grid_mask;
-	t_mask	right_mask;
-	t_mask	bottom_mask;
-	t_mask	full_mask;
-}			t_bruteforce_params;
+	t_mask64	tetri;
+	t_mask64	shifted;
+	t_mask64	last;
+	t_mask64	shift;
+}			t_tetri_masks;
 
+typedef struct		s_grid_mask
+{
+	t_mask64	tetri;
+	t_mask64	right;
+	t_mask64	bottom;
+	t_mask64	fill;
+}			t_grid_mask;
+
+typedef struct		s_bf_params
+{
+	t_list	*result_list;
+	t_grid_mask	*grid;
+}			t_bf_params;
+
+char	*read_tetri_file(char*);
+t_list	*get_tetriminos_from_buffer(char*);
+
+void	fillit(t_list*);
+t_mask64	bruteforce(t_bf_params*, size_t, t_list*);
+void	print_grid(size_t, t_list*);
+
+char	get_pattern_id(t_mask16);
 void	delelem(void *content, size_t content_size);
 
-void	fillit(t_list *tetri_list);
-t_mask	bruteforce(t_bruteforce_params *, size_t, t_list*);
-char	*read_tetri_file(char *);
-t_list	*get_tetriminos_from_buffer(char *);
-char	get_pattern_id(unsigned short mask);
-void	print_grid(size_t w, t_list *final_list);
-
-void	buffer_error(char *);
+void	buffer_error(char*);
 void	error(void);
 
-extern unsigned short	g_mask_table[19][9];
+extern t_mask16	g_mask_table[19][9];
 extern char				*g_pattern_table[19][5];
 
 #endif
