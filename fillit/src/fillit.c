@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/13 17:05:24 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/19 12:20:40 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/26 20:21:49 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static t_bf_params	*init_bruteforce()
 	p = (t_bf_params *)malloc(sizeof(t_bf_params));
 	if (!p)
 		error();
-	p->result_list = ft_lstnew(NULL, 0);
+	p->list = ft_lstnew(NULL, 0);
 	return(p);
 }
 
@@ -75,12 +75,12 @@ void	fillit(t_list *tetri_list)
 	t_mask64			grid;
 	size_t			grid_size;
 	t_bf_params	*p;
-	t_list			*result_list;
+	t_list			*list;
 
 	grid = 0;
 	grid_size = biggest_square(ft_lstsize(tetri_list) * 4);
 	p = init_bruteforce(tetri_list);
-	result_list = p->result_list;
+	list = p->list;
 	while (!grid)
 	{
 #if DEBUG == 1
@@ -89,25 +89,25 @@ void	fillit(t_list *tetri_list)
 #endif
 		if (grid_size > 8)
 			break ;
-		ft_bzero(p->result_list, sizeof(t_mask64));
+		ft_bzero(p->list, sizeof(t_mask64));
 		resize_masks(&p, grid_size);
 		grid = bruteforce(p, grid_size, tetri_list);
 		if (grid == 0)
 		{
-			p->result_list = result_list;
-			ft_lstdel(&p->result_list, &delelem);
-			p->result_list = ft_lstnew(NULL, 0);
-			//result_list = p->result_list;
+			p->list = list;
+			ft_lstdel(&p->list, &delelem);
+			p->list = ft_lstnew(NULL, 0);
+			//list = p->list;
 			grid_size++;
 		}
 	}
 #if DEBUG == 1
 	ft_putchar('\n');
 #endif
-	if (!p->result_list)
+	if (!p->list)
 		error();
-	print_grid(grid_size, result_list);
-	ft_lstdel(&p->result_list, &delelem);
+	print_grid(grid_size, list);
+	ft_lstdel(&p->list, &delelem);
 	ft_memdel((void **)&p->grid);
 	ft_memdel((void **)&p);
 }
