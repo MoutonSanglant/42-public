@@ -52,7 +52,7 @@ typedef struct		s_grid_mask
 
 typedef struct		s_bf_params
 {
-	t_list	*result_list;
+	t_list	*list;
 	t_grid_mask	*grid;
 }			t_bf_params;
 

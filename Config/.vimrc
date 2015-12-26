@@ -9,20 +9,24 @@ set nocompatible
 " Allow backspacing over everything in insert mode
 set backspace=indent,eol,start
 
-syn on		" Syntaxic colors
-set nu		" Show line numbers
-set ruler	" Show the cursor position
-set colorcolumn=80	" Color line 80 so we cans see max line length
+syn on			" Syntaxic colors
+set nu			" Show line numbers
+set ruler		" Show the cursor position
+set hlsearch	" Highlight found patterns
+set colorcolumn=80	" Color line 80 (specific to 42's norm)
+set shiftwidth=4
+set softtabstop=4
+set tabstop=4
 set backupdir	=~/.vim/.backup//,.,/tmp
 set directory	=~/.vim/.swp//,.,/tmp
 set undodir	=~/vim/.undo//,.,/tmp
 
 " If terminal emulates mouse, use it
-if has('moudr')
+if has('mouse')
 	set mouse=a
 endif
 
-" Only do this pat when compiled with support for autocommands.
+" Only do this part when compiled with support for autocommands.
 if has ("autocmd")
 	" language-dependant indenting
 	filetype plugin indent on
