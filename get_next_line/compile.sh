@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#make -C libft/ fclean && make -C libft/
+make -C libft/ fclean && make -C libft/
 
 clang -Wall -Wextra -Werror -I libft/includes -o get_next_line.o -c get_next_line.c
 clang -Wall -Wextra -Werror -I libft/includes -o main.o -c main.c

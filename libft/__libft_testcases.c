@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/24 17:24:21 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/14 16:36:54 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/01/05 16:49:45 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # define TEST_EXTRA
 #endif
 
-#define LINUX__
+#define LINUX
 
 #include "src/libft.h"
 
@@ -30,7 +30,7 @@
 
 #ifdef LINUX
 // strnstr
-# include <bsd/string.h>
+//# include <bsd/string.h>
 #endif
 
 #define MEMSET_LENGTH 17
@@ -438,6 +438,8 @@ void		test_strcat()
 {
 	char	*s1;
 	char	*s2;
+	char	buf[10];
+	char	buf2[10];
 
 	ft_putendl("== strcat / strncat / strlcat ==");
 	ft_putendl(">> libc");
@@ -485,8 +487,6 @@ void		test_strcat()
 	ft_putchar('\n');
 	ft_putendl("== strlcat ==");
 #ifndef LINUX
-	char	buf[10];
-
 	ft_bzero(buf, 10);
 	ft_strcpy(buf, "abc");
 	ft_putendl(buf);
@@ -516,21 +516,17 @@ void		test_strcat()
 	ft_putnbr(strlcat(buf, "ccc", 10));
 	ft_putstr(" - ");
 	ft_putendl(buf);
-
 	ft_putchar('\n');
 #else
 	ft_putstr("Missing code: LINUX");
 #endif
-
-	char	buf2[10];
-
 	ft_bzero(buf2, 10);
 	ft_strcpy(buf2, "abc");
 	ft_putendl(buf2);
 	ft_putnbr(ft_strlcat(buf2, "abcdefghijklmnop", 3));
 	ft_putstr(" - ");
 	ft_putendl(buf2);
-	ft_bzero(buf, 10);
+	ft_bzero(buf2, 10);
 	ft_strcpy(buf, "abc");
 	ft_putnbr(ft_strlcat(buf, "abcdefghijklmnop", 10));
 	ft_putstr(" - ");
@@ -553,7 +549,6 @@ void		test_strcat()
 	ft_putnbr(ft_strlcat(buf2, "ccc", 10));
 	ft_putstr(" - ");
 	ft_putendl(buf2);
-
 	ft_putchar('\n');
 	ft_putchar('\n');
 }
