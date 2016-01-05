@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/13 17:05:24 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/26 20:21:49 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/01/05 18:10:47 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void	fillit(t_list *tetri_list)
 
 	grid = 0;
 	grid_size = biggest_square(ft_lstsize(tetri_list) * 4);
-	p = init_bruteforce(tetri_list);
+	p = init_bruteforce();
 	list = p->list;
 	while (!grid)
 	{
