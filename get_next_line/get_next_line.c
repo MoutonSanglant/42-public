@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/02 12:28:41 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/03 19:05:09 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/01/06 01:35:01 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ static t_parser		*get_fd_parser(t_list *parser_list, int fd)
 	t_parser	*parser;
 
 	parser = (t_parser *)parser_list->content;
-	//ft_putnbr(parser->bcount);
 	while (parser->fd != fd)
 	{
 		if (!parser_list->next)
