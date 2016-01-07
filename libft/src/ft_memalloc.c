@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/01 12:37:37 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/14 11:51:52 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/01/06 16:39:55 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ void	*ft_memalloc(size_t size)
 
 	if (!size)
 		return (NULL);
-	addr = malloc(size);
+	addr = (void *)malloc(size);
+	// bzero ?
 	if (addr)
 	{
 		i = 0;

@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/02 12:28:41 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/06 01:35:01 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/01/06 18:33:56 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static t_list		*new_parser(int fd)
 
 	parser.fd = fd;
 	parser.bcount = 0;
-	parser.buffer = (char *)malloc(sizeof(char) * BUFF_SIZE);
+	parser.buffer = (char *)malloc(sizeof(char) * BUFF_SIZE + 1);
 	if (!parser.buffer)
 		return (NULL);
 	return (ft_lstnew((void *)&parser, sizeof(parser)));
@@ -57,7 +57,7 @@ static void		clear(void *elem, size_t size)
 	ft_memdel((void **)&parser->buffer);
 	ft_memdel(&elem);
 }
-
+#include <string.h>
 // 38 lignes
 static size_t	get_line(t_parser *parser, t_list **strings)
 {
@@ -72,34 +72,42 @@ static size_t	get_line(t_parser *parser, t_list **strings)
 	while (!eol)
 	{
 		if (parser->bcount == 0)
+		{
 			parser->bcount = read(parser->fd, parser->buffer, BUFF_SIZE);
-		if (parser->bcount == 0)
-			return (0);
+			if (parser->bcount == 0)
+			{
+				//parser->bcount = total_bcount;
+				*strings = lst;
+				return (total_bcount);
+			}
+		}
+		//parser->buffer[parser->bcount] = '\0';
 		total_bcount += parser->bcount;
 		if (!*strings)
 			*strings = ft_lstnew(NULL, 0);
 		if (!lst)
 			lst = *strings;
-		(*strings)->content = (char *)malloc(sizeof(char) * parser->bcount);
-		// TODO
-		//if (!lst->content)
-		//	return (-1);
+		(*strings)->content = (char *)ft_memalloc(sizeof(char) * parser->bcount + 1);
+		(*strings)->content_size = parser->bcount;
+		if (!(*strings)->content)
+			return (0);
 
 		eol = ft_memccpy((*strings)->content, (void *)parser->buffer, '\n', parser->bcount);
 		if (eol)
 		{
 			truncated_bytes = (int)eol - (int)(*strings)->content;
-			((char *)(*strings)->content)[truncated_bytes - 1] = '\0';
-			(*strings)->content_size = truncated_bytes - 1;
-			parser->buffer = ft_memmove((void *)parser->buffer, (void *)&(parser->buffer[truncated_bytes]), BUFF_SIZE - truncated_bytes);
 			parser->bcount -= truncated_bytes;
+			parser->buffer = (char *)ft_memmove((void *)parser->buffer, (void *)&(parser->buffer[truncated_bytes]), parser->bcount);
 			break;
 		}
-		(*strings)->content_size = parser->bcount;
-		((char *)(*strings)->content)[parser->bcount] = '\0';
 		parser->bcount = 0;
 		(*strings)->next = ft_lstnew(NULL, 0);
+		if (!(*strings)->next)
+			return (0);
 		*strings = (*strings)->next;
+		(*strings)->next = NULL;
+		(*strings)->content = NULL;
+		(*strings)->content_size = 0;
 	}
 	*strings = lst;
 	return (total_bcount);
@@ -109,12 +117,11 @@ static size_t	get_line(t_parser *parser, t_list **strings)
 int		get_next_line(const int fd, char **line)
 {
 	static t_list	*s_parsers = NULL;
-	t_parser		*parser;
+	t_parser		*parser; // optional
 	t_list			*strings;
-	t_list			*strn;
-	size_t			line_length;
+	t_list			*tmp_lst;
 	t_list			*last;
-	t_list			*start;
+	size_t			line_length;
 
 	parser = NULL;
 	strings = NULL;
@@ -129,35 +136,35 @@ int		get_next_line(const int fd, char **line)
 		/*
 		** Remove an element from the list
 		*/
-		start = s_parsers;
 		last = NULL;
-		while (((t_parser *)s_parsers->content)->fd != fd)
+		tmp_lst = s_parsers;
+		while (((t_parser *)tmp_lst->content)->fd != fd)
 		{
-			last = s_parsers;
-			s_parsers = s_parsers->next;
-			if (!s_parsers)
+			last = tmp_lst;
+			tmp_lst = tmp_lst->next;
+			if (!tmp_lst)
 				return (-1);
 		}
-		if (last && s_parsers->next && last->next)
-			last->next = s_parsers->next;
-		if (s_parsers == start)
-			start = start->next;
-		ft_lstdelone(&s_parsers, &clear);
-		s_parsers = start;
+		if (last && tmp_lst->next && last->next)
+			last->next = tmp_lst->next;
+		if (tmp_lst == s_parsers)
+			s_parsers = s_parsers->next;
+		ft_lstdelone(&tmp_lst, &clear);
 		return (0);
 	}
 	if (*line)
 		ft_memdel ((void *)line);
-	*line = (char *)malloc(sizeof(char) * line_length);
+	*line = (char *)malloc(sizeof(char) * line_length + 1);
 	if (!*line)
 		return (-1);
 	*line[0] = '\0';
 	while (strings)
 	{
-		strn = strings;
+		tmp_lst = strings;
 		ft_strncat(*line, (char *)strings->content, strings->content_size);
 		strings = strings->next;
-		free(strn);
+		ft_memdel ((void **)&tmp_lst->content);
+		ft_memdel ((void **)&tmp_lst);
 	}
 	return (1);
 }
