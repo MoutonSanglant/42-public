@@ -57,31 +57,31 @@ $(NAME): $(OBJ)
 	ranlib $(NAME)
 
 $(EXEC_ALL):
-	gcc -o $@ $(CFLAGS) __libft_testcases.c $(LDFLAGS) \
+	gcc -o $@ $(CFLAGS) main.c $(LDFLAGS) \
 		$(LDLIBS) -D TEST_ALL
 
 $(EXEC_MEM):
-	gcc -o $@ $(CFLAGS) __libft_testcases.c $(LDFLAGS) \
-		(LDLIBS) -D TEST_MEM
+	gcc -o $@ $(CFLAGS) main.c $(LDFLAGS) \
+		$(LDLIBS) -D TEST_MEM
 
 $(EXEC_STR):
-	gcc -o $@ $(CFLAGS) __libft_testcases.c $(LDFLAGS) \
+	gcc -o $@ $(CFLAGS) main.c $(LDFLAGS) \
 		$(LDLIBS) -D TEST_STR
 
 $(EXEC_IS):
-	gcc -o $@ $(CFLAGS) __libft_testcases.c $(LDFLAGS) \
+	gcc -o $@ $(CFLAGS) main.c $(LDFLAGS) \
 		$(LDLIBS) -D TEST_IS
 
 $(EXEC_PUT):
-	gcc -o $@ $(CFLAGS) __libft_testcases.c $(LDFLAGS) \
+	gcc -o $@ $(CFLAGS) main.c $(LDFLAGS) \
 		$(LDLIBS) -D TEST_PUT
 
 $(EXEC_LST):
-	gcc -o $@ $(CFLAGS) __libft_testcases.c $(LDFLAGS) \
+	gcc -o $@ $(CFLAGS) main.c $(LDFLAGS) \
 		$(LDLIBS) -D TEST_LST
 
 $(EXEC_EXTRA):
-	gcc -o $@ $(CFLAGS) __libft_testcases.c $(LDFLAGS) \
+	gcc -o $@ $(CFLAGS) main.c $(LDFLAGS) \
 		$(LDLIBS) -D TEST_EXTRA
 
 %.o: %.c

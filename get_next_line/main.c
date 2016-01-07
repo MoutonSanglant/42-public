@@ -46,6 +46,17 @@ int		main(int argc, char **argv)
 		i++;
 	}
 
+	(void) fd_test;
+	while (1)
+	{
+		if (getchar())
+			break;
+	}
+	while (1)
+	{
+		if (getchar())
+			break;
+	}
 	while (1)
 	{
 		i = 0;
@@ -62,11 +73,17 @@ int		main(int argc, char **argv)
 		i = 0;
 		while (i < argc)
 		{
+			if (i >= argc)
+			{
+				i = 0;
+				continue;
+			}
 			if (fd[i] <= 0)
 			{
 				i++;
 				continue;
 			}
+
 			r = get_next_line(fd[i], &line);
 			if (r > 0)
 			{
@@ -78,14 +95,41 @@ int		main(int argc, char **argv)
 				ft_putendl(line);
 			}
 			else if (r == 0)
+			{
+				ft_putstr(">> End of file on fd ");
+				ft_putnbr(fd[i]);
+				ft_putendl(" <<");
 				fd[i] = -1;
+				break;
+			}
 			else
 			{
 				ft_putendl("Memory error");
 				return (1);
 			}
 			i++;
+			while (1)
+			{
+				if (getchar())
+				{
+					ft_putendl("NEXT !!");
+					break;
+				}
+			}
 		}
+	}
+	free(line);
+	line = NULL;
+	ft_putendl(">> End of files <<");
+	while (1)
+	{
+		if (getchar())
+			break;
+	}
+	while (1)
+	{
+		if (getchar())
+			break;
 	}
 	return (0);
 }
