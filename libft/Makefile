@@ -16,9 +16,7 @@ NAME	= libft.a
 .SILENT: $(OBJ)
 
 CC	= gcc
-CFLAGS	= -Wall -Werror -Wextra -D LIBFT_EXTRA
-LDFLAGS	= -L. -lft
-LDLIBS	=
+CFLAGS	= -Wall -Werror -Wextra -D LIBFT_EXTRA -D DEBUG
 
 SRC_PREFIX = ./src/
 

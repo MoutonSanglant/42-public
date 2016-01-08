@@ -38,7 +38,7 @@ int		main(int argc, char **argv)
 	}
 
 	argc--;
-	fd = (int *)malloc(sizeof(int) * argc);
+	fd = (int *)ft_memalloc(sizeof(int) * argc);
 	i = 0;
 	while (i < argc)
 	{
@@ -100,7 +100,8 @@ int		main(int argc, char **argv)
 				ft_putnbr(fd[i]);
 				ft_putendl(" <<");
 				fd[i] = -1;
-				break;
+				continue;
+				//break;
 			}
 			else
 			{
@@ -108,18 +109,20 @@ int		main(int argc, char **argv)
 				return (1);
 			}
 			i++;
-			while (1)
+			/*while (1)
 			{
 				if (getchar())
 				{
 					ft_putendl("NEXT !!");
 					break;
 				}
-			}
+			}*/
 		}
 	}
-	free(line);
-	line = NULL;
+	ft_memdel((void **)&line);
+	ft_memdel((void **)&fd);
+	//free(line);
+	//line = NULL;
 	ft_putendl(">> End of files <<");
 	while (1)
 	{
