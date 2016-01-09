@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/18 20:48:20 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/26 20:47:53 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/01/09 15:16:27 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,7 @@ static int	bruteforce_tetri(t_bf_params *p, size_t grid_size,
 	p->grid->tetri = bruteforce(p, grid_size, tetri_list->next);
 	if (p->grid->tetri == 0)
 	{
+		//ft_putchar('@');
 		p->list = previous_list;
 		ft_lstdel(&p->list->next, &delelem);
 		return (1);

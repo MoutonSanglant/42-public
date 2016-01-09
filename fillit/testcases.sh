@@ -16,7 +16,8 @@ test_name=("empty" \
 	"simple2" \
 	"valid" \
 	"sample1" \
-	"sample2")
+	"sample2" \
+	"extra" )
 test=($'error' `# empty` \
 	$'error' `# invalid` \
 	$'error' `# overflow` \
@@ -31,10 +32,12 @@ test=($'error' `# empty` \
 	$'BB.\nBAA\nBAA' `# very_simple2` \
 	$'AADD\nABBD\nABBD\nCCCC' `# simple` \
 	$'AA.BB\nADDBB\nAD...\n.D...\nCCCC.' `# simple` \
-	$'AABBDD\nA.BBDD\nACCCC.\nHHEEII\nH.GEEI\nHGGG.I' `# valid` \
+	$'AABBDD.\nA.BBDD.\nACCCCFF\nEE..FF.\n.EEHHII\n.G.H..I\nGGGH..I' `# valid` \
 	$'ABBBB\nACCC.\nA..C.\nADD..\nDD...' `# sample1` \
-	$'ABBBB.\nACCCEE\nAFFCEE\nA.FFGG\nHHHDDG\n.HDD.G' `# sample2` )
+	$'ABBBB.\nACCCEE\nAFFCEE\nA.FFGG\nHHHDDG\n.HDD.G' `# sample2` \
+	$'ABCDEFG\nABCDEFG\nABCDEFG\nABCDEFG\n.......\n.......\n.......' `# extra` )
 
+#	$'AABBDD\nA.BBDD\nACCCC.\nHHEEII\nH.GEEI\nHGGG.I' `# valid` \
 for i in ${!test[@]}
 do
 	output=$(./fillit examples/${test_name[$i]}.fillit)

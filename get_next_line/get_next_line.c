@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/02 12:28:41 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/08 06:46:25 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/01/08 15:32:49 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ static int		clear_fd_parser(t_list **parser_list, int fd)
 	{
 		prev = fd_list;
 		fd_list = fd_list->next;
-		// ??
 		if (!fd_list)
 			return (-1);
 	}
@@ -69,7 +68,7 @@ static t_parser	*get_fd_parser(t_list **s_parsers, int fd)
 	return ((t_parser *)parser_list->content);
 }
 
-static int	to_eol(t_list **s, t_parser *p, size_t *total_bcount)
+static int		to_eol(t_list **s, t_parser *p, size_t *total_bcount)
 {
 	size_t	eol;
 
@@ -99,7 +98,8 @@ static int	to_eol(t_list **s, t_parser *p, size_t *total_bcount)
 	return (0);
 }
 
-static int	get_fd_line(char **line, t_list **s_parsers, int fd, t_list **strings)
+static int		get_fd_line(char **line, t_list **s_parsers,
+						int fd, t_list **strings)
 {
 	t_list		*first;
 	t_parser	*parser;
@@ -122,13 +122,13 @@ static int	get_fd_line(char **line, t_list **s_parsers, int fd, t_list **strings
 	}
 	*strings = first;
 	if (*line)
-		ft_memdel ((void **)&(*line));
+		ft_memdel((void **)&(*line));
 	if (!(*line = (char *)ft_memalloc(total_bcount + 1)))
 		return (-1);
 	return (total_bcount);
 }
 
-int		get_next_line(const int fd, char **line)
+int				get_next_line(const int fd, char **line)
 {
 	static t_list	*s_parsers = NULL;
 	t_list			*strings;
@@ -144,8 +144,8 @@ int		get_next_line(const int fd, char **line)
 			ft_strcat(*line, (char *)strings->content);
 			prev_str = strings;
 			strings = strings->next;
-			ft_memdel ((void **)&prev_str->content);
-			ft_memdel ((void **)&prev_str);
+			ft_memdel((void **)&prev_str->content);
+			ft_memdel((void **)&prev_str);
 		}
 	}
 	else
