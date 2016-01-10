@@ -6,7 +6,7 @@
 /*   By: mabuchwa <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/04 15:55:31 by mabuchwa          #+#    #+#             */
-/*   Updated: 2016/01/09 16:28:17 by mabuchwa         ###   ########.fr       */
+/*   Updated: 2016/01/10 02:39:21 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,8 @@ static int		ft_test(char **board, t_pos *tab, int box, t_val value)
 	tmp_b = b;
 	while (block < 4)
 	{
-		if (a < value.sd && b < value.sd && board[a][b] == '.')
+		if (a >= 0 && b >= 0
+				&& a < value.sd && b < value.sd && board[a][b] == '.')
 		{
 			block++;
 			a = tmp_a + (TAB->y[block] - TAB->y[0]);
