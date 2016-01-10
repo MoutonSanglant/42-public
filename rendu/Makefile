@@ -13,7 +13,7 @@
 NAME	= fillit
 
 CC	= gcc
-CFLAGS	= -g -O0 -Wall -Werror -Wextra -I./
+CFLAGS	= -Wall -Werror -Wextra -I./
 
 SRC		= ft_bzero ft_check_file ft_get_coor ft_memset ft_get_size ft_putstr \
 			ft_resolution ft_up_left main
