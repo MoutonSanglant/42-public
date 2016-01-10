@@ -6,7 +6,7 @@
 /*   By: mabuchwa <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/09 15:56:48 by mabuchwa          #+#    #+#             */
-/*   Updated: 2016/01/09 16:54:52 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/01/10 02:38:07 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,9 @@ static char		**ft_get_board(int side)
 	int		i;
 
 	i = 0;
-	if (!(board = (char**)malloc(sizeof(*board) * side + 1)))
+	if (!(board = (char**)malloc(sizeof(*board) * (side + 1))))
 		return (NULL);
-	board[side] = 0;
+	board[side] = NULL;
 	while (i < side)
 	{
 		if (!(board[i] = (char*)malloc(sizeof(**board) * (side + 1))))
@@ -50,21 +50,13 @@ static char		**ft_get_board(int side)
 void			ft_get_size(char **board, t_pos *tab, int side)
 {
 	int		size;
-	int		tmp;
 	int		i;
-	int		j;
 
 	i = 0;
-	j = 0;
 	size = (tab + i)->nb_tetri * 4;
 	if (side == 0)
-	{
 		while ((side * side) < size)
-		{
-			tmp = (side * side);
 			side++;
-		}
-	}
 	if (board != NULL)
 		ft_free_board(board, side);
 	board = ft_get_board(side);
