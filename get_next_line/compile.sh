@@ -1,11 +1,15 @@
 #!/bin/bash
 
+<<<<<<< HEAD
 # make -C libft/ fclean && make -C libft/
+=======
+make -C libft/ fclean && make -C libft/
+>>>>>>> 473a4c1ceef83c53b7a01a1e21e1e01665fb855e
 
-#clang -Wall -Wextra -Werror -I libft/includes -o get_next_line.o -c get_next_line.c
-#clang -Wall -Wextra -Werror -I libft/includes -o main.o -c main.c
-#clang -o test_gnl main.o get_next_line.o -I libft/includes -L libft/ -lft
+clang -Wall -Wextra -Werror -I libft/includes -o get_next_line.o -c get_next_line.c
+clang -Wall -Wextra -Werror -I libft/includes -o main.o -c main.c
+clang -o test_gnl main.o get_next_line.o -I libft/includes -L libft/ -lft
 
-clang -g -o0 -Wall -Wextra -Werror -I libft/includes -o get_next_line.o -c get_next_line.c
-clang -g -o0 -Wall -Wextra -Werror -I libft/includes -o main.o -c main.c
-clang -g -o0 -o test_gnl main.o get_next_line.o -I libft/includes -L libft/ -lft
+# clang -g -o0 -Wall -Wextra -Werror -I libft/includes -o get_next_line.o -c get_next_line.c
+# clang -g -o0 -Wall -Wextra -Werror -I libft/includes -o main.o -c main.c
+# clang -g -o0 -o test_gnl main.o get_next_line.o -I libft/includes -L libft/ -lft

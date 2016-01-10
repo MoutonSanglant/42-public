@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/18 19:56:10 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/18 21:01:58 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/01/09 14:58:09 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,10 @@ t_list *get_tetriminos_from_buffer(char *buffer)
 	unsigned short	width;
 	unsigned short	height;
 	unsigned int	mask;
-	char	*buffer_start;
-	t_list	*list;
-	t_list	*list_start;
-	t_tetrimino	*tetrimino;
+	char			*buffer_start;
+	t_list			*list;
+	t_list			*list_start;
+	t_tetrimino		*tetrimino;
 
 	list = NULL;
 	mask = 0;
@@ -48,6 +48,8 @@ t_list *get_tetriminos_from_buffer(char *buffer)
 		buffer++;
 		if (*buffer == '\n')
 		{
+			if (buffer[1] == '\0')
+				error();
 			/*
 			** TODO: check if there is more than one \n between patterns
 			** TODO: also check if there are extra \n after last pattern
