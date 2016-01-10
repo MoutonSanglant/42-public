@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/18 19:56:10 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/09 14:58:09 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/01/10 03:56:59 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ t_list *get_tetriminos_from_buffer(char *buffer)
 			width++;
 			buffer++;
 		}
+		if (width < 4)
+			buffer_error(buffer_start);
 		height++;
 		buffer++;
 		if (*buffer == '\n')
