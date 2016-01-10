@@ -6,7 +6,6 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/02 12:28:41 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/08 20:38:50 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,13 +119,13 @@ static int		get_fd_line(char **line, t_list **s_parsers,
 	}
 	*strings = first;
 	if (*line)
-		ft_memdel ((void **)&(*line));
+		ft_memdel((void **)&(*line));
 	if (!(*line = (char *)ft_memalloc(total_bcount + 1)))
 		return (-1);
 	return (total_bcount);
 }
 
-int		get_next_line(const int fd, char **line)
+int				get_next_line(const int fd, char **line)
 {
 	static t_list	*s_parsers = NULL;
 	t_list			*strings;
@@ -142,8 +141,8 @@ int		get_next_line(const int fd, char **line)
 			ft_strcat(*line, (char *)strings->content);
 			prev_str = strings;
 			strings = strings->next;
-			ft_memdel ((void **)&prev_str->content);
-			ft_memdel ((void **)&prev_str);
+			ft_memdel((void **)&prev_str->content);
+			ft_memdel((void **)&prev_str);
 		}
 	}
 	else
