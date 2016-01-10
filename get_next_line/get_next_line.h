@@ -18,8 +18,8 @@
 typedef struct	s_parser
 {
 	int		fd;		// 4
-	size_t	bcount;	// 4
-	char	*buffer;// 8
+	ssize_t	bs;		// 4
+	char	*buf;	// 8
 }				t_parser;
 
 int		get_next_line(int const fd, char **line);
