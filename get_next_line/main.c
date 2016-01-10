@@ -4,6 +4,15 @@
 
 #include "get_next_line.h"
 
+void	fpause()
+{
+	while (1)
+	{
+		if (getchar())
+			break;
+	}
+}
+
 int		main(int argc, char **argv)
 {
 	int		i;
@@ -33,106 +42,90 @@ int		main(int argc, char **argv)
 				return (1);
 			}
 		}
-		ft_putendl("Job done.");
-		return (0);
+		ft_memdel((void **)&line);
 	}
-
-	argc--;
-	fd = (int *)ft_memalloc(sizeof(int) * argc);
-	i = 0;
-	while (i < argc)
+	else
 	{
-		fd[i] = open(argv[i + 1], O_RDONLY);
-		i++;
-	}
-
-	(void) fd_test;
-	while (1)
-	{
-		if (getchar())
-			break;
-	}
-	while (1)
-	{
-		if (getchar())
-			break;
-	}
-	while (1)
-	{
+		argc--;
+		fd = (int *)ft_memalloc(sizeof(int) * argc);
 		i = 0;
-		fd_test = 0;
 		while (i < argc)
 		{
-			if (fd[i] > 0)
-				fd_test++;
+			fd[i] = open(argv[i + 1], O_RDONLY);
 			i++;
 		}
-		if (!fd_test)
-			break;
 
-		i = 0;
-		while (i < argc)
+		fpause();
+
+		while (1)
 		{
-			if (i >= argc)
+			i = 0;
+			fd_test = 0;
+			while (i < argc)
 			{
-				i = 0;
-				continue;
-			}
-			if (fd[i] <= 0)
-			{
+				if (fd[i] > 0)
+					fd_test++;
 				i++;
-				continue;
 			}
+			if (!fd_test)
+				break;
 
-			r = get_next_line(fd[i], &line);
-			if (r > 0)
+			i = 0;
+			while (i < argc)
 			{
-				ft_putstr("[");
-				ft_putnbr(fd[i]);
-				ft_putstr("] ");
-				ft_putstr(argv[i + 1]);
-				ft_putstr(": ");
-				ft_putendl(line);
-			}
-			else if (r == 0)
-			{
-				ft_putstr(">> End of file on fd ");
-				ft_putnbr(fd[i]);
-				ft_putendl(" <<");
-				fd[i] = -1;
-				continue;
-				//break;
-			}
-			else
-			{
-				ft_putendl("Memory error");
-				return (1);
-			}
-			i++;
-			/*while (1)
-			{
-				if (getchar())
+				if (i >= argc)
 				{
-					ft_putendl("NEXT !!");
-					break;
+					i = 0;
+					continue;
 				}
-			}*/
+				if (fd[i] <= 0)
+				{
+					i++;
+					continue;
+				}
+
+				r = get_next_line(fd[i], &line);
+				if (r > 0)
+				{
+					ft_putstr("[");
+					ft_putnbr(fd[i]);
+					ft_putstr("] ");
+					ft_putstr(argv[i + 1]);
+					ft_putstr(": ");
+					ft_putendl(line);
+				}
+				else if (r == 0)
+				{
+					ft_putstr(">> End of file on fd ");
+					ft_putnbr(fd[i]);
+					ft_putendl(" <<");
+					fd[i] = -1;
+					continue;
+				}
+				else
+				{
+					ft_putendl("Memory error");
+					return (1);
+				}
+				i++;
+				/*
+				** line-by-line mode
+				fpause();
+				*/
+			}
 		}
+		ft_memdel((void **)&line);
+		ft_memdel((void **)&fd);
+		ft_putendl(">> End of files <<");
 	}
-	ft_memdel((void **)&line);
-	ft_memdel((void **)&fd);
-	//free(line);
-	//line = NULL;
-	ft_putendl(">> End of files <<");
-	while (1)
-	{
-		if (getchar())
-			break;
-	}
-	while (1)
-	{
-		if (getchar())
-			break;
-	}
+	ft_putendl("Job done.");
+
+	fpause();
+	ft_putendl("Extra: test with an incorrect fd");
+	fpause();
+	if (get_next_line(967, &line) == -1)
+		ft_putendl("OK !");
+	else
+		ft_putendl("Erreur, le resultat devrait etre -1.");
 	return (0);
 }
