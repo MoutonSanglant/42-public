@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/18 20:48:20 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/09 15:16:27 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/01/10 04:52:52 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@ static t_mask64	convert(t_mask16 pattern_mask, int delta)
 		{
 			if (bitshift > 0 && bitshift % 4 == 0)
 				lineshift -= delta;
+			if (mask & ((pattern_mask & (1 << bitshift)) >> lineshift))
+				return (0);
 			mask |= (pattern_mask & (1 << bitshift++)) >> lineshift;
 		}
 	}
@@ -150,6 +152,8 @@ t_mask64	bruteforce(t_bf_params *p, size_t grid_size, t_list *tetri_list)
 	tetri_masks.shifted = 0;
 	tetri_masks.tetri = convert(g_mask_table[(int)tetri->pattern_id][0],
 								grid_size - 4);
+	if (tetri_masks.tetri == 0)
+		return(0);
 	previous_grid_mask = p->grid->tetri;
 	while (1)
 	{
