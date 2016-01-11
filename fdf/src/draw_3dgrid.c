@@ -1,4 +1,3 @@
-#include "mlx.h"
 #include "fdf.h"
 
 void	draw_3dgrid(t_mlx_sess *p)
@@ -13,4 +12,5 @@ void	draw_3dgrid(t_mlx_sess *p)
 	to.y = 30;
 	to.z = 30;
 	draw_line((t_mlx_sess *)p, from, to);
+	//draw_picture((t_mlx_sess *)p);
 }
