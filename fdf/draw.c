@@ -1,28 +1,46 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
-#include <includes/libft.h>
 #include "mlx.h"
-//#include "mlx_int.h"
+#include "fdf.h"
 
-typedef struct	s_mlx_sess
+void	draw_line(t_mlx_sess *mlx_sess, t_vector3 from, t_vector3 to)
 {
-	void	*sess;
-	void	*win;
-}				t_mlx_sess;
+	int		i;
+	int		j;
+	int		c;
 
-int		keypress(int key, void *p)
-{
-	t_mlx_sess	*mlx_sess;
-
-	mlx_sess = (t_mlx_sess *)p;
-	if (key == 53)
+	c = 0x009933bb;
+	i = from.x;
+	j = from.y;
+	while (i < to.x)
 	{
-		free(p);
-		mlx_destroy_window(mlx_sess->sess, mlx_sess->win);
-		exit(0);
+		while (j < to.y)
+		{
+			mlx_pixel_put(mlx_sess->sess, mlx_sess->win, i, j, c);
+			j++;
+		}
+		j = from.y;
+		i++;
 	}
-	return (0);
+}
+
+void	draw_square(t_mlx_sess *mlx_sess, t_vector3 from, t_vector3 to)
+{
+	int		i;
+	int		j;
+	int		c;
+
+	c = 0x009933bb;
+	i = from.x;
+	j = from.y;
+	while (i < to.x)
+	{
+		while (j < to.y)
+		{
+			mlx_pixel_put(mlx_sess->sess, mlx_sess->win, i, j, c);
+			j++;
+		}
+		j = from.y;
+		i++;
+	}
 }
 
 void	draw_pixel_chain(t_mlx_sess *mlx_sess)
@@ -54,7 +72,7 @@ void	draw_pixel_chain(t_mlx_sess *mlx_sess)
 
 void	draw_picture(t_mlx_sess *mlx_sess)
 {
-	static void		*img = NULL;
+	static void		*img = 0;
 	static int		x = 0;
 	static int		y = 0;
 
@@ -66,35 +84,4 @@ void	draw_picture(t_mlx_sess *mlx_sess)
 	mlx_clear_window(mlx_sess->sess, mlx_sess->win);
 	mlx_put_image_to_window(mlx_sess->sess, mlx_sess->win, img, 0, 0);
 	mlx_string_put(mlx_sess->sess, mlx_sess->win, 0, 0, 0x00ff0000, "Hello");
-}
-
-int		loop(void *p)
-{
-	//draw_pixel_chain((t_mlx_sess *)p);
-	draw_picture((t_mlx_sess *)p);
-
-	return (0);
-}
-
-int		main()
-{
-	t_mlx_sess	*param;
-
-	param = (t_mlx_sess *)malloc(sizeof(t_mlx_sess));
-	if (!(param->sess = mlx_init()))
-	{
-		free(param);
-		return (1);
-	}
-	if (!(param->win = mlx_new_window(param->sess, 400, 400, "test_mlx")))
-	{
-		free(param);
-		return (1);
-	}
-
-	mlx_key_hook(param->win, &keypress, (void *)param);
-	mlx_loop_hook(param->sess, &loop, (void *)param);
-	mlx_loop(param->sess);
-
-	return (0);
 }
