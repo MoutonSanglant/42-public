@@ -1,17 +1,15 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
-#include <includes/libft.h>
-#include "mlx.h"
 #include "fdf.h"
-//#include "mlx_int.h"
 
 int		keypress(int key, void *p)
 {
 	t_mlx_sess	*mlx_sess;
 
 	mlx_sess = (t_mlx_sess *)p;
+#ifdef LINUX
+	if (key == 65307)
+#else
 	if (key == 53)
+#endif
 	{
 		mlx_destroy_window(mlx_sess->sess, mlx_sess->win);
 		free(mlx_sess);
@@ -22,7 +20,11 @@ int		keypress(int key, void *p)
 
 int		loop(void *p)
 {
-	draw_3dgrid((t_mlx_sess *)p);
+	t_mlx_sess	*sess;
+
+	sess = (t_mlx_sess *)p;
+	//mlx_clear_window(sess->sess, sess->win);
+	draw_3dgrid(sess);
 	//draw_line((t_mlx_sess *)p);
 	//draw_picture((t_mlx_sess *)p);
 

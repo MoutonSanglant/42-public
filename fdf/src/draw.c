@@ -1,4 +1,3 @@
-#include "mlx.h"
 #include "fdf.h"
 
 void	draw_line(t_mlx_sess *mlx_sess, t_vector3 from, t_vector3 to)
@@ -81,7 +80,6 @@ void	draw_picture(t_mlx_sess *mlx_sess)
 		//img = mlx_new_image(mlx_sess->sess, x, y);
 		img = mlx_xpm_file_to_image(mlx_sess->sess, "./img.xpm", &x, &y);
 	}
-	mlx_clear_window(mlx_sess->sess, mlx_sess->win);
 	mlx_put_image_to_window(mlx_sess->sess, mlx_sess->win, img, 0, 0);
 	mlx_string_put(mlx_sess->sess, mlx_sess->win, 0, 0, 0x00ff0000, "Hello");
 }
