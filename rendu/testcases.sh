@@ -63,8 +63,8 @@ test=($'error' `# empty` \
 	$'ABBBB.\nACCCEE\nAFFCEE\nA.FFGG\nHHHDDG\n.HDD.G' `# sample2` \
 	$'AABBCCCCDD.\nA.BBEE..DD.\nAFFG.EEHHII\nFFGGGJJHKKI\nLLLL.J.HKKI\nMMNN.JOOPRR\nMM.NNOOPPPR\nQQSSTTUUUUR\nQ.S.TTZZ.VV\nQYS.XXZWWVV\nYYYXX.Z.WW.' `# max` \
 	$'ABCDEFG\nABCDEFG\nABCDEFG\nABCDEFG\n.......\n.......\n.......' `# extra` \
-	$'ABCDEF\nABCDEF\nABCDEF\nABCDEF\n......\n......' `# extra2` )
-
+	$'ABCDEF\nABCDEF\nABCDEF\nABCDEF\n......\n......' `# extra2` \
+	$'.AACCDDBBQ\nAACCDDEEBQ\n.FFGGEE.BQ\nFFGGHHIIIQ\nNNNHHJJIKK\nTNLLJJ.KK.\nTLLMMOOPP.\nTTMMOOPPRR\n.SSUUVVRR.\nSSUUVVWWWW' `# hardcore` )
 #	$'AABBDD\nA.BBDD\nACCCC.\nHHEEII\nH.GEEI\nHGGG.I' `# valid` \
 for i in ${!test[@]}
 do
