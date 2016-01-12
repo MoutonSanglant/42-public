@@ -5,16 +5,23 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
+<<<<<<< HEAD
 /*   Created: 2016/01/02 12:28:41 by tdefresn          #+#    #+#             */
 <<<<<<< HEAD
 /*   Updated: 2016/01/08 20:38:50 by tdefresn         ###   ########.fr       */
 =======
 /*   Updated: 2016/01/08 15:32:49 by tdefresn         ###   ########.fr       */
 >>>>>>> 473a4c1ceef83c53b7a01a1e21e1e01665fb855e
+=======
+/*   Created: 2016/01/13 14:44:53 by tdefresn          #+#    #+#             */
+<<<<<<< HEAD
+/*   Updated: 2016/01/13 16:06:56 by tdefresn         ###   ########.fr       */
+>>>>>>> c151902... gnl fixes: 'works with missing \n' + 'bad return value'
+=======
+/*   Updated: 2016/01/13 23:45:21 by tdefresn         ###   ########.fr       */
+>>>>>>> 59eceb9... gnl iteration
 /*                                                                            */
 /* ************************************************************************** */
-
-#include <libft.h>
 
 #include "get_next_line.h"
 
@@ -32,9 +39,16 @@ static int		clear_fd_parser(t_list **parser_list, int fd)
 		if (!fd_list)
 			return (-1);
 	}
-	if (prev && fd_list->next && prev->next)
-		prev->next = fd_list->next;
-	if (fd_list == (*parser_list))
+	if (prev)
+	{
+		if (fd_list->next)
+			prev->next = fd_list->next;
+		else
+			prev->next = NULL;
+
+		*parser_list = prev;
+	}
+	if (fd_list == *parser_list)
 		*parser_list = (*parser_list)->next;
 	ft_memdel((void **)&((t_parser *)fd_list->content)->buf);
 	ft_memdel((void **)&fd_list->content);
@@ -79,7 +93,7 @@ static int		to_eol(t_list **s, t_parser *p, size_t *total_bcount)
 {
 	size_t	eol;
 
-	if (p->bs == 0 && (!(p->bs = read(p->fd, p->buf, BUFF_SIZE)) || p->bs < 0))
+	if (p->bs == 0 && (!(p->bs = read(p->fd, p->buf, BUFF_SIZE)) || p->bs <= 0))
 		return (1 + (2 * p->bs));
 	*total_bcount += (size_t)p->bs;
 	if (!*s)
@@ -94,10 +108,10 @@ static int		to_eol(t_list **s, t_parser *p, size_t *total_bcount)
 									'\n', (size_t)p->bs)))
 	{
 		eol -= (size_t)(*s)->content;
-		p->bs -= (ssize_t)eol;
+		p->bs -= (long)eol;
 		((char *)(*s)->content)[eol - 1] = '\0';
 		p->buf = (char *)ft_memmove((void *)p->buf,
-							(void *)&(p->buf[eol]), (ssize_t)p->bs);
+							(void *)&(p->buf[eol]), (long)p->bs);
 		return (1);
 	}
 	p->bs = 0;
@@ -124,18 +138,20 @@ static int		get_fd_line(char **line, t_list **s_parsers,
 	while (!r)
 	{
 		if ((r = read_until_eol(strings, parser, &total_bcount)) && r < 0)
+		{
+			clear_fd_parser(s_parsers, fd);
 			return (-1);
+		}
 		if (!first && *strings)
 			first = *strings;
 		if (r == 0)
 			(*strings)->next = ft_lstnew(NULL, 0);
 	}
 	*strings = first;
-	if (*line)
-		ft_memdel((void **)&(*line));
 	if (!(*line = (char *)ft_memalloc(total_bcount + 1)))
 		return (-1);
-	return (total_bcount);
+	r = (total_bcount > 0) ? 1 : 0;
+	return (r);
 }
 
 int				get_next_line(const int fd, char **line)
@@ -145,20 +161,27 @@ int				get_next_line(const int fd, char **line)
 	t_list			*prev_str;
 	int				r;
 
-	r = 0;
+	if (fd < 0 || !line)
+		return (-1);
 	strings = NULL;
 	if ((r = get_fd_line(line, &s_parsers, fd, &strings)))
 	{
 		while (strings)
 		{
-			ft_strcat(*line, (char *)strings->content);
 			prev_str = strings;
+			if (strings->content)
+			{
+				ft_strcat(*line, (char *)strings->content);
+				ft_memdel((void **)&prev_str->content);
+			}
 			strings = strings->next;
-			ft_memdel((void **)&prev_str->content);
 			ft_memdel((void **)&prev_str);
 		}
 	}
 	else
+	{
 		r = clear_fd_parser(&s_parsers, fd);
+		*line[0] = '\0';
+	}
 	return (r);
 }

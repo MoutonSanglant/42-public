@@ -6,6 +6,15 @@ test_name=("empty" \
 	"invalid_tetri2" \
 	"invalid_tetri3" \
 	"invalid_tetri4" \
+	"invalid_tetri5" \
+	"invalid_tetri6" \
+	"invalid_tetri7" \
+	"invalid_tetri8" \
+	"invalid_tetri9" \
+	"invalid_tetri10" \
+	"invalid_tetri11" \
+	"invalid_tetri12" \
+	"invalid_tetri13" \
 	"overflow" \
 	"reject" \
 	"extra_character" \
@@ -31,13 +40,23 @@ test_name=("empty" \
 	"sample2" \
 	"max" \
 	"extra" \
-	"extra2" )
+	"extra2" \
+	"hardcore_small" )
 test=($'error' `# empty` \
 	$'error' `# invalid` \
 	$'error' `# invalid_tetri1` \
 	$'error' `# invalid_tetri2` \
 	$'error' `# invalid_tetri3` \
 	$'error' `# invalid_tetri4` \
+	$'error' `# invalid_tetri5` \
+	$'error' `# invalid_tetri6` \
+	$'error' `# invalid_tetri7` \
+	$'error' `# invalid_tetri8` \
+	$'error' `# invalid_tetri9` \
+	$'error' `# invalid_tetri10` \
+	$'error' `# invalid_tetri11` \
+	$'error' `# invalid_tetri12` \
+	$'error' `# invalid_tetri13` \
 	$'error' `# overflow` \
 	$'error' `# reject` \
 	$'error' `# extra_character` \
@@ -63,7 +82,9 @@ test=($'error' `# empty` \
 	$'ABBBB.\nACCCEE\nAFFCEE\nA.FFGG\nHHHDDG\n.HDD.G' `# sample2` \
 	$'AABBCCCCDD.\nA.BBEE..DD.\nAFFG.EEHHII\nFFGGGJJHKKI\nLLLL.J.HKKI\nMMNN.JOOPRR\nMM.NNOOPPPR\nQQSSTTUUUUR\nQ.S.TTZZ.VV\nQYS.XXZWWVV\nYYYXX.Z.WW.' `# max` \
 	$'ABCDEFG\nABCDEFG\nABCDEFG\nABCDEFG\n.......\n.......\n.......' `# extra` \
-	$'ABCDEF\nABCDEF\nABCDEF\nABCDEF\n......\n......' `# extra2` )
+	$'ABCDEF\nABCDEF\nABCDEF\nABCDEF\n......\n......' `# extra2` \
+	$'.AABB.\nAACCB.\n.CC.B.\n.DDEE.\nDDEEFF\n...FF.' `# hardcore_small` )
+#	$'.AACCDDBBQ\nAACCDDEEBQ\n.FFGGEE.BQ\nFFGGHHIIIQ\nNNNHHJJIKK\nTNLLJJ.KK.\nTLLMMOOPP.\nTTMMOOPPRR\n.SSUUVVRR.\nSSUUVVWWWW' `# hardcore` )
 
 #	$'AABBDD\nA.BBDD\nACCCC.\nHHEEII\nH.GEEI\nHGGG.I' `# valid` \
 for i in ${!test[@]}

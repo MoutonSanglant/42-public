@@ -13,14 +13,15 @@
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
 
+# include <libft.h>
 # define BUFF_SIZE 32
 
 typedef struct	s_parser
 {
-	int		fd;		// 4
-	ssize_t	bs;		// 4
-	char	*buf;	// 8
+	int		fd;
+	long	bs;
+	char	*buf;
 }				t_parser;
 
-int		get_next_line(int const fd, char **line);
+int				get_next_line(int const fd, char **line);
 #endif
