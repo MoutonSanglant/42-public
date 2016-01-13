@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/13 14:44:53 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/13 16:06:56 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/01/13 23:45:21 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,16 @@ static int		clear_fd_parser(t_list **parser_list, int fd)
 		if (!fd_list)
 			return (-1);
 	}
-	if (prev && fd_list->next && prev->next)
-		prev->next = fd_list->next;
-	if (fd_list == (*parser_list))
+	if (prev)
+	{
+		if (fd_list->next)
+			prev->next = fd_list->next;
+		else
+			prev->next = NULL;
+
+		*parser_list = prev;
+	}
+	if (fd_list == *parser_list)
 		*parser_list = (*parser_list)->next;
 	ft_memdel((void **)&((t_parser *)fd_list->content)->buf);
 	ft_memdel((void **)&fd_list->content);
@@ -110,7 +117,10 @@ static int		get_fd_line(char **line, t_list **s_parsers,
 	while (!r)
 	{
 		if ((r = read_until_eol(strings, parser, &total_bcount)) && r < 0)
+		{
+			clear_fd_parser(s_parsers, fd);
 			return (-1);
+		}
 		if (!first && *strings)
 			first = *strings;
 		if (r == 0)
@@ -119,7 +129,8 @@ static int		get_fd_line(char **line, t_list **s_parsers,
 	*strings = first;
 	if (!(*line = (char *)ft_memalloc(total_bcount + 1)))
 		return (-1);
-	return (total_bcount);
+	r = (total_bcount > 0) ? 1 : 0;
+	return (r);
 }
 
 int				get_next_line(const int fd, char **line)
@@ -129,11 +140,11 @@ int				get_next_line(const int fd, char **line)
 	t_list			*prev_str;
 	int				r;
 
-	r = 0;
+	if (fd < 0 || !line)
+		return (-1);
 	strings = NULL;
 	if ((r = get_fd_line(line, &s_parsers, fd, &strings)))
 	{
-		r = 1;
 		while (strings)
 		{
 			prev_str = strings;
@@ -142,11 +153,14 @@ int				get_next_line(const int fd, char **line)
 				ft_strcat(*line, (char *)strings->content);
 				ft_memdel((void **)&prev_str->content);
 			}
-			ft_memdel((void **)&prev_str);
 			strings = strings->next;
+			ft_memdel((void **)&prev_str);
 		}
 	}
 	else
+	{
 		r = clear_fd_parser(&s_parsers, fd);
+		*line[0] = '\0';
+	}
 	return (r);
 }
