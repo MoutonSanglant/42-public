@@ -118,8 +118,8 @@ static int		get_fd_line(char **line, t_list **s_parsers,
 			(*strings)->next = ft_lstnew(NULL, 0);
 	}
 	*strings = first;
-	if (*line)
-		ft_memdel((void **)&(*line));
+//	if (*line)
+//		ft_memdel((void **)&(*line));
 	if (!(*line = (char *)ft_memalloc(total_bcount + 1)))
 		return (-1);
 	return (total_bcount);

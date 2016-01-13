@@ -30,6 +30,7 @@ int		main(int argc, char **argv)
 			{
 				ft_putstr("stdin: ");
 				ft_putendl(line);
+				ft_memdel((void **)&line);
 			}
 			else if (r == 0)
 			{
@@ -42,7 +43,6 @@ int		main(int argc, char **argv)
 				return (1);
 			}
 		}
-		ft_memdel((void **)&line);
 	}
 	else
 	{
@@ -93,6 +93,7 @@ int		main(int argc, char **argv)
 					ft_putstr(argv[i + 1]);
 					ft_putstr(": ");
 					ft_putendl(line);
+					ft_memdel((void **)&line);
 				}
 				else if (r == 0)
 				{
@@ -114,7 +115,6 @@ int		main(int argc, char **argv)
 				*/
 			}
 		}
-		ft_memdel((void **)&line);
 		ft_memdel((void **)&fd);
 		ft_putendl(">> End of files <<");
 	}
