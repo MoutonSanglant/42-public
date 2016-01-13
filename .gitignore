@@ -3,3 +3,4 @@
 *.swp
 libft/test_*
 *._*
+*.dSYM

@@ -162,6 +162,8 @@ int		main(int argc, char **argv)
 		ft_putendl("this is ok");
 	if(gnl_ret == 0 || gnl_ret == 1)
 		ft_putendl("this is ok");
+	ft_memdel((void **)&line);
+	ft_memdel((void **)&str);
 
 /*	gnl_ret = get_next_line(p[0], &line);
 	gnl_ret = get_next_line(p[0], &line);
@@ -189,24 +191,24 @@ int		main(int argc, char **argv)
 		ft_putendl("1 ok !");
 	if (ft_strcmp(line, "abc") == 0)
 		ft_putendl("2 ok !");
-	//ft_memdel((void **)&line);
+	ft_memdel((void **)&line);
 	gnl_ret = get_next_line(p[0], &line);
 	if (gnl_ret == 1)
 		ft_putendl("3 ok !");
 	if (line == NULL || *line =='\0')
 		ft_putendl("4 ok !");
-	//ft_memdel((void **)&line);
+	ft_memdel((void **)&line);
 	gnl_ret = get_next_line(p[0], &line);
 	if (gnl_ret == 0)
 		ft_putendl("5 ok !");
 	if (line == NULL || *line =='\0')
 		ft_putendl("6 ok !");
-	//ft_memdel((void **)&line);
+	ft_memdel((void **)&line);
 	gnl_ret = get_next_line(p[0], &line);
 	if (gnl_ret == 0)
 		ft_putendl("7 ok !");
 	if (line == NULL || *line =='\0')
 		ft_putendl("8 ok !");
-	//ft_memdel((void **)&line);
+	ft_memdel((void **)&line);
 	return (0);
 }
