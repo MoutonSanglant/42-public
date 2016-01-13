@@ -35,6 +35,8 @@ int		main(int argc, char **argv)
 			else if (r == 0)
 			{
 				ft_putendl("EOF");
+				if (line)
+					ft_memdel((void **)&line);
 				break;
 			}
 			else
@@ -43,6 +45,8 @@ int		main(int argc, char **argv)
 				return (1);
 			}
 		}
+		if (line)
+			ft_memdel((void **)&line);
 	}
 	else
 	{
@@ -101,6 +105,8 @@ int		main(int argc, char **argv)
 					ft_putnbr(fd[i]);
 					ft_putendl(" <<");
 					fd[i] = -1;
+					if (line)
+						ft_memdel((void **)&line);
 					continue;
 				}
 				else
@@ -114,6 +120,8 @@ int		main(int argc, char **argv)
 				fpause();
 				*/
 			}
+			if (line)
+				ft_memdel((void **)&line);
 		}
 		ft_memdel((void **)&fd);
 		ft_putendl(">> End of files <<");
@@ -127,5 +135,24 @@ int		main(int argc, char **argv)
 		ft_putendl("OK !");
 	else
 		ft_putendl("Erreur, le resultat devrait etre -1.");
+	fpause();
+	ft_putendl("Extra: test with an incorrect ???");
+	fpause();
+
+	int p[2];
+	int out;
+	int ffd;
+
+	out = dup(1);
+	pipe(p);
+
+	ffd = 1;
+	dup2(p[1], 1);
+	write(ffd, "oiuytrew\n", 9);
+	close(p[1]);
+	dup2(out, ffd);
+	get_next_line(p[0], &line);
+	if (ft_strcmp(line, "oiuytrew") == 0)
+		ft_putendl("ok !");
 	return (0);
 }

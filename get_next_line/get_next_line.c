@@ -5,11 +5,10 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/01/02 12:28:41 by tdefresn          #+#    #+#             */
+/*   Created: 2016/01/13 14:44:53 by tdefresn          #+#    #+#             */
+/*   Updated: 2016/01/13 16:06:56 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#include <libft.h>
 
 #include "get_next_line.h"
 
@@ -70,7 +69,7 @@ static int		read_until_eol(t_list **s, t_parser *p, size_t *total_bcount)
 {
 	size_t	eol;
 
-	if (p->bs == 0 && (!(p->bs = read(p->fd, p->buf, BUFF_SIZE)) || p->bs < 0))
+	if (p->bs == 0 && (!(p->bs = read(p->fd, p->buf, BUFF_SIZE)) || p->bs <= 0))
 		return (1 + (2 * p->bs));
 	*total_bcount += (size_t)p->bs;
 	if (!*s)
@@ -85,10 +84,10 @@ static int		read_until_eol(t_list **s, t_parser *p, size_t *total_bcount)
 									'\n', (size_t)p->bs)))
 	{
 		eol -= (size_t)(*s)->content;
-		p->bs -= (ssize_t)eol;
+		p->bs -= (long)eol;
 		((char *)(*s)->content)[eol - 1] = '\0';
 		p->buf = (char *)ft_memmove((void *)p->buf,
-							(void *)&(p->buf[eol]), (ssize_t)p->bs);
+							(void *)&(p->buf[eol]), (long)p->bs);
 		return (1);
 	}
 	p->bs = 0;
@@ -118,8 +117,6 @@ static int		get_fd_line(char **line, t_list **s_parsers,
 			(*strings)->next = ft_lstnew(NULL, 0);
 	}
 	*strings = first;
-//	if (*line)
-//		ft_memdel((void **)&(*line));
 	if (!(*line = (char *)ft_memalloc(total_bcount + 1)))
 		return (-1);
 	return (total_bcount);
@@ -136,13 +133,17 @@ int				get_next_line(const int fd, char **line)
 	strings = NULL;
 	if ((r = get_fd_line(line, &s_parsers, fd, &strings)))
 	{
+		r = 1;
 		while (strings)
 		{
-			ft_strcat(*line, (char *)strings->content);
 			prev_str = strings;
-			strings = strings->next;
-			ft_memdel((void **)&prev_str->content);
+			if (strings->content)
+			{
+				ft_strcat(*line, (char *)strings->content);
+				ft_memdel((void **)&prev_str->content);
+			}
 			ft_memdel((void **)&prev_str);
+			strings = strings->next;
 		}
 	}
 	else
