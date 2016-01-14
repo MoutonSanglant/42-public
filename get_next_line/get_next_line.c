@@ -15,11 +15,19 @@
 =======
 /*   Created: 2016/01/13 14:44:53 by tdefresn          #+#    #+#             */
 <<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
 /*   Updated: 2016/01/13 16:06:56 by tdefresn         ###   ########.fr       */
 >>>>>>> c151902... gnl fixes: 'works with missing \n' + 'bad return value'
 =======
 /*   Updated: 2016/01/13 23:45:21 by tdefresn         ###   ########.fr       */
 >>>>>>> 59eceb9... gnl iteration
+=======
+/*   Updated: 2016/01/14 14:39:59 by tdefresn         ###   ########.fr       */
+>>>>>>> 0cd5732... norme/fix libft
+=======
+/*   Updated: 2016/01/14 16:27:36 by tdefresn         ###   ########.fr       */
+>>>>>>> 93f1338... gnl fix & norm
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,14 +48,7 @@ static int		clear_fd_parser(t_list **parser_list, int fd)
 			return (-1);
 	}
 	if (prev)
-	{
-		if (fd_list->next)
-			prev->next = fd_list->next;
-		else
-			prev->next = NULL;
-
-		*parser_list = prev;
-	}
+		prev->next = fd_list->next;
 	if (fd_list == *parser_list)
 		*parser_list = (*parser_list)->next;
 	ft_memdel((void **)&((t_parser *)fd_list->content)->buf);
@@ -138,10 +139,7 @@ static int		get_fd_line(char **line, t_list **s_parsers,
 	while (!r)
 	{
 		if ((r = read_until_eol(strings, parser, &total_bcount)) && r < 0)
-		{
-			clear_fd_parser(s_parsers, fd);
-			return (-1);
-		}
+			return (clear_fd_parser(s_parsers, fd) ? -1 : -1);
 		if (!first && *strings)
 			first = *strings;
 		if (r == 0)
@@ -150,6 +148,7 @@ static int		get_fd_line(char **line, t_list **s_parsers,
 	*strings = first;
 	if (!(*line = (char *)ft_memalloc(total_bcount + 1)))
 		return (-1);
+	*line[0] = '\0';
 	r = (total_bcount > 0) ? 1 : 0;
 	return (r);
 }
@@ -179,9 +178,6 @@ int				get_next_line(const int fd, char **line)
 		}
 	}
 	else
-	{
 		r = clear_fd_parser(&s_parsers, fd);
-		*line[0] = '\0';
-	}
 	return (r);
 }

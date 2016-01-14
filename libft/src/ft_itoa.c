@@ -6,71 +6,44 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/07 12:52:16 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/14 11:51:52 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/01/14 05:37:32 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static size_t	nbrlength(long long int n)
+static size_t	nbr_length(int n)
 {
-	size_t		length;
+	size_t		i;
 
 	if (n == 0)
 		return (1);
-	length = 0;
-	while (n > 0)
-	{
-		n /= 10;
-		length++;
-	}
-	return (length);
-}
-
-static char		getat(long long int n, size_t idx)
-{
-	char				c;
-	size_t				i;
-	long long int		lft;
-
 	i = 0;
-	while (i < idx)
+	while (n != 0)
 	{
 		n /= 10;
 		i++;
 	}
-	lft = n;
-	lft /= 10;
-	lft *= 10;
-	n = n - lft;
-	c = n + '0';
-	return (c);
+	return (i);
 }
 
 char			*ft_itoa(int n)
 {
 	char			*str;
-	int				sign;
-	size_t			size;
-	size_t			i;
-	long long int	ln;
+	size_t			sign;
+	size_t			l;
 
-	ln = (long long int)n;
-	sign = 0;
-	if (ln < 0)
-	{
-		ln *= -1;
-		sign = 1;
-	}
-	size = nbrlength(ln);
-	str = malloc(sizeof(char) * (size + sign + 1));
-	if (str == NULL)
+	sign = (n > 0) ? 0 : 1;
+	l = nbr_length(n) + sign;
+	if (!(str = ft_strnew(sizeof(char) * l)))
 		return (NULL);
-	i = sign - 1;
-	if (sign)
+	str[l] = '\0';
+	if (sign != 0)
 		str[0] = '-';
-	while (++i < size + sign)
-		str[i] = getat(ln, (size + sign - 1) - i);
-	str[i] = '\0';
+	while (l-- > sign)
+	{
+		str[l] = (sign > 0) ? '0' - (n % 10) : '0' + (n % 10);
+		n /= 10;
+	}
 	return (str);
 }
