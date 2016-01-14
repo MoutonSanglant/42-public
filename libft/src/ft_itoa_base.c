@@ -6,13 +6,13 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/14 00:57:09 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/14 05:39:53 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/01/14 15:25:49 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static size_t	nbr_length_in_base(size_t n, size_t base)
+static size_t	nbr_length_in_base(uint64_t n, size_t base)
 {
 	size_t		i;
 
@@ -25,7 +25,7 @@ static size_t	nbr_length_in_base(size_t n, size_t base)
 	return (i);
 }
 
-static char	*to_base(size_t value, size_t base)
+static char		*to_base(uint64_t value, size_t base)
 {
 	char		*str;
 	size_t		l;
@@ -45,7 +45,7 @@ static char	*to_base(size_t value, size_t base)
 	return (str);
 }
 
-char		*ft_itoa_base(int value, int base)
+char			*ft_itoa_base(int64_t value, int base)
 {
 	char	*str;
 
@@ -57,6 +57,6 @@ char		*ft_itoa_base(int value, int base)
 	else if (base == 10)
 		str = ft_itoa(value);
 	else
-		str = to_base((size_t)value, (size_t)base);
+		str = to_base((uint64_t)value, (size_t)base);
 	return (str);
 }

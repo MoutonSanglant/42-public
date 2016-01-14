@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/01 12:37:16 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/06 18:32:13 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/01/14 14:31:33 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,9 @@ void			*ft_memmove(void *dst, void const *src, size_t len)
 	}
 	else
 	{
-		i = len - 1;
-		while (i > 0)
-		{
+		i = len;
+		while (i-- > 0)
 			ptr_dst[i] = ptr_src[i];
-			i--;
-		}
 		ptr_dst[0] = ptr_src[0];
 	}
 	return (dst);

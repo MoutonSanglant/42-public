@@ -1,7 +1,6 @@
 let $USER = 'tdefresn'
 let $MAIL = $USER . '@student.42.fr'
 
-
 " Use Vim settings, rather than Vi settings.
 " Must be first, because it changes other options as a side effect.
 set nocompatible
@@ -11,6 +10,7 @@ set backspace=indent,eol,start
 
 syn on			" Syntaxic colors
 set nu			" Show line numbers
+"set rnu		" line number according to cursor position
 set ruler		" Show the cursor position
 set hlsearch	" Highlight found patterns
 set colorcolumn=80	" Color line 80 (specific to 42's norm)
@@ -25,6 +25,26 @@ set undodir	=~/vim/.undo//,.,/tmp
 if has('mouse')
 	set mouse=a
 endif
+
+" Insert multi-inclusion protection in new header files
+function! s:insert_gates()
+	let gatename = substitute(toupper(expand("%:t")), "\\.", "_", "g")
+	execute "normal! i#ifndef " . gatename
+	execute "normal! o# define " . gatename
+	execute "normal! Go"
+	execute "normal! Go"
+	execute "normal! Go"
+	execute "normal! Go#endif"
+	normal! kk
+endfunction
+
+autocmd BufNewFile *.h call <SID>insert_gates()
+
+" Keep cursor at last known position
+autocmd BufReadPost *
+	\ if line("'\"") > 0 && line("'\"") <= line("$") |
+	\	exe "normal! g'\"" |
+	\ endif
 
 " Only do this part when compiled with support for autocommands.
 if has ("autocmd")

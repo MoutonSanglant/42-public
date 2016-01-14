@@ -95,7 +95,7 @@ char			*ft_strtrim(const char *s);
 char			**ft_strsplit(const char *s, char c);
 char			*ft_itoa(int n);
 
-char			*ft_itoa_base(int n, int base);
+char			*ft_itoa_base(int64_t n, int base);
 
 /*
 **	CHECKS

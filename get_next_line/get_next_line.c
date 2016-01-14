@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/13 14:44:53 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/13 23:45:21 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/01/14 14:39:59 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ static int		clear_fd_parser(t_list **parser_list, int fd)
 			prev->next = fd_list->next;
 		else
 			prev->next = NULL;
-
 		*parser_list = prev;
 	}
 	if (fd_list == *parser_list)

@@ -12,6 +12,8 @@ int main(void)
 	ft_putchar('\n');
 	ft_putaddr((void *)0x1f56e4);
 	ft_putchar('\n');
+	ft_putaddr((void *)0x7ff6d2c031d0);
+	ft_putchar('\n');
 	ft_putaddr(a);
 	ft_putchar('\n');
 	ft_putaddr(b);
@@ -22,10 +24,10 @@ int main(void)
 	ft_putendl(ft_itoa_base(1, 10));
 	ft_putendl(ft_itoa_base(42, 10));
 	ft_putendl(ft_itoa_base(-42, 10));
-	ft_putendl(ft_itoa_base(9999, 2));
-	ft_putendl(ft_itoa_base(-9999, 7));
-	ft_putendl(ft_itoa_base(2147483647, 16));
-	ft_putendl(ft_itoa_base(2147483648, 8));
+	ft_putendl(ft_itoa_base(9999, 10));
+	ft_putendl(ft_itoa_base(-9999, 10));
+	ft_putendl(ft_itoa_base(2147483647, 10));
+	ft_putendl(ft_itoa_base(2147483648, 10));
 	ft_putendl(ft_itoa_base(2147483649, 10));
 	ft_putendl(ft_itoa_base(-2147483647, 10));
 	ft_putendl(ft_itoa_base(-2147483648, 10));
