@@ -62,7 +62,7 @@ static char		**split(char const *s, char c, size_t count)
 	words_table = split(str, c, count + 1);
 	if (words_table)
 		words_table = setelem(words_table, count,
-								ft_strsub(s, 0, ((int)str - (int)s)));
+								ft_strsub(s, 0, ((uintptr_t)str - (uintptr_t)s)));
 	return (words_table);
 }
 
