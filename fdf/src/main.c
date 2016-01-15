@@ -18,12 +18,12 @@ int		keypress(int key, void *p)
 	return (0);
 }
 
-int		loop(void *p)
+int		redraw(void *p)
 {
 	t_mlx_sess	*sess;
 
 	sess = (t_mlx_sess *)p;
-	mlx_clear_window(sess->sess, sess->win);
+//	mlx_clear_window(sess->sess, sess->win);
 	draw_3dgrid(sess);
 	//draw_line((t_mlx_sess *)p);
 	//draw_picture((t_mlx_sess *)p);
@@ -48,7 +48,8 @@ int		main()
 	}
 
 	mlx_key_hook(param->win, &keypress, (void *)param);
-	mlx_loop_hook(param->sess, &loop, (void *)param);
+//	mlx_loop_hook(param->sess, &redraw, (void *)param);
+	mlx_expose_hook(param->sess, &redraw, (void *)param);
 	mlx_loop(param->sess);
 
 	return (0);
