@@ -23,7 +23,7 @@ int		loop(void *p)
 	t_mlx_sess	*sess;
 
 	sess = (t_mlx_sess *)p;
-	//mlx_clear_window(sess->sess, sess->win);
+	mlx_clear_window(sess->sess, sess->win);
 	draw_3dgrid(sess);
 	//draw_line((t_mlx_sess *)p);
 	//draw_picture((t_mlx_sess *)p);
