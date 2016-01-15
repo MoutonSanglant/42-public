@@ -16,6 +16,7 @@ typedef struct	s_mlx_sess
 {
 	void	*sess;
 	void	*win;
+	void	*img;
 	int		col;
 }				t_mlx_sess;
 
