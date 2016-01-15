@@ -41,12 +41,16 @@ int	local_endian;
 int	expose_win1(void *p)
 {
   mlx_put_image_to_window(mlx,win1,im3,0,0);
+  printf("@");
+  fflush(stdout);
 }
 
 int	expose_win2(void *p)
 {
   mlx_put_image_to_window(mlx,win2,im4,0,0);
   mlx_put_image_to_window(mlx,win2,im2,0,0);
+  printf("#");
+  fflush(stdout);
 }
 
 int	key_win1(int key,void *p)

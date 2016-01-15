@@ -370,17 +370,10 @@ void	draw_pixel_chain(t_mlx_sess *mlx_sess)
 	b += 0x00080000;
 }
 
-void	draw_picture(t_mlx_sess *mlx_sess)
+void	draw_image(t_mlx_sess *mlx_sess, void *img, int *x, int *y)
 {
-	static void		*img = 0;
-	static int		x = 0;
-	static int		y = 0;
+	//static void		*img = 0;
 
-	if (!img)
-	{
-		//img = mlx_new_image(mlx_sess->sess, x, y);
-		img = mlx_xpm_file_to_image(mlx_sess->sess, "./img.xpm", &x, &y);
-	}
-	mlx_put_image_to_window(mlx_sess->sess, mlx_sess->win, img, 0, 0);
+	mlx_put_image_to_window(mlx_sess->sess, mlx_sess->win, img, *x, *y);
 	mlx_string_put(mlx_sess->sess, mlx_sess->win, 0, 0, 0x00ff0000, "Hello");
 }

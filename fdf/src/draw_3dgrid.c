@@ -80,5 +80,5 @@ void	draw_3dgrid(t_mlx_sess *p)
 	to.x = 180;
 	to.y = 180;
 	p->col = 0x99ff6666;
-	draw_square((t_mlx_sess *)p, &from, &to);
+//	draw_square((t_mlx_sess *)p, &from, &to);
 }
