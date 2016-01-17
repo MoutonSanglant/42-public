@@ -1,5 +1,22 @@
 #include "fdf.h"
 
+void		image_pixel_put(int color, unsigned char *data, int bpp, int sl, int x, int y, int endian)
+{
+	int opp;
+	int dec;
+	//unsigned char *ptr;
+
+	(void) endian;
+
+	//ptr = data+h*sl;
+	//ptr = data+y*sl;
+	opp = bpp/8;
+	dec = opp;
+	while (dec--)
+		*((data+y*sl)+x*opp+dec) = ((unsigned char *)(&color))[dec];
+
+}
+
 void	draw_line(t_mlx_sess *mlx, t_vector2 *from, t_vector2 *to)
 {
 	int x1 = from->x;
@@ -22,10 +39,14 @@ void	draw_line(t_mlx_sess *mlx, t_vector2 *from, t_vector2 *to)
   x=x1;
   y=y1;
 
+  t_image	*img;
+  img = mlx->img;
+
   if(dx > dy)
     {
       //draw_pixel(x,y, BLACK);
-		mlx_pixel_put(mlx->sess, mlx->win, x, y, mlx->col);
+	  image_pixel_put(mlx_get_color_value(mlx, mlx->col),(unsigned char *)img->data, img->bpp, img->sl, x, y, img->endian);
+	//	mlx_pixel_put(mlx->sess, mlx->win, x, y, mlx->col);
       e = 2*dy - dx;
       inc1 = 2*( dy -dx);
       inc2 = 2*dy;
@@ -39,13 +60,15 @@ void	draw_line(t_mlx_sess *mlx, t_vector2 *from, t_vector2 *to)
          else e += inc2;
          x += incx;
         // draw_pixel(x,y, BLACK);
-		mlx_pixel_put(mlx->sess, mlx->win, x, y, mlx->col);
+	//	mlx_pixel_put(mlx->sess, mlx->win, x, y, mlx->col);
+	  image_pixel_put(mlx_get_color_value(mlx, mlx->col),(unsigned char *)img->data, img->bpp, img->sl, x, y, img->endian);
       }
    }
    else
    {
       //draw_pixel(x,y, BLACK);
-		mlx_pixel_put(mlx->sess, mlx->win, x, y, mlx->col);
+	//	mlx_pixel_put(mlx->sess, mlx->win, x, y, mlx->col);
+	  image_pixel_put(mlx_get_color_value(mlx, mlx->col),(unsigned char *)img->data, img->bpp, img->sl, x, y, img->endian);
       e = 2*dx - dy;
       inc1 = 2*( dx - dy);
       inc2 = 2*dx;
@@ -59,7 +82,8 @@ void	draw_line(t_mlx_sess *mlx, t_vector2 *from, t_vector2 *to)
         else e += inc2;
         y += incy;
         //draw_pixel(x,y, BLACK);
-		mlx_pixel_put(mlx->sess, mlx->win, x, y, mlx->col);
+	//	mlx_pixel_put(mlx->sess, mlx->win, x, y, mlx->col);
+	  image_pixel_put(mlx_get_color_value(mlx, mlx->col),(unsigned char *)img->data, img->bpp, img->sl, x, y, img->endian);
     }
   }
 
