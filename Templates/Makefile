@@ -27,7 +27,7 @@ $(NAME): $(OBJ)
 clean:
 	/bin/rm -f ${OBJ}
 
-fclean: clean testclean
+fclean: clean
 	/bin/rm -f $(NAME)
 
 re: fclean all
