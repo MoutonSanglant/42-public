@@ -21,14 +21,19 @@ OBJ = $(SRC:.c=.o)
 
 
 .SILENT: $(OBJ)
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re libft
 
-all: $(NAME)_$(ARCH)
+all: libft $(NAME)_$(ARCH)
+
 
 $(NAME)_x86_64: $(OBJ)
 	@echo "making $@"
 	@$(CC) -o $(NAME) $^ $(CFLAGS) $(LDFLAGS) $(LDLIBS) $(LINUXLIBS) \
 		$(X64LIBS) -D LINUX -D BONUS
+
+libft:
+	@echo "making $@"
+	cd libft && $(MAKE) re
 
 %.o: %.c
 	@echo "making $<"

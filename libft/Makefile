@@ -40,11 +40,13 @@ OBJ = $(SRC:.c=.o)
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	ar rc $@ $^
-	ranlib $(NAME)
+	@echo "making $@"
+	@ar rc $@ $^
+	@ranlib $(NAME)
 
 %.o: %.c
-	$(CC) -o $@ -c $< $(CFLAGS)
+	@echo "making $@"
+	@$(CC) -o $@ -c $< $(CFLAGS)
 
 clean:
 	/bin/rm -f ${OBJ}
