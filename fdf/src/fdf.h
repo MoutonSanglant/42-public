@@ -6,17 +6,39 @@
 # include <math.h>
 # include <includes/libft.h>
 
+/*
+** BONUS
+*/
+# ifdef BONUS
+#  include <sys/time.h>
+/*
+** FPS in microseconds
+** 16666 for 60 fps
+** 33332 for 30 fps
+*/
+#  define FPS 33332
+# endif
+
 # ifdef LINUX
 #  include "../includes/linux/mlx.h"
 # else
 #  include "../includes/mlx.h"
 # endif
 
+typedef struct	s_image
+{
+	void	*img;
+	char	*data;
+	int		sl;
+	int		bpp;
+	int		endian;
+}				t_image;
+
 typedef struct	s_mlx_sess
 {
 	void	*sess;
 	void	*win;
-	void	*img;
+	t_image	*img;
 	int		col;
 }				t_mlx_sess;
 
