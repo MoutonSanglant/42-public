@@ -22,7 +22,7 @@ endif
 
 SRC_PREFIX	= ./src/
 
-SRC	= main draw draw_3dgrid
+SRC	= main draw draw_3dgrid set_image_pixel
 
 SRC := $(addsuffix .c, $(SRC))
 SRC := $(addprefix $(SRC_PREFIX), $(SRC))
@@ -34,9 +34,15 @@ OBJ = $(SRC:.c=.o)
 
 all: libft $(NAME)
 
+debug: CFLAGS += -D DEBUG
+debug: $(OBJ) $(SRC_PREFIX)debug.o
+	@echo "call to 'debug' rule"
+	$(CC) -o $(NAME) $^ $(CFLAGS) $(LDFLAGS) $(LDLIBS) -D BONUS
+	/bin/rm -f $(SRC_PREFIX)debug.o
+
 $(NAME): $(OBJ)
 	@echo "making $@"
-	@$(CC) -o $(NAME) $^ $(CFLAGS) $(LDFLAGS) $(LDLIBS) -D BONUS
+	$(CC) -o $(NAME) $^ $(CFLAGS) $(LDFLAGS) $(LDLIBS) -D BONUS
 
 libft:
 	@echo "making $@"
@@ -44,7 +50,7 @@ libft:
 
 %.o: %.c
 	@echo "making $<"
-	@$(CC) -o $@ -c $< $(CFLAGS) -D BONUS
+	$(CC) -o $@ -c $< $(CFLAGS) -D BONUS
 
 clean:
 	/bin/rm -f ${OBJ}

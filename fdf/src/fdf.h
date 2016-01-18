@@ -62,4 +62,10 @@ void	draw_picture(t_mlx_sess *);
 
 void	draw_3dgrid(t_mlx_sess *);
 
+void	set_image_pixel(t_image * img, int color, int x, int y);
+
+
+# ifdef DEBUG
+void	output_image_info(t_image *image);
+# endif
 #endif

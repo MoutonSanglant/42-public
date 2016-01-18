@@ -58,9 +58,24 @@ int		expose(void *p)
 	return (0);
 }
 
+#ifdef DEBUG
+static void	post(t_image *image)
+{
+	output_image_info(image);
+}
+#else
+static void	post(t_image *image)
+{
+	(void) image;
+}
+#endif
+
 int		main()
 {
 	t_mlx_sess	*param;
+	t_image image;
+	int local_endian;
+	int a;
 
 	param = (t_mlx_sess *)malloc(sizeof(t_mlx_sess));
 	if (!(param->sess = mlx_init()))
@@ -73,35 +88,15 @@ int		main()
 		free(param);
 		return (1);
 	}
-	int local_endian;
-	int a;
 	a = 0x11223344;
 	if (((unsigned char *)&a)[0] == 0x11)
 		local_endian = 1; // big-endian
 	else
 		local_endian = 0; // little-endian
-	//param->img_data = mlx_get_data_addr(param->img, &bpp, &sl, &endian);
-	t_image image;
-//	image = (t_image *)malloc(sizeof(t_image));
-	//image.img = mlx_xpm_file_to_image(param->sess, "./img.xpm", &x, &y);
 	image.img = mlx_new_image(param->sess, 200, 200);
 	image.data = mlx_get_data_addr(image.img, &image.bpp, &image.sl, &image.endian);
-	
+	post(&image);
 	param->img = &image;
-	ft_putstr("Image at ");
-	ft_putaddr(image.data);
-	ft_putstr(", bpp: ");
-	ft_putnbr(image.bpp);
-	ft_putstr(", sl: ");
-	ft_putnbr(image.sl);
-	ft_putstr(", endian: ");
-	ft_putnbr(image.endian);
-	ft_putstr("(local: ");
-	ft_putnbr(local_endian);
-	ft_putendl(")");
-//	just_a_test(param->sess, (unsigned char *)param->img_data, bpp, sl, 200, 200, endian);
-
-	//mlx_put_image_to_window(param->sess, param->win, param->img, 0, 0);
 
 	mlx_key_hook(param->win, &keypress, (void *)param);
 	mlx_expose_hook(param->win, &expose, (void *)param);
