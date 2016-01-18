@@ -1,369 +1,96 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   draw.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2016/01/18 17:35:36 by tdefresn          #+#    #+#             */
+/*   Updated: 2016/01/18 17:50:19 by tdefresn         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "fdf.h"
 
-void		image_pixel_put(int color, unsigned char *data, int bpp, int sl, int x, int y, int endian)
+void	draw_line(t_mlx_sess *sess, t_vector2 *from, t_vector2 *to)
 {
-	int opp;
-	int dec;
-	//unsigned char *ptr;
-
-	(void) endian;
-
-	//ptr = data+h*sl;
-	//ptr = data+y*sl;
-	opp = bpp/8;
-	dec = opp;
-	while (dec--)
-		*((data+y*sl)+x*opp+dec) = ((unsigned char *)(&color))[dec];
-
-}
-
-void	draw_line(t_mlx_sess *mlx, t_vector2 *from, t_vector2 *to)
-{
+	t_image	*img;
 	int x1 = from->x;
 	int x2 = to->x;
 	int y1 = from->y;
 	int y2 = to->y;
-  int dx, dy, i, e;
-  int incx, incy, inc1, inc2;
-  int x,y;
+	int dx, dy, i, e;
+	int incx, incy, inc1, inc2;
+	int x,y;
 
-  dx = x2 - x1;
-  dy = y2 - y1;
+	dx = x2 - x1;
+	dy = y2 - y1;
 
-  if(dx < 0) dx = -dx;
-  if(dy < 0) dy = -dy;
-  incx = 1;
-  if(x2 < x1) incx = -1;
-  incy = 1;
-  if(y2 < y1) incy = -1;
-  x=x1;
-  y=y1;
+	if(dx < 0) dx = -dx;
+	if(dy < 0) dy = -dy;
+	incx = 1;
+	if(x2 < x1) incx = -1;
+	incy = 1;
+	if(y2 < y1) incy = -1;
+	x=x1;
+	y=y1;
 
-  t_image	*img;
-  img = mlx->img;
+	img = sess->img;
 
-  if(dx > dy)
-    {
-      //draw_pixel(x,y, BLACK);
-	  image_pixel_put(mlx_get_color_value(mlx, mlx->col),(unsigned char *)img->data, img->bpp, img->sl, x, y, img->endian);
-	//	mlx_pixel_put(mlx->sess, mlx->win, x, y, mlx->col);
-      e = 2*dy - dx;
-      inc1 = 2*( dy -dx);
-      inc2 = 2*dy;
-      for(i = 0; i < dx; i++)
-      {
-         if(e >= 0)
-         {
-            y += incy;
-            e += inc1;
-         }
-         else e += inc2;
-         x += incx;
-        // draw_pixel(x,y, BLACK);
-	//	mlx_pixel_put(mlx->sess, mlx->win, x, y, mlx->col);
-	  image_pixel_put(mlx_get_color_value(mlx, mlx->col),(unsigned char *)img->data, img->bpp, img->sl, x, y, img->endian);
-      }
-   }
-   else
-   {
-      //draw_pixel(x,y, BLACK);
-	//	mlx_pixel_put(mlx->sess, mlx->win, x, y, mlx->col);
-	  image_pixel_put(mlx_get_color_value(mlx, mlx->col),(unsigned char *)img->data, img->bpp, img->sl, x, y, img->endian);
-      e = 2*dx - dy;
-      inc1 = 2*( dx - dy);
-      inc2 = 2*dx;
-      for(i = 0; i < dy; i++)
-      {
-        if(e >= 0)
-        {
-           x += incx;
-           e += inc1;
-        }
-        else e += inc2;
-        y += incy;
-        //draw_pixel(x,y, BLACK);
-	//	mlx_pixel_put(mlx->sess, mlx->win, x, y, mlx->col);
-	  image_pixel_put(mlx_get_color_value(mlx, mlx->col),(unsigned char *)img->data, img->bpp, img->sl, x, y, img->endian);
-    }
-  }
-
-}
-
-//void	draw_line(t_mlx_sess *mlx, t_vector3 from, t_vector3 to)
-/*
-void	draw_line(t_mlx_sess *mlx, t_vector2 *from, t_vector2 *to)
-{
-	int		x;
-	int		y;
-	int		dx;
-	int		dy;
-	int		e;
-
-	x = from->x;
-	y = from->y;
-	dx = to->x - x;
-	if (dx)
+	if(dx > dy)
 	{
-		if (dx > 0)
+		set_image_pixel(img, mlx_get_color_value(sess, sess->col), x, y);
+		e = 2*dy - dx;
+		inc1 = 2*( dy -dx);
+		inc2 = 2*dy;
+		for(i = 0; i < dx; i++)
 		{
-			if ((dy = to->y - from->y))
+			if(e >= 0)
 			{
-				if (dy > 0)
-				{
-					if (dx >= dy)
-					{
-						e = dx;
-						dx = e * 2;
-						dy = dy * 2;
-						x = from->x;
-						y = from->y;
-						while (1)
-						{
-							mlx_pixel_put(mlx->sess, mlx->win, x, y, mlx->col);
-							x = x + 1;
-							if (x == to->x)
-								break ;
-							e = e - dy;
-							if (e < 0)
-							{
-								y = y + 1;
-								e = e + dx;
-							}
-						}
-					}
-					else
-					{
-						e = dy;
-						dy = e * 2;
-						dx = dx * 2;
-						x = from->x;
-						y = from->y;
-						while (1)
-						{
-							mlx_pixel_put(mlx->sess, mlx->win, x, y, mlx->col);
-							//x = x + 1;
-							y = y + 1;
-							if (y == to->y)
-								break ;
-							e = e - dx;
-							if (e < 0)
-							{
-								x = x + 1;
-								e = e + dy;
-							}
-						}
-					}
-				}
-				else
-				{
-					if (dx >= -dy)
-					{
-						e = dx;
-						dx = e * 2;
-						dy = dy * 2;
-						x = from->x;
-						y = from->y;
-						while (1)
-						{
-							mlx_pixel_put(mlx->sess, mlx->win, x, y, mlx->col);
-							x = x + 1;
-							if (x == to->x)
-								break ;
-							e = e + dy;
-							if (e < 0)
-							{
-								y = y - 1;
-								e = e + dx;
-							}
-						}
-					}
-					else
-					{
-						e = dy;
-						dy = e * 2;
-						dx = dx * 2;
-						x = from->x;
-						y = from->y;
-						while (1)
-						{
-							mlx_pixel_put(mlx->sess, mlx->win, x, y, mlx->col);
-							y = y - 1;
-							if (y == to->y)
-								break ;
-							e = e + dx;
-							if (e > 0)
-							{
-								x = x + 1;
-								e = e + dy;
-							}
-						}
-					}
-				}
+				y += incy;
+				e += inc1;
 			}
-			else
-			{
-				y = from->y;
-				while (x != to->x)
-				{
-					mlx_pixel_put(mlx->sess, mlx->win, x, y, mlx->col);
-					x = x + 1;
-				}
-			}
-		}
-		else
-		{
-			if ((dy = to->y - from->y))
-			{
-				if (dy > 0)
-				{
-					if (-dx >= dy)
-					{
-						e = dx;
-						dx = e * 2;
-						dy = dy * 2;
-						x = from->x;
-						y = from->y;
-						while (1)
-						{
-							mlx_pixel_put(mlx->sess, mlx->win, x, y, mlx->col);
-							x = x - 1;
-							if (x == to->x)
-								break ;
-							e = e + dy;
-							if (e >= 0)
-							{
-								y = y + 1;
-								e = e + dx;
-							}
-						}
-					}
-					else
-					{
-						e = dy;
-						dy = e * 2;
-						dx = dx * 2;
-						x = from->x;
-						y = from->y;
-						while (1)
-						{
-							mlx_pixel_put(mlx->sess, mlx->win, x, y, mlx->col);
-							y = y + 1;
-							if (y == to->y)
-								break ;
-							e = e + dx;
-							if (e <= 0)
-							{
-								x = x - 1;
-								e = e + dy;
-							}
-						}
-					}
-				}
-				else
-				{
-					if (dx <= dy)
-					{
-						e = dx;
-						dx = e * 2;
-						dy = dy * 2;
-						x = from->x;
-						y = from->y;
-						while (1)
-						{
-							mlx_pixel_put(mlx->sess, mlx->win, x, y, mlx->col);
-							x = x - 1;
-							if (x == to->x)
-								break ;
-							e = e - dy;
-							if (e >= 0)
-							{
-								y = y - 1;
-								e = e + dx;
-							}
-						}
-					}
-					else
-					{
-						e = dy;
-						dy = e * 2;
-						dx = dx * 2;
-						x = from->x;
-						y = from->y;
-						while (1)
-						{
-							mlx_pixel_put(mlx->sess, mlx->win, x, y, mlx->col);
-							y = y - 1;
-							if (y == to->y)
-								break ;
-							e = e - dx;
-							if (e >= 0)
-							{
-								x = x - 1;
-								e = e + dy;
-							}
-						}
-					}
-				}
-			}
-			else
-			{
-				x = from->x;
-				y = from->y;
-				while (x != to->x)
-				{
-					mlx_pixel_put(mlx->sess, mlx->win, x, y, mlx->col);
-					x = x - 1;
-				}
-			}
+			else e += inc2;
+			x += incx;
+			set_image_pixel(img, mlx_get_color_value(sess, sess->col), x, y);
 		}
 	}
 	else
 	{
-		if ((dy = to->y - from->y))
+		set_image_pixel(img, mlx_get_color_value(sess, sess->col), x, y);
+		e = 2*dx - dy;
+		inc1 = 2*( dx - dy);
+		inc2 = 2*dx;
+		for(i = 0; i < dy; i++)
 		{
-			if (dy > 0)
+			if(e >= 0)
 			{
-				x = from->x;
-				y = from->y;
-				while (y != to->y)
-				{
-					mlx_pixel_put(mlx->sess, mlx->win, x, y, mlx->col);
-					y = y + 1;
-				}
+				x += incx;
+				e += inc1;
 			}
-			else
-			{
-				x = from->x;
-				y = from->y;
-				while (y != to->y)
-				{
-					mlx_pixel_put(mlx->sess, mlx->win, x, y, mlx->col);
-					y = y - 1;
-				}
-			}
+			else e += inc2;
+			y += incy;
+			set_image_pixel(img, mlx_get_color_value(sess, sess->col), x, y);
 		}
 	}
+
 }
-*/
 
-void	draw_square(t_mlx_sess *mlx_sess, t_vector2 *from, t_vector2 *to)
+void	draw_square(t_mlx_sess *sess, t_vector2 *from, t_vector2 *to)
 {
-	int		i;
-	int		j;
-	//int		c;
+	int		x;
+	int		y;
+	t_image	*img;
 
-	//c = 0x009933bb;
-	i = from->x;
-	j = from->y;
-	while (i < to->x)
+	img = sess->img;
+	x = from->x;
+	y = from->y;
+	while (x < to->x)
 	{
-		while (j < to->y)
-		{
-			mlx_pixel_put(mlx_sess->sess, mlx_sess->win, i, j, mlx_sess->col);
-			j++;
-		}
-		j = from->y;
-		i++;
+		while (y < to->y)
+			set_image_pixel(img, mlx_get_color_value(sess, sess->col), x, y++);
+		y = from->y;
+		x++;
 	}
 }
 
