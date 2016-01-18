@@ -4,11 +4,21 @@ CC		= gcc
 CFLAGS	= -Wall -Werror -Wextra -I./libft
 LDFLAGS	= -L./lib -L./libft
 LDLIBS	= -lft -lm
-LINUXLIBS	= -lX11 -lXext -lbsd
-X32LIBS	=
-X64LIBS	= -lmlx_linux_x64
 
-ARCH = $(shell uname -m)
+ARCH	= $(shell uname -m)
+OS		= $(shell uname -s)
+
+ifeq ($(OS), Darwin)
+	LDLIBS += -lmlx -framework OpenGL -framework AppKit
+endif
+
+ifeq ($(OS), Linux && $(ARCH), x86_64)
+	CFLAGS += -D LINUX
+	LDLIBS += -lX11 -lXext -lbsd -lmlx_linux_x64
+else ifeq ($(OS), Linux)
+	CFLAGS += -D LINUX
+	LDLIBS += -lX11 -lXext -lbsd -lmlx_linux_x86
+endif
 
 SRC_PREFIX	= ./src/
 
@@ -19,26 +29,22 @@ SRC := $(addprefix $(SRC_PREFIX), $(SRC))
 
 OBJ = $(SRC:.c=.o)
 
-
 .SILENT: $(OBJ)
 .PHONY: all clean fclean re libft
 
-all: libft $(NAME)_$(ARCH)
+all: libft $(NAME)
 
-
-$(NAME)_x86_64: $(OBJ)
+$(NAME): $(OBJ)
 	@echo "making $@"
-	@$(CC) -o $(NAME) $^ $(CFLAGS) $(LDFLAGS) $(LDLIBS) $(LINUXLIBS) \
-		$(X64LIBS) -D LINUX -D BONUS
+	@$(CC) -o $(NAME) $^ $(CFLAGS) $(LDFLAGS) $(LDLIBS) -D BONUS
 
 libft:
 	@echo "making $@"
-	cd libft && $(MAKE) re
+	cd libft && $(MAKE)
 
 %.o: %.c
 	@echo "making $<"
-	@$(CC) -o $@ -c $< $(CFLAGS) $(LDFLAGS) $(LDLIBS) $(LINUXLIBS) \
-		$(X64LIBS) -D LINUX -D BONUS
+	@$(CC) -o $@ -c $< $(CFLAGS) -D BONUS
 
 clean:
 	/bin/rm -f ${OBJ}
