@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/18 17:35:36 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/18 17:50:19 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/01/19 04:53:51 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,10 @@
 void	draw_line(t_mlx_sess *sess, t_vector2 *from, t_vector2 *to)
 {
 	t_image	*img;
-	int x1 = from->x;
-	int x2 = to->x;
-	int y1 = from->y;
-	int y2 = to->y;
+	int x1 = (int)from->x;
+	int x2 = (int)to->x;
+	int y1 = (int)from->y;
+	int y2 = (int)to->y;
 	int dx, dy, i, e;
 	int incx, incy, inc1, inc2;
 	int x,y;
@@ -76,7 +76,19 @@ void	draw_line(t_mlx_sess *sess, t_vector2 *from, t_vector2 *to)
 
 }
 
-void	draw_square(t_mlx_sess *sess, t_vector2 *from, t_vector2 *to)
+void	clear_canvas(t_mlx_sess *sess, int clear_color)
+{
+	t_vector2 from;
+	t_vector2 to;
+
+	from.x = 0;
+	from.y = 0;
+	to.x = sess->width;
+	to.y = sess->height;
+	draw_square(sess, clear_color, &from, &to);
+}
+
+void	draw_square(t_mlx_sess *sess, int color, t_vector2 *from, t_vector2 *to)
 {
 	int		x;
 	int		y;
@@ -88,7 +100,7 @@ void	draw_square(t_mlx_sess *sess, t_vector2 *from, t_vector2 *to)
 	while (x < to->x)
 	{
 		while (y < to->y)
-			set_image_pixel(img, mlx_get_color_value(sess, sess->col), x, y++);
+			set_image_pixel(img, mlx_get_color_value(sess, color), x, y++);
 		y = from->y;
 		x++;
 	}
