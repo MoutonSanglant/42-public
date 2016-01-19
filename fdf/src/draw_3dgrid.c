@@ -6,95 +6,61 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/18 17:52:02 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/18 17:52:03 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/01/19 04:49:08 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
+static void	draw_joints(t_mlx_sess *p, t_vector3 v, t_vector3 v2)
+{
+	t_vector2	from;
+	t_vector2	to;
+	t_vector4	vertex;
+	//t_vector3	vertex;
+
+	vertex.x = v.x;
+	vertex.y = v.y;
+	vertex.z = v.z;
+	vertex.w = 1;
+	//vertex = apply_matrix4(vertex, p->view);
+	vertex = apply_matrix4(vertex, p->view);
+	from.x = vertex.x;
+	from.y = vertex.y;
+
+	vertex.x = v2.x;
+	vertex.y = v2.y;
+	vertex.z = v2.z;
+	vertex.w = 1;
+	vertex = apply_matrix4(vertex, p->view);
+	to.x = vertex.x;
+	to.y = vertex.y;
+
+	draw_line((t_mlx_sess *)p, &from, &to);
+}
+
 void	draw_3dgrid(t_mlx_sess *p)
 {
 //	static t_vector3	from;
 //	static t_vector3	to;
-	static t_vector2	from;
-	static t_vector2	to;
-	static int v = 0;
 
+	int		x;
+	int		y;
 
+	x = 0;
+	y = 0;
 
-	from.x = 100;
-	from.y = 100;
-//	from.z = 12;
-	to.x = 200;
-	to.y = 100;
-//	to.z = 30;
-	p->col = 0xffff0000 + v;
-	draw_line((t_mlx_sess *)p, &from, &to);
-	to.x = 100;
-	to.y = 200;
-	p->col = 0xffffff00 + v;
-	draw_line((t_mlx_sess *)p, &from, &to);
-	to.x = 0;
-	to.y = 100;
-	p->col = 0x00ffffff + v;
-	draw_line((t_mlx_sess *)p, &from, &to);
-	to.x = 100;
-	to.y = 0;
-	p->col = 0x0000ff00 + v;
-	draw_line((t_mlx_sess *)p, &from, &to);
-	to.x = 200;
-	to.y = 200;
-	p->col = 0x0000ffff + v;
-	draw_line((t_mlx_sess *)p, &from, &to);
-	to.x = 0;
-	to.y = 0;
-	p->col = 0x000000ff + v;
-	draw_line((t_mlx_sess *)p, &from, &to);
-	to.x = 200;
-	to.y = 0;
-	draw_line((t_mlx_sess *)p, &from, &to);
-	to.x = 0;
-	to.y = 200;
-	p->col = 0x00ff00ff + v;
-	draw_line((t_mlx_sess *)p, &from, &to);
+	clear_canvas(p, 0x000000);
 
-
-	to.x = 200;
-	to.y = 150;
-	p->col = 0x006666ff + v;
-	draw_line((t_mlx_sess *)p, &from, &to);
-	to.x = 150;
-	to.y = 200;
-	p->col = 0x00ff66ff + v;
-	draw_line((t_mlx_sess *)p, &from, &to);
-	to.x = 50;
-	to.y = 200;
-	p->col = 0x0066ffff + v;
-	draw_line((t_mlx_sess *)p, &from, &to);
-	to.x = 0;
-	to.y = 150;
-	p->col = 0x00666600 + v;
-	draw_line((t_mlx_sess *)p, &from, &to);
-	to.x = 0;
-	to.y = 50;
-	p->col = 0x00660066 + v;
-	draw_line((t_mlx_sess *)p, &from, &to);
-	to.x = 50;
-	to.y = 0;
-	p->col = 0x0066ff00 + v;
-	draw_line((t_mlx_sess *)p, &from, &to);
-	to.x = 150;
-	to.y = 0;
-	p->col = 0x0066ff66 + v;
-	draw_line((t_mlx_sess *)p, &from, &to);
-	to.x = 200;
-	to.y = 50;
-	p->col = 0x00ff6666 + v;
-	draw_line((t_mlx_sess *)p, &from, &to);
-	//draw_picture((t_mlx_sess *)p);
-	to.x = 180;
-	to.y = 180;
-	p->col = 0x99ff6666 + v;
-//	draw_square((t_mlx_sess *)p, &from, &to);
-	v += 0x00101010;
+	while (x < 9)
+	{
+		while (y < 9)
+		{
+			draw_joints(p, p->grid[x + y * 10], p->grid[x + y * 10 + 1]);
+			draw_joints(p, p->grid[x + y * 10], p->grid[x + y * 10 + 10]);
+			y++;
+		}
+		y = 0;
+		x++;
+	}
 }
