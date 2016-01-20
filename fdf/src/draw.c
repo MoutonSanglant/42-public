@@ -6,13 +6,13 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/18 17:35:36 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/19 04:53:51 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/01/20 01:52:50 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-void	draw_line(t_mlx_sess *sess, t_vector2 *from, t_vector2 *to)
+void	draw_line(t_mlx_sess *p, t_vector2 *from, t_vector2 *to)
 {
 	t_image	*img;
 	int x1 = (int)from->x;
@@ -22,6 +22,9 @@ void	draw_line(t_mlx_sess *sess, t_vector2 *from, t_vector2 *to)
 	int dx, dy, i, e;
 	int incx, incy, inc1, inc2;
 	int x,y;
+	int color;
+
+	color = mlx_get_color_value(p->sess, p->col);
 
 	dx = x2 - x1;
 	dy = y2 - y1;
@@ -35,11 +38,11 @@ void	draw_line(t_mlx_sess *sess, t_vector2 *from, t_vector2 *to)
 	x=x1;
 	y=y1;
 
-	img = sess->img;
+	img = p->img;
 
 	if(dx > dy)
 	{
-		set_image_pixel(img, mlx_get_color_value(sess, sess->col), x, y);
+		set_image_pixel(img, color, x, y);
 		e = 2*dy - dx;
 		inc1 = 2*( dy -dx);
 		inc2 = 2*dy;
@@ -52,12 +55,12 @@ void	draw_line(t_mlx_sess *sess, t_vector2 *from, t_vector2 *to)
 			}
 			else e += inc2;
 			x += incx;
-			set_image_pixel(img, mlx_get_color_value(sess, sess->col), x, y);
+			set_image_pixel(img, color, x, y);
 		}
 	}
 	else
 	{
-		set_image_pixel(img, mlx_get_color_value(sess, sess->col), x, y);
+		set_image_pixel(img, color, x, y);
 		e = 2*dx - dy;
 		inc1 = 2*( dx - dy);
 		inc2 = 2*dx;
@@ -69,38 +72,36 @@ void	draw_line(t_mlx_sess *sess, t_vector2 *from, t_vector2 *to)
 				e += inc1;
 			}
 			else e += inc2;
-			y += incy;
-			set_image_pixel(img, mlx_get_color_value(sess, sess->col), x, y);
+				y += incy;
+			set_image_pixel(img, color, x, y);
 		}
 	}
 
 }
 
-void	clear_canvas(t_mlx_sess *sess, int clear_color)
+void	clear_canvas(t_mlx_sess *p, int clear_color)
 {
 	t_vector2 from;
 	t_vector2 to;
 
 	from.x = 0;
 	from.y = 0;
-	to.x = sess->width;
-	to.y = sess->height;
-	draw_square(sess, clear_color, &from, &to);
+	to.x = p->width;
+	to.y = p->height;
+	draw_square(p, mlx_get_color_value(p->sess, clear_color), &from, &to);
 }
 
-void	draw_square(t_mlx_sess *sess, int color, t_vector2 *from, t_vector2 *to)
+void	draw_square(t_mlx_sess *p, int color, t_vector2 *from, t_vector2 *to)
 {
 	int		x;
 	int		y;
-	t_image	*img;
 
-	img = sess->img;
 	x = from->x;
 	y = from->y;
 	while (x < to->x)
 	{
 		while (y < to->y)
-			set_image_pixel(img, mlx_get_color_value(sess, color), x, y++);
+			set_image_pixel(p->img, color, x, y++);
 		y = from->y;
 		x++;
 	}
