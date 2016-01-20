@@ -25,7 +25,11 @@
 #  include "../includes/mlx.h"
 # endif
 
-typedef double t_matrix4[4][4];
+# define DEG(x) (x * 180.0 / M_PI)
+# define RAD(x) (x * M_PI / 180.0)
+
+//typedef double t_matrix4[4][4];
+typedef double t_matrix4[16];
 
 typedef struct	s_vector2
 {
@@ -64,7 +68,6 @@ typedef struct	s_mlx_sess
 	t_image		*img;
 	t_vector3	*grid;
 	int			col;
-	t_matrix4	*world;
 	t_matrix4	*view;
 	t_matrix4	*projection;
 	int			width;
@@ -87,14 +90,20 @@ void	set_image_pixel(t_image * img, int color, int x, int y);
 **	MATRIX
 */
 
-t_matrix4	*identity_matrix4(t_matrix4 *);
-t_matrix4	*inverse_matrix4(t_matrix4 *);
-t_matrix4	*translate_matrix4(t_matrix4 *, t_vector3);
-t_matrix4	*scale_matrix4(t_matrix4 *, t_vector3);
+void	identity_matrix4(t_matrix4 *);
+void	inverse_matrix4(t_matrix4 *, t_matrix4 *);
+void	translation_matrix4(t_matrix4 *, t_vector3);
+void	scaling_matrix4(t_matrix4 *, t_vector3);
 //t_matrix4	*rotate_matrix4(t_matrix4 *, t_matrix4 *);
-t_matrix4	*rotate_matrix4(t_matrix4 *, double);
-t_matrix4	*projection_matrix4(t_matrix4 *, t_matrix4 *);
+//t_matrix4	*rotate_matrix4(t_matrix4 *, double);
+void	rotationX_matrix4(t_matrix4 *, double);
+void	rotationY_matrix4(t_matrix4 *, double);
+void	rotationZ_matrix4(t_matrix4 *, double);
+void	perspective_projection_matrix4(t_matrix4 *, t_vector2, int, int);
+void	orthographic_projection_matrix4(t_matrix4 *, t_vector2,	int, int);
 
+void	transpose_matrix4(t_matrix4 *m);
+void	multiply_matrix4(t_matrix4 *, t_matrix4 *);
 t_vector4	apply_matrix4(t_vector4, t_matrix4 *);
 //t_vector3	apply_matrix4(t_vector3, t_matrix4 *);
 

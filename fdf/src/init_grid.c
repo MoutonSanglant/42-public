@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/18 20:00:56 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/19 02:31:17 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/01/19 16:15:46 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,11 @@ void	init_grid(t_vector3 *grid)
 	{
 		while(y < 10)
 		{
-			grid[x + y * 10].x = (double)(50 * x);
-			grid[x + y * 10].y = (double)(50 * y);
-			grid[x + y].z = 0.0;
+			grid[x + y * 10].x = (double)(50.f * x);
+			grid[x + y * 10].y = (double)(50.f * y);
+			//grid[x + y * 10].z = (double)(50 * y);
+			//grid[x + y * 10].y = 0.0;
+			grid[x + y * 10].z = 0.f;
 			y++;
 		}
 		y = 0;
