@@ -25,32 +25,48 @@
 #  include "../includes/mlx.h"
 # endif
 
+# define ABS(x) (x < 0) ? -x : x
+
 # define DEG(x) (x * 180.0 / M_PI)
 # define RAD(x) (x * M_PI / 180.0)
 
-//typedef double t_matrix4[4][4];
-typedef double t_matrix4[16];
+//typedef float t_matrix4[4][4];
+typedef float t_matrix4[16];
 
 typedef struct	s_vector2
 {
-	double		x;
-	double		y;
+	float		x;
+	float		y;
 }				t_vector2;
 
 typedef struct	s_vector3
 {
-	double		x;
-	double		y;
-	double		z;
+	float		x;
+	float		y;
+	float		z;
 }				t_vector3;
 
 typedef struct	s_vector4
 {
-	double		x;
-	double		y;
-	double		z;
-	double		w;
+	float		x;
+	float		y;
+	float		z;
+	float		w;
 }				t_vector4;
+
+typedef struct	s_triangle
+{
+	t_vector3	a;
+	t_vector3	b;
+	t_vector3	c;
+}				t_triangle;
+
+typedef struct s_grid
+{
+	int		width;
+	int		height;
+	t_triangle	*triangles;
+}				t_grid;
 
 typedef struct	s_image
 {
@@ -66,12 +82,17 @@ typedef struct	s_mlx_sess
 	void		*sess;
 	void		*win;
 	t_image		*img;
-	t_vector3	*grid;
+	t_grid		*grid;
+	t_triangle	*cube;
 	int			col;
+	t_matrix4	*world;
+	t_matrix4	*worldToCamera;
 	t_matrix4	*view;
 	t_matrix4	*projection;
 	int			width;
 	int			height;
+	int			canvasW;
+	int			canvasH;
 }				t_mlx_sess;
 
 void	draw_line(t_mlx_sess *, t_vector2 *, t_vector2 *);
@@ -81,7 +102,8 @@ void	draw_picture(t_mlx_sess *);
 
 void	clear_canvas(t_mlx_sess *, int);
 
-void	init_grid(t_vector3 *grid);
+void	cube(t_triangle *);
+void	init_grid(t_grid *, int, int);
 void	draw_3dgrid(t_mlx_sess *);
 
 void	set_image_pixel(t_image * img, int color, int x, int y);
@@ -95,17 +117,16 @@ void	inverse_matrix4(t_matrix4 *, t_matrix4 *);
 void	translation_matrix4(t_matrix4 *, t_vector3);
 void	scaling_matrix4(t_matrix4 *, t_vector3);
 //t_matrix4	*rotate_matrix4(t_matrix4 *, t_matrix4 *);
-//t_matrix4	*rotate_matrix4(t_matrix4 *, double);
-void	rotationX_matrix4(t_matrix4 *, double);
-void	rotationY_matrix4(t_matrix4 *, double);
-void	rotationZ_matrix4(t_matrix4 *, double);
-void	perspective_projection_matrix4(t_matrix4 *, t_vector2, int, int);
+//t_matrix4	*rotate_matrix4(t_matrix4 *, float);
+void	rotationX_matrix4(t_matrix4 *, float);
+void	rotationY_matrix4(t_matrix4 *, float);
+void	rotationZ_matrix4(t_matrix4 *, float);
+void	perspective_projection_matrix4(t_matrix4 *, float, float, int, int);
 void	orthographic_projection_matrix4(t_matrix4 *, t_vector2,	int, int);
 
 void	transpose_matrix4(t_matrix4 *m);
-void	multiply_matrix4(t_matrix4 *, t_matrix4 *);
-t_vector4	apply_matrix4(t_vector4, t_matrix4 *);
-//t_vector3	apply_matrix4(t_vector3, t_matrix4 *);
+void	matrix4_product(t_matrix4 *, t_matrix4 *);
+t_vector3	apply_matrix4(t_vector3, t_matrix4 *);
 
 # ifdef DEBUG
 void	output_image_info(t_image *image);

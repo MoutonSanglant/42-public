@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/18 17:35:36 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/20 01:52:50 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/01/20 18:34:14 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,8 +84,8 @@ void	clear_canvas(t_mlx_sess *p, int clear_color)
 	t_vector2 from;
 	t_vector2 to;
 
-	from.x = 0;
-	from.y = 0;
+	from.x = 1;
+	from.y = 1;
 	to.x = p->width;
 	to.y = p->height;
 	draw_square(p, mlx_get_color_value(p->sess, clear_color), &from, &to);
@@ -101,7 +101,9 @@ void	draw_square(t_mlx_sess *p, int color, t_vector2 *from, t_vector2 *to)
 	while (x < to->x)
 	{
 		while (y < to->y)
+		{
 			set_image_pixel(p->img, color, x, y++);
+		}
 		y = from->y;
 		x++;
 	}
