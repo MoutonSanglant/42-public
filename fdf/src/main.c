@@ -160,6 +160,7 @@ static void	draw_gui(t_mlx_sess *p)
 #else
 static void	draw_gui(t_mlx_sess *p)
 {
+	(void) p;
 }
 #endif
 
