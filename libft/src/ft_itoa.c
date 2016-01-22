@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/07 12:52:16 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/14 05:37:32 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/01/22 18:10:17 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,13 @@ char			*ft_itoa(int n)
 	size_t			sign;
 	size_t			l;
 
+	if (n == 0)
+	{
+		str = ft_strnew(sizeof(char) * 1);
+		if (str)
+			str[0] = '0';
+		return (str);
+	}
 	sign = (n > 0) ? 0 : 1;
 	l = nbr_length(n) + sign;
 	if (!(str = ft_strnew(sizeof(char) * l)))

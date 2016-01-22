@@ -7,6 +7,10 @@ int		keydown(int key, void *p)
 
 	identity_matrix4(&trans);
 	sess = (t_mlx_sess *)p;
+
+	ft_putchar('\n');
+	ft_putnbr(key);
+
 #ifdef LINUX
 	if (key == 97)
 	{
@@ -99,6 +103,111 @@ int		keydown(int key, void *p)
 		translation_matrix4(&trans, v);
 		matrix4_product(sess->world, &trans);
 	}
+#else
+	// Q: 12
+	// W: 13
+	// E: 14
+	// A: 0
+	// S: 1
+	// D: 2
+	//
+	// down: 125
+	// up: 126
+	// left: 123
+	// right: 124
+	//
+	if (key == 97)
+	{
+		rotationY_matrix4(&trans, RAD(3));
+		matrix4_product(sess->world, &trans);
+	}
+	else if (key == 101)
+	{
+		rotationY_matrix4(&trans, RAD(-3));
+		matrix4_product(sess->world, &trans);
+	}
+	if (key == 113)
+	{
+		rotationZ_matrix4(&trans, RAD(-3));
+		matrix4_product(sess->world, &trans);
+	}
+	else if (key == 100)
+	{
+		rotationZ_matrix4(&trans, RAD(3));
+		matrix4_product(sess->world, &trans);
+	}
+	if (key == 122)
+	{
+		rotationX_matrix4(&trans, RAD(3));
+		matrix4_product(sess->world, &trans);
+	}
+	else if (key == 115)
+	{
+		rotationX_matrix4(&trans, RAD(-3));
+		matrix4_product(sess->world, &trans);
+	}
+
+	if (key == 9000)
+	{
+		t_vector3 v;
+		v.x = 0;
+		v.y = 0;
+		v.z = 40;
+		translation_matrix4(&trans, v);
+		matrix4_product(sess->world, &trans);
+
+	}
+	else if (key == 8000)
+	{
+		t_vector3 v;
+		v.x = 0;
+		v.y = 0;
+		v.z = -40;
+		translation_matrix4(&trans, v);
+		matrix4_product(sess->world, &trans);
+	}
+
+	if (key == 123)
+	{
+		t_vector3 v;
+		v.x = -40;
+		v.y = 0;
+		v.z = 0;
+		translation_matrix4(&trans, v);
+		matrix4_product(sess->world, &trans);
+	}
+	else if (key == 126)
+	{
+		t_vector3 v;
+		v.x = 0;
+		v.y = -40;
+		v.z = 0;
+		translation_matrix4(&trans, v);
+		matrix4_product(sess->world, &trans);
+		// unsuccessful attempt to avoid the inverted
+		// projection glitch
+		//if ((*sess->world)[7] <= 1)
+		//	(*sess->world)[7] = 1;
+	}
+	if (key == 124)
+	{
+		t_vector3 v;
+		v.x = 40;
+		v.y = 0;
+		v.z = 0;
+		translation_matrix4(&trans, v);
+		matrix4_product(sess->world, &trans);
+	}
+	else if (key == 125)
+	{
+		t_vector3 v;
+		v.x = 0;
+		v.y = 40;
+		v.z = 0;
+		translation_matrix4(&trans, v);
+		matrix4_product(sess->world, &trans);
+	}
+
 #endif
 
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/01 12:36:01 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/14 11:48:11 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/01/22 17:55:54 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static void		cleartable(char **table, int last_idx)
 	}
 }
 
-static char		**setelem(char **table, int idx, char *str)
+static char		**set(char **table, int idx, char *str)
 {
 	table[idx] = str;
 	if (!table[idx])
@@ -50,8 +50,8 @@ static char		**split(char const *s, char c, size_t count)
 		words_table = (char **)ft_memalloc(sizeof(char *)
 							* (count + 1));
 		if (words_table)
-			words_table = setelem(words_table, count,
-									ft_strsub(s, 0, ft_strlen(s)));
+			words_table = set(words_table, count,
+								ft_strsub(s, 0, ft_strlen(s)));
 		if (words_table)
 		{
 			count += (*s) ? 1 : 0;
@@ -61,8 +61,8 @@ static char		**split(char const *s, char c, size_t count)
 	}
 	words_table = split(str, c, count + 1);
 	if (words_table)
-		words_table = setelem(words_table, count,
-								ft_strsub(s, 0, ((uintptr_t)str - (uintptr_t)s)));
+		words_table = set(words_table, count,
+							ft_strsub(s, 0, ((uintptr_t)str - (uintptr_t)s)));
 	return (words_table);
 }
 
