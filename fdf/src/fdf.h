@@ -4,6 +4,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <math.h>
+
 # include <includes/libft.h>
 
 /*
@@ -24,6 +25,8 @@
 #  include "../includes/linux/mlx_int.h"
 # else
 #  include "../includes/mlx.h"
+#  define KeyPressMask	(1L<<0)
+#  define KeyPress	2
 # endif
 
 # define ABS(x) (x < 0) ? -x : x
