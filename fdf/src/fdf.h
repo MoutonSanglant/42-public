@@ -21,6 +21,7 @@
 
 # ifdef LINUX
 #  include "../includes/linux/mlx.h"
+#  include "../includes/linux/mlx_int.h"
 # else
 #  include "../includes/mlx.h"
 # endif
@@ -82,17 +83,26 @@ typedef struct	s_mlx_sess
 	void		*sess;
 	void		*win;
 	t_image		*img;
+	float		*zbuffer;
 	t_grid		*grid;
 	t_triangle	*cube;
 	int			col;
+	float		near; // camera value
+	float		far; // camera value
 	t_matrix4	*world;
 	t_matrix4	*worldToCamera;
 	t_matrix4	*view;
 	t_matrix4	*projection;
-	int			width;
-	int			height;
-	int			canvasW;
-	int			canvasH;
+	int			width; // image (or framebuffer) value
+	int			height; // image value
+	float		aspect; // image or canvas value
+	float		canvasS; // canvas (or screen) value
+	float		canvasW; // canvas value
+	float		canvasH; // canvas value
+	float		canvasT; // canvas value
+	float		canvasB; // canvas value
+	float		canvasL; // canvas value
+	float		canvasR; // canvas value
 }				t_mlx_sess;
 
 void	draw_line(t_mlx_sess *, t_vector2 *, t_vector2 *);
@@ -106,7 +116,7 @@ void	cube(t_triangle *);
 void	init_grid(t_grid *, int, int);
 void	draw_3dgrid(t_mlx_sess *);
 
-void	set_image_pixel(t_image * img, int color, int x, int y);
+void	set_image_pixel(t_mlx_sess *p, t_image * img, int color, int x, int y);
 
 /*
 **	MATRIX

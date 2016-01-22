@@ -1,6 +1,6 @@
 #include "fdf.h"
 
-int		keypress(int key, void *p)
+int		keydown(int key, void *p)
 {
 	t_mlx_sess	*sess;
 	t_matrix4	trans;
@@ -41,7 +41,6 @@ int		keypress(int key, void *p)
 
 	if (key == 65451)
 	{
-	ft_putchar('+');
 		t_vector3 v;
 		v.x = 0;
 		v.y = 0;
@@ -52,14 +51,12 @@ int		keypress(int key, void *p)
 	}
 	else if (key == 65453)
 	{
-	ft_putchar('-');
 		t_vector3 v;
 		v.x = 0;
 		v.y = 0;
 		v.z = -40;
 		translation_matrix4(&trans, v);
 		matrix4_product(sess->world, &trans);
-
 	}
 
 	if (key == 65361)
@@ -70,20 +67,19 @@ int		keypress(int key, void *p)
 		v.z = 0;
 		translation_matrix4(&trans, v);
 		matrix4_product(sess->world, &trans);
-		//sess->view = translate_matrix4(sess->view, v);
 	}
 	else if (key == 65362)
 	{
-		ft_putchar('@');
 		t_vector3 v;
 		v.x = 0;
 		v.y = -40;
 		v.z = 0;
 		translation_matrix4(&trans, v);
 		matrix4_product(sess->world, &trans);
-		//sess->view = translate_matrix4(sess->view, v);
-		//sess->view = scale_matrix4(sess->view, v);
-		ft_putnbr((int)(*sess->view)[3]);
+		// unsuccessful attempt to avoid the inverted
+		// projection glitch
+		//if ((*sess->world)[7] <= 1)
+		//	(*sess->world)[7] = 1;
 	}
 	if (key == 65363)
 	{
@@ -93,7 +89,6 @@ int		keypress(int key, void *p)
 		v.z = 0;
 		translation_matrix4(&trans, v);
 		matrix4_product(sess->world, &trans);
-		//sess->view = translate_matrix4(sess->view, v);
 	}
 	else if (key == 65364)
 	{
@@ -103,8 +98,18 @@ int		keypress(int key, void *p)
 		v.z = 0;
 		translation_matrix4(&trans, v);
 		matrix4_product(sess->world, &trans);
-		//sess->view = translate_matrix4(sess->view, v);
 	}
+#endif
+
+	return (0);
+}
+
+int		keypress(int key, void *p)
+{
+	t_mlx_sess	*sess;
+
+	sess = (t_mlx_sess *)p;
+#ifdef LINUX
 	if (key == 65307)
 #else
 	if (key == 53)
@@ -115,6 +120,7 @@ int		keypress(int key, void *p)
 
 		mlx_destroy_image(sess->sess, sess->img->img);
 		mlx_destroy_window(sess->sess, sess->win);
+		ft_memdel((void **)&sess->zbuffer);
 		ft_memdel((void **)&sess->world);
 		ft_memdel((void **)&sess->view);
 		ft_memdel((void **)&sess->worldToCamera);
@@ -140,21 +146,24 @@ static void	draw_gui(t_mlx_sess *p)
 		/*
 		** MEMORY IS DEFINETLY LOST !!
 		*/
-		camera[0] = (char *)malloc(sizeof(char) * 20);
+		camera[0] = (char *)ft_memalloc(sizeof(char) * 20);
 		camera[0] = ft_strcpy(camera[0], "  x: ");
-		camera[1] = (char *)malloc(sizeof(char) * 20);
+		camera[1] = (char *)ft_memalloc(sizeof(char) * 20);
 		camera[1] = ft_strcpy(camera[1], "  y: ");
-		camera[2] = (char *)malloc(sizeof(char) * 20);
+		camera[2] = (char *)ft_memalloc(sizeof(char) * 20);
 		camera[2] = ft_strcpy(camera[2], "  z: ");
 	}
 
 	mlx_string_put(p->sess, p->win, 5, 15, 0x00ffffff, "DEBUG CONSOLE");
 	mlx_string_put(p->sess, p->win, 5, 30, 0x00ffffff, "Camera");
 	ft_strncpy(&camera[0][5], ft_itoa((int)(*p->world)[3]), 3);
+	camera[0][8] = '\0';
 	mlx_string_put(p->sess, p->win, 5, 45, 0x00ffffff, camera[0]);
 	ft_strncpy(&camera[1][5], ft_itoa((int)(*p->world)[7]), 3);
+	camera[1][8] = '\0';
 	mlx_string_put(p->sess, p->win, 5, 60, 0x00ffffff, camera[1]);
 	ft_strncpy(&camera[2][5], ft_itoa((int)(*p->world)[11]), 3);
+	camera[2][8] = '\0';
 	mlx_string_put(p->sess, p->win, 5, 75, 0x00ffffff, camera[2]);
 }
 #else
@@ -228,6 +237,8 @@ static void	post(t_image *image)
 }
 #endif
 
+#include <stdio.h>
+
 int		main(int argc, char **argv)
 {
 	t_mlx_sess	*param;
@@ -272,13 +283,18 @@ int		main(int argc, char **argv)
 		return (1);
 
 	/*
-	**	IMAGE
+	**	FRAME_BUFFER
 	*/
 	image.img = mlx_new_image(param->sess, param->width, param->height);
 	image.data = mlx_get_data_addr(image.img, &image.bpp, &image.sl, &image.endian);
 	post(&image);
 	param->img = &image;
-	clear_canvas(param->sess, 0xffffff);
+	//clear_canvas(param->sess, 0xffffff);
+
+	/*
+	**	Z-BUFFER
+	*/
+	param->zbuffer = (float *)ft_memalloc(sizeof(float) * x * y);
 
 	/*
 	**	GRID
@@ -343,13 +359,32 @@ int		main(int argc, char **argv)
 	orthographic_projection_matrix4(param->projection, size, 5, 1000);
 
 	// Perspective
-	perspective_projection_matrix4(param->projection, 90.f, x/y, .1f, 100);
+	float FOV;
+	FOV = 90.f; // just need horizontal FOV
+	param->near = .1f;
+	param->far = 1000;
+	perspective_projection_matrix4(param->projection, FOV, x/y, param->near, param->far);
 
 	//t_matrix4 camera = { 0.718762, 0.615033, -0.324214, 0, -0.393732, 0.744416, 0.539277, 0, 0.573024, -0.259959, 0.777216, 0, 0.526967, 1.254234, -2.53215, 1};
 	//param->view = &camera;
-	param->canvasW = 2;
-	param->canvasH = 2;
+	//param->canvasS = tan(FOV * .5f) * param->near;
+	param->aspect = (float)param->width / (float)param->height;
+	param->canvasH = 2 * tan(FOV * .5f) * param->near;
+	param->canvasT = param->canvasH * .5f; // MAYBE a missing '* param->near' here
+	param->canvasB = -param->canvasT;
 
+	/* This solution needs x/y FOV
+	** read 3D Viewing: the Pinhole Camera Chapter 4
+	param->canvasW = 2 * tan(yFOV * .5f) * param->near;
+	param->canvasR = param->canvasW * .5f; // MAYBE a missing '* param->near' here
+	*/
+	param->canvasW = param->canvasH * param->aspect;
+	param->canvasR = param->canvasT * param->aspect; // MAYBE a missing '* param->near' here
+	param->canvasL = -param->canvasR;
+
+	printf("height: %i / width: %i\naspect: %f\nH: %f / W: %f\nT: %f\nB: %f\nL: %f\nR: %f\n", param->height, param->width, param->aspect, param->canvasH, param->canvasW, param->canvasT, param->canvasB, param->canvasL, param->canvasR);
+
+	mlx_hook(param->win, KeyPress, KeyPressMask, &keydown, (void *)param);
 	mlx_key_hook(param->win, &keypress, (void *)param);
 	//mlx_expose_hook(param->win, &expose, (void *)param);
 	mlx_loop_hook(param->sess, &draw_loop, (void *)param);

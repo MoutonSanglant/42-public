@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/18 17:52:02 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/21 01:47:00 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/01/22 14:09:39 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,30 +16,67 @@
 
 static int		rasterize_coord(t_mlx_sess *p, t_vector3 in, t_vector2 *out)
 {
+	// IMPORTANT NOTE
+	// I don't handle the FIT / OVERSCAN solutions to scale
+	// the image in x or y.
+	// This is on purpose, I don't want to provide a multiple
+	// solution since it is a simple project, yet I should
+	// choose one from these 2 solutions someday
+	//
+	// Yet, my goal now is to achieve to implement the
+	// "projection matrix", certainly calling it inside this function
+
+	t_vector3 NDCout;
+
 	// Coords are in screen coodinate
 	// 1 - Pass to NDC coordinates
 	// 2 - Pass to raster coordinates
-(void) p;
 
 	// This is a point in Camera space
-	out->x = in.x / -in.z;
-	out->y = in.y / -in.z;
+	out->x = in.x / -in.z * p->near; // we need to multiply x by near
+	out->y = in.y / -in.z * p->near; // we need to multiply y by near
 
-	if (ceil(ABS(out->x)) > p->canvasW * .5f || ceil(ABS(out->y)) > p->canvasH * .5f)
-		return (1);
+	// 1 - Convert points to NDC space
+	// NDC space should be in range [-1, 1] (GPU convention)
+	//NDCout.x = 2 * out->x / (r - l) - (r + l) / (r - l); !! NEXT LESSON !!
+	//NDCout.y = 2 * out->y / (t - b) - (t + b) / (t - b); !! NEXT LESSON !!
+	NDCout.x = (out->x + p->canvasR) / (2 * p->canvasR);
+	NDCout.y = (out->y + p->canvasT) / (2 * p->canvasT);
 
-	// convert point coordinates to raster coordinates
-
+	// 2 - Convert points Raster space
 	// normalize x & y (set in [0,1] range)
-	out->x = (out->x + p->canvasW * .5f) / p->canvasW;
-	out->y = (out->y + p->canvasH * .5f) / p->canvasH;
-	// Coords are now in NDC space
+	// Rasterised coordinates
+	int x;
+	int y;
 
-	// Pass to rang [0,x] & [0,y]
-	out->x = floor(out->x * p->width);
-	out->y = floor((1 - out->y) * p->width); // invert y
+	x = (int)(NDCout.x * p->width);
+	y = (int)((1 - NDCout.y) * p->height);
+
+	// We MAY still WANT draw the line to this point even
+	// if it is outside the canvas, that's why we computed
+	// it's position.
+	if (out->x < p->canvasL || out->x > p->canvasR || out->y < p->canvasB || out->y > p->canvasT)
+
+	{
+		out->x = x;
+		out->y = y;
+		return (1);
+		//return (1);
+	}
+	out->x = x;
+	out->y = y;
+	// out->z = -in.z;
 
 	return (0);
+
+	/*
+	** OLD ALGORITHM
+	out->x = (out->x + p->canvasW * .5f) / p->canvasW;
+	out->y = (out->y + p->canvasH * .5f) / p->canvasH;
+	// Multiply by framebuffer width & height
+	out->x = floor(out->x * p->width);
+	out->y = floor((1 - out->y) * p->width); // invert y
+	*/
 }
 
 static int draw_point(t_mlx_sess *p, t_vector3 vertex, t_vector2 *point, t_matrix4 *mvp)
@@ -55,7 +92,19 @@ static int draw_point(t_mlx_sess *p, t_vector3 vertex, t_vector2 *point, t_matri
 	//ft_putnbr((*mvp)[11]);
 	//ft_putchar('\n');
 	//ft_putendl("==============");
-	if ((int)point->x < 0 || (int)point->x >= p->width || (int)point->y < 0 || (int)point->y >= p->height)
+	/*
+	** doesn't work'
+	if ((int)point->x < 0)
+		point->x = 0;
+	else if ((int)point->x >= p->width)
+		point->x = p->width;
+	if ((int)point->y < 0)
+		point->y = 0;
+	else if ((int)point->y >= p->height)
+		point->y = p->height;
+	*/
+
+	if ((int)point->x < 0 || (int)point->x > p->width || (int)point->y < 0 || (int)point->y >= p->height)
 		return (0);
 
 	draw_line((t_mlx_sess *)p, point, point);
@@ -71,15 +120,37 @@ static void		draw_triangle(t_mlx_sess *p, t_triangle *triangle, t_matrix4 *mvp)
 	t_vector3	c;
 	//t_vector3	vertices[3];
 	t_vector2	pixels[3];
+	int a_test, b_test, c_test;
 
 	a = triangle->a;
 	b = triangle->b;
 	c = triangle->c;
-	if (draw_point(p, a, &pixels[0], mvp) && draw_point(p, b, &pixels[1], mvp) && draw_point(p, c, &pixels[2], mvp))
+	a_test = draw_point(p, a, &pixels[0], mvp);
+	b_test = draw_point(p, b, &pixels[1], mvp);
+	c_test = draw_point(p, c, &pixels[2], mvp);
+
+	if (a_test || c_test)
 	{
-		p->col = 0x00ffffff;
+		if (a_test && b_test)
+			p->col = 0x00ffffff;
+		else
+			p->col = 0x00ff0000;
 		draw_line((t_mlx_sess *)p, &pixels[0], &pixels[1]);
+	}
+	if (b_test || c_test)
+	{
+		if (b_test && c_test)
+			p->col = 0x00ffffff;
+		else
+			p->col = 0x00ff0000;
 		draw_line((t_mlx_sess *)p, &pixels[1], &pixels[2]);
+	}
+	if (a_test || c_test)
+	{
+		if (a_test && c_test)
+			p->col = 0x00ffffff;
+		else
+			p->col = 0x00ff0000;
 		draw_line((t_mlx_sess *)p, &pixels[2], &pixels[0]);
 	}
 
