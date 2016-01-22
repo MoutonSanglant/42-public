@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/18 17:35:36 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/20 18:34:14 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/01/22 13:54:05 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	draw_line(t_mlx_sess *p, t_vector2 *from, t_vector2 *to)
 
 	if(dx > dy)
 	{
-		set_image_pixel(img, color, x, y);
+			set_image_pixel(p, img, color, x, y);
 		e = 2*dy - dx;
 		inc1 = 2*( dy -dx);
 		inc2 = 2*dy;
@@ -55,12 +55,12 @@ void	draw_line(t_mlx_sess *p, t_vector2 *from, t_vector2 *to)
 			}
 			else e += inc2;
 			x += incx;
-			set_image_pixel(img, color, x, y);
+			set_image_pixel(p, img, color, x, y);
 		}
 	}
 	else
 	{
-		set_image_pixel(img, color, x, y);
+		set_image_pixel(p, img, color, x, y);
 		e = 2*dx - dy;
 		inc1 = 2*( dx - dy);
 		inc2 = 2*dx;
@@ -73,7 +73,7 @@ void	draw_line(t_mlx_sess *p, t_vector2 *from, t_vector2 *to)
 			}
 			else e += inc2;
 				y += incy;
-			set_image_pixel(img, color, x, y);
+			set_image_pixel(p, img, color, x, y);
 		}
 	}
 
@@ -102,7 +102,7 @@ void	draw_square(t_mlx_sess *p, int color, t_vector2 *from, t_vector2 *to)
 	{
 		while (y < to->y)
 		{
-			set_image_pixel(p->img, color, x, y++);
+			set_image_pixel(p, p->img, color, x, y++);
 		}
 		y = from->y;
 		x++;
