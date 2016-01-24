@@ -86,22 +86,66 @@ optional arguments:
 
 (defun set-grid-value(g x y v)
 	(setf (aref (aref g x) y) v))
-;;	(vector-push v (aref (aref g x) y)))
+
+;; 
+
+(defun set-cell-state(grid x y bitmask state)
+	;; Set cell's value inside the grid
+	(set-grid-value grid x y (logxor cell state))
+	;; propagate information to neighbours
+
+	)
+
+;; successor rules:
+;; if 'alive' && neighbours < 2 -> die
+;; if 'alive' && neighbours > 3 -> die
+;;
+;; if 'alive' && 2 < neighbours < 4 -> live
+;; if 'dead' && neighbours == 3 -> live
+;;
+;; details:
+;; dead(0) || alive(1) (in fact: WE DON'T CARE ABOUT PREVIOUS STATE !!)
+;; && sum(neighbours (2^i))
+;; > 3
+;; -> die
+;; < 2
+;; -> die
+;; else
+;; -> live
+;;
+;; neighbour states: from 2 to 256 ... (2^1) to (2^8)
 
 
-(defun parse-grid())
+(defun compute-successors-grid(grid successor-grid)
+	"Compute all successors in the grid to the successor-grid"
+	(let ((neighbours 0))
+		(loop for i from 0 below *width* do
+			(loop for j from 0 below *height* do
+				(let ((cell get-grid-value grid i j))
+				;; Check the cell's' neighbourhood
+					(loop for k from 1 to 8
+						;; sum the neighbours bitmask
+						collect (if (> (logand cell (exp (2 k))) 0) (+ neighbours 1))
+								;; > 3 neighbours -> die ! (& go to the next cell)
+								(if (> neighbours 3) ((set-cell-state successor-grid i j cell 0) (return))))
+					;; < 3 neighbours -> die ! (else: 2 || 3 neighbours -> live)
+					(if (< neighbours 2) (set-cell-state successor-grid i j cell 0))
+					(if (< neighbours 4) (set-cell-state successor-grid i j cell 1))))))
+	;; TODO
+	;; Swap the grids ?
+	;; At least, return the modified (successor) grid
+	)
 
 (defun draw-grid(g)
 	"Draw all grid points in the viewport"
 	(loop for i from 0 below *width* do
-			(loop for j from 0 below *height*
-			;; Check if cell state is 'alive'
-				collect (if (> (logand (get-grid-value g i j) 1) 0)
-							(let ((x (* i *vp-twist*))
-								(y (* j *vp-twist*)))
-								(sdl:draw-box (sdl:rectangle-from-edges-* x y (+ x *vp-twist*) (+ y *vp-twist*))
-									:color sdl:*white*))
-							))))
+		(loop for j from 0 below *height*
+		;; Check if cell state is 'alive'
+			collect (if (> (logand (get-grid-value g i j) 1) 0)
+						(let ((x (* i *vp-twist*))
+							(y (* j *vp-twist*)))
+							(sdl:draw-box (sdl:rectangle-from-edges-* x y (+ x *vp-twist*) (+ y *vp-twist*))
+								:color sdl:*white*))))))
 
 ;; (set-grid-value *current-grid* 2 0 "M"))
 ;; (format t "Blabla: ~S~%" (get-grid-value *current-grid* 2 0))
@@ -130,6 +174,12 @@ optional arguments:
 
 ;; We want a 'cell perfect' viewport (no matter the zoom, the
 ;; viewport/cell size should always draw full cells)
+
+
+;; NOTES ON VIEWPORT
+;; =================
+;; Viewport: the visible part of the grid
+;; Grid: the cell data set
 
 ;; Main
 (defun main (argv)
@@ -163,7 +213,6 @@ optional arguments:
 				(sdl:clear-display sdl:*black*)
 ;; Draw the currently processed grid
 				(draw-grid *current-grid*)
-
 ;; Redraw the display
 				(sdl:update-display)))))
 
