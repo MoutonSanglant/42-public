@@ -1,8 +1,3 @@
-;;(with-open-file (*standard-output* "/dev/null" :direction :output
-;;												:if-exists :supersede))
-
-;; Convenient way to store the notice message
-
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;;;	INIT FUNCTIONS	;;;
 ;;;;;;;;;;;;;;;;;;;;;;;
@@ -22,7 +17,7 @@ optional arguments:
 ;; Prints the usage notice on incorrect provided sizes
 (defun error-size()
 	"Output an error relative to grid size and exit the program"
-	(format t "Window size is too small (should be 10x10 at least)~%")
+	(format t "Window size is too small (should be 40x40 at least)~%")
 	(sb-ext:exit))
 
 (defun check-arguments()
@@ -44,13 +39,6 @@ optional arguments:
 		(error-args))
 	)
 
-(defun make-row-array (rows max-columns)
-	"Make an array of length rows containing arrays of
-	length max-columns, with a fill pointer initially set to 0"
-	(make-array rows
-		:initial-contents (loop for i from 0 below rows
-								collect (make-array max-columns
-												:fill-pointer 0))))
 (defun init-grid()
 	"Initialize the cells grid"
 	;; Width & Height of the window
@@ -62,7 +50,9 @@ optional arguments:
 	(if (< *height* 40) (error-size))
 
 	;; Init the grid
-	(let ((new_grid (make-row-array *width* *height*))) new_grid)
+	(make-array (list *width* *height*)
+				:element-type 'array
+				:initial-element 0)
 )
 
 ;;;;;;;;;;;;;;;
@@ -73,6 +63,7 @@ optional arguments:
 (check-arguments)
 (defparameter *current-grid* (init-grid))
 (defparameter *successors-grid* (init-grid))
+(defparameter *transformation-grid* (init-grid))
 (defparameter *ratio* (/ *height* *width*))
 ;; Load SDL library
 (ql:quickload "lispbuilder-sdl")
@@ -82,59 +73,130 @@ optional arguments:
 ;;;;;;;;;;;;;;;;;;;
 
 (defun get-grid-value(g x y)
-	(aref (aref g x) y))
+	(aref g x y))
 
 (defun set-grid-value(g x y v)
-	(setf (aref (aref g x) y) v))
+	(setf (aref g x y) v))
 
-;; 
-
-(defun set-cell-state(grid x y bitmask state)
-	;; Set cell's value inside the grid
-	(set-grid-value grid x y (logxor cell state))
-	;; propagate information to neighbours
-
-	)
-
-;; successor rules:
-;; if 'alive' && neighbours < 2 -> die
-;; if 'alive' && neighbours > 3 -> die
+;; We just want to test the first bit (is it 1 or 0 ?)
+;; If the test match the old state, we don't need to update
+;; the cell. Otherwise, we need to update it then propagate
+;; to neighbours
 ;;
-;; if 'alive' && 2 < neighbours < 4 -> live
-;; if 'dead' && neighbours == 3 -> live
+;; Visual representation:
 ;;
-;; details:
-;; dead(0) || alive(1) (in fact: WE DON'T CARE ABOUT PREVIOUS STATE !!)
-;; && sum(neighbours (2^i))
-;; > 3
-;; -> die
-;; < 2
-;; -> die
-;; else
-;; -> live
-;;
-;; neighbour states: from 2 to 256 ... (2^1) to (2^8)
 
+(defun new-cell(read-grid write-grid x y)
+	(format t "~S, ~S now alive !!~%" x y)
+	(set-grid-value write-grid x y 1)
+)
 
-(defun compute-successors-grid(grid successor-grid)
-	"Compute all successors in the grid to the successor-grid"
-	(let ((neighbours 0))
+(defun destroy-cell(read-grid write-grid x y)
+	(format t "~S, ~S now dead !!~%" x y)
+	(set-grid-value write-grid x y 0)
+
+)
+
+(defun check-cell(read-grid write-grid x y)
+	(defparameter *neighbours* 0)
+	;; case: left
+	(if (> x 0)
+		(let ((xx (- x 1)))
+			(if(eq (get-grid-value read-grid xx y) 1)
+				(defparameter *neighbours* (+ *neighbours* 1)))))
+	;; case: top
+	(if (> y 0)
+		(let ((yy (- y 1)))
+			(if(eq (get-grid-value read-grid x yy) 1)
+				(defparameter *neighbours* (+ *neighbours* 1)))))
+	;; case: top-left
+	(if (> x 0)
+		(if (> y 0)
+			(let ((xx (- x 1))(yy (- y 1)))
+				(if(eq (get-grid-value read-grid xx yy) 1)
+					(defparameter *neighbours* (+ *neighbours* 1))))))
+	;; case: right
+	(if (< x (- *width* 1))
+		(let ((xx (+ x 1)))
+			(if(eq (get-grid-value read-grid xx y) 1)
+				(defparameter *neighbours* (+ *neighbours* 1)))))
+	;; case: top-right
+	(if (< x (- *width* 1))
+		(if (> y 0)
+			(let ((xx (+ x 1))(yy (- y 1)))
+				(if(eq (get-grid-value read-grid xx yy) 1)
+					(defparameter *neighbours* (+ *neighbours* 1))))))
+	;; case: bottom-right
+	(if (< x (- *width* 1))
+		(if (< y (- *height* 1))
+			(let ((xx (+ x 1))(yy (+ y 1)))
+				(if(eq (get-grid-value read-grid xx yy) 1)
+					(defparameter *neighbours* (+ *neighbours* 1))))))
+	;; case: bottom
+	(if (< y (- *height* 1))
+		(let ((yy (+ y 1)))
+			(if(eq (get-grid-value read-grid x yy) 1)
+				(defparameter *neighbours* (+ *neighbours* 1)))))
+	;; case: bottom-left
+	(if (> x 0)
+		(if (< y (- *height* 1))
+			(let ((xx (- x 1))(yy (+ y 1)))
+				(if(eq (get-grid-value read-grid xx yy) 1)
+					(defparameter *neighbours* (+ *neighbours* 1))))))
+
+	;; if cell is alive
+	(if (eq (get-grid-value read-grid x y) 1)
+		;; under populatiom
+		(if (< *neighbours* 2)
+			(list
+				(destroy-cell read-grid write-grid x y)
+				(return-from check-cell))))
+
+	;; if cell is alive
+	(if (eq (get-grid-value read-grid x y) 1)
+		;; over-population
+		(if (> *neighbours* 3)
+			(list
+				(destroy-cell read-grid write-grid x y)
+				(return-from check-cell))))
+
+	;; if cell is dead
+	(if (eq (get-grid-value read-grid x y) 0)
+		;; birth
+		(if (eq *neighbours* 3)
+			(list
+				(new-cell read-grid write-grid x y)
+				(return-from check-cell))))
+)
+
+(defun compute-successors-grid(read-grid write-grid)
 		(loop for i from 0 below *width* do
-			(loop for j from 0 below *height* do
-				(let ((cell get-grid-value grid i j))
-				;; Check the cell's' neighbourhood
-					(loop for k from 1 to 8
-						;; sum the neighbours bitmask
-						collect (if (> (logand cell (exp (2 k))) 0) (+ neighbours 1))
-								;; > 3 neighbours -> die ! (& go to the next cell)
-								(if (> neighbours 3) ((set-cell-state successor-grid i j cell 0) (return))))
-					;; < 3 neighbours -> die ! (else: 2 || 3 neighbours -> live)
-					(if (< neighbours 2) (set-cell-state successor-grid i j cell 0))
-					(if (< neighbours 4) (set-cell-state successor-grid i j cell 1))))))
-	;; TODO
-	;; Swap the grids ?
-	;; At least, return the modified (successor) grid
+			(loop for j from 0 below *height*
+				collect (check-cell read-grid write-grid i j))))
+
+(defun compute-transformation-grid(read-grid write-grid)
+	(loop for i from 0 below *width* do
+		(loop for j from 0 below *height* do
+			(list
+				(set-grid-value write-grid i j (+ (get-grid-value *transformation-grid* i j) (get-grid-value read-grid i j)))
+				)))
+)
+
+(defun swap-grid(gridA gridB)
+	(loop for i from 0 below *width* do
+		(loop for j from 0 below *height* do
+				(list
+					(set-grid-value gridA i j (get-grid-value gridB i j))
+				)))
 	)
+
+(defun move-next-generation(read-grid write-grid)
+	"Make a step toward the next generation of cells"
+	;; main function awaits the new grid 
+	(compute-successors-grid read-grid write-grid)
+	(swap-grid read-grid write-grid)
+	;grid
+)
 
 (defun draw-grid(g)
 	"Draw all grid points in the viewport"
@@ -189,12 +251,12 @@ optional arguments:
 	;; Viewport twist: factor to resize cells to fit viewport
 	(defparameter *vp-twist* (/ 800 *width*))
 
-	(set-grid-value *current-grid* 1 1 1)
-	(set-grid-value *current-grid* 3 4 1)
-	(set-grid-value *current-grid* 13 4 1)
-	(set-grid-value *current-grid* 3 14 1)
-	(set-grid-value *current-grid* 25 25 1)
-	(set-grid-value *current-grid* 49 49 1)
+	(new-cell *current-grid* *successors-grid* 24 24)
+	(new-cell *current-grid* *successors-grid* 24 25)
+	(new-cell *current-grid* *successors-grid* 25 24)
+	(new-cell *current-grid* *successors-grid* 15 24)
+	(new-cell *current-grid* *successors-grid* 15 25)
+	(new-cell *current-grid* *successors-grid* 15 26)
 
 	(sdl:with-init ()
 		;; (sdl:window *width* *height* :title-caption "Move a rectangle using the mouse")
@@ -203,12 +265,22 @@ optional arguments:
 		(sdl:with-events ()
 			(:quit-event () t
 						(sb-ext:exit))
-			(:key-down-event ()
-				(sdl:push-quit-event))
+			(:key-down-event (:key key)
+				(when (sdl:key= key :sdl-key-escape)
+					(sdl:push-quit-event))
+				(when (sdl:key= key :sdl-key-space)
+					(format t ">> next step~%")
+					;;(defparameter *current-grid* (move-next-generation *current-grid* *successors-grid*))
+					(move-next-generation *current-grid* *successors-grid*)
+					)
+				)
 			(:idle ()
+				;(move-next-generation *current-grid* *successors-grid*)
 ;; Set cell under cursor to 'alive' state on left click
 				(when (sdl:mouse-left-p)
-					(set-grid-value *current-grid* (sdl:mouse-x) (sdl:mouse-y) 1))
+					(new-cell *current-grid* *successors-grid* (sdl:mouse-x) (sdl:mouse-y)))
+					;;(set-grid-value *current-grid* (sdl:mouse-x) (sdl:mouse-y) 1))
+			;		(move-next-generation *current-grid* *successors-grid*)
 ;; Clear the display each game loop
 				(sdl:clear-display sdl:*black*)
 ;; Draw the currently processed grid
