@@ -63,10 +63,6 @@ optional arguments:
 
 	;; Init the grid
 	(let ((new_grid (make-row-array *width* *height*))) new_grid)
-	;;	(vector-push '8 (aref my_array 2)) my_array)
-	;;(vector-push 'x (aref my_array 2))
-	;; (defparameter *grid* (make-array '((list (integerp *width*) (integerp *height*)))))
-	;;						:initial-contents'0))
 )
 
 ;;;;;;;;;;;;;;;
@@ -85,15 +81,27 @@ optional arguments:
 ;;;	FUNCTIONS	;;;
 ;;;;;;;;;;;;;;;;;;;
 
-(defun set-grid-value(g x y v)
-	(vector-push v (aref g x)))
-
 (defun get-grid-value(g x y)
-	(let ((row x)
-			(col y))
-		(aref (aref g row) col)))
+	(aref (aref g x) y))
+
+(defun set-grid-value(g x y v)
+	(setf (aref (aref g x) y) v))
+;;	(vector-push v (aref (aref g x) y)))
+
 
 (defun parse-grid())
+
+(defun draw-grid(g)
+	"Draw all grid points in the viewport"
+	(loop for i from 0 below *width* do
+			(loop for j from 0 below *height*
+			;; Check if cell state is 'alive'
+				collect (if (> (logand (get-grid-value g i j) 1) 0)
+							(let ((x (* i *vp-twist*))
+								(y (* j *vp-twist*)))
+								(sdl:draw-box (sdl:rectangle-from-edges-* x y (+ x *vp-twist*) (+ y *vp-twist*))
+									:color sdl:*white*))
+							))))
 
 ;; (set-grid-value *current-grid* 2 0 "M"))
 ;; (format t "Blabla: ~S~%" (get-grid-value *current-grid* 2 0))
@@ -120,14 +128,27 @@ optional arguments:
 ;; different values without risk of collision, thus represent
 ;; all the different existing states.
 
+;; We want a 'cell perfect' viewport (no matter the zoom, the
+;; viewport/cell size should always draw full cells)
+
 ;; Main
 (defun main (argv)
 	(defparameter *random-color* sdl:*white*)
 	;; Size of the viewport: ratio is height / width of the grid
-	(defparameter *height* (* 800 *ratio*))
+	(defparameter *vp-height* (* 800 *ratio*))
+	;; Viewport twist: factor to resize cells to fit viewport
+	(defparameter *vp-twist* (/ 800 *width*))
+
+	(set-grid-value *current-grid* 1 1 1)
+	(set-grid-value *current-grid* 3 4 1)
+	(set-grid-value *current-grid* 13 4 1)
+	(set-grid-value *current-grid* 3 14 1)
+	(set-grid-value *current-grid* 25 25 1)
+	(set-grid-value *current-grid* 49 49 1)
+
 	(sdl:with-init ()
 		;; (sdl:window *width* *height* :title-caption "Move a rectangle using the mouse")
-		(sdl:window 800 *height* :title-caption "Carnifex: The Game of Life")
+		(sdl:window 800 *vp-height* :title-caption "Carnifex: The Game of Life")
 		(setf (sdl:frame-rate) 60)
 		(sdl:with-events ()
 			(:quit-event () t
@@ -135,14 +156,14 @@ optional arguments:
 			(:key-down-event ()
 				(sdl:push-quit-event))
 			(:idle ()
-;; Change the color of the box if the left mouse button is depressed
+;; Set cell under cursor to 'alive' state on left click
 				(when (sdl:mouse-left-p)
-					(setf *random-color* (sdl:color :r (random 255) :g (random 255) :b (random 255))))
+					(set-grid-value *current-grid* (sdl:mouse-x) (sdl:mouse-y) 1))
 ;; Clear the display each game loop
 				(sdl:clear-display sdl:*black*)
-;; Draw the box having a center at the mouse x/y coordinates.
-				(sdl:draw-box (sdl:rectangle-from-midpoint-* (sdl:mouse-x) (sdl:mouse-y) 20 20)
-																		:color *random-color*)
+;; Draw the currently processed grid
+				(draw-grid *current-grid*)
+
 ;; Redraw the display
 				(sdl:update-display)))))
 
