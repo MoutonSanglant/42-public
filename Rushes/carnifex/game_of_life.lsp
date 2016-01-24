@@ -1,13 +1,21 @@
 ;;(with-open-file (*standard-output* "/dev/null" :direction :output
 ;;												:if-exists :supersede))
 
-(defparameter *notice* "usage: sbc --load game_of_life.lsp [-h] width height~%")
+;; Convenient way to store the notice message
+(defparameter *notice* "usage: sbcl --load game_of_life.lsp [-h] width height~%
+positional arguments:
+	width			width of the grid~%
+	height			height of the grid~%
+optional arguments:
+	-h, --help		show this help message and exit~%"
+	)
 
-;; Prints an usage notice on incorrect arguments
+;; Prints the usage notice on incorrect arguments
 (defun error-args()
 	(format t *notice*)
 	(sb-ext:exit))
 
+;; Prints the usage notice on incorrect provided sizes
 (defun error-size()
 	(format t "Window size is too small (should be 10x10 at least)~%")
 	(sb-ext:exit))
@@ -32,20 +40,25 @@
 (defparameter *width* (parse-integer(car(cdr *posix-argv*))))
 (defparameter *height* (parse-integer(car(cdr (cdr *posix-argv*)))))
 
+;; Check if the size provided is within a correct range
 (if (< *width* 40) (error-size))
 (if (< *height* 40) (error-size))
 
+;; Load SDL library
 (ql:quickload "lispbuilder-sdl")
+;; (ql:quickload '(:lispbuilder-sdl))
 
 (defparameter *random-color* sdl:*white*)
 
 ;; Main
 (defun main (argv)
 	(sdl:with-init ()
-		(sdl:window *width* *height* :title-caption "Move a rectangle using the mouse")
+		;; (sdl:window *width* *height* :title-caption "Move a rectangle using the mouse")
+		(sdl:window 800 600 :title-caption "Carnifex: The Game of Life")
 		(setf (sdl:frame-rate) 60)
 		(sdl:with-events ()
-			(:quit-event () t)
+			(:quit-event () t
+						(sb-ext:exit))
 			(:key-down-event ()
 				(sdl:push-quit-event))
 			(:idle ()
@@ -60,6 +73,6 @@
 ;; Redraw the display
 				(sdl:update-display)))))
 
-
+;; Run
 (sb-int:with-float-traps-masked (:invalid :inexact :overflow)
 	(main *posix-argv*))
