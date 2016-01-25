@@ -18,6 +18,8 @@
 # include <unistd.h>
 # include <stdint.h>
 
+# define HEX_TABLE(x) "0123456789ABCDEF"[x]
+
 typedef struct	s_list
 {
 	void			*content;

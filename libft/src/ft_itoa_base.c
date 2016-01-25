@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/14 00:57:09 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/14 15:25:49 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/01/25 19:10:57 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,8 @@ static char		*to_base(uint64_t value, size_t base)
 	while (l > 0)
 	{
 		l--;
-		str[l] = value % base;
+		str[l] = HEX_TABLE(value % base);
 		value /= base;
-		str[l] += '0';
-		if (str[l] > '9')
-			str[l] += 'a' - 10 - '0';
 	}
 	return (str);
 }
