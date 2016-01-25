@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/07 12:52:16 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/22 18:10:17 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/01/25 19:44:42 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ char			*ft_itoa(int n)
 		str[0] = '-';
 	while (l-- > sign)
 	{
-		str[l] = (sign > 0) ? '0' - (n % 10) : '0' + (n % 10);
+		str[l] = (sign > 0) ? HEX_TABLE(-(n % 10)) : HEX_TABLE(n % 10);
 		n /= 10;
 	}
 	return (str);
