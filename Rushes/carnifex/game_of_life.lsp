@@ -20,37 +20,34 @@ optional arguments:
 	(format t "Window size is too small (should be 40x40 at least)~%")
 	(sb-ext:exit))
 
-(defun check-arguments()
+(defun check-arguments(arguments)
 	"Check passed arguments and call error for incorrect formating"
 	;; Fetch the arguments (discard the program's name')
-	(defparameter *arguments* (cdr *posix-argv*))
 
 	;; Check if there are exactly 2 arguments
-	(if (not (eq (length *arguments*) 2)) (error-args))
+	(if (not (eq (length arguments) 2)) (error-args))
 
 	;; Check if the arguments are strict integers and no trailing caracters
-	(if (parse-integer (car *arguments*) :junk-allowed t)
-		(if (parse-integer (reverse (car *arguments*)) :junk-allowed t)
-			(if (parse-integer (car (cdr *arguments*)) :junk-allowed t)
-				(if (not (parse-integer (reverse (car (cdr *arguments*))) :junk-allowed t))
+	(if (parse-integer (car arguments) :junk-allowed t)
+		(if (parse-integer (reverse (car arguments)) :junk-allowed t)
+			(if (parse-integer (car (cdr arguments)) :junk-allowed t)
+				(if (not (parse-integer (reverse (car (cdr arguments))) :junk-allowed t))
 					(error-args))
 				(error-args))
 			(error-args))
 		(error-args))
 	)
 
-(defun init-grid()
+(defun init-grid(width height)
 	"Initialize the cells grid"
 	;; Width & Height of the window
-	(defparameter *width* (parse-integer(car(cdr *posix-argv*))))
-	(defparameter *height* (parse-integer(car(cdr (cdr *posix-argv*)))))
 
 	;; Check if the size provided is within a correct range
-	(if (< *width* 40) (error-size))
-	(if (< *height* 40) (error-size))
+	(if (< width 40) (error-size))
+	(if (< height 40) (error-size))
 
 	;; Init the grid
-	(make-array (list *width* *height*)
+	(make-array (list width height)
 				:element-type 'array
 				:initial-element 0)
 )
@@ -60,13 +57,17 @@ optional arguments:
 ;;;;;;;;;;;;;;;
 
 ;; Preliminary checks
-(check-arguments)
-(defparameter *current-grid* (init-grid))
-(defparameter *successors-grid* (init-grid))
-(defparameter *transformation-grid* (init-grid))
+(check-arguments (cdr *posix-argv*))
+(defparameter *width* (parse-integer(car(cdr *posix-argv*))))
+(defparameter *height* (parse-integer(car(cdr (cdr *posix-argv*)))))
+(defparameter *current-grid* (init-grid *width* *height*))
+(defparameter *successors-grid* (init-grid *width* *height*))
 (defparameter *ratio* (/ *height* *width*))
 ;; Load SDL library
 (ql:quickload "lispbuilder-sdl")
+(defparameter *neighbours* 0)
+(defparameter *vp-height* (* 800 *ratio*))
+(defparameter *vp-twist* (/ 800 *width*))
 
 ;;;;;;;;;;;;;;;;;;;
 ;;;	FUNCTIONS	;;;
@@ -86,15 +87,12 @@ optional arguments:
 ;; Visual representation:
 ;;
 
-(defun new-cell(read-grid write-grid x y)
-	(format t "~S, ~S now alive !!~%" x y)
+(defun new-cell(write-grid x y)
 	(set-grid-value write-grid x y 1)
 )
 
-(defun destroy-cell(read-grid write-grid x y)
-	(format t "~S, ~S now dead !!~%" x y)
+(defun destroy-cell(write-grid x y)
 	(set-grid-value write-grid x y 0)
-
 )
 
 (defun check-cell(read-grid write-grid x y)
@@ -149,7 +147,7 @@ optional arguments:
 		;; under populatiom
 		(if (< *neighbours* 2)
 			(list
-				(destroy-cell read-grid write-grid x y)
+				(destroy-cell write-grid x y)
 				(return-from check-cell))))
 
 	;; if cell is alive
@@ -157,7 +155,7 @@ optional arguments:
 		;; over-population
 		(if (> *neighbours* 3)
 			(list
-				(destroy-cell read-grid write-grid x y)
+				(destroy-cell write-grid x y)
 				(return-from check-cell))))
 
 	;; if cell is dead
@@ -165,7 +163,7 @@ optional arguments:
 		;; birth
 		(if (eq *neighbours* 3)
 			(list
-				(new-cell read-grid write-grid x y)
+				(new-cell write-grid x y)
 				(return-from check-cell))))
 )
 
@@ -173,14 +171,6 @@ optional arguments:
 		(loop for i from 0 below *width* do
 			(loop for j from 0 below *height*
 				collect (check-cell read-grid write-grid i j))))
-
-(defun compute-transformation-grid(read-grid write-grid)
-	(loop for i from 0 below *width* do
-		(loop for j from 0 below *height* do
-			(list
-				(set-grid-value write-grid i j (+ (get-grid-value *transformation-grid* i j) (get-grid-value read-grid i j)))
-				)))
-)
 
 (defun swap-grid(gridA gridB)
 	(loop for i from 0 below *width* do
@@ -244,19 +234,17 @@ optional arguments:
 ;; Grid: the cell data set
 
 ;; Main
-(defun main (argv)
+(defun main ()
 	(defparameter *random-color* sdl:*white*)
 	;; Size of the viewport: ratio is height / width of the grid
-	(defparameter *vp-height* (* 800 *ratio*))
 	;; Viewport twist: factor to resize cells to fit viewport
-	(defparameter *vp-twist* (/ 800 *width*))
 
-	(new-cell *current-grid* *successors-grid* 24 24)
-	(new-cell *current-grid* *successors-grid* 24 25)
-	(new-cell *current-grid* *successors-grid* 25 24)
-	(new-cell *current-grid* *successors-grid* 15 24)
-	(new-cell *current-grid* *successors-grid* 15 25)
-	(new-cell *current-grid* *successors-grid* 15 26)
+	(new-cell *successors-grid* 24 24)
+	(new-cell *successors-grid* 24 25)
+	(new-cell *successors-grid* 25 24)
+	(new-cell *successors-grid* 15 24)
+	(new-cell *successors-grid* 15 25)
+	(new-cell *successors-grid* 15 26)
 
 	(sdl:with-init ()
 		;; (sdl:window *width* *height* :title-caption "Move a rectangle using the mouse")
@@ -278,7 +266,7 @@ optional arguments:
 				;(move-next-generation *current-grid* *successors-grid*)
 ;; Set cell under cursor to 'alive' state on left click
 				(when (sdl:mouse-left-p)
-					(new-cell *current-grid* *successors-grid* (sdl:mouse-x) (sdl:mouse-y)))
+					(new-cell *successors-grid* (sdl:mouse-x) (sdl:mouse-y)))
 					;;(set-grid-value *current-grid* (sdl:mouse-x) (sdl:mouse-y) 1))
 			;		(move-next-generation *current-grid* *successors-grid*)
 ;; Clear the display each game loop
@@ -292,4 +280,4 @@ optional arguments:
 
 ;; Run
 (sb-int:with-float-traps-masked (:invalid :inexact :overflow)
-	(main *posix-argv*))
+	(main))
