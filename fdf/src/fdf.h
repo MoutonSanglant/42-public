@@ -23,10 +23,40 @@
 # ifdef LINUX
 #  include "../includes/linux/mlx.h"
 #  include "../includes/linux/mlx_int.h"
+
+#  define KEY_NUMPAD_MORE	65451
+#  define KEY_NUMPAD_LESS	65453
+#  define KEY_Q		97
+#  define KEY_W		122
+#  define KEY_E		101
+#  define KEY_A		113
+#  define KEY_S		115
+#  define KEY_D		100
+#  define KEY_LEFT	65361
+#  define KEY_RIGHT	65363
+#  define KEY_UP	65362
+#  define KEY_DOWN	65364
+
 # else
 #  include "../includes/mlx.h"
 #  define KeyPressMask	(1L<<0)
 #  define KeyPress	2
+
+/*
+** the '+' key is under the '-' key on mac keyboard
+*/
+#  define KEY_NUMPAD_MORE	69
+#  define KEY_NUMPAD_LESS	78
+#  define KEY_Q		12
+#  define KEY_W		13
+#  define KEY_E		14
+#  define KEY_A		0
+#  define KEY_S		1
+#  define KEY_D		2
+#  define KEY_LEFT	123
+#  define KEY_RIGHT	124
+#  define KEY_UP	126
+#  define KEY_DOWN	125
 # endif
 
 # define ABS(x) (x < 0) ? -x : x
