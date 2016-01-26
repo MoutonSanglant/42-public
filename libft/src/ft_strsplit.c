@@ -6,33 +6,23 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/01 12:36:01 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/22 17:55:54 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/01/26 03:10:16 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static void		cleartable(char **table, int last_idx)
+static char		**set(char **table, int idx, char *str)
 {
 	int i;
 
 	i = 0;
-	while (i < last_idx)
-	{
-		free(table[i]);
-		table[i] = NULL;
-		i++;
-	}
-}
-
-static char		**set(char **table, int idx, char *str)
-{
 	table[idx] = str;
 	if (!table[idx])
 	{
-		cleartable(table, idx);
-		free(table);
-		table = NULL;
+		while (i < idx)
+			ft_memdel((void **)&table[i++]);
+		ft_memdel((void **)&table);
 	}
 	return (table);
 }
@@ -54,7 +44,9 @@ static char		**split(char const *s, char c, size_t count)
 								ft_strsub(s, 0, ft_strlen(s)));
 		if (words_table)
 		{
-			count += (*s) ? 1 : 0;
+			// TODO
+			// CRASH !!
+			//count += (*s) ? 1 : 0;
 			words_table[count] = NULL;
 		}
 		return (words_table);
