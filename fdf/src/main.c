@@ -215,6 +215,7 @@ int		main(int argc, char **argv)
 	int			a;
 	int			x;
 	int			y;
+	t_vert		**vertmap;
 
 	if (argc < 1)
 		return (1);
@@ -227,6 +228,32 @@ int		main(int argc, char **argv)
 	{
 		x = 800;
 		y = 600;
+	}
+
+	int vx, vy;
+
+	vx = 0;
+	vy = 0;
+	if (argc > 3)
+	{
+		int i, j;
+		ft_putendl("======== Original file =======");
+
+		vertmap = get_vertmap_from_file(argv[3], &vx, &vy);
+		ft_putendl("======== Parsed file =======");
+		i = 0;
+		while (i < vy)
+		{
+			j = 0;
+			while (j < vx)
+			{
+				ft_putnbr(vertmap[i][j].coord.z);
+				ft_putchar(' ');
+				j++;
+			}
+			ft_putchar('\n');
+			i++;
+		}
 	}
 
 	param = (t_mlx_sess *)ft_memalloc(sizeof(t_mlx_sess));
@@ -268,7 +295,10 @@ int		main(int argc, char **argv)
 	**	GRID
 	*/
 	param->grid = (t_grid *)ft_memalloc(sizeof(t_grid));
-	init_grid(param->grid, 10, 10);
+	if (vertmap)
+		init_grid_from_vertmap(param->grid, vertmap, vx, vy);
+	else
+		init_grid(param->grid, 10, 10);
 	param->col = 0x00ffffff;
 
 	/*
