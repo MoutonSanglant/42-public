@@ -6,13 +6,14 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/26 01:00:57 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/26 01:00:57 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/01/26 15:52:34 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FDF_H
 # define FDF_H
 
+# include <fcntl.h>
 # include <unistd.h>
 # include <stdio.h>
 # include <stdlib.h>
