@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/14 00:57:09 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/25 19:10:57 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/01/26 18:44:45 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,10 @@ char			*ft_itoa_base(int64_t value, int base)
 	else if (base == 10)
 		str = ft_itoa(value);
 	else
+	{
+		if (value < 0)
+			value = -value;
 		str = to_base((uint64_t)value, (size_t)base);
+	}
 	return (str);
 }
