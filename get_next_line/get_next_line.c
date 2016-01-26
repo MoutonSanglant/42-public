@@ -17,6 +17,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 /*   Updated: 2016/01/13 16:06:56 by tdefresn         ###   ########.fr       */
 >>>>>>> c151902... gnl fixes: 'works with missing \n' + 'bad return value'
 =======
@@ -28,6 +29,9 @@
 =======
 /*   Updated: 2016/01/14 16:27:36 by tdefresn         ###   ########.fr       */
 >>>>>>> 93f1338... gnl fix & norm
+=======
+/*   Updated: 2016/01/26 01:00:02 by tdefresn         ###   ########.fr       */
+>>>>>>> ecd3c9e... get_next_line: return number of readen characters
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +123,12 @@ static int		to_eol(t_list **s, t_parser *p, size_t *total_bcount)
 	return (0);
 }
 
+/*
+**	To allow GNL to return characters count, switch
+**	-- r = (total_bcount > 0) ? 1 : 0;
+**	++ r = total_bcount;
+**
+*/
 static int		get_fd_line(char **line, t_list **s_parsers,
 <<<<<<< HEAD
 							int fd, t_list **strings)
@@ -149,7 +159,7 @@ static int		get_fd_line(char **line, t_list **s_parsers,
 	if (!(*line = (char *)ft_memalloc(total_bcount + 1)))
 		return (-1);
 	*line[0] = '\0';
-	r = (total_bcount > 0) ? 1 : 0;
+	r = total_bcount;
 	return (r);
 }
 

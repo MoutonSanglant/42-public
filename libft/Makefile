@@ -15,8 +15,9 @@ NAME	= libft.a
 .PHONY: all clean fclean re
 .SILENT: $(OBJ)
 
-CC	= gcc
-CFLAGS	= -Wall -Werror -Wextra -D LIBFT_EXTRA -D DEBUG
+CC		= gcc
+CFLAGS	= -Wall -Werror -Wextra -D LIBFT_EXTRA
+DFLAGS	= -g -O0 -D DEBUG
 
 SRC_PREFIX = ./src/
 
@@ -38,6 +39,9 @@ SRC := $(addprefix $(SRC_PREFIX)ft_, $(SRC))
 OBJ = $(SRC:.c=.o)
 
 all: $(NAME)
+
+debug: CFLAGS += $(DFLAGS)
+debug: re
 
 $(NAME): $(OBJ)
 	@echo "making $@"
