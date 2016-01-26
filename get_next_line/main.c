@@ -28,7 +28,8 @@ int		main(int argc, char **argv)
 		{
 			if (r > 0)
 			{
-				ft_putstr("stdin: ");
+				ft_putnbr(r);
+				ft_putendl(" readen characters on stdin: ");
 				ft_putendl(line);
 				ft_memdel((void **)&line);
 			}

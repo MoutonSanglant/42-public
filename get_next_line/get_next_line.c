@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/13 14:44:53 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/14 16:27:36 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/01/26 01:00:02 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,12 @@ static int		read_until_eol(t_list **s, t_parser *p, size_t *total_bcount)
 	return (0);
 }
 
+/*
+**	To allow GNL to return characters count, switch
+**	-- r = (total_bcount > 0) ? 1 : 0;
+**	++ r = total_bcount;
+**
+*/
 static int		get_fd_line(char **line, t_list **s_parsers,
 							int fd, t_list **strings)
 {
@@ -120,7 +126,7 @@ static int		get_fd_line(char **line, t_list **s_parsers,
 	if (!(*line = (char *)ft_memalloc(total_bcount + 1)))
 		return (-1);
 	*line[0] = '\0';
-	r = (total_bcount > 0) ? 1 : 0;
+	r = total_bcount;
 	return (r);
 }
 
