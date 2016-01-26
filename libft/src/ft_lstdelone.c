@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/03 10:30:28 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/26 03:33:56 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/01/26 22:50:26 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 void	ft_lstdelone(t_list **alst, void (*del)(void *, size_t))
 {
-	if (!alst || del)
+	if (!alst || !del)
 	{
 		ft_putendl("ft_lstdelone returned the following error:\n\
 					sent parameter is NULL.\n\
@@ -30,7 +30,6 @@ void	ft_lstdelone(t_list **alst, void (*del)(void *, size_t))
 					Verify your code, it is unsafe !!!");
 		return ;
 	}
-
 	del((*alst)->content, (*alst)->content_size);
 	ft_memdel((void **)alst);
 }
