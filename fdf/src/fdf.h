@@ -1,11 +1,26 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   fdf.h                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2016/01/26 01:00:57 by tdefresn          #+#    #+#             */
+/*   Updated: 2016/01/26 01:00:57 by tdefresn         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef FDF_H
 # define FDF_H
 
+# include <unistd.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <math.h>
 
 # include <includes/libft.h>
+
+# define BUFF_SIZE 32
 
 /*
 ** BONUS
@@ -65,20 +80,22 @@
 # define RAD(x) (x * M_PI / 180.0)
 
 //typedef float t_matrix4[4][4];
-typedef float t_matrix4[16];
+typedef float t_matrix4[16]; // t_mat4x4
 
 typedef struct	s_vector2
 {
 	float		x;
 	float		y;
-}				t_vector2;
+}				t_vector2; // t_vec2f
+
+// t_vec2i
 
 typedef struct	s_vector3
 {
 	float		x;
 	float		y;
 	float		z;
-}				t_vector3;
+}				t_vector3; // t_vec3f
 
 typedef struct	s_vector4
 {
@@ -86,14 +103,22 @@ typedef struct	s_vector4
 	float		y;
 	float		z;
 	float		w;
-}				t_vector4;
+}				t_vector4; // t_vec4f
 
 typedef struct	s_triangle
 {
 	t_vector3	a;
 	t_vector3	b;
 	t_vector3	c;
-}				t_triangle;
+}				t_triangle; // t_tri
+
+// typedef t_vec3f[3] t_tri;
+
+typedef struct	s_vert
+{
+	t_vector3	coord;
+	int			color;
+}				t_vert;
 
 typedef struct s_grid
 {
@@ -138,6 +163,16 @@ typedef struct	s_mlx_sess
 	float		canvasR; // canvas value
 }				t_mlx_sess;
 
+/*
+**	FILES
+*/
+
+t_vert	**get_vertmap_from_file(char *path, int *x, int *y);
+
+/*
+**	DRAWING
+*/
+
 void	draw_line(t_mlx_sess *, t_vector2 *, t_vector2 *);
 void	draw_square(t_mlx_sess *, int color, t_vector2 *, t_vector2 *);
 //void	draw_line(t_mlx_sess *, t_vector3, t_vector3);
@@ -147,6 +182,7 @@ void	clear_canvas(t_mlx_sess *, int);
 
 void	cube(t_triangle *);
 void	init_grid(t_grid *, int, int);
+void	init_grid_from_vertmap(t_grid *, t_vert **vertmap, int, int);
 void	draw_3dgrid(t_mlx_sess *);
 
 void	set_image_pixel(t_mlx_sess *p, t_image * img, int color, int x, int y);
@@ -170,6 +206,18 @@ void	orthographic_projection_matrix4(t_matrix4 *, t_vector2,	int, int);
 void	transpose_matrix4(t_matrix4 *m);
 void	matrix4_product(t_matrix4 *, t_matrix4 *);
 t_vector3	apply_matrix4(t_vector3, t_matrix4 *);
+
+/*
+**	GNL
+*/
+typedef struct	s_parser
+{
+	int		fd;
+	long	bs;
+	char	*buf;
+}				t_parser;
+
+int				get_next_line(int const fd, char **line);
 
 # ifdef DEBUG
 void	output_image_info(t_image *image);

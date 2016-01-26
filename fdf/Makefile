@@ -4,6 +4,7 @@ CC		= gcc
 CFLAGS	= -Wall -Werror -Wextra -I./libft
 LDFLAGS	= -L./lib -L./libft
 LDLIBS	= -lft -lm
+DFLAGS	= -g -O0 -D DEBUG
 
 ARCH	= $(shell uname -m)
 OS		= $(shell uname -s)
@@ -23,7 +24,7 @@ endif
 SRC_PREFIX	= ./src/
 
 SRC	= main draw draw_3dgrid set_image_pixel init_grid \
-	matrix matrix_math
+	matrix matrix_math get_next_line get_vertmap_from_file
 
 SRC := $(addsuffix .c, $(SRC))
 SRC := $(addprefix $(SRC_PREFIX), $(SRC))
@@ -35,7 +36,7 @@ OBJ = $(SRC:.c=.o)
 
 all: libft $(NAME)
 
-debug: CFLAGS += -D DEBUG -g -O0
+debug: CFLAGS += $(DFLAGS)
 debug: fclean debug_compile
 debug_compile: $(OBJ) $(SRC_PREFIX)debug.o
 	@echo "call to 'debug' rule"

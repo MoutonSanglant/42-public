@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/18 20:00:56 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/21 01:40:45 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/01/26 02:52:44 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,73 @@ void	cube(t_triangle *cube)
 	cube[11].a = points[1];
 	cube[11].b = points[5];
 	cube[11].c = points[4];
+}
+
+void	init_grid_from_vertmap(t_grid *grid, t_vert **vertmap, int width, int height)
+{
+	int x;
+	int y;
+	int i;
+
+	i = 0;
+	x = 0;
+	y = 0;
+	grid->width = width;
+	grid->height = height;
+	grid->triangles = (t_triangle *)ft_memalloc(sizeof(t_triangle) * width * height * 2);
+	while (x < width)
+	{
+		while (y < height)
+		{
+			grid->triangles[i].a.x = (float)(1.f * x);
+			grid->triangles[i].a.y = (float)(1.f * y);
+			grid->triangles[i].a.z = (float)vertmap[y][x].coord.z * 0.15f;
+			grid->triangles[i].b.x = (float)(1.f * x + 1.f);
+			grid->triangles[i].b.y = (float)(1.f * y);
+			ft_putchar('@');
+			ft_putnbr(x);
+			ft_putchar('y');
+			ft_putnbr(y);
+			ft_putchar('#');
+			ft_putnbr(width);
+			ft_putchar('\n');
+			if (x + 1 < width)
+				grid->triangles[i].b.z = (float)vertmap[y][x + 1].coord.z * 0.15f;
+			else
+				grid->triangles[i].b.z = 0.f;
+			grid->triangles[i].c.x = (float)(1.f * x);
+			grid->triangles[i].c.y = (float)(1.f * y + 1.f);
+			if (y + 1 < height)
+				grid->triangles[i].c.z = (float)vertmap[y][x + 1].coord.z * 0.15f;
+			else
+				grid->triangles[i].c.z = 0.f;
+			i++;
+
+			grid->triangles[i].a.x = (float)(1.f * x + 1.f);
+			grid->triangles[i].a.y = (float)(1.f * y);
+			if (x + 1 < width)
+				grid->triangles[i].a.z = (float)vertmap[y][x].coord.z * 0.15f;
+			else
+				grid->triangles[i].a.z = 0.f;
+			grid->triangles[i].b.x = (float)(1.f * x + 1.f);
+			grid->triangles[i].b.y = (float)(1.f * y + 1.f);
+			if (x + 1 < width && y + 1 < height)
+				grid->triangles[i].b.z = (float)vertmap[y + 1][x].coord.z * 0.15f;
+			else
+				grid->triangles[i].b.z = 0.f;
+			grid->triangles[i].c.x = (float)(1.f * x);
+			grid->triangles[i].c.y = (float)(1.f * y + 1.f);
+			if (y + 1 < height)
+				grid->triangles[i].c.z = (float)vertmap[y][x + 1].coord.z * 0.15f;
+			else
+				grid->triangles[i].c.z = 0.f;
+			i++;
+			y++;
+		}
+		y = 0;
+		x++;
+	}
+
 }
 
 void	init_grid(t_grid *grid, int width, int height)
