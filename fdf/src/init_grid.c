@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/18 20:00:56 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/27 13:53:31 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/01/27 21:59:42 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,10 +160,10 @@ void	init_grid(t_grid *grid, int width, int height)
 	{
 		while(y < height)
 		{
-			grid->triangles[i][0].x = (float)(1.f * x);
-			grid->triangles[i][0].y = (float)(1.f * y);
+			grid->triangles[i][0].x = (float)(1.f * x + 1.f);
+			grid->triangles[i][0].y = (float)(1.f * y + 1.f);
 			grid->triangles[i][0].z = 0.f;
-			grid->triangles[i][1].x = (float)(1.f * x + 1.f);
+			grid->triangles[i][1].x = (float)(1.f * x);
 			grid->triangles[i][1].y = (float)(1.f * y);
 			grid->triangles[i][1].z = 0.f;
 			grid->triangles[i][2].x = (float)(1.f * x);
@@ -172,13 +172,13 @@ void	init_grid(t_grid *grid, int width, int height)
 			i++;
 
 			grid->triangles[i][0].x = (float)(1.f * x + 1.f);
-			grid->triangles[i][0].y = (float)(1.f * y);
+			grid->triangles[i][0].y = (float)(1.f * y + 1.f);
 			grid->triangles[i][0].z = 0.f;
 			grid->triangles[i][1].x = (float)(1.f * x + 1.f);
-			grid->triangles[i][1].y = (float)(1.f * y + 1.f);
+			grid->triangles[i][1].y = (float)(1.f * y);
 			grid->triangles[i][1].z = 0.f;
 			grid->triangles[i][2].x = (float)(1.f * x);
-			grid->triangles[i][2].y = (float)(1.f * y + 1.f);
+			grid->triangles[i][2].y = (float)(1.f * y);
 			grid->triangles[i][2].z = 0.f;
 			i++;
 			y++;
