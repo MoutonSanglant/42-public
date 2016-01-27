@@ -3,7 +3,7 @@
 int		keydown(int key, void *p)
 {
 	t_mlx_sess	*sess;
-	t_matrix4	trans;
+	t_mat4x4	trans;
 
 	identity_matrix4(&trans);
 	sess = (t_mlx_sess *)p;
@@ -22,7 +22,7 @@ int		keydown(int key, void *p)
 		rotationX_matrix4(&trans, RAD(-3));
 	else if (key == KEY_NUMPAD_MORE)
 	{
-		t_vector3 v;
+		t_vec3f v;
 		v.x = 0;
 		v.y = 0;
 		v.z = 40;
@@ -30,7 +30,7 @@ int		keydown(int key, void *p)
 	}
 	else if (key == KEY_NUMPAD_LESS)
 	{
-		t_vector3 v;
+		t_vec3f v;
 		v.x = 0;
 		v.y = 0;
 		v.z = -40;
@@ -38,7 +38,7 @@ int		keydown(int key, void *p)
 	}
 	else if (key == KEY_LEFT)
 	{
-		t_vector3 v;
+		t_vec3f v;
 		v.x = -40;
 		v.y = 0;
 		v.z = 0;
@@ -46,7 +46,7 @@ int		keydown(int key, void *p)
 	}
 	else if (key == KEY_UP)
 	{
-		t_vector3 v;
+		t_vec3f v;
 		v.x = 0;
 		v.y = -40;
 		v.z = 0;
@@ -54,7 +54,7 @@ int		keydown(int key, void *p)
 	}
 	else if (key == KEY_RIGHT)
 	{
-		t_vector3 v;
+		t_vec3f v;
 		v.x = 40;
 		v.y = 0;
 		v.z = 0;
@@ -62,7 +62,7 @@ int		keydown(int key, void *p)
 	}
 	else if (key == KEY_DOWN)
 	{
-		t_vector3 v;
+		t_vec3f v;
 		v.x = 0;
 		v.y = 40;
 		v.z = 0;
@@ -107,32 +107,7 @@ int		keypress(int key, void *p)
 #ifdef DEBUG
 static void	draw_gui(t_mlx_sess *p)
 {
-	static char *camera[3];
-
-	if (!camera[0])
-	{
-		/*
-		** MEMORY IS DEFINETLY LOST !!
-		*/
-		camera[0] = (char *)ft_memalloc(sizeof(char) * 20);
-		camera[0] = ft_strcpy(camera[0], "  x: ");
-		camera[1] = (char *)ft_memalloc(sizeof(char) * 20);
-		camera[1] = ft_strcpy(camera[1], "  y: ");
-		camera[2] = (char *)ft_memalloc(sizeof(char) * 20);
-		camera[2] = ft_strcpy(camera[2], "  z: ");
-	}
-
-	mlx_string_put(p->sess, p->win, 5, 15, 0x00ffffff, "DEBUG CONSOLE");
-	mlx_string_put(p->sess, p->win, 5, 30, 0x00ffffff, "Camera");
-	ft_strncpy(&camera[0][5], ft_itoa((int)(*p->world)[3]), 3);
-	camera[0][8] = '\0';
-	mlx_string_put(p->sess, p->win, 5, 45, 0x00ffffff, camera[0]);
-	ft_strncpy(&camera[1][5], ft_itoa((int)(*p->world)[7]), 3);
-	camera[1][8] = '\0';
-	mlx_string_put(p->sess, p->win, 5, 60, 0x00ffffff, camera[1]);
-	ft_strncpy(&camera[2][5], ft_itoa((int)(*p->world)[11]), 3);
-	camera[2][8] = '\0';
-	mlx_string_put(p->sess, p->win, 5, 75, 0x00ffffff, camera[2]);
+	draw_debug_gui(p);
 }
 #else
 static void	draw_gui(t_mlx_sess *p)
@@ -205,8 +180,6 @@ static void	post(t_image *image)
 }
 #endif
 
-#include <stdio.h>
-
 int		main(int argc, char **argv)
 {
 	t_mlx_sess	*param;
@@ -234,28 +207,9 @@ int		main(int argc, char **argv)
 
 	vx = 0;
 	vy = 0;
+	vertmap = NULL;
 	if (argc > 3)
-	{
-		int i, j;
-		ft_putendl("======== Original file =======");
-
 		vertmap = get_vertmap_from_file(argv[3], &vx, &vy);
-		ft_putendl("======== Parsed file =======");
-		i = 0;
-		while (i < vy)
-		{
-			j = 0;
-			while (j < vx)
-			{
-				ft_putnbr(vertmap[i][j].coord.z);
-				ft_putchar(' ');
-				j++;
-			}
-			ft_putchar('\n');
-			i++;
-		}
-	}
-
 	param = (t_mlx_sess *)ft_memalloc(sizeof(t_mlx_sess));
 	if (!(param->sess = mlx_init()))
 	{
@@ -298,28 +252,31 @@ int		main(int argc, char **argv)
 	if (vertmap)
 		init_grid_from_vertmap(param->grid, vertmap, vx, vy);
 	else
+	{
+		ft_putendl("no input file !");
 		init_grid(param->grid, 10, 10);
+	}
 	param->col = 0x00ffffff;
 
 	/*
 	**	CUBE
 	*/
-	param->cube = (t_triangle *)ft_memalloc(sizeof(t_triangle) * 12);
+	param->cube = (t_tri *)ft_memalloc(sizeof(t_tri) * 12);
 	cube(param->cube);
 
-	t_matrix4	tmp;
-	t_vector3 v;
+	t_mat4x4	tmp;
+	t_vec3f v;
 
 	// World
-	param->world = (t_matrix4 *)ft_memalloc(sizeof(t_matrix4));
+	param->world = (t_mat4x4 *)ft_memalloc(sizeof(t_mat4x4));
 	identity_matrix4(param->world);
 
-	param->view = (t_matrix4 *)ft_memalloc(sizeof(t_matrix4));
+	param->view = (t_mat4x4 *)ft_memalloc(sizeof(t_mat4x4));
 	identity_matrix4(param->view);
 	// Camera needs to look down (along the negative 'Z-axis')
 	rotationX_matrix4(&tmp, RAD(90));
 	matrix4_product(param->view, &tmp);
-	param->worldToCamera = (t_matrix4 *)ft_memalloc(sizeof(t_matrix4));
+	param->worldToCamera = (t_mat4x4 *)ft_memalloc(sizeof(t_mat4x4));
 	inverse_matrix4(param->view, param->worldToCamera);
 	v.x = 0;
 	v.y = 0;
@@ -348,10 +305,10 @@ int		main(int argc, char **argv)
 	rotationZ_matrix4(&tmp, RAD(-10));
 	matrix4_product(param->world, &tmp);
 
-	param->projection = (t_matrix4 *)ft_memalloc(sizeof(t_matrix4));
+	param->projection = (t_mat4x4 *)ft_memalloc(sizeof(t_mat4x4));
 
 	// Orthographic
-	t_vector2 size;
+	t_vec2f size;
 	size.x = 1;
 	size.y = 1;
 	orthographic_projection_matrix4(param->projection, size, 5, 1000);
@@ -363,7 +320,7 @@ int		main(int argc, char **argv)
 	param->far = 1000;
 	perspective_projection_matrix4(param->projection, FOV, x/y, param->near, param->far);
 
-	//t_matrix4 camera = { 0.718762, 0.615033, -0.324214, 0, -0.393732, 0.744416, 0.539277, 0, 0.573024, -0.259959, 0.777216, 0, 0.526967, 1.254234, -2.53215, 1};
+	//t_mat4x4 camera = { 0.718762, 0.615033, -0.324214, 0, -0.393732, 0.744416, 0.539277, 0, 0.573024, -0.259959, 0.777216, 0, 0.526967, 1.254234, -2.53215, 1};
 	//param->view = &camera;
 	//param->canvasS = tan(FOV * .5f) * param->near;
 	param->aspect = (float)param->width / (float)param->height;

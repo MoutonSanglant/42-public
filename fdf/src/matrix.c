@@ -6,13 +6,13 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/18 21:09:30 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/20 20:38:42 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/01/27 12:46:14 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-void	identity_matrix4(t_matrix4 *m)
+void	identity_matrix4(t_mat4x4 *m)
 {
 /*
 	(*m)[0][0] = 1;
@@ -51,7 +51,7 @@ void	identity_matrix4(t_matrix4 *m)
 
 }
 
-void	inverse_matrix4(t_matrix4 *m, t_matrix4 *invOut)
+void	inverse_matrix4(t_mat4x4 *m, t_mat4x4 *invOut)
 {
 	float inv[16];
 	float	det;
@@ -189,8 +189,8 @@ void	inverse_matrix4(t_matrix4 *m, t_matrix4 *invOut)
 ** 0 0 1 Z
 ** 0 0 0 1
 */
-//t_matrix4	*translate_matrix4(t_matrix4 *A[4][4], t_matrix4 *B[4][4])
-void	translation_matrix4(t_matrix4 *m, t_vector3 v)
+//t_mat4x4	*translate_matrix4(t_mat4x4 *A[4][4], t_mat4x4 *B[4][4])
+void	translation_matrix4(t_mat4x4 *m, t_vec3f v)
 {
 	identity_matrix4(m);
 	/*
@@ -213,8 +213,8 @@ void	translation_matrix4(t_matrix4 *m, t_vector3 v)
 ** 0 0 Z 0
 ** 0 0 0 1
 */
-//t_matrix4	*scale_matrix4(t_matrix4 *A[4][4], t_matrix4 *B[4][4])
-void	scaling_matrix4(t_matrix4 *m, t_vector3 v)
+//t_mat4x4	*scale_matrix4(t_mat4x4 *A[4][4], t_mat4x4 *B[4][4])
+void	scaling_matrix4(t_mat4x4 *m, t_vec3f v)
 {
 	identity_matrix4(m);
 	(*m)[0] = v.x;
@@ -250,8 +250,8 @@ void	scaling_matrix4(t_matrix4 *m, t_vector3 v)
 **
 ** @ is the angle of the rotation
 */
-//t_matrix4	*rotate_matrix4(t_matrix4 *A, t_matrix4 *B)
-void	rotationX_matrix4(t_matrix4 *m, float alpha)
+//t_mat4x4	*rotate_matrix4(t_mat4x4 *A, t_mat4x4 *B)
+void	rotationX_matrix4(t_mat4x4 *m, float alpha)
 {
 	identity_matrix4(m);
 	/*
@@ -266,7 +266,7 @@ void	rotationX_matrix4(t_matrix4 *m, float alpha)
 	(*m)[10] = cosf(alpha);
 }
 
-void	rotationY_matrix4(t_matrix4 *m, float alpha)
+void	rotationY_matrix4(t_mat4x4 *m, float alpha)
 {
 	identity_matrix4(m);
 	/*
@@ -281,7 +281,7 @@ void	rotationY_matrix4(t_matrix4 *m, float alpha)
 	(*m)[10] = cosf(alpha);
 }
 
-void	rotationZ_matrix4(t_matrix4 *m, float alpha)
+void	rotationZ_matrix4(t_mat4x4 *m, float alpha)
 {
 	identity_matrix4(m);
 	/*
@@ -307,7 +307,7 @@ void	rotationZ_matrix4(t_matrix4 *m, float alpha)
 ** N is Near viewing plane distance
 ** F is Far viewing plane distance
 */
-void	perspective_projection_matrix4(t_matrix4 *m, float angleOfView, float vp,
+void	perspective_projection_matrix4(t_mat4x4 *m, float angleOfView, float vp,
 										int far, int near)
 {
 	float scale;
@@ -331,7 +331,7 @@ void	perspective_projection_matrix4(t_matrix4 *m, float angleOfView, float vp,
 ** N is Near viewing plane distance
 ** F is Far viewing plane distance
 */
-void	orthographic_projection_matrix4(t_matrix4 *m, t_vector2 size,
+void	orthographic_projection_matrix4(t_mat4x4 *m, t_vec2f size,
 										int far, int near)
 {
 	identity_matrix4(m);

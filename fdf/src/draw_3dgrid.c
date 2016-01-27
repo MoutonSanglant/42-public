@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/18 17:52:02 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/22 14:09:39 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/01/27 12:55:26 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 #include <stdio.h>
 
-static int		rasterize_coord(t_mlx_sess *p, t_vector3 in, t_vector2 *out)
+static int		rasterize_coord(t_mlx_sess *p, t_vec3f in, t_vec2f *out)
 {
 	// IMPORTANT NOTE
 	// I don't handle the FIT / OVERSCAN solutions to scale
@@ -26,7 +26,7 @@ static int		rasterize_coord(t_mlx_sess *p, t_vector3 in, t_vector2 *out)
 	// Yet, my goal now is to achieve to implement the
 	// "projection matrix", certainly calling it inside this function
 
-	t_vector3 NDCout;
+	t_vec3f NDCout;
 
 	// Coords are in screen coodinate
 	// 1 - Pass to NDC coordinates
@@ -79,7 +79,7 @@ static int		rasterize_coord(t_mlx_sess *p, t_vector3 in, t_vector2 *out)
 	*/
 }
 
-static int draw_point(t_mlx_sess *p, t_vector3 vertex, t_vector2 *point, t_matrix4 *mvp)
+static int draw_point(t_mlx_sess *p, t_vec3f vertex, t_vec2f *point, t_mat4x4 *mvp)
 {
 	vertex = apply_matrix4(vertex, mvp);
 	vertex = apply_matrix4(vertex, p->worldToCamera);
@@ -112,19 +112,19 @@ static int draw_point(t_mlx_sess *p, t_vector3 vertex, t_vector2 *point, t_matri
 	return (1);
 }
 
-//static void	draw_joints(t_mlx_sess *p, t_vector3 v, t_vector3 v2, t_matrix4 *p->world, t_matrix4 *W2C)
-static void		draw_triangle(t_mlx_sess *p, t_triangle *triangle, t_matrix4 *mvp)
+//static void	draw_joints(t_mlx_sess *p, t_vec3f v, t_vec3f v2, t_mat4x4 *p->world, t_mat4x4 *W2C)
+static void		draw_triangle(t_mlx_sess *p, t_tri *triangle, t_mat4x4 *mvp)
 {
-	t_vector3	a;
-	t_vector3	b;
-	t_vector3	c;
-	//t_vector3	vertices[3];
-	t_vector2	pixels[3];
+	t_vec3f	a;
+	t_vec3f	b;
+	t_vec3f	c;
+	//t_vec3f	vertices[3];
+	t_vec2f	pixels[3];
 	int a_test, b_test, c_test;
 
-	a = triangle->a;
-	b = triangle->b;
-	c = triangle->c;
+	a = (*triangle)[0];
+	b = (*triangle)[1];
+	c = (*triangle)[2];
 	a_test = draw_point(p, a, &pixels[0], mvp);
 	b_test = draw_point(p, b, &pixels[1], mvp);
 	c_test = draw_point(p, c, &pixels[2], mvp);
@@ -179,20 +179,20 @@ static void		draw_triangle(t_mlx_sess *p, t_triangle *triangle, t_matrix4 *mvp)
 
 void	draw_3dgrid(t_mlx_sess *p)
 {
-//	static t_vector3	from;
-//	static t_vector3	to;
+//	static t_vec3f	from;
+//	static t_vec3f	to;
 
-	t_matrix4	mvp;
-	t_matrix4	model;
-	static t_matrix4	*trans = NULL;
+	t_mat4x4	mvp;
+	t_mat4x4	model;
+	static t_mat4x4	*trans = NULL;
 	static int r = 0;
-	t_matrix4	rot;
-	t_matrix4	tmp;
-	t_vector3 s;
-	t_vector3 o;
-	//t_vector3 ox;
-	//t_vector3 oy;
-	//t_vector3 oz;
+	t_mat4x4	rot;
+	t_mat4x4	tmp;
+	t_vec3f s;
+	t_vec3f o;
+	//t_vec3f ox;
+	//t_vec3f oy;
+	//t_vec3f oz;
 
 	identity_matrix4(&model);
 	// Scale
@@ -250,7 +250,7 @@ void	draw_3dgrid(t_mlx_sess *p)
 	p->col = 0x00ffffff;
 	if (!trans)
 	{
-		trans = (t_matrix4 *)malloc(sizeof(t_matrix4));
+		trans = (t_mat4x4 *)malloc(sizeof(t_mat4x4));
 		identity_matrix4(trans);
 	}
 	identity_matrix4(&model);
@@ -293,7 +293,7 @@ void	draw_3dgrid(t_mlx_sess *p)
 	//ft_putendl(" (should be -1)");
 	// Camera (world-to-camera)
 	// we need the inverse of View
-	//t_matrix4 iview;
+	//t_mat4x4 iview;
 
 	//inverse_matrix4(p->view, &iview);
 	//matrix4_product(&mvp, &iview);

@@ -41,7 +41,7 @@ debug: fclean debug_compile
 debug_compile: $(OBJ) $(SRC_PREFIX)debug.o
 	@echo "call to 'debug' rule"
 	$(CC) -o $(NAME) $^ $(CFLAGS) $(LDFLAGS) $(LDLIBS) -D BONUS
-	/bin/rm -f $(SRC_PREFIX)debug.o
+#	/bin/rm -f $(SRC_PREFIX)debug.o
 
 $(NAME): $(OBJ)
 	@echo "making $@"

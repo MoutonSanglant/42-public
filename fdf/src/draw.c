@@ -6,13 +6,13 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/18 17:35:36 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/22 13:54:05 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/01/27 12:46:14 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-void	draw_line(t_mlx_sess *p, t_vector2 *from, t_vector2 *to)
+void	draw_line(t_mlx_sess *p, t_vec2f *from, t_vec2f *to)
 {
 	t_image	*img;
 	int x1 = (int)from->x;
@@ -81,8 +81,8 @@ void	draw_line(t_mlx_sess *p, t_vector2 *from, t_vector2 *to)
 
 void	clear_canvas(t_mlx_sess *p, int clear_color)
 {
-	t_vector2 from;
-	t_vector2 to;
+	t_vec2f from;
+	t_vec2f to;
 
 	from.x = 1;
 	from.y = 1;
@@ -91,7 +91,7 @@ void	clear_canvas(t_mlx_sess *p, int clear_color)
 	draw_square(p, mlx_get_color_value(p->sess, clear_color), &from, &to);
 }
 
-void	draw_square(t_mlx_sess *p, int color, t_vector2 *from, t_vector2 *to)
+void	draw_square(t_mlx_sess *p, int color, t_vec2f *from, t_vec2f *to)
 {
 	int		x;
 	int		y;

@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/25 23:38:14 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/26 15:54:16 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/01/27 13:36:41 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,9 +73,6 @@ static t_vert	*get_vertex_line(char *line, int line_nbr, int *count)
 		i++;
 		*count = i;
 	}
-	ft_putstr("x: ");
-	ft_putnbr(*count);
-	ft_putchar('\n');
 
 	// Clear the table
 	i = 0;
@@ -116,7 +113,6 @@ t_vert	**get_vertmap_from_file(char *path, int *x, int *y)
 	{
 		if (bcount < 0)
 			buff_error();
-		ft_putendl(line);
 		vertex_map[i] = get_vertex_line(line, i, x);
 		ft_strdel(&line);
 		i++;
