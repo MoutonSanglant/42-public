@@ -157,8 +157,8 @@ typedef struct	s_mlx_sess
 	t_mat4x4	*worldToCamera;
 	t_mat4x4	*view;
 	t_mat4x4	*projection;
-	int			width; // image (or framebuffer) value
-	int			height; // image value
+	uint32_t	width; // image (or framebuffer) value
+	uint32_t	height; // image value
 	float		aspect; // image or canvas value
 	float		canvasS; // canvas (or screen) value
 	float		canvasW; // canvas value
@@ -167,6 +167,7 @@ typedef struct	s_mlx_sess
 	float		canvasB; // canvas value
 	float		canvasL; // canvas value
 	float		canvasR; // canvas value
+	int			need_update; //canvas ?
 }				t_mlx_sess;
 
 /*
@@ -190,8 +191,9 @@ void	cube(t_tri *);
 void	init_grid(t_grid *, int, int);
 void	init_grid_from_vertmap(t_grid *, t_vert **vertmap, int, int);
 void	draw_3dgrid(t_mlx_sess *);
+void	rasterize(t_mlx_sess *p, t_tri *triangle);
 
-void	set_image_pixel(t_mlx_sess *p, t_image * img, int color, int x, int y);
+void	set_image_pixel(t_mlx_sess *p, t_image * img, int color, uint32_t x, uint32_t y);
 
 /*
 **	MATRIX

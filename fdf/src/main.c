@@ -8,6 +8,8 @@ int		keydown(int key, void *p)
 	identity_matrix4(&trans);
 	sess = (t_mlx_sess *)p;
 
+	sess->need_update = 1;
+
 	if (key == KEY_Q)
 		rotationY_matrix4(&trans, RAD(3));
 	else if (key == KEY_E)
@@ -107,7 +109,8 @@ int		keypress(int key, void *p)
 #ifdef DEBUG
 static void	draw_gui(t_mlx_sess *p)
 {
-	draw_debug_gui(p);
+	//draw_debug_gui(p);
+	(void) p;
 }
 #else
 static void	draw_gui(t_mlx_sess *p)
@@ -127,9 +130,10 @@ int		draw_loop(void *p)
 	sess = (t_mlx_sess *)p;
 	gettimeofday(&tval_now, NULL);
 	timersub(&tval_now, &tval_last, &tval_tic);
-	if (tval_tic.tv_usec > FPS)
+	if (tval_tic.tv_usec > FPS && sess->need_update)
 	//if (T == 0)
 	{
+		ft_putchar('@');
 		//mlx_clear_window(sess->sess, sess->win);
 		gettimeofday(&tval_last, NULL);
 		// TODO
@@ -138,10 +142,11 @@ int		draw_loop(void *p)
 		// so a draw call is invoked only
 		// if an event occured
 		//clear_canvas(sess, 0xffffff);
-		clear_canvas(sess, 0x00000000);
+		clear_canvas(sess, 0x000460000);
 		draw_3dgrid(sess);
 		mlx_put_image_to_window(sess->sess, sess->win, sess->img->img, 0, 0);
 		draw_gui(sess);
+		sess->need_update = 0;
 		//mlx_clear_window(sess->sess, sess->win);
 	}
 	return (0);
@@ -238,6 +243,7 @@ int		main(int argc, char **argv)
 	image.data = mlx_get_data_addr(image.img, &image.bpp, &image.sl, &image.endian);
 	post(&image);
 	param->img = &image;
+	param->need_update = 1;
 	//clear_canvas(param->sess, 0xffffff);
 
 	/*
@@ -254,7 +260,8 @@ int		main(int argc, char **argv)
 	else
 	{
 		ft_putendl("no input file !");
-		init_grid(param->grid, 10, 10);
+		//init_grid(param->grid, 10, 10);
+		init_grid(param->grid, 1, 1);
 	}
 	param->col = 0x00ffffff;
 

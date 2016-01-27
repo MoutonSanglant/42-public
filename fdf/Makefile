@@ -24,7 +24,8 @@ endif
 SRC_PREFIX	= ./src/
 
 SRC	= main draw draw_3dgrid set_image_pixel init_grid \
-	matrix matrix_math get_next_line get_vertmap_from_file
+	matrix matrix_math get_next_line get_vertmap_from_file \
+	rasterize
 
 SRC := $(addsuffix .c, $(SRC))
 SRC := $(addprefix $(SRC_PREFIX), $(SRC))

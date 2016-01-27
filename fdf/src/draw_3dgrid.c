@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/18 17:52:02 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/27 12:55:26 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/01/27 21:49:19 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,22 +92,23 @@ static int draw_point(t_mlx_sess *p, t_vec3f vertex, t_vec2f *point, t_mat4x4 *m
 	//ft_putnbr((*mvp)[11]);
 	//ft_putchar('\n');
 	//ft_putendl("==============");
-	/*
-	** doesn't work'
-	if ((int)point->x < 0)
-		point->x = 0;
-	else if ((int)point->x >= p->width)
-		point->x = p->width;
-	if ((int)point->y < 0)
-		point->y = 0;
-	else if ((int)point->y >= p->height)
-		point->y = p->height;
-	*/
 
-	if ((int)point->x < 0 || (int)point->x > p->width || (int)point->y < 0 || (int)point->y >= p->height)
-		return (0);
+	//
+	// doesn't work'
+	//if ((int)point->x < 0)
+	//	point->x = 0;
+	//else if ((int)point->x >= p->width)
+	//	point->x = p->width;
+	//if ((int)point->y < 0)
+	//	point->y = 0;
+	//else if ((int)point->y >= p->height)
+	//	point->y = p->height;
 
-	draw_line((t_mlx_sess *)p, point, point);
+
+	//if ((int)point->x < 0 || (int)point->x > p->width || (int)point->y < 0 || (int)point->y >= p->height)
+	//	return (0);
+
+	//draw_line((t_mlx_sess *)p, point, point);
 
 	return (1);
 }
@@ -118,16 +119,42 @@ static void		draw_triangle(t_mlx_sess *p, t_tri *triangle, t_mat4x4 *mvp)
 	t_vec3f	a;
 	t_vec3f	b;
 	t_vec3f	c;
-	//t_vec3f	vertices[3];
-	t_vec2f	pixels[3];
 	int a_test, b_test, c_test;
+	t_vec2f	pixels[3];
 
 	a = (*triangle)[0];
 	b = (*triangle)[1];
 	c = (*triangle)[2];
+
 	a_test = draw_point(p, a, &pixels[0], mvp);
 	b_test = draw_point(p, b, &pixels[1], mvp);
 	c_test = draw_point(p, c, &pixels[2], mvp);
+
+	t_tri t;
+	t[0].x = pixels[0].x;
+	t[0].y = pixels[0].y;
+	t[0].z = 0;
+	t[1].x = pixels[1].x;
+	t[1].y = pixels[1].y;
+	t[1].z = 0;
+	t[2].x = pixels[2].x;
+	t[2].y = pixels[2].y;
+	t[2].z = 0;
+/*
+	t[0] = apply_matrix4(t[0], mvp);
+	t[0] = apply_matrix4(t[0], p->worldToCamera);
+	rasterize_coord(p, t[0], &pixels[0]);
+	t[1] = apply_matrix4(t[1], mvp);
+	t[1] = apply_matrix4(t[1], p->worldToCamera);
+	rasterize_coord(p, t[1], &pixels[1]);
+	t[2] = apply_matrix4(t[2], mvp);
+	t[2] = apply_matrix4(t[2], p->worldToCamera);
+	rasterize_coord(p, t[2], &pixels[2]);
+*/
+	// Coords qre now in raster space
+	rasterize(p, &t);
+//	return ;
+
 
 	if (a_test || c_test)
 	{
@@ -318,8 +345,8 @@ void	draw_3dgrid(t_mlx_sess *p)
 	int		x = 0;
 	int		y = 0;
 
-	while (x < 12)
-		draw_triangle(p, &p->cube[x++], &mvp);
+//	while (x < 12)
+//		draw_triangle(p, &p->cube[x++], &mvp);
 
 	i = 0;
 	x = 0;
