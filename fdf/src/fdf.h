@@ -80,44 +80,49 @@
 # define DEG(x) (x * 180.0 / M_PI)
 # define RAD(x) (x * M_PI / 180.0)
 
-//typedef float t_matrix4[4][4];
-typedef float t_matrix4[16]; // t_mat4x4
+typedef float t_mat4x4[16];
 
-typedef struct	s_vector2
+typedef struct	s_vec2f
 {
 	float		x;
 	float		y;
-}				t_vector2; // t_vec2f
+}				t_vec2f;
 
-// t_vec2i
+typedef struct	s_vec2i
+{
+	float		x;
+	float		y;
+}				t_vec2i;
 
-typedef struct	s_vector3
+typedef struct	s_vec3f
 {
 	float		x;
 	float		y;
 	float		z;
-}				t_vector3; // t_vec3f
+}				t_vec3f;
 
-typedef struct	s_vector4
+typedef struct	s_vec4f
 {
 	float		x;
 	float		y;
 	float		z;
 	float		w;
-}				t_vector4; // t_vec4f
+}				t_vec4f;
 
-typedef struct	s_triangle
+/*
+typedef struct	s_tri
 {
-	t_vector3	a;
-	t_vector3	b;
-	t_vector3	c;
-}				t_triangle; // t_tri
+	t_vec3f	a;
+	t_vec3f	b;
+	t_vec3f	c;
+}				t_tri;
+*/
 
-// typedef t_vec3f[3] t_tri;
+typedef t_vec3f t_tri[3];
 
 typedef struct	s_vert
 {
-	t_vector3	coord;
+	t_vec3f		coord;
 	int			color;
 }				t_vert;
 
@@ -125,7 +130,7 @@ typedef struct s_grid
 {
 	int		width;
 	int		height;
-	t_triangle	*triangles;
+	t_tri	*triangles;
 }				t_grid;
 
 typedef struct	s_image
@@ -144,14 +149,14 @@ typedef struct	s_mlx_sess
 	t_image		*img;
 	float		*zbuffer;
 	t_grid		*grid;
-	t_triangle	*cube;
+	t_tri	*cube;
 	int			col;
 	float		near; // camera value
 	float		far; // camera value
-	t_matrix4	*world;
-	t_matrix4	*worldToCamera;
-	t_matrix4	*view;
-	t_matrix4	*projection;
+	t_mat4x4	*world;
+	t_mat4x4	*worldToCamera;
+	t_mat4x4	*view;
+	t_mat4x4	*projection;
 	int			width; // image (or framebuffer) value
 	int			height; // image value
 	float		aspect; // image or canvas value
@@ -174,14 +179,14 @@ t_vert	**get_vertmap_from_file(char *path, int *x, int *y);
 **	DRAWING
 */
 
-void	draw_line(t_mlx_sess *, t_vector2 *, t_vector2 *);
-void	draw_square(t_mlx_sess *, int color, t_vector2 *, t_vector2 *);
-//void	draw_line(t_mlx_sess *, t_vector3, t_vector3);
+void	draw_line(t_mlx_sess *, t_vec2f *, t_vec2f *);
+void	draw_square(t_mlx_sess *, int color, t_vec2f *, t_vec2f *);
+//void	draw_line(t_mlx_sess *, t_vec3f, t_vec3f);
 void	draw_picture(t_mlx_sess *);
 
 void	clear_canvas(t_mlx_sess *, int);
 
-void	cube(t_triangle *);
+void	cube(t_tri *);
 void	init_grid(t_grid *, int, int);
 void	init_grid_from_vertmap(t_grid *, t_vert **vertmap, int, int);
 void	draw_3dgrid(t_mlx_sess *);
@@ -192,21 +197,21 @@ void	set_image_pixel(t_mlx_sess *p, t_image * img, int color, int x, int y);
 **	MATRIX
 */
 
-void	identity_matrix4(t_matrix4 *);
-void	inverse_matrix4(t_matrix4 *, t_matrix4 *);
-void	translation_matrix4(t_matrix4 *, t_vector3);
-void	scaling_matrix4(t_matrix4 *, t_vector3);
-//t_matrix4	*rotate_matrix4(t_matrix4 *, t_matrix4 *);
-//t_matrix4	*rotate_matrix4(t_matrix4 *, float);
-void	rotationX_matrix4(t_matrix4 *, float);
-void	rotationY_matrix4(t_matrix4 *, float);
-void	rotationZ_matrix4(t_matrix4 *, float);
-void	perspective_projection_matrix4(t_matrix4 *, float, float, int, int);
-void	orthographic_projection_matrix4(t_matrix4 *, t_vector2,	int, int);
+void	identity_matrix4(t_mat4x4 *);
+void	inverse_matrix4(t_mat4x4 *, t_mat4x4 *);
+void	translation_matrix4(t_mat4x4 *, t_vec3f);
+void	scaling_matrix4(t_mat4x4 *, t_vec3f);
+//t_mat4x4	*rotate_matrix4(t_mat4x4 *, t_mat4x4 *);
+//t_mat4x4	*rotate_matrix4(t_mat4x4 *, float);
+void	rotationX_matrix4(t_mat4x4 *, float);
+void	rotationY_matrix4(t_mat4x4 *, float);
+void	rotationZ_matrix4(t_mat4x4 *, float);
+void	perspective_projection_matrix4(t_mat4x4 *, float, float, int, int);
+void	orthographic_projection_matrix4(t_mat4x4 *, t_vec2f,	int, int);
 
-void	transpose_matrix4(t_matrix4 *m);
-void	matrix4_product(t_matrix4 *, t_matrix4 *);
-t_vector3	apply_matrix4(t_vector3, t_matrix4 *);
+void	transpose_matrix4(t_mat4x4 *m);
+void	matrix4_product(t_mat4x4 *, t_mat4x4 *);
+t_vec3f	apply_matrix4(t_vec3f, t_mat4x4 *);
 
 /*
 **	GNL
@@ -222,5 +227,6 @@ int				get_next_line(int const fd, char **line);
 
 # ifdef DEBUG
 void	output_image_info(t_image *image);
+void	draw_debug_gui(t_mlx_sess *p);
 # endif
 #endif

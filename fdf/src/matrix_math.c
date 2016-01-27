@@ -6,19 +6,19 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/19 00:37:19 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/20 22:16:22 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/01/27 12:46:14 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-void	view_to_projection(t_vector3 v, t_matrix4 *m)
+void	view_to_projection(t_vec3f v, t_mat4x4 *m)
 {
 	(void) v;
 	(void) m;
 }
 
-void	world_to_view(t_vector3 v, t_matrix4 *m)
+void	world_to_view(t_vec3f v, t_mat4x4 *m)
 {
 	(void) v;
 	(void) m;
@@ -28,9 +28,9 @@ void	world_to_view(t_vector3 v, t_matrix4 *m)
 ** Transpose a matrix to switch between column-vector
 ** matrices and row-vector matrices
 */
-void		transpose_matrix4(t_matrix4 *m)
+void		transpose_matrix4(t_mat4x4 *m)
 {
-	t_matrix4	A;
+	t_mat4x4	A;
 
 	A[0] = (*m)[0];
 	A[1] = (*m)[1];
@@ -67,9 +67,9 @@ void		transpose_matrix4(t_matrix4 *m)
 	(*m)[15] = A[15];
 }
 
-void		matrix4_product(t_matrix4 *m, t_matrix4 *B)
+void		matrix4_product(t_mat4x4 *m, t_mat4x4 *B)
 {
-	t_matrix4	A;
+	t_mat4x4	A;
 
 	A[0] = (*m)[0];
 	A[1] = (*m)[1];
@@ -191,9 +191,9 @@ void		matrix4_product(t_matrix4 *m, t_matrix4 *B)
 ** Xaxis.z Yaxis.z Zaxis.z Trans.z
 **    0       0       0       1
 */
-t_vector3	apply_matrix4(t_vector3 a, t_matrix4 *m)
+t_vec3f	apply_matrix4(t_vec3f a, t_mat4x4 *m)
 {
-	t_vector3 b;
+	t_vec3f b;
 
 	b.x = a.x;
 	b.y = a.y;
