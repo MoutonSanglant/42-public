@@ -1,5 +1,24 @@
 #include "fdf.h"
 
+static void	clear_zbuffer(float *zbuffer, int x, int y)
+{
+	int i, j;
+
+	i = 0;
+	j = 0;
+	while (i < x)
+	{
+		j = 0;
+		while (j < y)
+		{
+			zbuffer[i + j * x] = FLT_MAX;
+			j++;
+		}
+		i++;
+	}
+	//ft_memset(param->zbuffer, FLT_MAX, x * y);
+}
+
 int		keydown(int key, void *p)
 {
 	t_mlx_sess	*sess;
@@ -105,11 +124,10 @@ int		keypress(int key, void *p)
 	return (0);
 }
 
-#include <stdio.h>
 #ifdef DEBUG
 static void	draw_gui(t_mlx_sess *p)
 {
-	//draw_debug_gui(p);
+	draw_debug_gui(p);
 	(void) p;
 }
 #else
@@ -131,23 +149,15 @@ int		draw_loop(void *p)
 	gettimeofday(&tval_now, NULL);
 	timersub(&tval_now, &tval_last, &tval_tic);
 	if (tval_tic.tv_usec > FPS && sess->need_update)
-	//if (T == 0)
 	{
-		ft_putchar('@');
-		//mlx_clear_window(sess->sess, sess->win);
 		gettimeofday(&tval_last, NULL);
-		// TODO
-		// Actually, redraw hover the image
-		// on every tick, should be changed
-		// so a draw call is invoked only
-		// if an event occured
 		//clear_canvas(sess, 0xffffff);
 		clear_canvas(sess, 0x000460000);
+		clear_zbuffer(sess->zbuffer, sess->width, sess->height);
 		draw_3dgrid(sess);
 		mlx_put_image_to_window(sess->sess, sess->win, sess->img->img, 0, 0);
 		draw_gui(sess);
 		sess->need_update = 0;
-		//mlx_clear_window(sess->sess, sess->win);
 	}
 	return (0);
 }
@@ -249,7 +259,11 @@ int		main(int argc, char **argv)
 	/*
 	**	Z-BUFFER
 	*/
+
+#ifdef BONUS
 	param->zbuffer = (float *)ft_memalloc(sizeof(float) * x * y);
+	clear_zbuffer(param->zbuffer, x, y);
+#endif
 
 	/*
 	**	GRID
@@ -260,8 +274,8 @@ int		main(int argc, char **argv)
 	else
 	{
 		ft_putendl("no input file !");
-		init_grid(param->grid, 10, 10);
-		//init_grid(param->grid, 1, 1);
+		//init_grid(param->grid, 10, 10);
+		init_grid(param->grid, 1, 1);
 	}
 	param->col = 0x00ffffff;
 

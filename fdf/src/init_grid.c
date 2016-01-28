@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/18 20:00:56 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/27 21:59:42 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/01/28 17:30:40 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,42 +41,42 @@ void	cube(t_tri *cube)
 	points[7].y = .5f;
 	points[7].z = .5f;
 
-	cube[0][0] = points[0];
-	cube[0][1] = points[1];
-	cube[0][2] = points[3];
-	cube[1][0] = points[1];
-	cube[1][1] = points[2];
-	cube[1][2] = points[3];
-	cube[2][0] = points[1];
-	cube[2][1] = points[5];
-	cube[2][2] = points[2];
-	cube[3][0] = points[5];
-	cube[3][1] = points[6];
-	cube[3][2] = points[2];
-	cube[4][0] = points[5];
-	cube[4][1] = points[4];
-	cube[4][2] = points[6];
-	cube[5][0] = points[4];
-	cube[5][1] = points[7];
-	cube[5][2] = points[6];
-	cube[6][0] = points[4];
-	cube[6][1] = points[0];
-	cube[6][2] = points[7];
-	cube[7][0] = points[0];
-	cube[7][1] = points[3];
-	cube[7][2] = points[7];
-	cube[8][0] = points[3];
-	cube[8][1] = points[2];
-	cube[8][2] = points[7];
-	cube[9][0] = points[2];
-	cube[9][1] = points[6];
-	cube[9][2] = points[7];
-	cube[10][0] = points[0];
-	cube[10][1] = points[1];
-	cube[10][2] = points[4];
-	cube[11][0] = points[1];
-	cube[11][1] = points[5];
-	cube[11][2] = points[4];
+	cube[0][0].coord = points[0];
+	cube[0][1].coord = points[1];
+	cube[0][2].coord = points[3];
+	cube[1][0].coord = points[1];
+	cube[1][1].coord = points[2];
+	cube[1][2].coord = points[3];
+	cube[2][0].coord = points[1];
+	cube[2][1].coord = points[5];
+	cube[2][2].coord = points[2];
+	cube[3][0].coord = points[5];
+	cube[3][1].coord = points[6];
+	cube[3][2].coord = points[2];
+	cube[4][0].coord = points[5];
+	cube[4][1].coord = points[4];
+	cube[4][2].coord = points[6];
+	cube[5][0].coord = points[4];
+	cube[5][1].coord = points[7];
+	cube[5][2].coord = points[6];
+	cube[6][0].coord = points[4];
+	cube[6][1].coord = points[0];
+	cube[6][2].coord = points[7];
+	cube[7][0].coord = points[0];
+	cube[7][1].coord = points[3];
+	cube[7][2].coord = points[7];
+	cube[8][0].coord = points[3];
+	cube[8][1].coord = points[2];
+	cube[8][2].coord = points[7];
+	cube[9][0].coord = points[2];
+	cube[9][1].coord = points[6];
+	cube[9][2].coord = points[7];
+	cube[10][0].coord = points[0];
+	cube[10][1].coord = points[1];
+	cube[10][2].coord = points[4];
+	cube[11][0].coord = points[1];
+	cube[11][1].coord = points[5];
+	cube[11][2].coord = points[4];
 }
 
 void	init_grid_from_vertmap(t_grid *grid, t_vert **vertmap, int width, int height)
@@ -85,54 +85,114 @@ void	init_grid_from_vertmap(t_grid *grid, t_vert **vertmap, int width, int heigh
 	int y;
 	int i;
 
+	unsigned char r;
+	unsigned char g;
+	unsigned char b;
+
+	char x_diff;
+	char y_diff;
+
+	r = 0;
+	g = 0;
+	b = 0;
 	i = 0;
 	x = 0;
 	y = 0;
+	x_diff = 255 / width;
+	y_diff = 255 / height;
 	grid->width = width;
 	grid->height = height;
 	grid->triangles = (t_tri *)ft_memalloc(sizeof(t_tri) * width * height * 2);
 	while (x < width)
 	{
+		g = 0;
 		while (y < height)
 		{
-			grid->triangles[i][0].x = (float)(1.f * x);
-			grid->triangles[i][0].y = (float)(1.f * y);
-			grid->triangles[i][0].z = (float)vertmap[y][x].coord.z * 0.15f;
-			grid->triangles[i][1].x = (float)(1.f * x + 1.f);
-			grid->triangles[i][1].y = (float)(1.f * y);
-			if (x + 1 < width)
-				grid->triangles[i][1].z = (float)vertmap[y][x + 1].coord.z * 0.15f;
+			// top-right triangle
+			grid->triangles[i][0].color.r = r + x_diff;
+			grid->triangles[i][0].color.g = g + y_diff;
+			grid->triangles[i][0].color.b = b;
+			grid->triangles[i][1].color.r = r;
+			grid->triangles[i][1].color.g = g;
+			grid->triangles[i][1].color.b = b;
+			grid->triangles[i][2].color.r = r;
+			grid->triangles[i][2].color.g = g + y_diff;
+			grid->triangles[i][2].color.b = b;
+
+			// bottom-left triangle
+			grid->triangles[i + 1][0].color.r = r + x_diff;
+			grid->triangles[i + 1][0].color.g = g + y_diff;
+			grid->triangles[i + 1][0].color.b = b;
+			grid->triangles[i + 1][1].color.r = r + x_diff;
+			grid->triangles[i + 1][1].color.g = g;
+			grid->triangles[i + 1][1].color.b = b;
+			grid->triangles[i + 1][2].color.r = r;
+			grid->triangles[i + 1][2].color.g = g;
+			grid->triangles[i + 1][2].color.b = b;
+			g += y_diff;
+			b = r * .5f + g * .5f;
+
+			/*
+			** +x <-
+			** +y ^
+			**
+			** 1
+			** | \
+			** 2--0
+			**
+			** 2--1
+			**  \ |
+			**    0
+			**
+			** ccw
+			**
+			** according to camera:
+			** 0--2
+			**  \ |
+			**    1
+			**
+			** 0
+			** | \
+			** 1--2
+			**
+			*/
+
+			grid->triangles[i][0].coord.x = (float)(1.f * x + 1.f);
+			grid->triangles[i][0].coord.y = (float)(1.f * y + 1.f);
+			if (x + 1 < width && y + 1 < height)
+				grid->triangles[i][0].coord.z = (float)vertmap[y + 1][x + 1].coord.z * 0.15f;
 			else
-				grid->triangles[i][1].z = 0.f;
-			grid->triangles[i][2].x = (float)(1.f * x);
-			grid->triangles[i][2].y = (float)(1.f * y + 1.f);
+				grid->triangles[i][0].coord.z = 0.f;
+			grid->triangles[i][1].coord.x = (float)(1.f * x);
+			grid->triangles[i][1].coord.y = (float)(1.f * y);
+			grid->triangles[i][1].coord.z = (float)vertmap[y][x].coord.z * 0.15f;
+			grid->triangles[i][2].coord.x = (float)(1.f * x);
+			grid->triangles[i][2].coord.y = (float)(1.f * y + 1.f);
 			if (y + 1 < height)
-				grid->triangles[i][2].z = (float)vertmap[y][x + 1].coord.z * 0.15f;
+				grid->triangles[i][2].coord.z = (float)vertmap[y + 1][x].coord.z * 0.15f;
 			else
-				grid->triangles[i][2].z = 0.f;
+				grid->triangles[i][2].coord.z = 0.f;
 			i++;
 
-			grid->triangles[i][0].x = (float)(1.f * x + 1.f);
-			grid->triangles[i][0].y = (float)(1.f * y);
-			if (x + 1 < width)
-				grid->triangles[i][0].z = (float)vertmap[y][x].coord.z * 0.15f;
-			else
-				grid->triangles[i][0].z = 0.f;
-			grid->triangles[i][1].x = (float)(1.f * x + 1.f);
-			grid->triangles[i][1].y = (float)(1.f * y + 1.f);
+			grid->triangles[i][0].coord.x = (float)(1.f * x + 1.f);
+			grid->triangles[i][0].coord.y = (float)(1.f * y + 1.f);
 			if (x + 1 < width && y + 1 < height)
-				grid->triangles[i][1].z = (float)vertmap[y + 1][x].coord.z * 0.15f;
+				grid->triangles[i][0].coord.z = (float)vertmap[y + 1][x + 1].coord.z * 0.15f;
 			else
-				grid->triangles[i][1].z = 0.f;
-			grid->triangles[i][2].x = (float)(1.f * x);
-			grid->triangles[i][2].y = (float)(1.f * y + 1.f);
-			if (y + 1 < height)
-				grid->triangles[i][2].z = (float)vertmap[y][x + 1].coord.z * 0.15f;
+				grid->triangles[i][0].coord.z = 0.f;
+			grid->triangles[i][1].coord.x = (float)(1.f * x + 1.f);
+			grid->triangles[i][1].coord.y = (float)(1.f * y);
+			if (x + 1 < width)
+				grid->triangles[i][1].coord.z = (float)vertmap[y][x + 1].coord.z * 0.15f;
 			else
-				grid->triangles[i][2].z = 0.f;
+				grid->triangles[i][1].coord.z = 0.f;
+			grid->triangles[i][2].coord.x = (float)(1.f * x);
+			grid->triangles[i][2].coord.y = (float)(1.f * y);
+			grid->triangles[i][2].coord.z = (float)vertmap[y][x].coord.z * 0.15f;
 			i++;
 			y++;
 		}
+		r += x_diff;
 		y = 0;
 		x++;
 	}
@@ -144,6 +204,22 @@ void	init_grid(t_grid *grid, int width, int height)
 	int		x;
 	int		y;
 	int		i;
+	unsigned char r;
+	unsigned char g;
+	unsigned char b;
+
+	char x_diff;
+	char y_diff;
+
+	r = 0;
+	g = 0;
+	b = 0;
+
+	x_diff = 255 / width;
+	y_diff = 255 / height;
+	ft_putchar('*');
+	ft_putnbr(x_diff);
+	ft_putchar('\n');
 
 	x = 0;
 	y = 0;
@@ -158,31 +234,57 @@ void	init_grid(t_grid *grid, int width, int height)
 	grid->triangles = (t_tri *)malloc(sizeof(t_tri) * width * height * 2);
 	while (x < width)
 	{
+		g = 0;
 		while(y < height)
 		{
-			grid->triangles[i][0].x = (float)(1.f * x + 1.f);
-			grid->triangles[i][0].y = (float)(1.f * y + 1.f);
-			grid->triangles[i][0].z = 0.f;
-			grid->triangles[i][1].x = (float)(1.f * x);
-			grid->triangles[i][1].y = (float)(1.f * y);
-			grid->triangles[i][1].z = 0.f;
-			grid->triangles[i][2].x = (float)(1.f * x);
-			grid->triangles[i][2].y = (float)(1.f * y + 1.f);
-			grid->triangles[i][2].z = 0.f;
+			// top-right triangle
+			grid->triangles[i][0].color.r = r + x_diff;
+			grid->triangles[i][0].color.g = g + y_diff;
+			grid->triangles[i][0].color.b = b;
+			grid->triangles[i][1].color.r = r;
+			grid->triangles[i][1].color.g = g;
+			grid->triangles[i][1].color.b = b;
+			grid->triangles[i][2].color.r = r;
+			grid->triangles[i][2].color.g = g + y_diff;
+			grid->triangles[i][2].color.b = b;
+
+			// bottom-left triangle
+			grid->triangles[i + 1][0].color.r = r + x_diff;
+			grid->triangles[i + 1][0].color.g = g + y_diff;
+			grid->triangles[i + 1][0].color.b = b;
+			grid->triangles[i + 1][1].color.r = r + x_diff;
+			grid->triangles[i + 1][1].color.g = g;
+			grid->triangles[i + 1][1].color.b = b;
+			grid->triangles[i + 1][2].color.r = r;
+			grid->triangles[i + 1][2].color.g = g;
+			grid->triangles[i + 1][2].color.b = b;
+			g += y_diff;
+			b = r * .5f + g * .5f;
+
+			grid->triangles[i][0].coord.x = (float)(1.f * x + 1.f);
+			grid->triangles[i][0].coord.y = (float)(1.f * y + 1.f);
+			grid->triangles[i][0].coord.z = 0.f;
+			grid->triangles[i][1].coord.x = (float)(1.f * x);
+			grid->triangles[i][1].coord.y = (float)(1.f * y);
+			grid->triangles[i][1].coord.z = 0.f;
+			grid->triangles[i][2].coord.x = (float)(1.f * x);
+			grid->triangles[i][2].coord.y = (float)(1.f * y + 1.f);
+			grid->triangles[i][2].coord.z = 0.f;
 			i++;
 
-			grid->triangles[i][0].x = (float)(1.f * x + 1.f);
-			grid->triangles[i][0].y = (float)(1.f * y + 1.f);
-			grid->triangles[i][0].z = 0.f;
-			grid->triangles[i][1].x = (float)(1.f * x + 1.f);
-			grid->triangles[i][1].y = (float)(1.f * y);
-			grid->triangles[i][1].z = 0.f;
-			grid->triangles[i][2].x = (float)(1.f * x);
-			grid->triangles[i][2].y = (float)(1.f * y);
-			grid->triangles[i][2].z = 0.f;
+			grid->triangles[i][0].coord.x = (float)(1.f * x + 1.f);
+			grid->triangles[i][0].coord.y = (float)(1.f * y + 1.f);
+			grid->triangles[i][0].coord.z = 0.f;
+			grid->triangles[i][1].coord.x = (float)(1.f * x + 1.f);
+			grid->triangles[i][1].coord.y = (float)(1.f * y);
+			grid->triangles[i][1].coord.z = 0.f;
+			grid->triangles[i][2].coord.x = (float)(1.f * x);
+			grid->triangles[i][2].coord.y = (float)(1.f * y);
+			grid->triangles[i][2].coord.z = 0.f;
 			i++;
 			y++;
 		}
+		r += x_diff;
 		y = 0;
 		x++;
 	}

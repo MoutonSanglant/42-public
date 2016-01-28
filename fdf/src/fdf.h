@@ -27,6 +27,7 @@
 ** BONUS
 */
 # ifdef BONUS
+#  include <float.h>
 #  include <sys/time.h>
 /*
 ** FPS in microseconds
@@ -109,22 +110,20 @@ typedef struct	s_vec4f
 	float		w;
 }				t_vec4f;
 
-/*
-typedef struct	s_tri
+typedef struct	s_color
 {
-	t_vec3f	a;
-	t_vec3f	b;
-	t_vec3f	c;
-}				t_tri;
-*/
-
-typedef t_vec3f t_tri[3];
+	unsigned char	r;
+	unsigned char	g;
+	unsigned char	b;
+}				t_color;
 
 typedef struct	s_vert
 {
 	t_vec3f		coord;
-	int			color;
+	t_color		color;
 }				t_vert;
+
+typedef t_vert t_tri[3];
 
 typedef struct s_grid
 {
@@ -149,7 +148,7 @@ typedef struct	s_mlx_sess
 	t_image		*img;
 	float		*zbuffer;
 	t_grid		*grid;
-	t_tri	*cube;
+	t_tri		*cube;
 	int			col;
 	float		near; // camera value
 	float		far; // camera value
