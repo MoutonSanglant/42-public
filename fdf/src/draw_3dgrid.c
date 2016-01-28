@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/18 17:52:02 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/28 03:44:43 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/01/28 18:46:00 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 #include <stdio.h>
 
-static int		rasterize_coord(t_mlx_sess *p, t_vec3f in, t_vec2f *out)
+static int		rasterize_coord(t_mlx_sess *p, t_vec3f in, t_vec3f *out)
 {
 	// IMPORTANT NOTE
 	// I don't handle the FIT / OVERSCAN solutions to scale
@@ -60,12 +60,13 @@ static int		rasterize_coord(t_mlx_sess *p, t_vec3f in, t_vec2f *out)
 	{
 		out->x = x;
 		out->y = y;
+		out->z = -in.z;
 		return (1);
 		//return (1);
 	}
 	out->x = x;
 	out->y = y;
-	// out->z = -in.z;
+	out->z = -in.z;
 
 	return (0);
 
@@ -79,7 +80,7 @@ static int		rasterize_coord(t_mlx_sess *p, t_vec3f in, t_vec2f *out)
 	*/
 }
 
-static int draw_point(t_mlx_sess *p, t_vec3f vertex, t_vec2f *point, t_mat4x4 *mvp)
+static int draw_point(t_mlx_sess *p, t_vec3f vertex, t_vec3f *point, t_mat4x4 *mvp)
 {
 	vertex = apply_matrix4(vertex, mvp);
 	vertex = apply_matrix4(vertex, p->worldToCamera);
@@ -120,39 +121,58 @@ static void		draw_triangle(t_mlx_sess *p, t_tri *triangle, t_mat4x4 *mvp)
 	t_vec3f	b;
 	t_vec3f	c;
 	int a_test, b_test, c_test;
-	t_vec2f	pixels[3];
+	t_vec3f	pixels[3];
 	pixels[0].x = 0;
 	pixels[0].y = 0;
+	pixels[0].z = 0;
 	pixels[1].x = 0;
 	pixels[1].y = 0;
+	pixels[1].z = 0;
 	pixels[2].x = 0;
 	pixels[2].y = 0;
+	pixels[2].z = 0;
 
-	a = (*triangle)[0];
-	b = (*triangle)[1];
-	c = (*triangle)[2];
+	a = (*triangle)[0].coord;
+	b = (*triangle)[1].coord;
+	c = (*triangle)[2].coord;
 
 	a_test = draw_point(p, a, &pixels[0], mvp);
 	b_test = draw_point(p, b, &pixels[1], mvp);
 	c_test = draw_point(p, c, &pixels[2], mvp);
 
-	t_tri t; // like t_vec3f[3];
-	t[0].x = pixels[0].x;
-	t[0].y = pixels[0].y;
-	t[0].z = 0.f;
+	t_tri t; // like t_vert[3];
+	t[0].coord.x = pixels[0].x;
+	t[0].coord.y = pixels[0].y;
+	t[0].coord.z = pixels[0].z;
+	t[0].color.r = (*triangle)[0].color.r;
+	t[0].color.g = (*triangle)[0].color.g;
+	t[0].color.b = (*triangle)[0].color.b;
 
-	t[1].x = pixels[1].x;
-	t[1].y = pixels[1].y;
-	t[1].z = 0.f;
+	t[1].coord.x = pixels[1].x;
+	t[1].coord.y = pixels[1].y;
+	t[1].coord.z = pixels[1].z;
+	t[1].color.r = (*triangle)[1].color.r;
+	t[1].color.g = (*triangle)[1].color.g;
+	t[1].color.b = (*triangle)[1].color.b;
 
-	t[2].x = pixels[2].x;
-	t[2].y = pixels[2].y;
-	t[2].z = 0.f;
+	t[2].coord.x = pixels[2].x;
+	t[2].coord.y = pixels[2].y;
+	t[2].coord.z = pixels[2].z;
+	t[2].color.r = (*triangle)[2].color.r;
+	t[2].color.g = (*triangle)[2].color.g;
+	t[2].color.b = (*triangle)[2].color.b;
 
 	// Coords qre now in raster space
 	rasterize(p, &t);
 	return ;
 
+	t_vec2f	px[3];
+	px[0].x = pixels[0].x;
+	px[0].y = pixels[0].y;
+	px[1].x = pixels[1].x;
+	px[1].y = pixels[1].y;
+	px[2].x = pixels[2].x;
+	px[2].y = pixels[2].y;
 
 	if (a_test || c_test)
 	{
@@ -160,7 +180,7 @@ static void		draw_triangle(t_mlx_sess *p, t_tri *triangle, t_mat4x4 *mvp)
 			p->col = 0x00ffffff;
 		else
 			p->col = 0x00ff0000;
-		draw_line((t_mlx_sess *)p, &pixels[0], &pixels[1]);
+		draw_line((t_mlx_sess *)p, &px[0], &px[1]);
 	}
 	if (b_test || c_test)
 	{
@@ -168,7 +188,7 @@ static void		draw_triangle(t_mlx_sess *p, t_tri *triangle, t_mat4x4 *mvp)
 			p->col = 0x00ffffff;
 		else
 			p->col = 0x00ff0000;
-		draw_line((t_mlx_sess *)p, &pixels[1], &pixels[2]);
+		draw_line((t_mlx_sess *)p, &px[1], &px[2]);
 	}
 	if (a_test || c_test)
 	{
@@ -176,7 +196,7 @@ static void		draw_triangle(t_mlx_sess *p, t_tri *triangle, t_mat4x4 *mvp)
 			p->col = 0x00ffffff;
 		else
 			p->col = 0x00ff0000;
-		draw_line((t_mlx_sess *)p, &pixels[2], &pixels[0]);
+		draw_line((t_mlx_sess *)p, &px[2], &px[0]);
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/25 23:38:14 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/27 13:36:41 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/01/28 16:26:15 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,9 @@ static t_vert	*get_vertex_line(char *line, int line_nbr, int *count)
 		vertices[i].coord.x = i;
 		vertices[i].coord.y = line_nbr;
 		vertices[i].coord.z = ft_atoi(ascii_values[i]);
-		vertices[i].color = 0;
+		vertices[i].color.r = 0;
+		vertices[i].color.g = 0;
+		vertices[i].color.b = 0;
 		i++;
 		*count = i;
 	}

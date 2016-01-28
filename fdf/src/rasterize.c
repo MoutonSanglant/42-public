@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/27 12:41:37 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/28 03:43:51 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/01/28 18:37:31 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,10 @@ void		rasterize(t_mlx_sess *p, t_tri *triangle)
 	float ymax;
 
 	// get bouding box of the triangle
-	xmin = min3(&(*triangle)[0].x, &(*triangle)[1].x, &(*triangle)[2].x);
-	xmax = max3(&(*triangle)[0].x, &(*triangle)[1].x, &(*triangle)[2].x);
-	ymin = min3(&(*triangle)[0].y, &(*triangle)[1].y, &(*triangle)[2].y);
-	ymax = max3(&(*triangle)[0].y, &(*triangle)[1].y, &(*triangle)[2].y);
+	xmin = min3(&(*triangle)[0].coord.x, &(*triangle)[1].coord.x, &(*triangle)[2].coord.x);
+	xmax = max3(&(*triangle)[0].coord.x, &(*triangle)[1].coord.x, &(*triangle)[2].coord.x);
+	ymin = min3(&(*triangle)[0].coord.y, &(*triangle)[1].coord.y, &(*triangle)[2].coord.y);
+	ymax = max3(&(*triangle)[0].coord.y, &(*triangle)[1].coord.y, &(*triangle)[2].coord.y);
 
 	if (xmin > p->width - 1 || xmax < 0 || ymin > p->height - 1 || ymax < 0)
 		return;
@@ -58,7 +58,7 @@ void		rasterize(t_mlx_sess *p, t_tri *triangle)
 	//triangle[1] = ...;
 	//triangle[2] = ...;
 
-	area = edge_function(&(*triangle)[0], &(*triangle)[1], &(*triangle)[2]); // area of the full triangle * 2
+	area = edge_function(&(*triangle)[0].coord, &(*triangle)[1].coord, &(*triangle)[2].coord); // area of the full triangle * 2
 
 	uint32_t x, y;
 	y = y0;
@@ -72,27 +72,39 @@ void		rasterize(t_mlx_sess *p, t_tri *triangle)
 			float	w[3];
 
 			x++;
-			pixel_sample.x = x + .5f;
-			pixel_sample.y = y + .5f;
+			pixel_sample.x = x + .0f;
+			pixel_sample.y = y + .0f;
 			pixel_sample.z = 0;
 
-			w[0] = edge_function(&(*triangle)[1], &(*triangle)[2], &pixel_sample); // signed area of the small triangle * 2
-			w[1] = edge_function(&(*triangle)[2], &(*triangle)[0], &pixel_sample);
-			w[2] = edge_function(&(*triangle)[0], &(*triangle)[1], &pixel_sample);
+			w[0] = edge_function(&(*triangle)[1].coord, &(*triangle)[2].coord, &pixel_sample); // signed area of the small triangle * 2
+			w[1] = edge_function(&(*triangle)[2].coord, &(*triangle)[0].coord, &pixel_sample);
+			w[2] = edge_function(&(*triangle)[0].coord, &(*triangle)[1].coord, &pixel_sample);
 
 			if (w[0] >= 0.f && w[1] >= 0.f && w[2] >= 0.f)
 			{
+				float z;
+				float oneOverZ;
+
 				w[0] /= area;
 				w[1] /= area;
 				w[2] /= area;
 
-				unsigned char r = w[0] * 255 + w[1] * 0 + w[2] * 0;
-				unsigned char g = w[0] * 0 + w[1] * 255 + w[2] * 0;
-				unsigned char b = w[0] * 0 + w[1] * 0 + w[2] * 255;
+				oneOverZ = (*triangle)[0].coord.z * w[0] + (*triangle)[1].coord.z * w[1] + (*triangle)[2].coord.z * w[2];
+				z = 1 / oneOverZ;
+				if (z < p->zbuffer[x + y * p->width])
+				{
+					p->zbuffer[x + y * p->width] = z;
 
-				int col = (r << 16) | (g << 8) | (b);
+					unsigned char r = w[0] * (*triangle)[0].color.r + w[1] * (*triangle)[1].color.r + w[2] * (*triangle)[2].color.r;
+					unsigned char g = w[0] * (*triangle)[0].color.g + w[1] * (*triangle)[1].color.g + w[2] * (*triangle)[2].color.g;
+					unsigned char b = w[0] * (*triangle)[0].color.b + w[1] * (*triangle)[1].color.b + w[2] * (*triangle)[2].color.b;
+					//unsigned char g = w[0] * 0 + w[1] * 255 + w[2] * 0;
+					//unsigned char b = w[0] * 0 + w[1] * 0 + w[2] * 255;
 
-				set_image_pixel(p, p->img, mlx_get_color_value(p->sess, col), x, y);
+					int col = (r << 16) | (g << 8) | (b);
+
+					set_image_pixel(p, p->img, mlx_get_color_value(p->sess, col), x, y);
+				}
 			}
 		}
 	}
