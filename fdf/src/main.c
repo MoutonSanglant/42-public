@@ -260,8 +260,8 @@ int		main(int argc, char **argv)
 	else
 	{
 		ft_putendl("no input file !");
-		//init_grid(param->grid, 10, 10);
-		init_grid(param->grid, 1, 1);
+		init_grid(param->grid, 10, 10);
+		//init_grid(param->grid, 1, 1);
 	}
 	param->col = 0x00ffffff;
 

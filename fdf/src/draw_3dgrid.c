@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/18 17:52:02 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/27 21:49:19 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/01/28 03:44:43 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,12 @@ static void		draw_triangle(t_mlx_sess *p, t_tri *triangle, t_mat4x4 *mvp)
 	t_vec3f	c;
 	int a_test, b_test, c_test;
 	t_vec2f	pixels[3];
+	pixels[0].x = 0;
+	pixels[0].y = 0;
+	pixels[1].x = 0;
+	pixels[1].y = 0;
+	pixels[2].x = 0;
+	pixels[2].y = 0;
 
 	a = (*triangle)[0];
 	b = (*triangle)[1];
@@ -130,30 +136,22 @@ static void		draw_triangle(t_mlx_sess *p, t_tri *triangle, t_mat4x4 *mvp)
 	b_test = draw_point(p, b, &pixels[1], mvp);
 	c_test = draw_point(p, c, &pixels[2], mvp);
 
-	t_tri t;
+	t_tri t; // like t_vec3f[3];
 	t[0].x = pixels[0].x;
 	t[0].y = pixels[0].y;
-	t[0].z = 0;
+	t[0].z = 0.f;
+
 	t[1].x = pixels[1].x;
 	t[1].y = pixels[1].y;
-	t[1].z = 0;
+	t[1].z = 0.f;
+
 	t[2].x = pixels[2].x;
 	t[2].y = pixels[2].y;
-	t[2].z = 0;
-/*
-	t[0] = apply_matrix4(t[0], mvp);
-	t[0] = apply_matrix4(t[0], p->worldToCamera);
-	rasterize_coord(p, t[0], &pixels[0]);
-	t[1] = apply_matrix4(t[1], mvp);
-	t[1] = apply_matrix4(t[1], p->worldToCamera);
-	rasterize_coord(p, t[1], &pixels[1]);
-	t[2] = apply_matrix4(t[2], mvp);
-	t[2] = apply_matrix4(t[2], p->worldToCamera);
-	rasterize_coord(p, t[2], &pixels[2]);
-*/
+	t[2].z = 0.f;
+
 	// Coords qre now in raster space
 	rasterize(p, &t);
-//	return ;
+	return ;
 
 
 	if (a_test || c_test)
@@ -180,28 +178,6 @@ static void		draw_triangle(t_mlx_sess *p, t_tri *triangle, t_mat4x4 *mvp)
 			p->col = 0x00ff0000;
 		draw_line((t_mlx_sess *)p, &pixels[2], &pixels[0]);
 	}
-
-	/*
-	vertices[0] = apply_matrix4(a, mvp);
-	vertices[0] = apply_matrix4(a, p->worldToCamera);
-	//vertex = apply_matrix4(a, p->projection);
-	if (rasterize_coord(p, vertices[0], &pixels[0]))
-		return ;
-	vertices[1] = apply_matrix4(b, mvp);
-	vertices[1] = apply_matrix4(b, p->worldToCamera);
-	if (rasterize_coord(p, vertices[1], &pixels[1]))
-		return ;
-	vertices[2] = apply_matrix4(c, mvp);
-	vertices[2] = apply_matrix4(c, p->worldToCamera);
-	if (rasterize_coord(p, vertices[2], &pixels[2]))
-		return ;
-*/
-	/*
-	if ((int)from.x <= 0 || (int)from.x >= p->width || (int)from.y <= 0 || (int)from.y >= p->height)
-		return ;
-	if ((int)to.x <= 0 || (int)to.x >= p->width || (int)to.y <= 0 || (int)to.y >= p->height)
-		return ;
-	*/
 }
 
 void	draw_3dgrid(t_mlx_sess *p)
