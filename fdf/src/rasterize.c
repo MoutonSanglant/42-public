@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/27 12:41:37 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/28 18:37:31 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/01/29 04:53:30 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,10 @@ void		rasterize(t_mlx_sess *p, t_tri *triangle)
 					unsigned char r = w[0] * (*triangle)[0].color.r + w[1] * (*triangle)[1].color.r + w[2] * (*triangle)[2].color.r;
 					unsigned char g = w[0] * (*triangle)[0].color.g + w[1] * (*triangle)[1].color.g + w[2] * (*triangle)[2].color.g;
 					unsigned char b = w[0] * (*triangle)[0].color.b + w[1] * (*triangle)[1].color.b + w[2] * (*triangle)[2].color.b;
+
+					//r *= z;
+					//g *= z;
+					//b *= z;
 					//unsigned char g = w[0] * 0 + w[1] * 255 + w[2] * 0;
 					//unsigned char b = w[0] * 0 + w[1] * 0 + w[2] * 255;
 
