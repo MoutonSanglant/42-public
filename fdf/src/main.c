@@ -320,11 +320,11 @@ int		main(int argc, char **argv)
 	v.y = 650;
 	v.z = -300;
 	translation_matrix4(&tmp, v);
-	matrix4_product(param->world, &tmp);
+	//matrix4_product(param->world, &tmp);
 	rotationX_matrix4(&tmp, RAD(-10));
-	matrix4_product(param->world, &tmp);
+	//matrix4_product(param->world, &tmp);
 	rotationZ_matrix4(&tmp, RAD(-10));
-	matrix4_product(param->world, &tmp);
+	//matrix4_product(param->world, &tmp);
 
 	param->projection = (t_mat4x4 *)ft_memalloc(sizeof(t_mat4x4));
 
@@ -339,6 +339,7 @@ int		main(int argc, char **argv)
 	FOV = 90.f; // just need horizontal FOV
 	param->near = .1f;
 	param->far = 1000;
+	// Use an horizontal FOV
 	perspective_projection_matrix4(param->projection, FOV, x/y, param->near, param->far);
 
 	//t_mat4x4 camera = { 0.718762, 0.615033, -0.324214, 0, -0.393732, 0.744416, 0.539277, 0, 0.573024, -0.259959, 0.777216, 0, 0.526967, 1.254234, -2.53215, 1};
@@ -346,6 +347,7 @@ int		main(int argc, char **argv)
 	//param->canvasS = tan(FOV * .5f) * param->near;
 	param->aspect = (float)param->width / (float)param->height;
 	param->canvasH = 2 * tan(FOV * .5f) * param->near;
+	//param->canvasH = 2 * tan(FOV * .5f);
 	param->canvasT = param->canvasH * .5f; // MAYBE a missing '* param->near' here
 	param->canvasB = -param->canvasT;
 
@@ -357,6 +359,12 @@ int		main(int argc, char **argv)
 	param->canvasW = param->canvasH * param->aspect;
 	param->canvasR = param->canvasT * param->aspect; // MAYBE a missing '* param->near' here
 	param->canvasL = -param->canvasR;
+
+	/*param->canvasT = param->canvasH * .5f; // MAYBE a missing '* param->near' here
+	//param->canvasT = -param->canvasT; // MAYBE a missing '* param->near' here
+	param->canvasB = -param->canvasT; // MAYBE a missing '* param->near' here
+	param->canvasR = param->canvasW * .5f; // MAYBE a missing '* param->near' here
+	param->canvasL = -param->canvasR;*/
 
 	printf("height: %i / width: %i\naspect: %f\nH: %f / W: %f\nT: %f\nB: %f\nL: %f\nR: %f\n", param->height, param->width, param->aspect, param->canvasH, param->canvasW, param->canvasT, param->canvasB, param->canvasL, param->canvasR);
 

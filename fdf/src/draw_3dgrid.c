@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/18 17:52:02 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/28 18:46:00 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/01/29 21:00:13 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,13 @@
 
 static int		rasterize_coord(t_mlx_sess *p, t_vec3f in, t_vec3f *out)
 {
+	*out = apply_matrix4(in, p->projection);
+	if (out->x < -1.f || out->x > 1.f || out->y < -1.f || out->x > 1.f)
+		return (1);
+
+	out->x = fminf(p->width - 1, ((uint32_t)((out->x + 1.f) * 0.5f *p->width)));
+	out->y = fminf(p->height - 1, ((uint32_t)((1 - (out->y + 1.f) * 0.5f) *p->height)));
+	return (0);
 	// IMPORTANT NOTE
 	// I don't handle the FIT / OVERSCAN solutions to scale
 	// the image in x or y.
@@ -38,8 +45,17 @@ static int		rasterize_coord(t_mlx_sess *p, t_vec3f in, t_vec3f *out)
 
 	// 1 - Convert points to NDC space
 	// NDC space should be in range [-1, 1] (GPU convention)
-	//NDCout.x = 2 * out->x / (r - l) - (r + l) / (r - l); !! NEXT LESSON !!
-	//NDCout.y = 2 * out->y / (t - b) - (t + b) / (t - b); !! NEXT LESSON !!
+	
+	/*
+	int r, l, t, b;
+
+	r = p->canvasR;
+	t = p->canvasT;
+	l = p->canvasL;
+	b = p->canvasB;
+	NDCout.x = 2 * out->x / (r - l) - (r + l) / (r - l); //!! NEXT LESSON !!
+	NDCout.y = 2 * out->y / (t - b) - (t + b) / (t - b); //!! NEXT LESSON !!
+	*/
 	NDCout.x = (out->x + p->canvasR) / (2 * p->canvasR);
 	NDCout.y = (out->y + p->canvasT) / (2 * p->canvasT);
 
@@ -49,6 +65,8 @@ static int		rasterize_coord(t_mlx_sess *p, t_vec3f in, t_vec3f *out)
 	int x;
 	int y;
 
+	//x = (int)((NDCout.x + 1) / 2 * p->width);
+	//y = (int)((1 - NDCout.y) / 2 * p->height);
 	x = (int)(NDCout.x * p->width);
 	y = (int)((1 - NDCout.y) * p->height);
 
