@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/19 00:37:19 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/27 12:46:14 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/01/29 20:06:47 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,11 +205,12 @@ t_vec3f	apply_matrix4(t_vec3f a, t_mat4x4 *m)
 	a.z = (*m)[2] * b.x + (*m)[6] * b.y + (*m)[10] * b.z + (*m)[14];
 	w = (*m)[3] * b.x + (*m)[7] * b.y + (*m)[11] * b.z + (*m)[15];
 	/*/
+	// affine transformation matrix operation
 	a.x = (*m)[0] * b.x + (*m)[1] * b.y + (*m)[2] * b.z + (*m)[3];
 	a.y = (*m)[4] * b.x + (*m)[5] * b.y + (*m)[6] * b.z + (*m)[7];
 	a.z = (*m)[8] * b.x + (*m)[9] * b.y + (*m)[10] * b.z + (*m)[11];
 	//*/
-	//*
+	// projection matrix operation
 	float w;
 	w = (*m)[12] * b.x + (*m)[13] * b.y + (*m)[14] * b.z + (*m)[15];
 	//w = (*m)[3] * b.x + (*m)[7] * b.y + (*m)[11] * b.z + (*m)[15];

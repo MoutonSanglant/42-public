@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/18 21:09:30 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/27 12:46:14 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/01/29 21:02:26 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -310,8 +310,22 @@ void	rotationZ_matrix4(t_mat4x4 *m, float alpha)
 void	perspective_projection_matrix4(t_mat4x4 *m, float angleOfView, float vp,
 										int far, int near)
 {
+	(void)vp;
 	float scale;
+	scale = 1 / tanf(angleOfView * 0.5f * M_PI / 180);
 
+	identity_matrix4(m);
+	(*m)[0] = scale;
+	(*m)[5] = scale;
+	(*m)[10] = -(far / (far - near));
+	//(*m)[11] = -1.f;
+	(*m)[14] = -1.f;
+	//(*m)[14] = -((far * near) / (far - near));
+	(*m)[11] = -((far * near) / (far - near));
+	(*m)[15] = 0.f;
+
+
+	/*
 	(void)vp;
 	scale = 1 / tanf(angleOfView * 0.5f * M_PI / 180);
 	identity_matrix4(m);
@@ -322,7 +336,7 @@ void	perspective_projection_matrix4(t_mat4x4 *m, float angleOfView, float vp,
 	//(*m)[11] = -far * near / (far - near);
 	(*m)[11] = -((2 * far * near) / (far - near));
 	(*m)[14] = -1;
-	(*m)[15] = 0;
+	(*m)[15] = 0;*/
 }
 
 /*
@@ -340,7 +354,6 @@ void	orthographic_projection_matrix4(t_mat4x4 *m, t_vec2f size,
 	(*m)[10] = -(2 / (far - near));
 	(*m)[11] = -((far + near) / (far - near));
 	(*m)[15] = 1;
-
 }
 
 void	view_frustum_matrix4()
