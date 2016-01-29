@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/18 17:35:36 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/27 12:46:14 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/01/30 03:44:42 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,14 +81,21 @@ void	draw_line(t_mlx_sess *p, t_vec2f *from, t_vec2f *to)
 
 void	clear_canvas(t_mlx_sess *p, int clear_color)
 {
-	t_vec2f from;
-	t_vec2f to;
+	size_t x;
+	size_t y;
 
-	from.x = 1;
-	from.y = 1;
-	to.x = p->width;
-	to.y = p->height;
-	draw_square(p, mlx_get_color_value(p->sess, clear_color), &from, &to);
+	x = 1;
+	y = 1;
+	while (x < p->width)
+	{
+		while (y < p->height)
+		{
+			set_image_pixel(p, p->img, clear_color, x, y++);
+			p->zbuffer[x + y * p->width] = FLT_MAX;
+		}
+		y = 1;
+		x++;
+	}
 }
 
 void	draw_square(t_mlx_sess *p, int color, t_vec2f *from, t_vec2f *to)
