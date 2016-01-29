@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/18 17:52:02 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/28 18:46:00 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/01/29 04:52:26 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,10 +140,12 @@ static void		draw_triangle(t_mlx_sess *p, t_tri *triangle, t_mat4x4 *mvp)
 	b_test = draw_point(p, b, &pixels[1], mvp);
 	c_test = draw_point(p, c, &pixels[2], mvp);
 
+	// Coords are now in raster space
 	t_tri t; // like t_vert[3];
 	t[0].coord.x = pixels[0].x;
 	t[0].coord.y = pixels[0].y;
 	t[0].coord.z = pixels[0].z;
+	// Divide vertex attribute by vertex z
 	t[0].color.r = (*triangle)[0].color.r;
 	t[0].color.g = (*triangle)[0].color.g;
 	t[0].color.b = (*triangle)[0].color.b;
@@ -151,6 +153,7 @@ static void		draw_triangle(t_mlx_sess *p, t_tri *triangle, t_mat4x4 *mvp)
 	t[1].coord.x = pixels[1].x;
 	t[1].coord.y = pixels[1].y;
 	t[1].coord.z = pixels[1].z;
+	// Divide vertex attribute by vertex z
 	t[1].color.r = (*triangle)[1].color.r;
 	t[1].color.g = (*triangle)[1].color.g;
 	t[1].color.b = (*triangle)[1].color.b;
@@ -158,11 +161,16 @@ static void		draw_triangle(t_mlx_sess *p, t_tri *triangle, t_mat4x4 *mvp)
 	t[2].coord.x = pixels[2].x;
 	t[2].coord.y = pixels[2].y;
 	t[2].coord.z = pixels[2].z;
+	// Divide vertex attribute by vertex z
 	t[2].color.r = (*triangle)[2].color.r;
 	t[2].color.g = (*triangle)[2].color.g;
 	t[2].color.b = (*triangle)[2].color.b;
 
-	// Coords qre now in raster space
+	// Pre-compute 1 over z
+	//t[0].coord.z = 1 / t[0].coord.z;
+	//t[1].coord.z = 1 / t[1].coord.z;
+	//t[2].coord.z = 1 / t[2].coord.z;
+
 	rasterize(p, &t);
 	return ;
 
