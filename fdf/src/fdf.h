@@ -167,6 +167,10 @@ typedef struct	s_mlx_sess
 	float		canvasL; // canvas value
 	float		canvasR; // canvas value
 	int			need_update; //canvas ?
+	float		line_width;
+	int			lines_color;
+	int			faces_color;
+	int			bg_color;
 }				t_mlx_sess;
 
 /*
@@ -208,7 +212,7 @@ void	rotationX_matrix4(t_mat4x4 *, float);
 void	rotationY_matrix4(t_mat4x4 *, float);
 void	rotationZ_matrix4(t_mat4x4 *, float);
 void	perspective_projection_matrix4(t_mat4x4 *, float, float, int, int);
-void	orthographic_projection_matrix4(t_mat4x4 *, t_vec2f,	int, int);
+void	orthographic_projection_matrix4(t_mat4x4 *, float, float, float, float,	int, int);
 
 void	transpose_matrix4(t_mat4x4 *m);
 void	matrix4_product(t_mat4x4 *, t_mat4x4 *);

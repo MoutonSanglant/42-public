@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/18 21:09:30 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/29 21:02:26 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/01/30 04:27:52 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -307,36 +307,25 @@ void	rotationZ_matrix4(t_mat4x4 *m, float alpha)
 ** N is Near viewing plane distance
 ** F is Far viewing plane distance
 */
-void	perspective_projection_matrix4(t_mat4x4 *m, float angleOfView, float vp,
-										int far, int near)
+void	perspective_projection_matrix4(t_mat4x4 *m, float angleOfView,
+										float aspect, int far, int near)
 {
-	(void)vp;
+	// m is in row-major order
 	float scale;
-	scale = 1 / tanf(angleOfView * 0.5f * M_PI / 180);
+	scale = 1.f / tanf(angleOfView * .5f * M_PI / 180.f);
 
+	(void)aspect;
 	identity_matrix4(m);
-	(*m)[0] = scale;
+	(*m)[0] = scale / aspect;
 	(*m)[5] = scale;
-	(*m)[10] = -(far / (far - near));
-	//(*m)[11] = -1.f;
-	(*m)[14] = -1.f;
+	//(*m)[10] = -(far / (far - near));
+	(*m)[10] = (near + far) / (near - far);
+	(*m)[11] = -1.f;
 	//(*m)[14] = -((far * near) / (far - near));
-	(*m)[11] = -((far * near) / (far - near));
+	(*m)[14] = 2.f * far * near / (near - far);
 	(*m)[15] = 0.f;
-
-
-	/*
-	(void)vp;
-	scale = 1 / tanf(angleOfView * 0.5f * M_PI / 180);
-	identity_matrix4(m);
-	(*m)[0] = scale;
-	(*m)[5] = scale / vp;
-	//(*m)[5] = scale;
-	(*m)[10] = -(far + near) / (far - near);
-	//(*m)[11] = -far * near / (far - near);
-	(*m)[11] = -((2 * far * near) / (far - near));
-	(*m)[14] = -1;
-	(*m)[15] = 0;*/
+	// transpose m in column-major order
+	transpose_matrix4(m);
 }
 
 /*
@@ -345,15 +334,25 @@ void	perspective_projection_matrix4(t_mat4x4 *m, float angleOfView, float vp,
 ** N is Near viewing plane distance
 ** F is Far viewing plane distance
 */
-void	orthographic_projection_matrix4(t_mat4x4 *m, t_vec2f size,
-										int far, int near)
+void	orthographic_projection_matrix4(t_mat4x4 *m, float t, float b, float l,											float r, int far, int near)
 {
 	identity_matrix4(m);
+	(*m)[0] = 2.f / (r - l);
+	(*m)[3] = -((r + l) / (r - l));
+	(*m)[5] = 2.f / (t - b);
+	(*m)[7] = -((t + b) / (t - b));
+	(*m)[10] = -(2.f / (far - near));
+	(*m)[11] = -((far + near) / (far - near));
+	(*m)[15] = 1.f;
+	transpose_matrix4(m);
+
+	/*
 	(*m)[0] = 1 / size.x;
 	(*m)[5] = 1 / size.y;
 	(*m)[10] = -(2 / (far - near));
 	(*m)[11] = -((far + near) / (far - near));
 	(*m)[15] = 1;
+	*/
 }
 
 void	view_frustum_matrix4()

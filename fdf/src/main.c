@@ -1,24 +1,5 @@
 #include "fdf.h"
 
-static void	clear_zbuffer(float *zbuffer, int x, int y)
-{
-	int i, j;
-
-	i = 0;
-	j = 0;
-	while (i < x)
-	{
-		j = 0;
-		while (j < y)
-		{
-			zbuffer[i + j * x] = FLT_MAX;
-			j++;
-		}
-		i++;
-	}
-	//ft_memset(param->zbuffer, FLT_MAX, x * y);
-}
-
 int		keydown(int key, void *p)
 {
 	t_mlx_sess	*sess;
@@ -46,7 +27,7 @@ int		keydown(int key, void *p)
 		t_vec3f v;
 		v.x = 0;
 		v.y = 0;
-		v.z = 40;
+		v.z = 1;
 		translation_matrix4(&trans, v);
 	}
 	else if (key == KEY_NUMPAD_LESS)
@@ -54,13 +35,13 @@ int		keydown(int key, void *p)
 		t_vec3f v;
 		v.x = 0;
 		v.y = 0;
-		v.z = -40;
+		v.z = -1;
 		translation_matrix4(&trans, v);
 	}
 	else if (key == KEY_LEFT)
 	{
 		t_vec3f v;
-		v.x = -40;
+		v.x = -1;
 		v.y = 0;
 		v.z = 0;
 		translation_matrix4(&trans, v);
@@ -69,14 +50,14 @@ int		keydown(int key, void *p)
 	{
 		t_vec3f v;
 		v.x = 0;
-		v.y = -40;
+		v.y = -1;
 		v.z = 0;
 		translation_matrix4(&trans, v);
 	}
 	else if (key == KEY_RIGHT)
 	{
 		t_vec3f v;
-		v.x = 40;
+		v.x = 1;
 		v.y = 0;
 		v.z = 0;
 		translation_matrix4(&trans, v);
@@ -85,7 +66,7 @@ int		keydown(int key, void *p)
 	{
 		t_vec3f v;
 		v.x = 0;
-		v.y = 40;
+		v.y = 1;
 		v.z = 0;
 		translation_matrix4(&trans, v);
 	}
@@ -152,8 +133,7 @@ int		draw_loop(void *p)
 	{
 		gettimeofday(&tval_last, NULL);
 		//clear_canvas(sess, 0xffffff);
-		clear_canvas(sess, 0x000460000);
-		clear_zbuffer(sess->zbuffer, sess->width, sess->height);
+		clear_canvas(sess, sess->bg_color);
 		draw_3dgrid(sess);
 		mlx_put_image_to_window(sess->sess, sess->win, sess->img->img, 0, 0);
 		draw_gui(sess);
@@ -262,7 +242,7 @@ int		main(int argc, char **argv)
 
 #ifdef BONUS
 	param->zbuffer = (float *)ft_memalloc(sizeof(float) * x * y);
-	clear_zbuffer(param->zbuffer, x, y);
+	//clear_zbuffer(param->zbuffer, x, y);
 #endif
 
 	/*
@@ -288,86 +268,88 @@ int		main(int argc, char **argv)
 	t_mat4x4	tmp;
 	t_vec3f v;
 
-	// World
+	/*
+	**	WORLD Matrix
+	*/
 	param->world = (t_mat4x4 *)ft_memalloc(sizeof(t_mat4x4));
 	identity_matrix4(param->world);
 
+	/*
+	**	VIEW MAtrix
+	*/
 	param->view = (t_mat4x4 *)ft_memalloc(sizeof(t_mat4x4));
 	identity_matrix4(param->view);
+
+	/*
+	**	CAMERA Matrix (WorldToCamera)
+	*/
+	param->worldToCamera = (t_mat4x4 *)ft_memalloc(sizeof(t_mat4x4));
 	// Camera needs to look down (along the negative 'Z-axis')
 	rotationX_matrix4(&tmp, RAD(90));
 	matrix4_product(param->view, &tmp);
-	param->worldToCamera = (t_mat4x4 *)ft_memalloc(sizeof(t_mat4x4));
 	inverse_matrix4(param->view, param->worldToCamera);
-	v.x = 0;
-	v.y = 0;
-	v.z = 50;
-	translation_matrix4(&tmp, v);
-	//matrix4_product(param->view, &tmp);
-	//(*param->view)[3] = 0;
-	//(*param->view)[7] = 0;
-	//(*param->view)[11] = 0;
-	v.x = 0;
-	v.y = 50;
-	v.z = 0;
-	rotationY_matrix4(&tmp, RAD(-30));
-	//matrix4_product(param->view, &tmp);
-	//matrix4_product(param->view, &tmp);
-	//rotationZ_matrix4(&tmp, RAD(45));
-	//matrix4_product(&tmp, &tmp2);
-	//matrix4_product(param->view, &tmp);
-	v.x = -200;
-	v.y = 650;
-	v.z = -300;
-	translation_matrix4(&tmp, v);
-	//matrix4_product(param->world, &tmp);
-	rotationX_matrix4(&tmp, RAD(-10));
-	//matrix4_product(param->world, &tmp);
-	rotationZ_matrix4(&tmp, RAD(-10));
-	//matrix4_product(param->world, &tmp);
 
+	// Move the world so it looks in a good direction
+	rotationZ_matrix4(&tmp, RAD(180));
+	matrix4_product(param->world, &tmp);
+	v.x = 18;
+	v.y = 20;
+	v.z = -6;
+	translation_matrix4(&tmp, v);
+	matrix4_product(param->world, &tmp);
+	rotationX_matrix4(&tmp, RAD(-10));
+	matrix4_product(param->world, &tmp);
+	rotationZ_matrix4(&tmp, RAD(-25));
+	matrix4_product(param->world, &tmp);
+
+	/*
+	**	PROJECTION Matrix
+	*/
 	param->projection = (t_mat4x4 *)ft_memalloc(sizeof(t_mat4x4));
 
-	// Orthographic
-	t_vec2f size;
-	size.x = 1;
-	size.y = 1;
-	orthographic_projection_matrix4(param->projection, size, 5, 1000);
-
-	// Perspective
-	float FOV;
-	FOV = 90.f; // just need horizontal FOV
-	param->near = .1f;
-	param->far = 1000;
-	// Use an horizontal FOV
-	perspective_projection_matrix4(param->projection, FOV, x/y, param->near, param->far);
-
-	//t_mat4x4 camera = { 0.718762, 0.615033, -0.324214, 0, -0.393732, 0.744416, 0.539277, 0, 0.573024, -0.259959, 0.777216, 0, 0.526967, 1.254234, -2.53215, 1};
-	//param->view = &camera;
-	//param->canvasS = tan(FOV * .5f) * param->near;
+	// Aspect of the window
 	param->aspect = (float)param->width / (float)param->height;
-	param->canvasH = 2 * tan(FOV * .5f) * param->near;
-	//param->canvasH = 2 * tan(FOV * .5f);
-	param->canvasT = param->canvasH * .5f; // MAYBE a missing '* param->near' here
+
+	// Perspective Camera
+	param->near = .1f;
+	param->far = 100;
+	// Use an horizontal FOV
+	perspective_projection_matrix4(param->projection, 90.f, param->aspect, param->near, param->far);
+
+	/*
+	**	ORTHOGRAPHIC
+	*/
+	/*float t, b, l, r;
+	r = param->width * param->aspect;
+	t = param->width;
+	r = -.1f * param->aspect;
+	t = -.1f;
+	l = -r;
+	b = -t;
+	orthographic_projection_matrix4(param->projection, t, b, l, r, 1.f, 100);*/
+	// Canvas Height
+	param->canvasH = 2 * tan(90.f * .5f) * param->near;
+	param->canvasW = param->canvasH * param->aspect;
+	param->canvasT = param->canvasH * .5f;
 	param->canvasB = -param->canvasT;
 
-	/* This solution needs x/y FOV
-	** read 3D Viewing: the Pinhole Camera Chapter 4
-	param->canvasW = 2 * tan(yFOV * .5f) * param->near;
-	param->canvasR = param->canvasW * .5f; // MAYBE a missing '* param->near' here
-	*/
-	param->canvasW = param->canvasH * param->aspect;
-	param->canvasR = param->canvasT * param->aspect; // MAYBE a missing '* param->near' here
+	param->canvasR = param->canvasT * .5f;
 	param->canvasL = -param->canvasR;
 
-	/*param->canvasT = param->canvasH * .5f; // MAYBE a missing '* param->near' here
-	//param->canvasT = -param->canvasT; // MAYBE a missing '* param->near' here
-	param->canvasB = -param->canvasT; // MAYBE a missing '* param->near' here
-	param->canvasR = param->canvasW * .5f; // MAYBE a missing '* param->near' here
-	param->canvasL = -param->canvasR;*/
+	/*
+	**	DRAWING Settings
+	*/
+	param->line_width = .03f;
+	param->lines_color = 0x00000000;
+	param->bg_color = 0x00046000;
+	param->faces_color = param->bg_color;
+	// invert
+	param->faces_color = param->lines_color;
+	param->lines_color = param->bg_color;
 
 	printf("height: %i / width: %i\naspect: %f\nH: %f / W: %f\nT: %f\nB: %f\nL: %f\nR: %f\n", param->height, param->width, param->aspect, param->canvasH, param->canvasW, param->canvasT, param->canvasB, param->canvasL, param->canvasR);
 
+	// Start MLX session
 	mlx_hook(param->win, KeyPress, KeyPressMask, &keydown, (void *)param);
 	mlx_key_hook(param->win, &keypress, (void *)param);
 	//mlx_expose_hook(param->win, &expose, (void *)param);

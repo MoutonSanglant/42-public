@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/27 12:41:37 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/29 04:53:30 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/01/30 03:46:46 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void		rasterize(t_mlx_sess *p, t_tri *triangle)
 	ymax = max3(&(*triangle)[0].coord.y, &(*triangle)[1].coord.y, &(*triangle)[2].coord.y);
 
 	if (xmin > p->width - 1 || xmax < 0 || ymin > p->height - 1 || ymax < 0)
-		return;
+		return ;
 
 	uint32_t x0 = (uint32_t)fmaxf(0.f, (float) floor(xmin));
 	uint32_t x1 = (uint32_t)fminf(p->width - 1, (float) floor(xmax));
@@ -72,8 +72,8 @@ void		rasterize(t_mlx_sess *p, t_tri *triangle)
 			float	w[3];
 
 			x++;
-			pixel_sample.x = x + .0f;
-			pixel_sample.y = y + .0f;
+			pixel_sample.x = x;
+			pixel_sample.y = y;
 			pixel_sample.z = 0;
 
 			w[0] = edge_function(&(*triangle)[1].coord, &(*triangle)[2].coord, &pixel_sample); // signed area of the small triangle * 2
@@ -90,23 +90,27 @@ void		rasterize(t_mlx_sess *p, t_tri *triangle)
 				w[2] /= area;
 
 				oneOverZ = (*triangle)[0].coord.z * w[0] + (*triangle)[1].coord.z * w[1] + (*triangle)[2].coord.z * w[2];
-				z = 1 / oneOverZ;
+				//z = 1 / oneOverZ;
+				z = oneOverZ;
 				if (z < p->zbuffer[x + y * p->width])
 				{
-					p->zbuffer[x + y * p->width] = z;
-
 					unsigned char r = w[0] * (*triangle)[0].color.r + w[1] * (*triangle)[1].color.r + w[2] * (*triangle)[2].color.r;
 					unsigned char g = w[0] * (*triangle)[0].color.g + w[1] * (*triangle)[1].color.g + w[2] * (*triangle)[2].color.g;
 					unsigned char b = w[0] * (*triangle)[0].color.b + w[1] * (*triangle)[1].color.b + w[2] * (*triangle)[2].color.b;
 
-					//r *= z;
-					//g *= z;
-					//b *= z;
-					//unsigned char g = w[0] * 0 + w[1] * 255 + w[2] * 0;
-					//unsigned char b = w[0] * 0 + w[1] * 0 + w[2] * 255;
+					// Visual render of the z-Buffer
+					//r = (unsigned char) 255 * z * 4;
+					//g = (unsigned char) 255 * z * 4;
+					//b = (unsigned char) 255 * z * 4;
 
 					int col = (r << 16) | (g << 8) | (b);
+					//if (w[0] > .59f || w[1] > .59f || w[2] > .59f)
+					//	col = 0x00046000;
 
+					col = p->lines_color;
+					if (w[0] >= p->line_width && w[1] >= p->line_width && w[2] >= p->line_width)
+						col = p->faces_color;
+					p->zbuffer[x + y * p->width] = z;
 					set_image_pixel(p, p->img, mlx_get_color_value(p->sess, col), x, y);
 				}
 			}
