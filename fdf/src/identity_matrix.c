@@ -1,34 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   set_image_pixel.c                                  :+:      :+:    :+:   */
+/*   identity_matrix.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/01/18 17:50:22 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/03 20:38:26 by tdefresn         ###   ########.fr       */
+/*   Created: 2016/02/02 18:51:47 by tdefresn          #+#    #+#             */
+/*   Updated: 2016/02/02 18:52:52 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-/*
-**	TODO
-**	Manage different endians
-**	(It should help to remove the void cast on 'sess')
-*/
-
-void		set_image_pixel(t_mlx_sess *sess, t_image *img, int color,
-							t_vec2ui32 xy)
+void	identity_matrix4(t_mat4x4 *m)
 {
-	int				opp;
-	int				dec;
-	unsigned char	*ptr;
-
-	(void)sess;
-	opp = img->bpp / 8;
-	dec = opp;
-	ptr = ((unsigned char *)img->data + xy.y * img->sl) + xy.x * opp;
-	while (dec--)
-		*(ptr + dec) = ((unsigned char *)(&color))[dec];
+	(*m)[0] = 1.f;
+	(*m)[1] = 0.f;
+	(*m)[2] = 0.f;
+	(*m)[3] = 0.f;
+	(*m)[4] = 0.f;
+	(*m)[5] = 1.f;
+	(*m)[6] = 0.f;
+	(*m)[7] = 0.f;
+	(*m)[8] = 0.f;
+	(*m)[9] = 0.f;
+	(*m)[10] = 1.f;
+	(*m)[11] = 0.f;
+	(*m)[12] = 0.f;
+	(*m)[13] = 0.f;
+	(*m)[14] = 0.f;
+	(*m)[15] = 1.f;
 }

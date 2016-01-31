@@ -1,34 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   set_image_pixel.c                                  :+:      :+:    :+:   */
+/*   putcol.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/01/18 17:50:22 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/03 20:38:26 by tdefresn         ###   ########.fr       */
+/*   Created: 2016/01/31 22:38:07 by tdefresn          #+#    #+#             */
+/*   Updated: 2016/01/31 22:42:18 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fdf.h"
+#include "game_2048.h"
 
-/*
-**	TODO
-**	Manage different endians
-**	(It should help to remove the void cast on 'sess')
-*/
-
-void		set_image_pixel(t_mlx_sess *sess, t_image *img, int color,
-							t_vec2ui32 xy)
+void		putcol(t_sess *sess, t_win *win)
 {
-	int				opp;
-	int				dec;
-	unsigned char	*ptr;
+	int w;
+	int h;
 
 	(void)sess;
-	opp = img->bpp / 8;
-	dec = opp;
-	ptr = ((unsigned char *)img->data + xy.y * img->sl) + xy.x * opp;
-	while (dec--)
-		*(ptr + dec) = ((unsigned char *)(&color))[dec];
+	w = 1;
+	h = 1;
+	while (h < win->height - 1)
+	{
+		while (w < 4)
+			mvwprintw(win->self, h, w++ * (win->width / 4), "|");
+		w = 1;
+		h++;
+	}
 }

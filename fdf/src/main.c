@@ -1,76 +1,77 @@
 #include "fdf.h"
 
+void	rotate_around_center(t_mlx_sess *sess, char c, int dir)
+{
+	t_mat4x4	m_iworld;
+	t_mat4x4	m_rot;
+
+	inverse_matrix4(sess->world, &m_iworld);
+	identity_matrix4(&m_rot);
+	if (c == 'z')
+		rotation_z_matrix4(&m_rot, RAD(3 * dir));
+	else if (c == 'y')
+		rotation_y_matrix4(&m_rot, RAD(3 * dir));
+	else if (c == 'x')
+		rotation_x_matrix4(&m_rot, RAD(3 * dir));
+	matrix4_product(&m_rot, &m_iworld);
+	inverse_matrix4(&m_iworld, sess->world);
+}
+
 int		keydown(int key, void *p)
 {
 	t_mlx_sess	*sess;
-	t_mat4x4	trans;
+	t_mat4x4	m_loc;
+	t_mat4x4	m_rot;
+	t_vec3f		loc;
 
-	identity_matrix4(&trans);
 	sess = (t_mlx_sess *)p;
-
 	sess->need_update = 1;
+	loc.x = 0;
+	loc.y = 0;
+	loc.z = 0;
+	identity_matrix4(&m_loc);
+	identity_matrix4(&m_rot);
 
-	if (key == KEY_Q)
-		rotationY_matrix4(&trans, RAD(3));
+	ft_putchar('\n');
+	ft_putnbr(key);
+
+	if (key == KEY_B)
+		sess->bresenham = (sess->bresenham) ? 0 : 1;
+	else if (key == KEY_O)
+		set_orthographic_camera(sess);
+	else if (key == KEY_P)
+		set_perspective_camera(sess);
+	else if (key == KEY_Q)
+		rotate_around_center(sess, 'y', 1);
 	else if (key == KEY_E)
-		rotationY_matrix4(&trans, RAD(-3));
+		rotate_around_center(sess, 'y', -1);
 	else if (key == KEY_A)
-		rotationZ_matrix4(&trans, RAD(-3));
+		rotate_around_center(sess, 'z', -1);
 	else if (key == KEY_D)
-		rotationZ_matrix4(&trans, RAD(3));
+		rotate_around_center(sess, 'z', 1);
 	else if (key == KEY_W)
-		rotationX_matrix4(&trans, RAD(3));
+		rotate_around_center(sess, 'x', -1);
 	else if (key == KEY_S)
-		rotationX_matrix4(&trans, RAD(-3));
+		rotate_around_center(sess, 'x', 1);
 	else if (key == KEY_NUMPAD_MORE)
-	{
-		t_vec3f v;
-		v.x = 0;
-		v.y = 0;
-		v.z = 1;
-		translation_matrix4(&trans, v);
-	}
+		loc.y = -1;
 	else if (key == KEY_NUMPAD_LESS)
-	{
-		t_vec3f v;
-		v.x = 0;
-		v.y = 0;
-		v.z = -1;
-		translation_matrix4(&trans, v);
-	}
+		loc.y = 1;
 	else if (key == KEY_LEFT)
-	{
-		t_vec3f v;
-		v.x = -1;
-		v.y = 0;
-		v.z = 0;
-		translation_matrix4(&trans, v);
-	}
-	else if (key == KEY_UP)
-	{
-		t_vec3f v;
-		v.x = 0;
-		v.y = -1;
-		v.z = 0;
-		translation_matrix4(&trans, v);
-	}
+		loc.x = -1;
 	else if (key == KEY_RIGHT)
-	{
-		t_vec3f v;
-		v.x = 1;
-		v.y = 0;
-		v.z = 0;
-		translation_matrix4(&trans, v);
-	}
+		loc.x = 1;
+	else if (key == KEY_UP)
+		loc.z = -1;
 	else if (key == KEY_DOWN)
-	{
-		t_vec3f v;
-		v.x = 0;
-		v.y = 1;
-		v.z = 0;
-		translation_matrix4(&trans, v);
-	}
-	matrix4_product(sess->world, &trans);
+		loc.z = 1;
+	else if (key == KEY_PAGE_UP)
+		change_grid_z(sess->grid, 1.1f);
+	else if (key == KEY_PAGE_DOWN)
+		change_grid_z(sess->grid, 0.9f);
+	translation_matrix4(&m_loc, loc);
+	matrix4_product(&m_loc, sess->world);
+	matrix4_product(&m_rot, sess->world);
 	return (0);
 }
 
@@ -93,11 +94,10 @@ int		keypress(int key, void *p)
 		ft_memdel((void **)&sess->zbuffer);
 		ft_memdel((void **)&sess->world);
 		ft_memdel((void **)&sess->view);
-		ft_memdel((void **)&sess->worldToCamera);
+		ft_memdel((void **)&sess->world_to_camera);
 		ft_memdel((void **)&sess->projection);
 		ft_memdel((void **)&sess->grid->triangles);
 		ft_memdel((void **)&sess->grid);
-		ft_memdel((void **)&sess->cube);
 		ft_memdel((void **)&sess->sess);
 		ft_memdel((void **)&sess);
 		exit(0);
@@ -155,23 +155,29 @@ int		expose(void *p)
 	t_mlx_sess	*sess;
 
 	sess = (t_mlx_sess *)p;
-	//clear_canvas(sess, 0x00ffffff);
-	(void)sess;
-	//mlx_clear_window(sess->sess, sess->win);
-//	draw_3dgrid(sess);
-
+	sess->need_update = 1;
 	return (0);
 }
 
-#ifdef DEBUG
-static void	post(t_image *image)
+#ifdef LINUX
+static void set_mlx_hooks(t_mlx_sess *sess)
 {
-	output_image_info(image);
+	// Start MLX session
+	mlx_hook(sess->win, KeyPress, KeyPressMask, &keydown, (void *)sess);
+	mlx_key_hook(sess->win, &keypress, (void *)sess);
+	mlx_expose_hook(sess->win, &expose, (void *)sess);
+	mlx_loop_hook(sess->sess, &draw_loop, (void *)sess);
+
 }
 #else
-static void	post(t_image *image)
+static void set_mlx_hooks(t_mlx_sess *sess)
 {
-	(void) image;
+	// Start MLX session
+	mlx_hook(sess->win, KEYPRESS, KEYPRESSMASK, &keydown, (void *)sess);
+	mlx_key_hook(sess->win, &keypress, (void *)sess);
+	mlx_expose_hook(sess->win, &expose, (void *)sess);
+	mlx_loop_hook(sess->sess, &draw_loop, (void *)sess);
+
 }
 #endif
 
@@ -184,6 +190,19 @@ int		main(int argc, char **argv)
 	int			x;
 	int			y;
 	t_vert		**vertmap;
+
+	char txt[] = "hello";
+	char dst[32];
+
+	for (int j = 0; j < 12; ++j) {
+		for (size_t i = 0; i < sizeof(txt); ++i) {
+			dst[i + 6] = txt[i];
+		}
+		ft_memmove(dst + j, dst + 6, sizeof(txt));
+		if (ft_memcmp(dst + j, txt, sizeof(txt) != 0))
+				ft_putstr("sniff\n");
+	}
+	ft_putstr("Youpi!\n");
 
 	if (argc < 1)
 		return (1);
@@ -231,10 +250,12 @@ int		main(int argc, char **argv)
 	*/
 	image.img = mlx_new_image(param->sess, param->width, param->height);
 	image.data = mlx_get_data_addr(image.img, &image.bpp, &image.sl, &image.endian);
-	post(&image);
 	param->img = &image;
+	if (argc > 3)
+		param->img->filename = argv[3];
+	else
+		param->img->filename = NULL;
 	param->need_update = 1;
-	//clear_canvas(param->sess, 0xffffff);
 
 	/*
 	**	Z-BUFFER
@@ -250,110 +271,89 @@ int		main(int argc, char **argv)
 	*/
 	param->grid = (t_grid *)ft_memalloc(sizeof(t_grid));
 	if (vertmap)
+	{
 		init_grid_from_vertmap(param->grid, vertmap, vx, vy);
+		identity_matrix4(&param->m_model);
+
+		t_mat4x4	trans;
+		t_vec3f		loc;
+		identity_matrix4(&trans);
+		/*
+		** Put model at the center of the scene
+		*/
+		loc.x = -param->grid->width * .5f;
+		loc.y = -param->grid->height * .5f;
+		loc.z = 0;
+		translation_matrix4(&trans, loc);
+		matrix4_product(&trans, &param->m_model);
+	}
 	else
 	{
-		ft_putendl("no input file !");
-		//init_grid(param->grid, 10, 10);
-		init_grid(param->grid, 1, 1);
+		ft_putendl("No input file, making a 10x10 flat grid.");
+		init_grid(param->grid, 10, 10);
+		identity_matrix4(&param->m_model);
 	}
 	param->col = 0x00ffffff;
 
-	/*
-	**	CUBE
-	*/
-	param->cube = (t_tri *)ft_memalloc(sizeof(t_tri) * 12);
-	cube(param->cube);
-
 	t_mat4x4	tmp;
-	t_vec3f v;
 
 	/*
 	**	WORLD Matrix
 	*/
 	param->world = (t_mat4x4 *)ft_memalloc(sizeof(t_mat4x4));
-	identity_matrix4(param->world);
 
 	/*
-	**	VIEW MAtrix
+	**	VIEW Matrix
 	*/
 	param->view = (t_mat4x4 *)ft_memalloc(sizeof(t_mat4x4));
 	identity_matrix4(param->view);
 
 	/*
-	**	CAMERA Matrix (WorldToCamera)
+	**	CAMERA Matrix (world_to_camera)
 	*/
-	param->worldToCamera = (t_mat4x4 *)ft_memalloc(sizeof(t_mat4x4));
+	param->world_to_camera = (t_mat4x4 *)ft_memalloc(sizeof(t_mat4x4));
 	// Camera needs to look down (along the negative 'Z-axis')
-	rotationX_matrix4(&tmp, RAD(90));
-	matrix4_product(param->view, &tmp);
-	inverse_matrix4(param->view, param->worldToCamera);
+	rotation_x_matrix4(&tmp, RAD(90));
+	matrix4_product(&tmp, param->view);
+	inverse_matrix4(param->view, param->world_to_camera);
 
 	// Move the world so it looks in a good direction
-	rotationZ_matrix4(&tmp, RAD(180));
-	matrix4_product(param->world, &tmp);
-	v.x = 18;
-	v.y = 20;
-	v.z = -6;
-	translation_matrix4(&tmp, v);
-	matrix4_product(param->world, &tmp);
-	rotationX_matrix4(&tmp, RAD(-10));
-	matrix4_product(param->world, &tmp);
-	rotationZ_matrix4(&tmp, RAD(-25));
-	matrix4_product(param->world, &tmp);
 
 	/*
 	**	PROJECTION Matrix
 	*/
 	param->projection = (t_mat4x4 *)ft_memalloc(sizeof(t_mat4x4));
 
-	// Aspect of the window
-	param->aspect = (float)param->width / (float)param->height;
-
-	// Perspective Camera
-	param->near = .1f;
-	param->far = 100;
-	// Use an horizontal FOV
-	perspective_projection_matrix4(param->projection, 90.f, param->aspect, param->near, param->far);
-
 	/*
-	**	ORTHOGRAPHIC
+	**	CAMERA
 	*/
-	/*float t, b, l, r;
-	r = param->width * param->aspect;
-	t = param->width;
-	r = -.1f * param->aspect;
-	t = -.1f;
-	l = -r;
-	b = -t;
-	orthographic_projection_matrix4(param->projection, t, b, l, r, 1.f, 100);*/
-	// Canvas Height
-	param->canvasH = 2 * tan(90.f * .5f) * param->near;
-	param->canvasW = param->canvasH * param->aspect;
-	param->canvasT = param->canvasH * .5f;
-	param->canvasB = -param->canvasT;
-
-	param->canvasR = param->canvasT * .5f;
-	param->canvasL = -param->canvasR;
+	param->camera.aspect = (float)param->width / (float)param->height;
+	param->camera.near = .1f;
+	param->camera.far = 100;
+	param->camera.angle_of_view = 90.f;
+	param->camera.right = .1f * param->camera.aspect;
+	param->camera.top = .1f;
+	param->camera.left = -param->camera.right;
+	param->camera.bottom = -param->camera.top;
+	param->camera.far = 100.f;
+	set_perspective_camera(param);
 
 	/*
 	**	DRAWING Settings
 	*/
-	param->line_width = .03f;
+	param->bresenham = 1;
+	param->line_width = .06f;
 	param->lines_color = 0x00000000;
 	param->bg_color = 0x00046000;
-	param->faces_color = param->bg_color;
+	//param->faces_color = param->bg_color;
+	param->faces_color = 0x00ff0000;
 	// invert
-	param->faces_color = param->lines_color;
-	param->lines_color = param->bg_color;
+	//param->faces_color = param->lines_color;
+	//param->lines_color = param->bg_color;
 
-	printf("height: %i / width: %i\naspect: %f\nH: %f / W: %f\nT: %f\nB: %f\nL: %f\nR: %f\n", param->height, param->width, param->aspect, param->canvasH, param->canvasW, param->canvasT, param->canvasB, param->canvasL, param->canvasR);
+//	printf("height: %i / width: %i\naspect: %f\nH: %f / W: %f\nT: %f\nB: %f\nL: %f\nR: %f\n", param->height, param->width, param->camera.aspect, param->canvasH, param->canvasW, param->canvasT, param->canvasB, param->canvasL, param->canvasR);
 
-	// Start MLX session
-	mlx_hook(param->win, KeyPress, KeyPressMask, &keydown, (void *)param);
-	mlx_key_hook(param->win, &keypress, (void *)param);
-	//mlx_expose_hook(param->win, &expose, (void *)param);
-	mlx_loop_hook(param->sess, &draw_loop, (void *)param);
+	set_mlx_hooks(param);
 	mlx_loop(param->sess);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/13 14:44:53 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/26 02:16:11 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/03 18:08:16 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,8 +98,8 @@ static int		read_until_eol(t_list **s, t_parser *p, size_t *total_bcount)
 **	To allow GNL to return characters count, switch
 **	-- r = (total_bcount > 0) ? 1 : 0;
 **	++ r = total_bcount;
-**
 */
+
 static int		get_fd_line(char **line, t_list **s_parsers,
 							int fd, t_list **strings)
 {

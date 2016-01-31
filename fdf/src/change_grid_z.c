@@ -1,34 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   set_image_pixel.c                                  :+:      :+:    :+:   */
+/*   change_grid_z.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/01/18 17:50:22 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/03 20:38:26 by tdefresn         ###   ########.fr       */
+/*   Created: 2016/02/03 12:42:29 by tdefresn          #+#    #+#             */
+/*   Updated: 2016/02/03 14:10:27 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-/*
-**	TODO
-**	Manage different endians
-**	(It should help to remove the void cast on 'sess')
-*/
-
-void		set_image_pixel(t_mlx_sess *sess, t_image *img, int color,
-							t_vec2ui32 xy)
+void	change_grid_z(t_grid *grid, float f)
 {
-	int				opp;
-	int				dec;
-	unsigned char	*ptr;
+	int		i;
+	int		j;
+	int		l;
 
-	(void)sess;
-	opp = img->bpp / 8;
-	dec = opp;
-	ptr = ((unsigned char *)img->data + xy.y * img->sl) + xy.x * opp;
-	while (dec--)
-		*(ptr + dec) = ((unsigned char *)(&color))[dec];
+	i = 0;
+	l = grid->width * grid->height * 2;
+	while (i < l)
+	{
+		j = 0;
+		while (j < 3)
+			grid->triangles[i][j++].coord.z *= f;
+		i++;
+	}
 }

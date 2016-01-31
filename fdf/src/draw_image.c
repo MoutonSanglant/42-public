@@ -1,34 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   set_image_pixel.c                                  :+:      :+:    :+:   */
+/*   draw_image.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/01/18 17:50:22 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/03 20:38:26 by tdefresn         ###   ########.fr       */
+/*   Created: 2016/02/03 16:54:03 by tdefresn          #+#    #+#             */
+/*   Updated: 2016/02/03 16:54:15 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-/*
-**	TODO
-**	Manage different endians
-**	(It should help to remove the void cast on 'sess')
-*/
-
-void		set_image_pixel(t_mlx_sess *sess, t_image *img, int color,
-							t_vec2ui32 xy)
+void	draw_image(t_mlx_sess *mlx_sess, void *img, int *x, int *y)
 {
-	int				opp;
-	int				dec;
-	unsigned char	*ptr;
-
-	(void)sess;
-	opp = img->bpp / 8;
-	dec = opp;
-	ptr = ((unsigned char *)img->data + xy.y * img->sl) + xy.x * opp;
-	while (dec--)
-		*(ptr + dec) = ((unsigned char *)(&color))[dec];
+	mlx_put_image_to_window(mlx_sess->sess, mlx_sess->win, img, *x, *y);
+	mlx_string_put(mlx_sess->sess, mlx_sess->win, 0, 0, 0x00ff0000, "Hello");
 }

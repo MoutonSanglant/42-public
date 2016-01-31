@@ -1,34 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   set_image_pixel.c                                  :+:      :+:    :+:   */
+/*   count_file_lines.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/01/18 17:50:22 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/03 20:38:26 by tdefresn         ###   ########.fr       */
+/*   Created: 2016/02/03 19:52:50 by tdefresn          #+#    #+#             */
+/*   Updated: 2016/02/03 20:00:47 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-/*
-**	TODO
-**	Manage different endians
-**	(It should help to remove the void cast on 'sess')
-*/
-
-void		set_image_pixel(t_mlx_sess *sess, t_image *img, int color,
-							t_vec2ui32 xy)
+static void		buff_error(void)
 {
-	int				opp;
-	int				dec;
-	unsigned char	*ptr;
+	ft_putendl("Error: Can't read file !");
+	exit(17);
+}
 
-	(void)sess;
-	opp = img->bpp / 8;
-	dec = opp;
-	ptr = ((unsigned char *)img->data + xy.y * img->sl) + xy.x * opp;
-	while (dec--)
-		*(ptr + dec) = ((unsigned char *)(&color))[dec];
+int				count_file_lines(char *path)
+{
+	char	*line;
+	int		bcount;
+	int		fd;
+	int		i;
+
+	i = 0;
+	fd = open(path, O_RDONLY);
+	while ((bcount = get_next_line(fd, &line)))
+	{
+		if (bcount < 0)
+			buff_error();
+		ft_strdel(&line);
+		i++;
+	}
+	close(fd);
+	return (i);
 }

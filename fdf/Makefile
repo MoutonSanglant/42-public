@@ -1,10 +1,16 @@
-NAME	= fdf
-
 CC		= gcc
-CFLAGS	= -Wall -Werror -Wextra -I./libft
+CFLAGS	= -Wall -Werror -Wextra -I./libft -D BONUS
 LDFLAGS	= -L./lib -L./libft
 LDLIBS	= -lft -lm
-DFLAGS	= -g -O0 -D DEBUG
+
+ifeq ($(BUILD), Debug)
+CFLAGS	+= -g -O0 -D DEBUG
+SUFFIX	= .debug.o
+NAME	= fdf.debug
+else
+SUFFIX	= .o
+NAME	= fdf
+endif
 
 ARCH	= $(shell uname -m)
 OS		= $(shell uname -s)
@@ -22,44 +28,52 @@ else ifeq ($(OS), Linux)
 endif
 
 SRC_PREFIX	= ./src/
+OBJ_PREFIX	= ./obj/
 
-SRC	= main draw draw_3dgrid set_image_pixel init_grid \
+SRC	= main draw_3dgrid set_image_pixel init_grid init_grid_from_vertmap \
 	matrix matrix_math get_next_line get_vertmap_from_file \
-	rasterize
+	rasterize camera inverse_matrix projection_matrix identity_matrix \
+	change_grid_z draw_square draw_image clear_canvas bresenham_draw_line \
+	count_file_lines
+
+ifeq ($(BUILD), Debug)
+SRC += draw_debug_gui
+endif
 
 SRC := $(addsuffix .c, $(SRC))
 SRC := $(addprefix $(SRC_PREFIX), $(SRC))
 
-OBJ = $(SRC:.c=.o)
+OBJ = $(subst $(SRC_PREFIX), , $(SRC:.c=$(SUFFIX)))
+OBJ := $(addprefix $(OBJ_PREFIX), $(OBJ))
 
-.SILENT: $(OBJ)
-.PHONY: all clean fclean re libft
+.PHONY: all clean fclean re libft debug
 
-all: libft $(NAME)
+all: $(NAME)
 
-debug: CFLAGS += $(DFLAGS)
-debug: fclean debug_compile
-debug_compile: $(OBJ) $(SRC_PREFIX)debug.o
-	@echo "call to 'debug' rule"
-	$(CC) -o $(NAME) $^ $(CFLAGS) $(LDFLAGS) $(LDLIBS) -D BONUS
-#	/bin/rm -f $(SRC_PREFIX)debug.o
+debug:
+	@$(MAKE) BUILD=Debug all
 
-$(NAME): $(OBJ)
+$(NAME): $(OBJ) libft/libft.a
 	@echo "making $@"
-	$(CC) -o $(NAME) $^ $(CFLAGS) $(LDFLAGS) $(LDLIBS) -D BONUS
+	$(CC) -o $(NAME) $(OBJ) $(CFLAGS) $(LDFLAGS) $(LDLIBS)
+
+libft/libft.a: libft
 
 libft:
 	@echo "making $@"
-	cd libft && $(MAKE)
+	@$(MAKE) -C libft BUILD=$(BUILD)
 
-%.o: %.c
+$(OBJ_PREFIX)%$(SUFFIX): $(SRC_PREFIX)%.c
 	@echo "making $<"
-	$(CC) -o $@ -c $< $(CFLAGS) -D BONUS
+	@mkdir -p obj
+	@$(CC) -o $@ -c $< $(CFLAGS)
 
 clean:
-	/bin/rm -f ${OBJ}
+	/bin/rm -rf $(OBJ_PREFIX)
+	$(MAKE) -C libft clean
 
 fclean: clean
 	/bin/rm -f $(NAME)
+	$(MAKE) -C libft fclean
 
 re: fclean all

@@ -12,15 +12,11 @@
 
 NAME	= libft.a
 
-.PHONY: all clean fclean re
-.SILENT: $(OBJ)
-
 CC		= gcc
 CFLAGS	= -Wall -Werror -Wextra -D LIBFT_EXTRA
 DFLAGS	= -g -O0 -D DEBUG
 
 SRC_PREFIX = ./src/
-
 
 SRC		= memset bzero memcpy memccpy memmove memchr memcmp strdup strcpy strncpy \
 strcat strncat strlcat strchr strrchr strstr strnstr strcmp strncmp atoi \
@@ -38,6 +34,9 @@ SRC := $(addprefix $(SRC_PREFIX)ft_, $(SRC))
 
 OBJ = $(SRC:.c=.o)
 
+.PHONY: all clean fclean re
+.SILENT: $(OBJ)
+
 all: $(NAME)
 
 debug: CFLAGS += $(DFLAGS)
@@ -53,7 +52,7 @@ $(NAME): $(OBJ)
 	@$(CC) -o $@ -c $< $(CFLAGS)
 
 clean:
-	/bin/rm -f ${OBJ}
+	/bin/rm -f $(OBJ)
 
 fclean: clean
 	/bin/rm -f $(NAME)
