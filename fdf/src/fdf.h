@@ -68,8 +68,8 @@
 */
 #  define KEY_NUMPAD_MORE	69
 #  define KEY_NUMPAD_LESS	78
-#  define KEY_O		9999
-#  define KEY_P		9999
+#  define KEY_O		31
+#  define KEY_P		35
 #  define KEY_Q		12
 #  define KEY_W		13
 #  define KEY_E		14
@@ -80,8 +80,8 @@
 #  define KEY_RIGHT	124
 #  define KEY_UP	126
 #  define KEY_DOWN	125
-#  define KEY_PAGE_UP	99999
-#  define KEY_PAGE_DOWN	99999
+#  define KEY_PAGE_UP	116
+#  define KEY_PAGE_DOWN	121
 # endif
 
 # define ABS(x) (x < 0) ? -x : x

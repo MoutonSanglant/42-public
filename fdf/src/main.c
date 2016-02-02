@@ -27,10 +27,10 @@ int		keydown(int key, void *p)
 	identity_matrix4(&m_loc);
 	identity_matrix4(&m_rot);
 
-	/*
+
 	ft_putchar('\n');
 	ft_putnbr(key);
-	*/
+
 
 	if (key == KEY_O)
 		set_orthographic_camera(sess);

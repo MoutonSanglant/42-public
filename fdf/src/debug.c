@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/18 17:55:42 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/01 20:36:45 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/02 13:20:05 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	draw_debug_gui(t_mlx_sess *p)
 	if (p->img->filename)
 	{
 		mlx_string_put(p->sess, p->win, 5, line * line_height, 0x00ffffff, "Source file: ");
-		mlx_string_put(p->sess, p->win, 100, line++ * line_height, 0x00ffffff, p->img->filename);
+		mlx_string_put(p->sess, p->win, 120, line++ * line_height, 0x00ffffff, p->img->filename);
 	}
 	mlx_string_put(p->sess, p->win, 5, line++ * line_height, 0x00ffffff, "Camera");
 	if (!camera[0])
