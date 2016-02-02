@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/18 17:55:42 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/27 13:51:35 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/01 20:36:45 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,20 @@ void	output_image_info(t_image *image)
 void	draw_debug_gui(t_mlx_sess *p)
 {
 	static char *camera[3];
+	int			line_height;
+	int			line;
 	int			i;
 
-	mlx_string_put(p->sess, p->win, 5, 15, 0x00ffffff, "DEBUG CONSOLE");
-	mlx_string_put(p->sess, p->win, 5, 30, 0x00ffffff, "Camera");
+	line = 1;
+	line_height = 15;
+
+	mlx_string_put(p->sess, p->win, 5, line++ * line_height, 0x00ffffff, "DEBUG CONSOLE");
+	if (p->img->filename)
+	{
+		mlx_string_put(p->sess, p->win, 5, line * line_height, 0x00ffffff, "Source file: ");
+		mlx_string_put(p->sess, p->win, 100, line++ * line_height, 0x00ffffff, p->img->filename);
+	}
+	mlx_string_put(p->sess, p->win, 5, line++ * line_height, 0x00ffffff, "Camera");
 	if (!camera[0])
 	{
 		/*
@@ -50,7 +60,7 @@ void	draw_debug_gui(t_mlx_sess *p)
 	{
 		ft_strncpy(&camera[i][5], ft_itoa((int)(*p->world)[3 + i * 4]), 3);
 		camera[i][8] = '\0';
-		mlx_string_put(p->sess, p->win, 5, 45 + i * 15, 0x00ffffff, camera[i]);
+		mlx_string_put(p->sess, p->win, 5, line++ * line_height, 0x00ffffff, camera[i]);
 		i++;
 	}
 }

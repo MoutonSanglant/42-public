@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/18 17:52:02 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/30 04:34:32 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/01 20:22:12 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,54 +145,59 @@ static void		draw_triangle(t_mlx_sess *p, t_tri *triangle, t_mat4x4 *mvp)
 
 }
 
-void	draw_3dgrid(t_mlx_sess *p)
+void	draw_cube(t_mlx_sess *sess)
 {
 	t_mat4x4	mvp;
 	t_mat4x4	model;
+	t_mat4x4	trans;
+	t_vec3f		loc;
+	int			i;
 
 	identity_matrix4(&model);
+	identity_matrix4(&trans);
+	loc.x = -.5f;
+	loc.y = -.5f;
+	loc.z = 0;
+	translation_matrix4(&trans, loc);
+	matrix4_product(&model, &trans);
 
-	// Add model transformations here...
-	//t_mat4x4	tmp;
-
-	// Enable to rotate the model
-	/*
-	static int r = 0;
-	t_mat4x4	rot;
-
-	rotationZ_matrix4(&rot, RAD(r));
-	matrix4_product(&model, &rot);
-	r += 5;
-	*/
-
-	// Model Matrix: Local
 	identity_matrix4(&mvp);
 	matrix4_product(&mvp, &model);
-	// World (local-to-world)
-	matrix4_product(&mvp, p->world);
-
-	int		i;
-	int		x = 0;
-	int		y = 0;
-
+	matrix4_product(&mvp, sess->world);
 	// Draw a small cube
-	p->col = 0x00ff0000;
-	while (x < 12)
-		draw_triangle(p, &p->cube[x++], &mvp);
+	sess->faces_color = 0x00ff0000;
+	i = 0;
+	while (i < 12)
+		draw_triangle(sess, &sess->cube[i++], &mvp);
+
+}
+
+void	draw_3dgrid(t_mlx_sess *sess)
+{
+	t_mat4x4	mvp;
+	int			x;
+	int			y;
+	int			i;
+
+	identity_matrix4(&mvp);
+	// Model
+	matrix4_product(&mvp, &sess->m_model);
+	// World (local-to-world)
+	matrix4_product(&mvp, sess->world);
 
 	// Draw the grid
 	i = 0;
 	x = 0;
-	p->col = 0x00ffffff;
-	while (x < p->grid->width)
+	sess->faces_color = 0x0000ff00;
+	while (x < sess->grid->width)
 	{
-		while (y < p->grid->height)
+		y = 0;
+		while (y < sess->grid->height)
 		{
-			draw_triangle(p, &p->grid->triangles[i++], &mvp);
-			draw_triangle(p, &p->grid->triangles[i++], &mvp);
+			draw_triangle(sess, &sess->grid->triangles[i++], &mvp);
+			draw_triangle(sess, &sess->grid->triangles[i++], &mvp);
 			y++;
 		}
-		y = 0;
 		x++;
 	}
 }

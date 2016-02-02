@@ -43,6 +43,8 @@
 
 #  define KEY_NUMPAD_MORE	65451
 #  define KEY_NUMPAD_LESS	65453
+#  define KEY_O		111
+#  define KEY_P		112
 #  define KEY_Q		97
 #  define KEY_W		122
 #  define KEY_E		101
@@ -53,6 +55,8 @@
 #  define KEY_RIGHT	65363
 #  define KEY_UP	65362
 #  define KEY_DOWN	65364
+#  define KEY_PAGE_UP	65365
+#  define KEY_PAGE_DOWN	65366
 
 # else
 #  include "../includes/mlx.h"
@@ -64,6 +68,8 @@
 */
 #  define KEY_NUMPAD_MORE	69
 #  define KEY_NUMPAD_LESS	78
+#  define KEY_O		9999
+#  define KEY_P		9999
 #  define KEY_Q		12
 #  define KEY_W		13
 #  define KEY_E		14
@@ -74,6 +80,8 @@
 #  define KEY_RIGHT	124
 #  define KEY_UP	126
 #  define KEY_DOWN	125
+#  define KEY_PAGE_UP	99999
+#  define KEY_PAGE_DOWN	99999
 # endif
 
 # define ABS(x) (x < 0) ? -x : x
@@ -123,9 +131,9 @@ typedef struct	s_vert
 	t_color		color;
 }				t_vert;
 
-typedef t_vert t_tri[3];
+typedef t_vert	t_tri[3];
 
-typedef struct s_grid
+typedef struct	s_grid
 {
 	int		width;
 	int		height;
@@ -136,6 +144,7 @@ typedef struct	s_image
 {
 	void	*img;
 	char	*data;
+	char	*filename;
 	int		sl;
 	int		bpp;
 	int		endian;
@@ -168,9 +177,11 @@ typedef struct	s_mlx_sess
 	float		canvasR; // canvas value
 	int			need_update; //canvas ?
 	float		line_width;
-	int			lines_color;
-	int			faces_color;
+	int			lines_color; // model
+	int			faces_color; // model
+	t_mat4x4	m_model;
 	int			bg_color;
+	float		map_height; // map
 }				t_mlx_sess;
 
 /*
@@ -180,23 +191,30 @@ typedef struct	s_mlx_sess
 t_vert	**get_vertmap_from_file(char *path, int *x, int *y);
 
 /*
+**	RENDERING
+*/
+
+void	draw_3dgrid(t_mlx_sess *);
+void	rasterize(t_mlx_sess *p, t_tri *triangle);
+
+/*
 **	DRAWING
 */
 
 void	draw_line(t_mlx_sess *, t_vec2f *, t_vec2f *);
 void	draw_square(t_mlx_sess *, int color, t_vec2f *, t_vec2f *);
-//void	draw_line(t_mlx_sess *, t_vec3f, t_vec3f);
 void	draw_picture(t_mlx_sess *);
 
 void	clear_canvas(t_mlx_sess *, int);
+void	set_image_pixel(t_mlx_sess *p, t_image * img, int color, uint32_t x, uint32_t y);
+
+/*
+**	INITIALISATIONS
+*/
 
 void	cube(t_tri *);
 void	init_grid(t_grid *, int, int);
 void	init_grid_from_vertmap(t_grid *, t_vert **vertmap, int, int);
-void	draw_3dgrid(t_mlx_sess *);
-void	rasterize(t_mlx_sess *p, t_tri *triangle);
-
-void	set_image_pixel(t_mlx_sess *p, t_image * img, int color, uint32_t x, uint32_t y);
 
 /*
 **	MATRIX
@@ -219,6 +237,13 @@ void	matrix4_product(t_mat4x4 *, t_mat4x4 *);
 t_vec3f	apply_matrix4(t_vec3f, t_mat4x4 *);
 
 /*
+**	CAMERAS
+*/
+
+void	set_orthographic_camera(t_mlx_sess *sess);
+void	set_perspective_camera(t_mlx_sess *sess);
+
+/*
 **	GNL
 */
 typedef struct	s_parser
@@ -228,10 +253,17 @@ typedef struct	s_parser
 	char	*buf;
 }				t_parser;
 
-int				get_next_line(int const fd, char **line);
+int		get_next_line(int const fd, char **line);
+
+/*
+**	EXTRA
+*/
+
+void	change_grid_z_value(t_grid *grid, float f);
 
 # ifdef DEBUG
 void	output_image_info(t_image *image);
 void	draw_debug_gui(t_mlx_sess *p);
+void	draw_cube(t_mlx_sess *sess);
 # endif
 #endif

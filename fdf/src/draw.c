@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/18 17:35:36 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/30 03:44:42 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/01 17:18:49 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	draw_line(t_mlx_sess *p, t_vec2f *from, t_vec2f *to)
 
 	if(dx > dy)
 	{
-			set_image_pixel(p, img, color, x, y);
+		set_image_pixel(p, img, color, x, y);
 		e = 2*dy - dx;
 		inc1 = 2*( dy -dx);
 		inc2 = 2*dy;
@@ -54,7 +54,7 @@ void	draw_line(t_mlx_sess *p, t_vec2f *from, t_vec2f *to)
 				e += inc1;
 			}
 			else e += inc2;
-			x += incx;
+				x += incx;
 			set_image_pixel(p, img, color, x, y);
 		}
 	}
@@ -84,16 +84,16 @@ void	clear_canvas(t_mlx_sess *p, int clear_color)
 	size_t x;
 	size_t y;
 
-	x = 1;
-	y = 1;
+	x = 0;
+	y = 0;
 	while (x < p->width)
 	{
 		while (y < p->height)
 		{
 			set_image_pixel(p, p->img, clear_color, x, y++);
-			p->zbuffer[x + y * p->width] = FLT_MAX;
+			p->zbuffer[x + y * (p->width - 1) ] = FLT_MAX;
 		}
-		y = 1;
+		y = 0;
 		x++;
 	}
 }
