@@ -89,6 +89,9 @@
 # define DEG(x) (x * 180.0 / M_PI)
 # define RAD(x) (x * M_PI / 180.0)
 
+/*
+**	Matrices are in row-major columns
+*/
 typedef float t_mat4x4[16];
 
 typedef struct	s_vec2f
@@ -150,6 +153,18 @@ typedef struct	s_image
 	int		endian;
 }				t_image;
 
+typedef struct	s_camera
+{
+	float	angle_of_view;
+	float	aspect;
+	float	far;
+	float	near;
+	float	top;
+	float	bottom;
+	float	left;
+	float	right;
+}				t_camera;
+
 typedef struct	s_mlx_sess
 {
 	void		*sess;
@@ -159,15 +174,16 @@ typedef struct	s_mlx_sess
 	t_grid		*grid;
 	t_tri		*cube;
 	int			col;
-	float		near; // camera value
-	float		far; // camera value
+	t_camera	camera;
+	//float		near; // camera value
+	//float		far; // camera value
 	t_mat4x4	*world;
 	t_mat4x4	*worldToCamera;
 	t_mat4x4	*view;
 	t_mat4x4	*projection;
 	uint32_t	width; // image (or framebuffer) value
 	uint32_t	height; // image value
-	float		aspect; // image or canvas value
+//	float		aspect; // image or canvas value
 	float		canvasS; // canvas (or screen) value
 	float		canvasW; // canvas value
 	float		canvasH; // canvas value
@@ -226,11 +242,11 @@ void	translation_matrix4(t_mat4x4 *, t_vec3f);
 void	scaling_matrix4(t_mat4x4 *, t_vec3f);
 //t_mat4x4	*rotate_matrix4(t_mat4x4 *, t_mat4x4 *);
 //t_mat4x4	*rotate_matrix4(t_mat4x4 *, float);
-void	rotationX_matrix4(t_mat4x4 *, float);
-void	rotationY_matrix4(t_mat4x4 *, float);
-void	rotationZ_matrix4(t_mat4x4 *, float);
-void	perspective_projection_matrix4(t_mat4x4 *, float, float, int, int);
-void	orthographic_projection_matrix4(t_mat4x4 *, float, float, float, float,	int, int);
+void	rotation_x_matrix4(t_mat4x4 *, float);
+void	rotation_y_matrix4(t_mat4x4 *, float);
+void	rotation_z_matrix4(t_mat4x4 *, float);
+void	perspective_projection_matrix4(t_mat4x4 *m, t_camera *camera);
+void	orthographic_projection_matrix4(t_mat4x4 *m, t_camera *camera);
 
 void	transpose_matrix4(t_mat4x4 *m);
 void	matrix4_product(t_mat4x4 *, t_mat4x4 *);

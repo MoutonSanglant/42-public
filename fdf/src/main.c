@@ -7,7 +7,7 @@ void	rotate_around_center(t_mlx_sess *sess, int dir)
 
 	inverse_matrix4(sess->world, &m_iworld);
 	identity_matrix4(&m_rot);
-	rotationZ_matrix4(&m_rot, RAD(3 * dir));
+	rotation_z_matrix4(&m_rot, RAD(3 * dir));
 	matrix4_product(&m_iworld, &m_rot);
 	inverse_matrix4(&m_iworld, sess->world);
 }
@@ -37,17 +37,17 @@ int		keydown(int key, void *p)
 	else if (key == KEY_P)
 		set_perspective_camera(sess);
 	else if (key == KEY_Q)
-		rotationY_matrix4(&m_rot, RAD(3));
+		rotation_y_matrix4(&m_rot, RAD(3));
 	else if (key == KEY_E)
-		rotationY_matrix4(&m_rot, RAD(-3));
+		rotation_y_matrix4(&m_rot, RAD(-3));
 	else if (key == KEY_A)
 		rotate_around_center(sess, -1);
 	else if (key == KEY_D)
 		rotate_around_center(sess, 1);
 	else if (key == KEY_W)
-		rotationX_matrix4(&m_rot, RAD(3));
+		rotation_x_matrix4(&m_rot, RAD(3));
 	else if (key == KEY_S)
-		rotationX_matrix4(&m_rot, RAD(-3));
+		rotation_x_matrix4(&m_rot, RAD(-3));
 	else if (key == KEY_NUMPAD_MORE)
 		loc.y = -1;
 	else if (key == KEY_NUMPAD_LESS)
@@ -293,7 +293,7 @@ int		main(int argc, char **argv)
 	*/
 	param->worldToCamera = (t_mat4x4 *)ft_memalloc(sizeof(t_mat4x4));
 	// Camera needs to look down (along the negative 'Z-axis')
-	rotationX_matrix4(&tmp, RAD(90));
+	rotation_x_matrix4(&tmp, RAD(90));
 	matrix4_product(param->view, &tmp);
 	inverse_matrix4(param->view, param->worldToCamera);
 
@@ -305,20 +305,26 @@ int		main(int argc, char **argv)
 	param->projection = (t_mat4x4 *)ft_memalloc(sizeof(t_mat4x4));
 
 	// Aspect of the window
-	param->aspect = (float)param->width / (float)param->height;
 
-	// Perspective Camera
-	param->near = .1f;
-	param->far = 100;
-	// Use an horizontal FOV
+	// Camera
+	param->camera.aspect = (float)param->width / (float)param->height;
+	param->camera.near = .1f;
+	param->camera.far = 100;
+	param->camera.angle_of_view = 90.f;
+	param->camera.right = .1f * param->camera.aspect;
+	param->camera.top = .1f;
+	param->camera.left = -param->camera.right;
+	param->camera.bottom = -param->camera.top;
+	param->camera.far = 100.f;
+// Use an horizontal FOV
 	set_perspective_camera(param);
 
 	/*
 	**	ORTHOGRAPHIC
 	*/
 	// Canvas Height
-	param->canvasH = 2 * tan(90.f * .5f) * param->near;
-	param->canvasW = param->canvasH * param->aspect;
+	param->canvasH = 2 * tan(90.f * .5f) * param->camera.near;
+	param->canvasW = param->canvasH * param->camera.aspect;
 	param->canvasT = param->canvasH * .5f;
 	param->canvasB = -param->canvasT;
 
@@ -337,7 +343,7 @@ int		main(int argc, char **argv)
 	//param->faces_color = param->lines_color;
 	//param->lines_color = param->bg_color;
 
-	printf("height: %i / width: %i\naspect: %f\nH: %f / W: %f\nT: %f\nB: %f\nL: %f\nR: %f\n", param->height, param->width, param->aspect, param->canvasH, param->canvasW, param->canvasT, param->canvasB, param->canvasL, param->canvasR);
+	printf("height: %i / width: %i\naspect: %f\nH: %f / W: %f\nT: %f\nB: %f\nL: %f\nR: %f\n", param->height, param->width, param->camera.aspect, param->canvasH, param->canvasW, param->canvasT, param->canvasB, param->canvasL, param->canvasR);
 
 	// Start MLX session
 	mlx_hook(param->win, KeyPress, KeyPressMask, &keydown, (void *)param);

@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/02 13:37:44 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/02 14:47:09 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/02 18:00:32 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,4 +141,3 @@ void			inverse_matrix4(t_mat4x4 *m, t_mat4x4 *inv_out)
 	while (++i < 16)
 		(*inv_out)[i] = inv[i] * det;
 }
-
