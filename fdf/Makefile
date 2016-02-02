@@ -1,10 +1,16 @@
-NAME	= fdf
-
 CC		= gcc
 CFLAGS	= -Wall -Werror -Wextra -I./libft
 LDFLAGS	= -L./lib -L./libft
 LDLIBS	= -lft -lm
-DFLAGS	= -g -O0 -D DEBUG
+
+ifeq ($(BUILD), Debug)
+CFLAGS	+= -g -O0 -D DEBUG
+SUFFIX	= .debug.o
+NAME	= fdf.debug
+else
+SUFFIX	= .o
+NAME	= fdf
+endif
 
 ARCH	= $(shell uname -m)
 OS		= $(shell uname -s)
@@ -27,39 +33,44 @@ SRC	= main draw draw_3dgrid set_image_pixel init_grid \
 	matrix matrix_math get_next_line get_vertmap_from_file \
 	rasterize camera inverse_matrix projection_matrix identity_matrix
 
+ifeq ($(BUILD), Debug)
+SRC += debug
+endif
+
 SRC := $(addsuffix .c, $(SRC))
 SRC := $(addprefix $(SRC_PREFIX), $(SRC))
 
-OBJ = $(SRC:.c=.o)
+OBJ = $(SRC:.c=$(SUFFIX))
 
-.SILENT: $(OBJ)
-.PHONY: all clean fclean re libft
 
-all: libft $(NAME)
+.PHONY: all clean fclean re libft debug
 
-debug: CFLAGS += $(DFLAGS)
-debug: fclean debug_compile
-debug_compile: $(OBJ) $(SRC_PREFIX)debug.o
-	@echo "call to 'debug' rule"
-	$(CC) -o $(NAME) $^ $(CFLAGS) $(LDFLAGS) $(LDLIBS) -D BONUS
-#	/bin/rm -f $(SRC_PREFIX)debug.o
+all: $(NAME)
 
-$(NAME): $(OBJ)
+debug:
+	$(MAKE) BUILD=Debug all
+
+$(NAME): $(OBJ) libft/libft.a
 	@echo "making $@"
-	$(CC) -o $(NAME) $^ $(CFLAGS) $(LDFLAGS) $(LDLIBS) -D BONUS
+	$(CC) -o $(NAME) $(OBJ) $(CFLAGS) $(LDFLAGS) $(LDLIBS) -D BONUS
+
+libft/libft.a: libft
 
 libft:
 	@echo "making $@"
-	cd libft && $(MAKE)
+	$(MAKE) -C libft BUILD=$(BUILD)
 
-%.o: %.c
+%$(SUFFIX): %.c
 	@echo "making $<"
-	$(CC) -o $@ -c $< $(CFLAGS) -D BONUS
+	@$(CC) -o $@ -c $< $(CFLAGS) -D BONUS
 
 clean:
-	/bin/rm -f ${OBJ}
+	/bin/rm -f $(OBJ)
+	$(MAKE) -C libft clean
 
 fclean: clean
 	/bin/rm -f $(NAME)
+	$(MAKE) -C libft fclean
 
 re: fclean all
+

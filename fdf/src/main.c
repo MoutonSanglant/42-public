@@ -159,6 +159,7 @@ int		expose(void *p)
 static void	post_loading(t_image *image)
 {
 	output_image_info(image);
+	(void) image;
 }
 #else
 static void	post_loading(t_image *image)
@@ -166,6 +167,7 @@ static void	post_loading(t_image *image)
 	(void) image;
 }
 #endif
+
 
 int		main(int argc, char **argv)
 {
@@ -176,6 +178,19 @@ int		main(int argc, char **argv)
 	int			x;
 	int			y;
 	t_vert		**vertmap;
+
+	char txt[] = "hello";
+	char dst[32];
+
+	for (int j = 0; j < 12; ++j) {
+		for (size_t i = 0; i < sizeof(txt); ++i) {
+			dst[i + 6] = txt[i];
+		}
+		ft_memmove(dst + j, dst + 6, sizeof(txt));
+		if (ft_memcmp(dst + j, txt, sizeof(txt) != 0))
+				ft_putstr("sniff\n");
+	}
+	ft_putstr("Youpi!\n");
 
 	if (argc < 1)
 		return (1);
