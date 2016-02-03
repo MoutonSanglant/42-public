@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/03 16:53:27 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/03 16:59:00 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/03 20:45:35 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@ static void		bresenham_init(t_bresenham *bres)
 	bres->incy = 1;
 	if (bres->y2 < bres->y1)
 		bres->incy = -1;
-	bres->x = bres->x1;
-	bres->y = bres->y1;
+	bres->xy.x = bres->x1;
+	bres->xy.y = bres->y1;
 }
 
 static void		bresenham_x_bigger_than_y(t_bresenham *bres, t_mlx_sess *sess,
@@ -35,7 +35,7 @@ static void		bresenham_x_bigger_than_y(t_bresenham *bres, t_mlx_sess *sess,
 {
 	int			i;
 
-	set_image_pixel(sess, img, color, bres->x, bres->y);
+	set_image_pixel(sess, img, color, bres->xy);
 	bres->e = 2 * bres->dy - bres->dx;
 	bres->inc1 = 2 * (bres->dy - bres->dx);
 	bres->inc2 = 2 * bres->dy;
@@ -44,13 +44,13 @@ static void		bresenham_x_bigger_than_y(t_bresenham *bres, t_mlx_sess *sess,
 	{
 		if (bres->e >= 0)
 		{
-			bres->y += bres->incy;
+			bres->xy.y += bres->incy;
 			bres->e += bres->inc1;
 		}
 		else
 			bres->e += bres->inc2;
-		bres->x += bres->incx;
-		set_image_pixel(sess, img, color, bres->x, bres->y);
+		bres->xy.x += bres->incx;
+		set_image_pixel(sess, img, color, bres->xy);
 		i++;
 	}
 }
@@ -60,7 +60,7 @@ static void		bresenham_y_bigger_than_x(t_bresenham *bres, t_mlx_sess *sess,
 {
 	int			i;
 
-	set_image_pixel(sess, img, color, bres->x, bres->y);
+	set_image_pixel(sess, img, color, bres->xy);
 	bres->e = 2 * bres->dx - bres->dy;
 	bres->inc1 = 2 * (bres->dx - bres->dy);
 	bres->inc2 = 2 * bres->dx;
@@ -69,13 +69,13 @@ static void		bresenham_y_bigger_than_x(t_bresenham *bres, t_mlx_sess *sess,
 	{
 		if (bres->e >= 0)
 		{
-			bres->x += bres->incx;
+			bres->xy.x += bres->incx;
 			bres->e += bres->inc1;
 		}
 		else
 			bres->e += bres->inc2;
-		bres->y += bres->incy;
-		set_image_pixel(sess, img, color, bres->x, bres->y);
+		bres->xy.y += bres->incy;
+		set_image_pixel(sess, img, color, bres->xy);
 		i++;
 	}
 }

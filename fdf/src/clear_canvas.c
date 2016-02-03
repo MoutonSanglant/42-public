@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/03 16:54:45 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/03 16:59:41 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/03 20:43:16 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,18 @@
 
 void	clear_canvas(t_mlx_sess *p, int clear_color)
 {
-	size_t x;
-	size_t y;
+	t_vec2ui32	xy;
 
-	x = 0;
-	y = 0;
-	while (x < p->width)
+	xy.x = 0;
+	while (xy.x < p->width)
 	{
-		while (y < p->height)
+		xy.y = 0;
+		while (xy.y < p->height)
 		{
-			set_image_pixel(p, p->img, clear_color, x, y);
-			p->zbuffer[x + y * (p->width)] = FLT_MAX;
-			++y;
+			set_image_pixel(p, p->img, clear_color, xy);
+			p->zbuffer[xy.x + xy.y * (p->width)] = FLT_MAX;
+			++xy.y;
 		}
-		y = 0;
-		x++;
+		xy.x++;
 	}
 }

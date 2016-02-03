@@ -6,39 +6,29 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/18 17:50:22 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/27 21:31:55 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/03 20:38:26 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-#include <stdio.h>
+/*
+**	TODO
+**	Manage different endians
+**	(It should help to remove the void cast on 'sess')
+*/
 
-void		set_image_pixel(t_mlx_sess * p, t_image *img, int color, uint32_t x, uint32_t y)
+void		set_image_pixel(t_mlx_sess *sess, t_image *img, int color,
+							t_vec2ui32 xy)
 {
 	int				opp;
 	int				dec;
 	unsigned char	*ptr;
 
+	(void)sess;
 	opp = img->bpp / 8;
 	dec = opp;
-	(void) p;
-	// TMP
-	// Check if the point is inside the screen boundaries
-//	if (x == 0 || x > p->width || y == 0 || y > p->height)
-//		return;
-	/*
-	(void) x;
-	('void) y;
-	(void) color;
-	(void) img;
-	*/
-	/*
-	** TODO
-	** manage different endians
-	*/
-	ptr = ((unsigned char *)img->data + y * img->sl) + x * opp;
+	ptr = ((unsigned char *)img->data + xy.y * img->sl) + xy.x * opp;
 	while (dec--)
 		*(ptr + dec) = ((unsigned char *)(&color))[dec];
-
 }

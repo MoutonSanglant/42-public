@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/27 12:41:37 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/01 17:02:41 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/03 20:41:42 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,10 @@ void		rasterize(t_mlx_sess *p, t_tri *triangle)
 					if (w[0] >= p->line_width && w[1] >= 0 && w[2] >= 0)
 						col = p->faces_color;
 					p->zbuffer[x + y * p->width] = z;
-					set_image_pixel(p, p->img, mlx_get_color_value(p->sess, col), x, y);
+					t_vec2ui32	xy;
+					xy.x = x;
+					xy.y = y;
+					set_image_pixel(p, p->img, mlx_get_color_value(p->sess, col), xy);
 				}
 			}
 		}

@@ -100,17 +100,23 @@
 */
 typedef float	t_mat4x4[16];
 
-typedef struct	s_vec2f
-{
-	float		x;
-	float		y;
-}				t_vec2f;
-
 typedef struct	s_vec2
 {
 	int			x;
 	int			y;
 }				t_vec2;
+
+typedef struct	s_vec2ui32
+{
+	uint32_t	x;
+	uint32_t	y;
+}				t_vec2ui32;
+
+typedef struct	s_vec2f
+{
+	float		x;
+	float		y;
+}				t_vec2f;
 
 typedef struct	s_vec3f
 {
@@ -198,9 +204,8 @@ typedef struct	s_mlx_sess
 
 typedef struct	s_bresenham
 {
+	t_vec2ui32	xy;
 	int			e;
-	int			x;
-	int			y;
 	int			x1;
 	int			x2;
 	int			y1;
@@ -237,8 +242,8 @@ void			draw_square(t_mlx_sess *sess, int color,
 void			draw_picture(t_mlx_sess *sess);
 
 void			clear_canvas(t_mlx_sess *sess, int color);
-void			set_image_pixel(t_mlx_sess *sess, t_image *img,
-						int color, uint32_t x, uint32_t y);
+void			set_image_pixel(t_mlx_sess *sess, t_image *img, int color,
+								t_vec2ui32 xy);
 
 /*
 **	INITIALISATIONS
@@ -263,6 +268,7 @@ void			perspective_projection_matrix4(t_mat4x4 *mat, t_camera *camera);
 void			orthographic_projection_matrix4(t_mat4x4 *mat,
 												t_camera *camera);
 
+void			copy_matrix4(t_mat4x4 *dst, const t_mat4x4 *src);
 void			transpose_matrix4(t_mat4x4 *mat);
 void			matrix4_product(t_mat4x4 *mat_b, t_mat4x4 *out);
 t_vec3f			apply_matrix4(t_vec3f vec, t_mat4x4 *mat);

@@ -6,22 +6,22 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/02 18:05:49 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/02 18:15:47 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/03 20:32:51 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
 /*
-** Perspective projection:
-**
-** 1 0     0       0
-** 0 1     0       0
-** 0 0 (N + F)/N  -F
-** 0 0    1/N      0
-**
-** N is Near viewing plane distance
-** F is Far viewing plane distance
+**	Perspective projection
+**	======================
+**	1 0     0       0
+**	0 1     0       0
+**	0 0 (N + F)/N  -F
+**	0 0    1/N      0
+**	=================
+**	N is Near viewing plane distance
+**	F is Far viewing plane distance
 */
 
 void	perspective_projection_matrix4(t_mat4x4 *m, t_camera *camera)
@@ -44,10 +44,10 @@ void	perspective_projection_matrix4(t_mat4x4 *m, t_camera *camera)
 }
 
 /*
-** Orthographic projection:
-**
-** N is Near viewing plane distance
-** F is Far viewing plane distance
+**	Orthographic projection
+**	=======================
+**	N is Near viewing plane distance
+**	F is Far viewing plane distance
 */
 
 void	orthographic_projection_matrix4(t_mat4x4 *m, t_camera *camera)
