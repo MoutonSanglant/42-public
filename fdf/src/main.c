@@ -8,7 +8,7 @@ void	rotate_around_center(t_mlx_sess *sess, int dir)
 	inverse_matrix4(sess->world, &m_iworld);
 	identity_matrix4(&m_rot);
 	rotation_z_matrix4(&m_rot, RAD(3 * dir));
-	matrix4_product(&m_iworld, &m_rot);
+	matrix4_product(&m_rot, &m_iworld);
 	inverse_matrix4(&m_iworld, sess->world);
 }
 
@@ -27,12 +27,12 @@ int		keydown(int key, void *p)
 	identity_matrix4(&m_loc);
 	identity_matrix4(&m_rot);
 
-
 	ft_putchar('\n');
 	ft_putnbr(key);
 
-
-	if (key == KEY_O)
+	if (key == KEY_B)
+		sess->bresenham = (sess->bresenham) ? 0 : 1;
+	else if (key == KEY_O)
 		set_orthographic_camera(sess);
 	else if (key == KEY_P)
 		set_perspective_camera(sess);
@@ -61,12 +61,12 @@ int		keydown(int key, void *p)
 	else if (key == KEY_DOWN)
 		loc.z = 1;
 	else if (key == KEY_PAGE_UP)
-		change_grid_z_value(sess->grid, 1.1f);
+		change_grid_z(sess->grid, 1.1f);
 	else if (key == KEY_PAGE_DOWN)
-		change_grid_z_value(sess->grid, 0.9f);
+		change_grid_z(sess->grid, 0.9f);
 	translation_matrix4(&m_loc, loc);
-	matrix4_product(sess->world, &m_loc);
-	matrix4_product(sess->world, &m_rot);
+	matrix4_product(&m_loc, sess->world);
+	matrix4_product(&m_rot, sess->world);
 	return (0);
 }
 
@@ -89,11 +89,10 @@ int		keypress(int key, void *p)
 		ft_memdel((void **)&sess->zbuffer);
 		ft_memdel((void **)&sess->world);
 		ft_memdel((void **)&sess->view);
-		ft_memdel((void **)&sess->worldToCamera);
+		ft_memdel((void **)&sess->world_to_camera);
 		ft_memdel((void **)&sess->projection);
 		ft_memdel((void **)&sess->grid->triangles);
 		ft_memdel((void **)&sess->grid);
-		ft_memdel((void **)&sess->cube);
 		ft_memdel((void **)&sess->sess);
 		ft_memdel((void **)&sess);
 		exit(0);
@@ -155,19 +154,27 @@ int		expose(void *p)
 	return (0);
 }
 
-#ifdef DEBUG
-static void	post_loading(t_image *image)
+#ifdef LINUX
+static void set_mlx_hooks(t_mlx_sess *sess)
 {
-	output_image_info(image);
-	(void) image;
+	// Start MLX session
+	mlx_hook(sess->win, KeyPress, KeyPressMask, &keydown, (void *)sess);
+	mlx_key_hook(sess->win, &keypress, (void *)sess);
+	mlx_expose_hook(sess->win, &expose, (void *)sess);
+	mlx_loop_hook(sess->sess, &draw_loop, (void *)sess);
+
 }
 #else
-static void	post_loading(t_image *image)
+static void set_mlx_hooks(t_mlx_sess *sess)
 {
-	(void) image;
+	// Start MLX session
+	mlx_hook(sess->win, KEYPRESS, KEYPRESSMASK, &keydown, (void *)sess);
+	mlx_key_hook(sess->win, &keypress, (void *)sess);
+	mlx_expose_hook(sess->win, &expose, (void *)sess);
+	mlx_loop_hook(sess->sess, &draw_loop, (void *)sess);
+
 }
 #endif
-
 
 int		main(int argc, char **argv)
 {
@@ -243,7 +250,6 @@ int		main(int argc, char **argv)
 		param->img->filename = argv[3];
 	else
 		param->img->filename = NULL;
-	post_loading(&image);
 	param->need_update = 1;
 
 	/*
@@ -274,21 +280,15 @@ int		main(int argc, char **argv)
 		loc.y = -param->grid->height * .5f;
 		loc.z = 0;
 		translation_matrix4(&trans, loc);
-		matrix4_product(&param->m_model, &trans);
+		matrix4_product(&trans, &param->m_model);
 	}
 	else
 	{
-		ft_putendl("no input file !");
+		ft_putendl("No input file, making a 10x10 flat grid.");
 		init_grid(param->grid, 10, 10);
 		identity_matrix4(&param->m_model);
 	}
 	param->col = 0x00ffffff;
-
-	/*
-	**	CUBE
-	*/
-	param->cube = (t_tri *)ft_memalloc(sizeof(t_tri) * 12);
-	cube(param->cube);
 
 	t_mat4x4	tmp;
 
@@ -298,19 +298,19 @@ int		main(int argc, char **argv)
 	param->world = (t_mat4x4 *)ft_memalloc(sizeof(t_mat4x4));
 
 	/*
-	**	VIEW MAtrix
+	**	VIEW Matrix
 	*/
 	param->view = (t_mat4x4 *)ft_memalloc(sizeof(t_mat4x4));
 	identity_matrix4(param->view);
 
 	/*
-	**	CAMERA Matrix (WorldToCamera)
+	**	CAMERA Matrix (world_to_camera)
 	*/
-	param->worldToCamera = (t_mat4x4 *)ft_memalloc(sizeof(t_mat4x4));
+	param->world_to_camera = (t_mat4x4 *)ft_memalloc(sizeof(t_mat4x4));
 	// Camera needs to look down (along the negative 'Z-axis')
 	rotation_x_matrix4(&tmp, RAD(90));
-	matrix4_product(param->view, &tmp);
-	inverse_matrix4(param->view, param->worldToCamera);
+	matrix4_product(&tmp, param->view);
+	inverse_matrix4(param->view, param->world_to_camera);
 
 	// Move the world so it looks in a good direction
 
@@ -319,9 +319,9 @@ int		main(int argc, char **argv)
 	*/
 	param->projection = (t_mat4x4 *)ft_memalloc(sizeof(t_mat4x4));
 
-	// Aspect of the window
-
-	// Camera
+	/*
+	**	CAMERA
+	*/
 	param->camera.aspect = (float)param->width / (float)param->height;
 	param->camera.near = .1f;
 	param->camera.far = 100;
@@ -331,40 +331,24 @@ int		main(int argc, char **argv)
 	param->camera.left = -param->camera.right;
 	param->camera.bottom = -param->camera.top;
 	param->camera.far = 100.f;
-// Use an horizontal FOV
 	set_perspective_camera(param);
-
-	/*
-	**	ORTHOGRAPHIC
-	*/
-	// Canvas Height
-	param->canvasH = 2 * tan(90.f * .5f) * param->camera.near;
-	param->canvasW = param->canvasH * param->camera.aspect;
-	param->canvasT = param->canvasH * .5f;
-	param->canvasB = -param->canvasT;
-
-	param->canvasR = param->canvasT * .5f;
-	param->canvasL = -param->canvasR;
 
 	/*
 	**	DRAWING Settings
 	*/
+	param->bresenham = 1;
 	param->line_width = .06f;
 	param->lines_color = 0x00000000;
 	param->bg_color = 0x00046000;
 	//param->faces_color = param->bg_color;
-	//param->faces_color = 0x00ff0000;
+	param->faces_color = 0x00ff0000;
 	// invert
 	//param->faces_color = param->lines_color;
 	//param->lines_color = param->bg_color;
 
-	printf("height: %i / width: %i\naspect: %f\nH: %f / W: %f\nT: %f\nB: %f\nL: %f\nR: %f\n", param->height, param->width, param->camera.aspect, param->canvasH, param->canvasW, param->canvasT, param->canvasB, param->canvasL, param->canvasR);
+//	printf("height: %i / width: %i\naspect: %f\nH: %f / W: %f\nT: %f\nB: %f\nL: %f\nR: %f\n", param->height, param->width, param->camera.aspect, param->canvasH, param->canvasW, param->canvasT, param->canvasB, param->canvasL, param->canvasR);
 
-	// Start MLX session
-	mlx_hook(param->win, KeyPress, KeyPressMask, &keydown, (void *)param);
-	mlx_key_hook(param->win, &keypress, (void *)param);
-	mlx_expose_hook(param->win, &expose, (void *)param);
-	mlx_loop_hook(param->sess, &draw_loop, (void *)param);
+	set_mlx_hooks(param);
 	mlx_loop(param->sess);
 	return (0);
 }

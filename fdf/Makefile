@@ -30,12 +30,14 @@ endif
 SRC_PREFIX	= ./src/
 OBJ_PREFIX	= ./obj/
 
-SRC	= main draw draw_3dgrid set_image_pixel init_grid \
+SRC	= main draw_3dgrid set_image_pixel init_grid init_grid_from_vertmap \
 	matrix matrix_math get_next_line get_vertmap_from_file \
-	rasterize camera inverse_matrix projection_matrix identity_matrix
+	rasterize camera inverse_matrix projection_matrix identity_matrix \
+	change_grid_z draw_square draw_image clear_canvas bresenham_draw_line \
+	count_file_lines
 
 ifeq ($(BUILD), Debug)
-SRC += debug
+SRC += draw_debug_gui
 endif
 
 SRC := $(addsuffix .c, $(SRC))
@@ -49,7 +51,7 @@ OBJ := $(addprefix $(OBJ_PREFIX), $(OBJ))
 all: $(NAME)
 
 debug:
-	$(MAKE) BUILD=Debug all
+	@$(MAKE) BUILD=Debug all
 
 $(NAME): $(OBJ) libft/libft.a
 	@echo "making $@"
