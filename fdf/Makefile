@@ -1,5 +1,5 @@
 CC		= gcc
-CFLAGS	= -Wall -Werror -Wextra -I./libft
+CFLAGS	= -Wall -Werror -Wextra -I./libft -D BONUS
 LDFLAGS	= -L./lib -L./libft
 LDLIBS	= -lft -lm
 
@@ -28,6 +28,7 @@ else ifeq ($(OS), Linux)
 endif
 
 SRC_PREFIX	= ./src/
+OBJ_PREFIX	= ./obj/
 
 SRC	= main draw draw_3dgrid set_image_pixel init_grid \
 	matrix matrix_math get_next_line get_vertmap_from_file \
@@ -40,8 +41,8 @@ endif
 SRC := $(addsuffix .c, $(SRC))
 SRC := $(addprefix $(SRC_PREFIX), $(SRC))
 
-OBJ = $(SRC:.c=$(SUFFIX))
-
+OBJ = $(subst $(SRC_PREFIX), , $(SRC:.c=$(SUFFIX)))
+OBJ := $(addprefix $(OBJ_PREFIX), $(OBJ))
 
 .PHONY: all clean fclean re libft debug
 
@@ -52,20 +53,21 @@ debug:
 
 $(NAME): $(OBJ) libft/libft.a
 	@echo "making $@"
-	$(CC) -o $(NAME) $(OBJ) $(CFLAGS) $(LDFLAGS) $(LDLIBS) -D BONUS
+	$(CC) -o $(NAME) $(OBJ) $(CFLAGS) $(LDFLAGS) $(LDLIBS)
 
 libft/libft.a: libft
 
 libft:
 	@echo "making $@"
-	$(MAKE) -C libft BUILD=$(BUILD)
+	@$(MAKE) -C libft BUILD=$(BUILD)
 
-%$(SUFFIX): %.c
+$(OBJ_PREFIX)%$(SUFFIX): $(SRC_PREFIX)%.c
 	@echo "making $<"
-	@$(CC) -o $@ -c $< $(CFLAGS) -D BONUS
+	@mkdir -p obj
+	@$(CC) -o $@ -c $< $(CFLAGS)
 
 clean:
-	/bin/rm -f $(OBJ)
+	/bin/rm -rf $(OBJ_PREFIX)
 	$(MAKE) -C libft clean
 
 fclean: clean
@@ -73,4 +75,3 @@ fclean: clean
 	$(MAKE) -C libft fclean
 
 re: fclean all
-
