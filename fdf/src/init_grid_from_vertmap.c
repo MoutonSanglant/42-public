@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/03 13:51:35 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/04 02:48:08 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/04 20:50:46 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,9 @@ void			init_grid_from_vertmap(t_grid *grid, t_vert **vertmap,
 	coord.x = 0;
 	grid->width = width;
 	grid->height = height;
-	grid->triangles = (t_tri *)ft_memalloc(sizeof(t_tri) * width * height * 2);
+	if (!(grid->triangles = (t_tri *)ft_memalloc(sizeof(t_tri)
+												* width * height * 2)))
+		alloc_error("grid->triangles", sizeof(t_tri) * width * height * 2);
 	while (coord.x < width)
 	{
 		coord.y = 0;

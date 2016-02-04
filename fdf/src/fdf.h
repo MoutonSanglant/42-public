@@ -58,6 +58,12 @@
 #  define KEY_ESCAPE	65307
 #  define KEY_NUMPAD_MORE	65451
 #  define KEY_NUMPAD_LESS	65453
+#  define KEY_NUMPAD_STAR	99999
+#  define KEY_0		9999
+#  define KEY_1		9999
+#  define KEY_2		9999
+#  define KEY_3		9999
+#  define KEY_4		9999
 #  define KEY_Z		9999
 #  define KEY_I		9999
 #  define KEY_O		111
@@ -87,6 +93,12 @@
 #  define KEY_ESCAPE	53
 #  define KEY_NUMPAD_MORE	69
 #  define KEY_NUMPAD_LESS	78
+#  define KEY_NUMPAD_STAR	67
+#  define KEY_0		29
+#  define KEY_1		18
+#  define KEY_2		19
+#  define KEY_3		20
+#  define KEY_4		21
 #  define KEY_Z		6
 #  define KEY_I		34
 #  define KEY_O		31
@@ -202,6 +214,7 @@ typedef struct	s_options
 	int				lines_color;
 	int				faces_color;
 	int				bg_color;
+	int				distance;
 }				t_options;
 
 typedef struct	s_mlx_sess
@@ -313,8 +326,7 @@ t_vec3f			apply_matrix4(t_vec3f vec, t_mat4x4 *mat);
 **	CAMERAS
 */
 
-void			set_orthographic_camera(t_mlx_sess *sess);
-void			set_perspective_camera(t_mlx_sess *sess);
+void			camera(t_mlx_sess *sess, char *str);
 
 /*
 **	WINDOW EVENTS
@@ -351,6 +363,8 @@ void			alloc_error(char *error_obj, size_t alloc_size);
 **	EXTRA
 */
 
+void			set_color_scheme(t_mlx_sess *sess, int lines_color,
+									int faces_color, int bg_color);
 void			change_grid_z(t_grid *grid, float factor);
 
 # ifdef DEBUG

@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/04 14:03:16 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/04 19:10:28 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/04 22:26:47 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,9 @@ static void	translation_events(t_mlx_sess *sess, int key)
 	loc.z = 0;
 	identity_matrix4(&m_loc);
 	if (key == KEY_NUMPAD_MORE)
-		loc.y = -1;
+		loc.y = -1 * sess->options.distance;
 	else if (key == KEY_NUMPAD_LESS)
-		loc.y = 1;
+		loc.y = 1 * sess->options.distance;
 	else if (key == KEY_LEFT)
 		loc.x = -1;
 	else if (key == KEY_RIGHT)
@@ -61,9 +61,9 @@ static void	translation_events(t_mlx_sess *sess, int key)
 static void	matrix_events(t_mlx_sess *sess, int key)
 {
 	if (key == KEY_O)
-		set_orthographic_camera(sess);
+		camera(sess, "orthographic");
 	else if (key == KEY_P)
-		set_perspective_camera(sess);
+		camera(sess, "perspective");
 	else if (key == KEY_Q)
 		rotate_around_center(sess, 'y', 1);
 	else if (key == KEY_E)
@@ -78,6 +78,20 @@ static void	matrix_events(t_mlx_sess *sess, int key)
 		rotate_around_center(sess, 'x', 1);
 	else
 		translation_events(sess, key);
+}
+
+static void	color_events(t_mlx_sess *sess, int key)
+{
+	if (key == KEY_0)
+		set_color_scheme(sess, 0x00ffffff, 0x00000000, 0x00000000);
+	else if (key == KEY_1)
+		set_color_scheme(sess, 0x00ff0000, 0x000000ff, 0x000000ff);
+	else if (key == KEY_2)
+		set_color_scheme(sess, 0x00883333, 0x000000ff, 0x0000ff00);
+	else if (key == KEY_3)
+		set_color_scheme(sess, 0x00000000, 0x00046000, 0x000460ff);
+	else if (key == KEY_4)
+		set_color_scheme(sess, 0x00a34f89, 0x0009af39, 0x00394f90);
 }
 
 /*
@@ -96,13 +110,18 @@ int			keydown(int key, void *p)
 		sess->options.bresenham = (sess->options.bresenham) ? 0 : 1;
 	if (key == KEY_Z)
 		sess->options.zdraw = (sess->options.zdraw) ? 0 : 1;
+	if (key == KEY_NUMPAD_STAR)
+		sess->options.line_width = (sess->options.line_width > .1f) ? .05f :
+							sess->options.line_width + .005f;
 	else if (key == KEY_I)
 	{
 		color = sess->options.faces_color;
 		sess->options.faces_color = sess->options.lines_color;
 		sess->options.lines_color = color;
 	}
-	else
-		matrix_events(sess, key);
+	color_events(sess, key);
+	matrix_events(sess, key);
+	(*sess->world)[7] = ((*sess->world)[7] < sess->options.distance) ?
+								sess->options.distance : (*sess->world)[7];
 	return (0);
 }
