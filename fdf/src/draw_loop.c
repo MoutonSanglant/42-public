@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/04 14:16:46 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/04 15:44:32 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/04 17:03:15 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 static void	draw_gui(t_mlx_sess *p)
 {
 	draw_debug_gui(p);
-	(void)p;
 }
 
 #else

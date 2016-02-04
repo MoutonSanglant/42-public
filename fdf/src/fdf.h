@@ -58,6 +58,7 @@
 #  define KEY_ESCAPE	65307
 #  define KEY_NUMPAD_MORE	65451
 #  define KEY_NUMPAD_LESS	65453
+#  define KEY_I		110
 #  define KEY_O		111
 #  define KEY_P		112
 #  define KEY_Q		97
@@ -85,6 +86,7 @@
 #  define KEY_ESCAPE	53
 #  define KEY_NUMPAD_MORE	69
 #  define KEY_NUMPAD_LESS	78
+#  define KEY_I		34
 #  define KEY_O		31
 #  define KEY_P		35
 #  define KEY_Q		12
@@ -197,7 +199,7 @@ typedef struct	s_mlx_sess
 	float			*zbuffer;
 	t_grid			*grid;
 	struct timeval	last_tval;
-	int				col;
+	int				system_endian;
 	t_camera		camera;
 	t_mat4x4		*world;
 	t_mat4x4		*world_to_camera;

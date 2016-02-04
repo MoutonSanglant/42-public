@@ -6,28 +6,31 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/04 14:02:46 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/04 16:30:53 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/04 17:11:46 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-static void	init_buffers(t_mlx_sess *sess, char *filename)
+static void		init_buffers(t_mlx_sess *sess, char *filename)
 {
-	sess->img = (t_image *)malloc(sizeof(t_image));
+	sess->img = (t_image *)ft_memalloc(sizeof(t_image));
 	if (!sess->img)
 		alloc_error("sess->img", sizeof(t_image));
 	sess->img->img = mlx_new_image(sess->sess, sess->width, sess->height);
 	if (!sess->img->img)
 		alloc_error("sess->img->img", sizeof(int) * sess->width * sess->height);
-	sess->img->data = mlx_get_data_addr(sess->img->img, &sess->img->bpp, &sess->img->sl, &sess->img->endian);
+	sess->img->data = mlx_get_data_addr(sess->img->img, &sess->img->bpp,
+										&sess->img->sl, &sess->img->endian);
 	sess->img->filename = filename;
-	sess->zbuffer = (float *)ft_memalloc(sizeof(float) * sess->width * sess->height);
+	sess->zbuffer = (float *)ft_memalloc(sizeof(float)
+											* sess->width * sess->height);
 	if (!sess->zbuffer)
-		alloc_error("sess->zbuffer", sizeof(float) * sess->width * sess->height);
+		alloc_error("sess->zbuffer", sizeof(float)
+										* sess->width * sess->height);
 }
 
-static void	init_vertex_grid(t_mlx_sess *sess, t_vert **vertmap, int x, int y)
+static void		init_vertex_grid(t_mlx_sess *sess, t_vert **vertmap, int x, int y)
 {
 	t_mat4x4	trans;
 	t_vec3f		loc;
@@ -51,67 +54,64 @@ static void	init_vertex_grid(t_mlx_sess *sess, t_vert **vertmap, int x, int y)
 	matrix4_product(&trans, &sess->m_model);
 }
 
-int		main(int argc, char **argv)
+static t_vec2	get_size(int argc, char **argv)
+{
+	t_vec2		screen_size;
+
+	screen_size.x = DEFAULT_WIDTH;
+	screen_size.y = DEFAULT_HEIGHT;
+	if (argc > 2)
+	{
+		screen_size.x = ft_atoi(argv[1]);
+		screen_size.y = ft_atoi(argv[2]);
+		if (screen_size.x < MIN_WIDTH || screen_size.x > MAX_WIDTH)
+		{
+			ft_putstr("Width must be a value between: ");
+			ft_putnbr(MIN_WIDTH);
+			ft_putstr(" and ");
+			ft_putnbr(MAX_WIDTH);
+			ft_putchar('\n');
+			exit (1);
+		}
+		if (screen_size.y < MIN_HEIGHT || screen_size.y > MAX_HEIGHT)
+		{
+			ft_putstr("Height must be a value between: ");
+			ft_putnbr(MIN_HEIGHT);
+			ft_putstr(" and ");
+			ft_putnbr(MAX_HEIGHT);
+			ft_putchar('\n');
+			exit (1);
+		}
+	}
+	return (screen_size);
+}
+
+int				main(int argc, char **argv)
 {
 	t_vert		**vertmap;
+	char		*filepath;
 	t_mlx_sess	*sess;
-	int			a;
-	int			x;
-	int			y;
-	char *filepath;
-	int vx, vy;
-	int			local_endian;
+	t_vec2		vertmap_size;
+	t_vec2		screen_size;
 
 	filepath = NULL;
-
-	x = 800;
-	y = 600;
+	vertmap = NULL;
+	vertmap_size.x = 0;
+	vertmap_size.y = 0;
 	if (argc < 1 || argc > 4)
 	{
 		ft_putendl(USAGE_MSG);
 		return (1);
 	}
-	if (argc > 2)
-	{
-		x = ft_atoi(argv[1]);
-		y = ft_atoi(argv[2]);
-	}
-	else
-	{
-	}
-
-	vx = 0;
-	vy = 0;
-	vertmap = NULL;
+	screen_size = get_size(argc, argv);
 	if (argc > 3)
+	{
 		filepath = argv[3];
-
-	if (filepath)
-		vertmap = get_vertmap_from_file(argv[3], &vx, &vy);
-
-	sess = init_mlx_sess(x, y);
-
-	a = 0x11223344;
-	if (((unsigned char *)&a)[0] == 0x11)
-		local_endian = 1; // big-endian
-	else
-		local_endian = 0; // little-endian
-	if (local_endian == 1)
-		return (1);
-
+		vertmap = get_vertmap_from_file(argv[3], &vertmap_size.x, &vertmap_size.y);
+	}
+	sess = init_mlx_sess(screen_size.x, screen_size.y);
 	init_buffers(sess, filepath);
-	init_vertex_grid(sess, vertmap, vx, vy);
-
-	
-	/*
-	**	DRAWING Settings
-	*/
-	// invert
-
-//	printf("height: %i / width: %i\naspect: %f\nH: %f / W: %f\nT: %f\nB: %f\nL: %f\nR: %f\n", param->height, param->width, param->camera.aspect, param->canvasH, param->canvasW, param->canvasT, param->canvasB, param->canvasL, param->canvasR);
-	
-
-
+	init_vertex_grid(sess, vertmap, vertmap_size.x, vertmap_size.y);
 	start_mlx_sess(sess);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/04 14:03:16 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/04 16:17:55 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/04 17:03:23 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,15 +66,17 @@ static void	translation_events(t_mlx_sess *sess, int key)
 int			keydown(int key, void *p)
 {
 	t_mlx_sess	*sess;
+	int			color;
 
 	sess = (t_mlx_sess *)p;
 	sess->need_update = 1;
 	if (key == KEY_B)
 		sess->bresenham = (sess->bresenham) ? 0 : 1;
-	else if (key == KEY_O)
+	else if (key == KEY_I)
 	{
-		param->faces_color = param->lines_color;
-		param->lines_color = param->bg_color;
+		color = sess->faces_color;
+		sess->faces_color = sess->lines_color;
+		sess->lines_color = color;
 	}
 	else if (key == KEY_O)
 		set_orthographic_camera(sess);

@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/04 14:39:50 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/04 15:36:50 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/04 17:02:06 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,22 @@ static void	draw_settings(t_mlx_sess *sess)
 	sess->faces_color = 0x00ff0000;
 }
 
+/*
+**	return
+**	1: system is big-endian
+**	0: system is little-endian
+*/
+static int	get_system_endian()
+{
+	int		a;
+
+	a = 0x11223344;
+	if (((unsigned char *)&a)[0] == 0x11)
+		return(1);
+	else
+		return(0);
+}
+
 t_mlx_sess	*init_mlx_sess(int width, int height)
 {
 	t_mlx_sess	*sess;
@@ -82,10 +98,9 @@ t_mlx_sess	*init_mlx_sess(int width, int height)
 	sess->need_update = 1;
 	sess->last_tval.tv_sec = 0;
 	sess->last_tval.tv_usec = 0;
-	sess->col = 0x00ffffff;
+	sess->system_endian = get_system_endian();
 	init_matrices(sess);
 	init_camera(sess);
 	draw_settings(sess);
-
 	return (sess);
 }
