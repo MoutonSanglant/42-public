@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/18 17:52:02 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/04 02:44:25 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/04 19:08:19 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static int		compute_point(t_mlx_sess *sess, t_vec3f *vertex,
 {
 	*screen_out = apply_matrix4(*vertex, sess->projection);
 	if (screen_out->x < -1.f || screen_out->x > 1.f
-			|| screen_out->y < -1.f || screen_out->x > 1.f)
+			|| screen_out->y < -1.f || screen_out->y > 1.f)
 		return (0);
 	screen_out->x = fminf(sess->width - 1.f,
 			((uint32_t)((screen_out->x + 1.f) * 0.5f * sess->width)));
@@ -90,7 +90,7 @@ void			draw_3dgrid(t_mlx_sess *sess)
 	int			y;
 
 	draw_fn = &rasterize;
-	if (sess->bresenham)
+	if (sess->options.bresenham)
 		draw_fn = &draw_triangle_edges;
 	identity_matrix4(&mvp);
 	matrix4_product(&sess->m_model, &mvp);

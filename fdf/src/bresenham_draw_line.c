@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/03 16:53:27 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/03 20:45:35 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/04 19:56:34 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static void		bresenham_x_bigger_than_y(t_bresenham *bres, t_mlx_sess *sess,
 {
 	int			i;
 
-	set_image_pixel(sess, img, color, bres->xy);
+	set_image_pixel(sess, img, color, &bres->xy);
 	bres->e = 2 * bres->dy - bres->dx;
 	bres->inc1 = 2 * (bres->dy - bres->dx);
 	bres->inc2 = 2 * bres->dy;
@@ -50,7 +50,7 @@ static void		bresenham_x_bigger_than_y(t_bresenham *bres, t_mlx_sess *sess,
 		else
 			bres->e += bres->inc2;
 		bres->xy.x += bres->incx;
-		set_image_pixel(sess, img, color, bres->xy);
+		set_image_pixel(sess, img, color, &bres->xy);
 		i++;
 	}
 }
@@ -60,7 +60,7 @@ static void		bresenham_y_bigger_than_x(t_bresenham *bres, t_mlx_sess *sess,
 {
 	int			i;
 
-	set_image_pixel(sess, img, color, bres->xy);
+	set_image_pixel(sess, img, color, &bres->xy);
 	bres->e = 2 * bres->dx - bres->dy;
 	bres->inc1 = 2 * (bres->dx - bres->dy);
 	bres->inc2 = 2 * bres->dx;
@@ -75,7 +75,7 @@ static void		bresenham_y_bigger_than_x(t_bresenham *bres, t_mlx_sess *sess,
 		else
 			bres->e += bres->inc2;
 		bres->xy.y += bres->incy;
-		set_image_pixel(sess, img, color, bres->xy);
+		set_image_pixel(sess, img, color, &bres->xy);
 		i++;
 	}
 }
@@ -85,7 +85,7 @@ void			bresenham_draw_line(t_mlx_sess *sess, t_vec2 *from, t_vec2 *to)
 	t_bresenham	bres;
 	int			color;
 
-	color = mlx_get_color_value(sess->sess, sess->col);
+	color = mlx_get_color_value(sess->sess, sess->options.lines_color);
 	bres.x1 = from->x;
 	bres.x2 = to->x;
 	bres.y1 = from->y;

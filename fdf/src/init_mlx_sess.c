@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/04 14:39:50 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/04 17:02:06 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/04 19:09:21 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ static void	init_matrices(t_mlx_sess *sess)
 	identity_matrix4(sess->view);
 	identity_matrix4(sess->projection);
 	identity_matrix4(sess->world_to_camera);
-
 	rotation_x_matrix4(&trans, RAD(90));
 	matrix4_product(&trans, sess->view);
 	inverse_matrix4(sess->view, sess->world_to_camera);
@@ -54,12 +53,11 @@ static void	init_camera(t_mlx_sess *sess)
 
 static void	draw_settings(t_mlx_sess *sess)
 {
-	sess->bresenham = 1;
-	sess->line_width = .06f;
-	sess->lines_color = 0x00000000;
-	sess->bg_color = 0x00046000;
-	//sess->faces_color = sess->bg_color;
-	sess->faces_color = 0x00ff0000;
+	sess->options.bresenham = 1;
+	sess->options.line_width = .06f;
+	sess->options.lines_color = 0x00000000;
+	sess->options.bg_color = 0x00046000;
+	sess->options.faces_color = sess->options.bg_color;
 }
 
 /*
@@ -67,15 +65,15 @@ static void	draw_settings(t_mlx_sess *sess)
 **	1: system is big-endian
 **	0: system is little-endian
 */
-static int	get_system_endian()
+
+static int	get_system_endian(void)
 {
 	int		a;
 
 	a = 0x11223344;
 	if (((unsigned char *)&a)[0] == 0x11)
-		return(1);
-	else
-		return(0);
+		return (1);
+	return (0);
 }
 
 t_mlx_sess	*init_mlx_sess(int width, int height)
@@ -90,7 +88,8 @@ t_mlx_sess	*init_mlx_sess(int width, int height)
 	}
 	sess->width = width;
 	sess->height = height;
-	if (!(sess->win = mlx_new_window(sess->sess, sess->width, sess->height, "test_mlx")))
+	if (!(sess->win = mlx_new_window(sess->sess, sess->width,
+										sess->height, "test_mlx")))
 	{
 		ft_memdel((void **)&sess);
 		alloc_error("sess->win", sizeof(int) * sess->width * sess->height);
