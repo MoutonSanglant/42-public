@@ -21,11 +21,20 @@
 
 # include <includes/libft.h>
 
+# define USAGE_MSG "Usage: fdf [Width] [Height] [MapFile]"
+
 # define BUFF_SIZE 32
-# define WHITE 0x00ffffff
-# define RED 0x00ff0000
-# define GREEN 0x0000ff00
-# define BLUE 0x000000ff
+# define WHITE	0x00ffffff
+# define RED	0x00ff0000
+# define GREEN	0x0000ff00
+# define BLUE	0x000000ff
+# define DEFAULT_WIDTH	800
+# define DEFAULT_HEIGHT	600
+# define MIN_WIDTH	100
+# define MAX_WIDTH	1600
+# define MIN_HEIGHT	100
+# define MAX_HEIGHT	900
+
 
 /*
 ** BONUS
@@ -46,6 +55,7 @@
 #  include "../includes/linux/mlx.h"
 #  include "../includes/linux/mlx_int.h"
 
+#  define KEY_ESCAPE	65307
 #  define KEY_NUMPAD_MORE	65451
 #  define KEY_NUMPAD_LESS	65453
 #  define KEY_O		111
@@ -72,6 +82,7 @@
 /*
 ** the '+' key is under the '-' key on mac keyboard
 */
+#  define KEY_ESCAPE	53
 #  define KEY_NUMPAD_MORE	69
 #  define KEY_NUMPAD_LESS	78
 #  define KEY_O		31
@@ -180,27 +191,28 @@ typedef struct	s_camera
 
 typedef struct	s_mlx_sess
 {
-	void		*sess;
-	void		*win;
-	t_image		*img;
-	float		*zbuffer;
-	t_grid		*grid;
-	int			col;
-	t_camera	camera;
-	t_mat4x4	*world;
-	t_mat4x4	*world_to_camera;
-	t_mat4x4	*view;
-	t_mat4x4	*projection;
-	uint32_t	width;
-	uint32_t	height;
-	int			need_update;
-	t_mat4x4	m_model;
-	float		line_width;
-	int			lines_color;
-	int			faces_color;
-	int			bg_color;
-	float		map_height;
-	int			bresenham;
+	void			*sess;
+	void			*win;
+	t_image			*img;
+	float			*zbuffer;
+	t_grid			*grid;
+	struct timeval	last_tval;
+	int				col;
+	t_camera		camera;
+	t_mat4x4		*world;
+	t_mat4x4		*world_to_camera;
+	t_mat4x4		*view;
+	t_mat4x4		*projection;
+	uint32_t		width;
+	uint32_t		height;
+	int				need_update;
+	t_mat4x4		m_model;
+	float			line_width;
+	int				lines_color;
+	int				faces_color;
+	int				bg_color;
+	float			map_height;
+	int				bresenham;
 }				t_mlx_sess;
 
 typedef struct	s_bresenham
@@ -227,11 +239,24 @@ int				count_file_lines(char *path);
 t_vert			**get_vertmap_from_file(char *path, int *x, int *y);
 
 /*
+**	MLX
+*/
+
+t_mlx_sess		*init_mlx_sess();
+void			start_mlx_sess(t_mlx_sess *sess);
+
+/*
 **	RENDERING
 */
 
 void			draw_3dgrid(t_mlx_sess *sess);
 void			rasterize(t_mlx_sess *p, t_tri *triangle);
+
+/*
+**	LOOPS
+*/
+
+int		draw_loop(void *p);
 
 /*
 **	DRAWING
@@ -247,7 +272,7 @@ void			set_image_pixel(t_mlx_sess *sess, t_image *img, int color,
 								t_vec2ui32 xy);
 
 /*
-**	INITIALISATIONS
+**	INIT
 */
 
 void			init_grid(t_grid *grid, int width, int height);
@@ -282,6 +307,19 @@ void			set_orthographic_camera(t_mlx_sess *sess);
 void			set_perspective_camera(t_mlx_sess *sess);
 
 /*
+**	WINDOW EVENTS
+*/
+
+int		expose(void *p);
+
+/*
+**	INPUT EVENTS
+*/
+
+int				keydown(int key, void *p);
+int				keypress(int key, void *p);
+
+/*
 **	GNL
 */
 typedef struct	s_parser
@@ -292,6 +330,12 @@ typedef struct	s_parser
 }				t_parser;
 
 int				get_next_line(int const fd, char **line);
+
+/*
+**	ERRORS
+*/
+
+void			alloc_error(char *error_obj, size_t alloc_size);
 
 /*
 **	EXTRA

@@ -55,7 +55,7 @@ else
 endif
 
 " Color for the max line length column
-highlight ColorColumn ctermbg=grey guibg=grey
+highlight ColorColumn ctermbg=grey ctermfg=black guibg=grey
 " Color for the line number column
 highlight LineNr ctermfg=red ctermbg=DarkGrey guibg=#ffffff
 " Color for the 42 header

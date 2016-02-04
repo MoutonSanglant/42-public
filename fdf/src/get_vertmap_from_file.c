@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/25 23:38:14 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/03 20:03:04 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/04 15:16:55 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,12 @@ static void		format_error(void)
 	ft_putendl("Error: File is badly formated !'");
 	exit(16);
 }
+
+/*
+**	TODO
+**	Format error case:
+**	A line is bigger/smaller than another
+*/
 
 static t_vert	*parse_value_array(char **ascii_values, t_vert *vertices,
 									int line_nbr, int *count)
