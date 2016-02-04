@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/04 14:02:46 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/04 18:20:58 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/04 22:17:54 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,7 @@ static void		init_vertex_grid(t_mlx_sess *sess, t_vert **vertmap,
 	t_mat4x4	trans;
 	t_vec3f		loc;
 
-	sess->grid = (t_grid *)ft_memalloc(sizeof(t_grid));
-	if (!sess->zbuffer)
+	if (!(sess->grid = (t_grid *)ft_memalloc(sizeof(t_grid))))
 		alloc_error("sess->grid", sizeof(t_grid));
 	if (vertmap)
 		init_grid_from_vertmap(sess->grid, vertmap, x, y);
@@ -53,6 +52,7 @@ static void		init_vertex_grid(t_mlx_sess *sess, t_vert **vertmap,
 	loc.z = 0;
 	translation_matrix4(&trans, loc);
 	matrix4_product(&trans, &sess->m_model);
+	sess->options.distance = (int)fmax(sess->grid->width, sess->grid->height);
 }
 
 static void		get_size(int argc, char **argv, t_vec2 *screen_size)

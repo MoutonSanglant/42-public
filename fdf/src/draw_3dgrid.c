@@ -12,6 +12,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 /*   Updated: 2016/01/29 21:00:13 by tdefresn         ###   ########.fr       */
 =======
 /*   Updated: 2016/01/29 04:52:26 by tdefresn         ###   ########.fr       */
@@ -31,6 +32,9 @@
 =======
 /*   Updated: 2016/02/04 19:08:19 by tdefresn         ###   ########.fr       */
 >>>>>>> 3c0e559... norme
+=======
+/*   Updated: 2016/02/05 22:35:32 by tdefresn         ###   ########.fr       */
+>>>>>>> 58b245a... colors
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +99,7 @@ static void		draw_triangle(t_mlx_sess *sess, t_tri *triangles, t_mat4x4 *mvp,
 		inside_boundaries[i] = compute_point(sess, &vertex[i],
 												&triangle[i].coord);
 		triangle[i].coord.z = 1 / triangle[i].coord.z;
+		triangle[i].color = (*triangles)[i].color;
 		i++;
 	}
 	if (inside_boundaries[0] && inside_boundaries[1] && inside_boundaries[2])

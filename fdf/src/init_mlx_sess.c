@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/04 14:39:50 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/04 19:09:21 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/05 19:52:02 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,14 @@ static void	init_matrices(t_mlx_sess *sess)
 {
 	t_mat4x4	trans;
 
-	sess->world = (t_mat4x4 *)ft_memalloc(sizeof(t_mat4x4));
-	sess->view = (t_mat4x4 *)ft_memalloc(sizeof(t_mat4x4));
-	sess->projection = (t_mat4x4 *)ft_memalloc(sizeof(t_mat4x4));
-	sess->world_to_camera = (t_mat4x4 *)ft_memalloc(sizeof(t_mat4x4));
+	if (!(sess->world = (t_mat4x4 *)ft_memalloc(sizeof(t_mat4x4))))
+		alloc_error("sess->world", sizeof(t_mat4x4));
+	if (!(sess->view = (t_mat4x4 *)ft_memalloc(sizeof(t_mat4x4))))
+		alloc_error("sess->view", sizeof(t_mat4x4));
+	if (!(sess->projection = (t_mat4x4 *)ft_memalloc(sizeof(t_mat4x4))))
+		alloc_error("sess->projection", sizeof(t_mat4x4));
+	if (!(sess->world_to_camera = (t_mat4x4 *)ft_memalloc(sizeof(t_mat4x4))))
+		alloc_error("sess->world_to_camera", sizeof(t_mat4x4));
 	identity_matrix4(sess->world);
 	identity_matrix4(sess->view);
 	identity_matrix4(sess->projection);
@@ -48,15 +52,15 @@ static void	init_camera(t_mlx_sess *sess)
 	sess->camera.top = .1f;
 	sess->camera.left = -sess->camera.right;
 	sess->camera.bottom = -sess->camera.top;
-	set_perspective_camera(sess);
 }
 
 static void	draw_settings(t_mlx_sess *sess)
 {
+	sess->options.tooltip = 1;
 	sess->options.bresenham = 1;
-	sess->options.line_width = .06f;
-	sess->options.lines_color = 0x00000000;
-	sess->options.bg_color = 0x00046000;
+	sess->options.line_width = .02f;
+	sess->options.lines_color = 0x00ffffff;
+	sess->options.bg_color = 0x00000000;
 	sess->options.faces_color = sess->options.bg_color;
 }
 
@@ -80,7 +84,8 @@ t_mlx_sess	*init_mlx_sess(int width, int height)
 {
 	t_mlx_sess	*sess;
 
-	sess = (t_mlx_sess *)ft_memalloc(sizeof(t_mlx_sess));
+	if (!(sess = (t_mlx_sess *)ft_memalloc(sizeof(t_mlx_sess))))
+		alloc_error("sess", sizeof(t_mlx_sess));
 	if (!(sess->sess = mlx_init()))
 	{
 		ft_memdel((void **)&sess);

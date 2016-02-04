@@ -34,6 +34,7 @@
 # define MAX_WIDTH	1600
 # define MIN_HEIGHT	100
 # define MAX_HEIGHT	900
+# define GUI_LINE_HEIGHT 18
 
 # ifdef BONUS
 #  include <float.h>
@@ -58,8 +59,19 @@
 #  define KEY_ESCAPE	65307
 #  define KEY_NUMPAD_MORE	65451
 #  define KEY_NUMPAD_LESS	65453
-#  define KEY_Z		9999
-#  define KEY_I		9999
+#  define KEY_NUMPAD_STAR	65450
+#  define KEY_0		224
+#  define KEY_1		38
+#  define KEY_2		233
+#  define KEY_3		34
+#  define KEY_4		39
+#  define KEY_5		40
+#  define KEY_6		45
+#  define KEY_7		232
+#  define KEY_8		95
+#  define KEY_9		231
+#  define KEY_Z		119
+#  define KEY_I		105
 #  define KEY_O		111
 #  define KEY_P		112
 #  define KEY_Q		97
@@ -69,6 +81,7 @@
 #  define KEY_S		115
 #  define KEY_D		100
 #  define KEY_B		98
+#  define KEY_H		104
 #  define KEY_LEFT	65361
 #  define KEY_RIGHT	65363
 #  define KEY_UP	65362
@@ -87,6 +100,12 @@
 #  define KEY_ESCAPE	53
 #  define KEY_NUMPAD_MORE	69
 #  define KEY_NUMPAD_LESS	78
+#  define KEY_NUMPAD_STAR	67
+#  define KEY_0		29
+#  define KEY_1		18
+#  define KEY_2		19
+#  define KEY_3		20
+#  define KEY_4		21
 #  define KEY_Z		6
 #  define KEY_I		34
 #  define KEY_O		31
@@ -98,6 +117,7 @@
 #  define KEY_S		1
 #  define KEY_D		2
 #  define KEY_B		11
+#  define KEY_H		9999
 #  define KEY_LEFT	123
 #  define KEY_RIGHT	124
 #  define KEY_UP	126
@@ -151,9 +171,12 @@ typedef struct	s_vec4f
 
 typedef struct	s_color
 {
-	unsigned char	r;
-	unsigned char	g;
-	unsigned char	b;
+	float		r;
+	float		g;
+	float		b;
+//	unsigned char	r;
+//	unsigned char	g;
+//	unsigned char	b;
 }				t_color;
 
 typedef struct	s_vert
@@ -202,6 +225,8 @@ typedef struct	s_options
 	int				lines_color;
 	int				faces_color;
 	int				bg_color;
+	int				distance;
+	int				tooltip;
 }				t_options;
 
 typedef struct	s_mlx_sess
@@ -313,8 +338,7 @@ t_vec3f			apply_matrix4(t_vec3f vec, t_mat4x4 *mat);
 **	CAMERAS
 */
 
-void			set_orthographic_camera(t_mlx_sess *sess);
-void			set_perspective_camera(t_mlx_sess *sess);
+void			camera(t_mlx_sess *sess, char *str);
 
 /*
 **	WINDOW EVENTS
@@ -351,11 +375,11 @@ void			alloc_error(char *error_obj, size_t alloc_size);
 **	EXTRA
 */
 
+void			set_color_scheme(t_mlx_sess *sess, int lines_color,
+									int faces_color, int bg_color);
 void			change_grid_z(t_grid *grid, float factor);
 
 # ifdef DEBUG
-
-#  define LINE_HEIGHT 18
 
 void			output_image_info(t_image *image);
 void			draw_debug_gui(t_mlx_sess *sess);

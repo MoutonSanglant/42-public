@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/03 13:51:35 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/04 02:48:08 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/05 22:58:23 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,20 +83,21 @@ static void		top_right_triangle_colors(t_grid *grid, size_t idx,
 		grid->triangles[idx][0].color = vertmap[coord.y + 1][coord.x + 1].color;
 	else
 	{
-		grid->triangles[idx][0].color.r = 0 + (255 / grid->width);
-		grid->triangles[idx][0].color.g = 0 + (255 / grid->height);
-		grid->triangles[idx][0].color.b = 0;
+		grid->triangles[idx][0].color.r = 1;
+		grid->triangles[idx][0].color.g = 1;
+		grid->triangles[idx][0].color.b = 1;
 	}
-	grid->triangles[idx][1].color.r = 0;
-	grid->triangles[idx][1].color.g = 0;
-	grid->triangles[idx][1].color.b = 0;
+	grid->triangles[idx][1].color.r = 1;
+	grid->triangles[idx][1].color.g = 1;
+	grid->triangles[idx][1].color.b = 1;
+	grid->triangles[idx][1].color = vertmap[coord.y][coord.x].color;
 	if (coord.y + 1 < grid->height)
 		grid->triangles[idx][2].color = vertmap[coord.y + 1][coord.x].color;
 	else
 	{
-		grid->triangles[idx][2].color.r = 0;
-		grid->triangles[idx][2].color.g = 0 + (255 / grid->height);
-		grid->triangles[idx][2].color.b = 0;
+		grid->triangles[idx][2].color.r = 1;
+		grid->triangles[idx][2].color.g = 1;
+		grid->triangles[idx][2].color.b = 1;
 	}
 }
 
@@ -104,24 +105,25 @@ static void		bottom_left_triangle_colors(t_grid *grid, size_t idx,
 											t_vert **vertmap, t_vec2 coord)
 {
 	if (coord.x + 1 < grid->width && coord.y + 1 < grid->height)
-		grid->triangles[idx][0].color = vertmap[coord.y + 1][coord.x + 1].color;
+		grid->triangles[idx][1].color = vertmap[coord.y + 1][coord.x + 1].color;
 	else
 	{
-		grid->triangles[idx][0].color.r = 0 + (255 / grid->width);
-		grid->triangles[idx][0].color.g = 0 + (255 / grid->height);
-		grid->triangles[idx][0].color.b = 0;
+		grid->triangles[idx][1].color.r = 1;
+		grid->triangles[idx][1].color.g = 1;
+		grid->triangles[idx][1].color.b = 1;
 	}
 	if (coord.x + 1 < grid->width)
-		grid->triangles[idx][1].color = vertmap[coord.y][coord.x + 1].color;
+		grid->triangles[idx][2].color = vertmap[coord.y][coord.x + 1].color;
 	else
 	{
-		grid->triangles[idx][1].color.r = 0 + (255 / grid->width);
-		grid->triangles[idx][1].color.g = 0;
-		grid->triangles[idx][1].color.b = 0;
+		grid->triangles[idx][2].color.r = 1;
+		grid->triangles[idx][2].color.g = 1;
+		grid->triangles[idx][2].color.b = 1;
 	}
-	grid->triangles[idx][2].color.r = 0;
-	grid->triangles[idx][2].color.g = 0;
-	grid->triangles[idx][2].color.b = 0;
+	grid->triangles[idx][0].color.r = 1;
+	grid->triangles[idx][0].color.g = 1;
+	grid->triangles[idx][0].color.b = 1;
+	grid->triangles[idx][0].color = vertmap[coord.y][coord.x].color;
 }
 
 /*
@@ -138,7 +140,9 @@ void			init_grid_from_vertmap(t_grid *grid, t_vert **vertmap,
 	coord.x = 0;
 	grid->width = width;
 	grid->height = height;
-	grid->triangles = (t_tri *)ft_memalloc(sizeof(t_tri) * width * height * 2);
+	if (!(grid->triangles = (t_tri *)ft_memalloc(sizeof(t_tri)
+												* width * height * 2)))
+		alloc_error("grid->triangles", sizeof(t_tri) * width * height * 2);
 	while (coord.x < width)
 	{
 		coord.y = 0;

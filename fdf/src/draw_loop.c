@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/04 14:16:46 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/04 19:08:48 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/05 07:07:01 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,48 @@ static void	draw_gui(t_mlx_sess *p)
 
 #else
 
+static void	draw_help_tooltip(void *s, void *w, int line)
+{
+	mlx_string_put(s, w, 20, line++ * GUI_LINE_HEIGHT, WHITE, "[+] Zoom in");
+	mlx_string_put(s, w, 20, line++ * GUI_LINE_HEIGHT, WHITE, "[-] Zoom out");
+	mlx_string_put(s, w, 20, line++ * GUI_LINE_HEIGHT, WHITE, "[Arrows] Pan");
+	mlx_string_put(s, w, 20, line++ * GUI_LINE_HEIGHT, WHITE,
+					"[W/A/S/D/Q/E] Rotate");
+	mlx_string_put(s, w, 20, line++ * GUI_LINE_HEIGHT, WHITE,
+					"[PAGE UP/DOWN] Rise/Lower vertices");
+	mlx_string_put(s, w, 20, line++ * GUI_LINE_HEIGHT, WHITE, "[O]rthographic");
+	mlx_string_put(s, w, 20, line++ * GUI_LINE_HEIGHT, WHITE, "[P]erspective");
+	mlx_string_put(s, w, 20, line++ * GUI_LINE_HEIGHT, WHITE,
+					"[B]ackface culling");
+	mlx_string_put(s, w, 20, line++ * GUI_LINE_HEIGHT, WHITE,
+					"[I]nvert colors");
+	mlx_string_put(s, w, 20, line++ * GUI_LINE_HEIGHT, WHITE, "[Z]-Buffer");
+	mlx_string_put(s, w, 20, line++ * GUI_LINE_HEIGHT, WHITE,
+					"[*] Line weight");
+	mlx_string_put(s, w, 20, line++ * GUI_LINE_HEIGHT, WHITE,
+					"[0-9] Color schemes");
+	mlx_string_put(s, w, 20, line++ * GUI_LINE_HEIGHT, WHITE, "[ESC] Exit");
+}
+
 static void	draw_gui(t_mlx_sess *p)
 {
-	(void)p;
+	void	*s;
+	void	*w;
+	int		line;
+
+	if (!p->options.tooltip)
+		return ;
+	line = 1;
+	s = p->sess;
+	w = p->win;
+	if (p->img->filename)
+	{
+		mlx_string_put(s, w, 5, line * GUI_LINE_HEIGHT, WHITE, "Source file: ");
+		mlx_string_put(s, w, 155, line++ * GUI_LINE_HEIGHT, WHITE,
+														p->img->filename);
+	}
+	mlx_string_put(s, w, 5, line++ * GUI_LINE_HEIGHT, 0x00ffffff, "[H]elp");
+	draw_help_tooltip(s, w, line);
 }
 
 #endif
@@ -52,6 +91,11 @@ int			draw_loop(void *p)
 }
 
 #else
+
+/*
+**	TODO
+**	Do something ?
+*/
 
 int			draw_loop(void *p)
 {

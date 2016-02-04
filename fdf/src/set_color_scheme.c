@@ -1,36 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   count_file_lines.c                                 :+:      :+:    :+:   */
+/*   set_color_scheme.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/02/03 19:52:50 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/04 20:31:49 by tdefresn         ###   ########.fr       */
+/*   Created: 2016/02/04 22:20:40 by tdefresn          #+#    #+#             */
+/*   Updated: 2016/02/04 22:27:19 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-int				count_file_lines(char *path)
+void	set_color_scheme(t_mlx_sess *sess, int lines_color,
+							int faces_color, int bg_color)
 {
-	char	*line;
-	int		bcount;
-	int		fd;
-	int		i;
-
-	i = 0;
-	fd = open(path, O_RDONLY);
-	while ((bcount = get_next_line(fd, &line)))
-	{
-		if (bcount < 0)
-		{
-			perror(path);
-			exit(255);
-		}
-		ft_strdel(&line);
-		i++;
-	}
-	close(fd);
-	return (i);
+	sess->options.lines_color = lines_color;
+	sess->options.faces_color = faces_color;
+	sess->options.bg_color = bg_color;
 }
