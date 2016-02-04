@@ -1,31 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   clear_canvas.c                                     :+:      :+:    :+:   */
+/*   alloc_error.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/02/03 16:54:45 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/04 15:40:27 by tdefresn         ###   ########.fr       */
+/*   Created: 2016/02/04 15:05:56 by tdefresn          #+#    #+#             */
+/*   Updated: 2016/02/04 15:26:54 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-void	clear_canvas(t_mlx_sess *p, int clear_color)
+void	alloc_error(char *error_obj, size_t alloc_size)
 {
-	t_vec2ui32	xy;
-
-	xy.x = 0;
-	while (xy.x < p->width)
-	{
-		xy.y = 0;
-		while (xy.y < p->height)
-		{
-			set_image_pixel(p, p->img, clear_color, xy);
-			p->zbuffer[xy.x + xy.y * (p->width)] = FLT_MAX;
-			++xy.y;
-		}
-		xy.x++;
-	}
+	ft_putstr("Memory allocation error: ");
+	ft_putstr(error_obj);
+	ft_putstr(" required a block of size ");
+	ft_putnbr(alloc_size);
+	ft_putendl(" but couldn't get it.'");
+	exit(1);
 }

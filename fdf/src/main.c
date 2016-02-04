@@ -1,211 +1,76 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2016/02/04 14:02:46 by tdefresn          #+#    #+#             */
+/*   Updated: 2016/02/04 16:30:53 by tdefresn         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "fdf.h"
 
-void	rotate_around_center(t_mlx_sess *sess, char c, int dir)
+static void	init_buffers(t_mlx_sess *sess, char *filename)
 {
-	t_mat4x4	m_iworld;
-	t_mat4x4	m_rot;
-
-	inverse_matrix4(sess->world, &m_iworld);
-	identity_matrix4(&m_rot);
-	if (c == 'z')
-		rotation_z_matrix4(&m_rot, RAD(3 * dir));
-	else if (c == 'y')
-		rotation_y_matrix4(&m_rot, RAD(3 * dir));
-	else if (c == 'x')
-		rotation_x_matrix4(&m_rot, RAD(3 * dir));
-	matrix4_product(&m_rot, &m_iworld);
-	inverse_matrix4(&m_iworld, sess->world);
+	sess->img = (t_image *)malloc(sizeof(t_image));
+	if (!sess->img)
+		alloc_error("sess->img", sizeof(t_image));
+	sess->img->img = mlx_new_image(sess->sess, sess->width, sess->height);
+	if (!sess->img->img)
+		alloc_error("sess->img->img", sizeof(int) * sess->width * sess->height);
+	sess->img->data = mlx_get_data_addr(sess->img->img, &sess->img->bpp, &sess->img->sl, &sess->img->endian);
+	sess->img->filename = filename;
+	sess->zbuffer = (float *)ft_memalloc(sizeof(float) * sess->width * sess->height);
+	if (!sess->zbuffer)
+		alloc_error("sess->zbuffer", sizeof(float) * sess->width * sess->height);
 }
 
-int		keydown(int key, void *p)
+static void	init_vertex_grid(t_mlx_sess *sess, t_vert **vertmap, int x, int y)
 {
-	t_mlx_sess	*sess;
-	t_mat4x4	m_loc;
-	t_mat4x4	m_rot;
+	t_mat4x4	trans;
 	t_vec3f		loc;
 
-	sess = (t_mlx_sess *)p;
-	sess->need_update = 1;
-	loc.x = 0;
-	loc.y = 0;
+	sess->grid = (t_grid *)ft_memalloc(sizeof(t_grid));
+	if (!sess->zbuffer)
+		alloc_error("sess->grid", sizeof(t_grid));
+	if (vertmap)
+		init_grid_from_vertmap(sess->grid, vertmap, x, y);
+	else
+	{
+		ft_putendl("No input file, making a 10x10 flat grid.");
+		init_grid(sess->grid, 10, 10);
+	}
+	identity_matrix4(&sess->m_model);
+	identity_matrix4(&trans);
+	loc.x = -sess->grid->width * .5f;
+	loc.y = -sess->grid->height * .5f;
 	loc.z = 0;
-	identity_matrix4(&m_loc);
-	identity_matrix4(&m_rot);
-
-	ft_putchar('\n');
-	ft_putnbr(key);
-
-	if (key == KEY_B)
-		sess->bresenham = (sess->bresenham) ? 0 : 1;
-	else if (key == KEY_O)
-		set_orthographic_camera(sess);
-	else if (key == KEY_P)
-		set_perspective_camera(sess);
-	else if (key == KEY_Q)
-		rotate_around_center(sess, 'y', 1);
-	else if (key == KEY_E)
-		rotate_around_center(sess, 'y', -1);
-	else if (key == KEY_A)
-		rotate_around_center(sess, 'z', -1);
-	else if (key == KEY_D)
-		rotate_around_center(sess, 'z', 1);
-	else if (key == KEY_W)
-		rotate_around_center(sess, 'x', -1);
-	else if (key == KEY_S)
-		rotate_around_center(sess, 'x', 1);
-	else if (key == KEY_NUMPAD_MORE)
-		loc.y = -1;
-	else if (key == KEY_NUMPAD_LESS)
-		loc.y = 1;
-	else if (key == KEY_LEFT)
-		loc.x = -1;
-	else if (key == KEY_RIGHT)
-		loc.x = 1;
-	else if (key == KEY_UP)
-		loc.z = -1;
-	else if (key == KEY_DOWN)
-		loc.z = 1;
-	else if (key == KEY_PAGE_UP)
-		change_grid_z(sess->grid, 1.1f);
-	else if (key == KEY_PAGE_DOWN)
-		change_grid_z(sess->grid, 0.9f);
-	translation_matrix4(&m_loc, loc);
-	matrix4_product(&m_loc, sess->world);
-	matrix4_product(&m_rot, sess->world);
-	return (0);
+	translation_matrix4(&trans, loc);
+	matrix4_product(&trans, &sess->m_model);
 }
-
-int		keypress(int key, void *p)
-{
-	t_mlx_sess	*sess;
-
-	sess = (t_mlx_sess *)p;
-#ifdef LINUX
-	if (key == 65307)
-#else
-	if (key == 53)
-#endif
-	{
-		//mlx_destroy_window(sess->sess, sess->win);
-		//ft_memdel((void **)&sess);
-
-		mlx_destroy_image(sess->sess, sess->img->img);
-		mlx_destroy_window(sess->sess, sess->win);
-		ft_memdel((void **)&sess->zbuffer);
-		ft_memdel((void **)&sess->world);
-		ft_memdel((void **)&sess->view);
-		ft_memdel((void **)&sess->world_to_camera);
-		ft_memdel((void **)&sess->projection);
-		ft_memdel((void **)&sess->grid->triangles);
-		ft_memdel((void **)&sess->grid);
-		ft_memdel((void **)&sess->sess);
-		ft_memdel((void **)&sess);
-		exit(0);
-	}
-	return (0);
-}
-
-#ifdef DEBUG
-static void	draw_gui(t_mlx_sess *p)
-{
-	draw_debug_gui(p);
-	(void) p;
-}
-#else
-static void	draw_gui(t_mlx_sess *p)
-{
-	(void) p;
-}
-#endif
-
-#ifdef BONUS
-int		draw_loop(void *p)
-{
-	static struct timeval	tval_last = {0,0};
-	t_mlx_sess	*sess;
-	struct timeval			tval_now;
-	struct timeval			tval_tic;
-
-	sess = (t_mlx_sess *)p;
-	gettimeofday(&tval_now, NULL);
-	timersub(&tval_now, &tval_last, &tval_tic);
-	if (tval_tic.tv_usec > FPS && sess->need_update)
-	{
-		gettimeofday(&tval_last, NULL);
-		//clear_canvas(sess, 0xffffff);
-		clear_canvas(sess, sess->bg_color);
-		draw_3dgrid(sess);
-		mlx_put_image_to_window(sess->sess, sess->win, sess->img->img, 0, 0);
-		draw_gui(sess);
-		sess->need_update = 0;
-	}
-	return (0);
-}
-#else
-int		draw_loop(void *p)
-{
-	(void) p;
-	return (0);
-}
-
-#endif
-
-int		expose(void *p)
-{
-	t_mlx_sess	*sess;
-
-	sess = (t_mlx_sess *)p;
-	sess->need_update = 1;
-	return (0);
-}
-
-#ifdef LINUX
-static void set_mlx_hooks(t_mlx_sess *sess)
-{
-	// Start MLX session
-	mlx_hook(sess->win, KeyPress, KeyPressMask, &keydown, (void *)sess);
-	mlx_key_hook(sess->win, &keypress, (void *)sess);
-	mlx_expose_hook(sess->win, &expose, (void *)sess);
-	mlx_loop_hook(sess->sess, &draw_loop, (void *)sess);
-
-}
-#else
-static void set_mlx_hooks(t_mlx_sess *sess)
-{
-	// Start MLX session
-	mlx_hook(sess->win, KEYPRESS, KEYPRESSMASK, &keydown, (void *)sess);
-	mlx_key_hook(sess->win, &keypress, (void *)sess);
-	mlx_expose_hook(sess->win, &expose, (void *)sess);
-	mlx_loop_hook(sess->sess, &draw_loop, (void *)sess);
-
-}
-#endif
 
 int		main(int argc, char **argv)
 {
-	t_mlx_sess	*param;
-	t_image		image;
-	int			local_endian;
+	t_vert		**vertmap;
+	t_mlx_sess	*sess;
 	int			a;
 	int			x;
 	int			y;
-	t_vert		**vertmap;
+	char *filepath;
+	int vx, vy;
+	int			local_endian;
 
-	char txt[] = "hello";
-	char dst[32];
+	filepath = NULL;
 
-	for (int j = 0; j < 12; ++j) {
-		for (size_t i = 0; i < sizeof(txt); ++i) {
-			dst[i + 6] = txt[i];
-		}
-		ft_memmove(dst + j, dst + 6, sizeof(txt));
-		if (ft_memcmp(dst + j, txt, sizeof(txt) != 0))
-				ft_putstr("sniff\n");
-	}
-	ft_putstr("Youpi!\n");
-
-	if (argc < 1)
+	x = 800;
+	y = 600;
+	if (argc < 1 || argc > 4)
+	{
+		ft_putendl(USAGE_MSG);
 		return (1);
+	}
 	if (argc > 2)
 	{
 		x = ft_atoi(argv[1]);
@@ -213,30 +78,19 @@ int		main(int argc, char **argv)
 	}
 	else
 	{
-		x = 800;
-		y = 600;
 	}
-
-	int vx, vy;
 
 	vx = 0;
 	vy = 0;
 	vertmap = NULL;
 	if (argc > 3)
+		filepath = argv[3];
+
+	if (filepath)
 		vertmap = get_vertmap_from_file(argv[3], &vx, &vy);
-	param = (t_mlx_sess *)ft_memalloc(sizeof(t_mlx_sess));
-	if (!(param->sess = mlx_init()))
-	{
-		ft_memdel((void **)&param);
-		return (1);
-	}
-	param->width = x;
-	param->height = y;
-	if (!(param->win = mlx_new_window(param->sess, param->width, param->height, "test_mlx")))
-	{
-		ft_memdel((void **)&param);
-		return (1);
-	}
+
+	sess = init_mlx_sess(x, y);
+
 	a = 0x11223344;
 	if (((unsigned char *)&a)[0] == 0x11)
 		local_endian = 1; // big-endian
@@ -245,115 +99,19 @@ int		main(int argc, char **argv)
 	if (local_endian == 1)
 		return (1);
 
-	/*
-	**	FRAME_BUFFER
-	*/
-	image.img = mlx_new_image(param->sess, param->width, param->height);
-	image.data = mlx_get_data_addr(image.img, &image.bpp, &image.sl, &image.endian);
-	param->img = &image;
-	if (argc > 3)
-		param->img->filename = argv[3];
-	else
-		param->img->filename = NULL;
-	param->need_update = 1;
+	init_buffers(sess, filepath);
+	init_vertex_grid(sess, vertmap, vx, vy);
 
-	/*
-	**	Z-BUFFER
-	*/
-
-#ifdef BONUS
-	param->zbuffer = (float *)ft_memalloc(sizeof(float) * x * y);
-	//clear_zbuffer(param->zbuffer, x, y);
-#endif
-
-	/*
-	**	GRID
-	*/
-	param->grid = (t_grid *)ft_memalloc(sizeof(t_grid));
-	if (vertmap)
-	{
-		init_grid_from_vertmap(param->grid, vertmap, vx, vy);
-		identity_matrix4(&param->m_model);
-
-		t_mat4x4	trans;
-		t_vec3f		loc;
-		identity_matrix4(&trans);
-		/*
-		** Put model at the center of the scene
-		*/
-		loc.x = -param->grid->width * .5f;
-		loc.y = -param->grid->height * .5f;
-		loc.z = 0;
-		translation_matrix4(&trans, loc);
-		matrix4_product(&trans, &param->m_model);
-	}
-	else
-	{
-		ft_putendl("No input file, making a 10x10 flat grid.");
-		init_grid(param->grid, 10, 10);
-		identity_matrix4(&param->m_model);
-	}
-	param->col = 0x00ffffff;
-
-	t_mat4x4	tmp;
-
-	/*
-	**	WORLD Matrix
-	*/
-	param->world = (t_mat4x4 *)ft_memalloc(sizeof(t_mat4x4));
-
-	/*
-	**	VIEW Matrix
-	*/
-	param->view = (t_mat4x4 *)ft_memalloc(sizeof(t_mat4x4));
-	identity_matrix4(param->view);
-
-	/*
-	**	CAMERA Matrix (world_to_camera)
-	*/
-	param->world_to_camera = (t_mat4x4 *)ft_memalloc(sizeof(t_mat4x4));
-	// Camera needs to look down (along the negative 'Z-axis')
-	rotation_x_matrix4(&tmp, RAD(90));
-	matrix4_product(&tmp, param->view);
-	inverse_matrix4(param->view, param->world_to_camera);
-
-	// Move the world so it looks in a good direction
-
-	/*
-	**	PROJECTION Matrix
-	*/
-	param->projection = (t_mat4x4 *)ft_memalloc(sizeof(t_mat4x4));
-
-	/*
-	**	CAMERA
-	*/
-	param->camera.aspect = (float)param->width / (float)param->height;
-	param->camera.near = .1f;
-	param->camera.far = 100;
-	param->camera.angle_of_view = 90.f;
-	param->camera.right = .1f * param->camera.aspect;
-	param->camera.top = .1f;
-	param->camera.left = -param->camera.right;
-	param->camera.bottom = -param->camera.top;
-	param->camera.far = 100.f;
-	set_perspective_camera(param);
-
+	
 	/*
 	**	DRAWING Settings
 	*/
-	param->bresenham = 1;
-	param->line_width = .06f;
-	param->lines_color = 0x00000000;
-	param->bg_color = 0x00046000;
-	//param->faces_color = param->bg_color;
-	param->faces_color = 0x00ff0000;
 	// invert
-	//param->faces_color = param->lines_color;
-	//param->lines_color = param->bg_color;
 
 //	printf("height: %i / width: %i\naspect: %f\nH: %f / W: %f\nT: %f\nB: %f\nL: %f\nR: %f\n", param->height, param->width, param->camera.aspect, param->canvasH, param->canvasW, param->canvasT, param->canvasB, param->canvasL, param->canvasR);
+	
 
-	set_mlx_hooks(param);
-	mlx_loop(param->sess);
+
+	start_mlx_sess(sess);
 	return (0);
 }
