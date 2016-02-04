@@ -6,11 +6,20 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/03 13:51:35 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/03 14:09:32 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/04 02:48:08 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
+
+/*
+**	1
+**	|\
+**	| \
+**	2--0
+**	Draw midline first in order to discard
+**	it at rendering to produce quads
+*/
 
 static void		top_right_triangle_vertices(t_grid *grid, size_t idx,
 										t_vert **vertmap, t_vec2 coord)
@@ -35,26 +44,35 @@ static void		top_right_triangle_vertices(t_grid *grid, size_t idx,
 		grid->triangles[idx][2].coord.z = 0.f;
 }
 
+/*
+**	0--2
+**	 \ |
+**	  \|
+**	   1
+**	Draw midline first in order to discard
+**	it at rendering to produce quads
+*/
+
 static void		bottom_left_triangle_vertices(t_grid *grid, size_t idx,
 											t_vert **vertmap, t_vec2 coord)
 {
-	grid->triangles[idx][0].coord.x = (float)(1.f * coord.x + 1.f);
-	grid->triangles[idx][0].coord.y = (float)(1.f * coord.y + 1.f);
+	grid->triangles[idx][1].coord.x = (float)(1.f * coord.x + 1.f);
+	grid->triangles[idx][1].coord.y = (float)(1.f * coord.y + 1.f);
 	if (coord.x + 1 < grid->width && coord.y + 1 < grid->height)
-		grid->triangles[idx][0].coord.z =
+		grid->triangles[idx][1].coord.z =
 			(float)vertmap[coord.y + 1][coord.x + 1].coord.z * 0.15f;
 	else
-		grid->triangles[idx][0].coord.z = 0.f;
-	grid->triangles[idx][1].coord.x = (float)(1.f * coord.x + 1.f);
-	grid->triangles[idx][1].coord.y = (float)(1.f * coord.y);
+		grid->triangles[idx][1].coord.z = 0.f;
+	grid->triangles[idx][2].coord.x = (float)(1.f * coord.x + 1.f);
+	grid->triangles[idx][2].coord.y = (float)(1.f * coord.y);
 	if (coord.x + 1 < grid->width)
-		grid->triangles[idx][1].coord.z =
+		grid->triangles[idx][2].coord.z =
 			(float)vertmap[coord.y][coord.x + 1].coord.z * 0.15f;
 	else
-		grid->triangles[idx][1].coord.z = 0.f;
-	grid->triangles[idx][2].coord.x = (float)(1.f * coord.x);
-	grid->triangles[idx][2].coord.y = (float)(1.f * coord.y);
-	grid->triangles[idx][2].coord.z =
+		grid->triangles[idx][2].coord.z = 0.f;
+	grid->triangles[idx][0].coord.x = (float)(1.f * coord.x);
+	grid->triangles[idx][0].coord.y = (float)(1.f * coord.y);
+	grid->triangles[idx][0].coord.z =
 		(float)vertmap[coord.y][coord.x].coord.z * 0.15f;
 }
 

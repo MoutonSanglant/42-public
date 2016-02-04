@@ -5,3 +5,5 @@ libft/test_*
 libft/libft.a
 *._*
 *.dSYM
+
+!/School/Config/.*

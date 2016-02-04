@@ -1,13 +1,18 @@
 #include "fdf.h"
 
-void	rotate_around_center(t_mlx_sess *sess, int dir)
+void	rotate_around_center(t_mlx_sess *sess, char c, int dir)
 {
 	t_mat4x4	m_iworld;
 	t_mat4x4	m_rot;
 
 	inverse_matrix4(sess->world, &m_iworld);
 	identity_matrix4(&m_rot);
-	rotation_z_matrix4(&m_rot, RAD(3 * dir));
+	if (c == 'z')
+		rotation_z_matrix4(&m_rot, RAD(3 * dir));
+	else if (c == 'y')
+		rotation_y_matrix4(&m_rot, RAD(3 * dir));
+	else if (c == 'x')
+		rotation_x_matrix4(&m_rot, RAD(3 * dir));
 	matrix4_product(&m_rot, &m_iworld);
 	inverse_matrix4(&m_iworld, sess->world);
 }
@@ -37,17 +42,17 @@ int		keydown(int key, void *p)
 	else if (key == KEY_P)
 		set_perspective_camera(sess);
 	else if (key == KEY_Q)
-		rotation_y_matrix4(&m_rot, RAD(3));
+		rotate_around_center(sess, 'y', 1);
 	else if (key == KEY_E)
-		rotation_y_matrix4(&m_rot, RAD(-3));
+		rotate_around_center(sess, 'y', -1);
 	else if (key == KEY_A)
-		rotate_around_center(sess, -1);
+		rotate_around_center(sess, 'z', -1);
 	else if (key == KEY_D)
-		rotate_around_center(sess, 1);
+		rotate_around_center(sess, 'z', 1);
 	else if (key == KEY_W)
-		rotation_x_matrix4(&m_rot, RAD(3));
+		rotate_around_center(sess, 'x', -1);
 	else if (key == KEY_S)
-		rotation_x_matrix4(&m_rot, RAD(-3));
+		rotate_around_center(sess, 'x', 1);
 	else if (key == KEY_NUMPAD_MORE)
 		loc.y = -1;
 	else if (key == KEY_NUMPAD_LESS)

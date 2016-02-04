@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/18 17:52:02 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/03 19:47:29 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/04 02:44:25 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,11 @@ static int		compute_point(t_mlx_sess *sess, t_vec3f *vertex,
 	return (1);
 }
 
+/*
+**	Don't draw the midline in order to represents
+**	quads instead of triangles
+*/
+
 static void		draw_triangle_edges(t_mlx_sess *sess, t_tri *points)
 {
 	t_vec2	points_2d[3];
@@ -41,7 +46,6 @@ static void		draw_triangle_edges(t_mlx_sess *sess, t_tri *points)
 	points_2d[1].y = (*points)[1].coord.y;
 	points_2d[2].x = (*points)[2].coord.x;
 	points_2d[2].y = (*points)[2].coord.y;
-	bresenham_draw_line(sess, &points_2d[0], &points_2d[1]);
 	bresenham_draw_line(sess, &points_2d[1], &points_2d[2]);
 	bresenham_draw_line(sess, &points_2d[0], &points_2d[2]);
 }
