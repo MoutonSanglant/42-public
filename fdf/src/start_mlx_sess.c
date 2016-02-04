@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/04 14:40:41 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/04 15:29:17 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/04 18:34:05 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 #ifdef LINUX
 
-static void set_mlx_hooks(t_mlx_sess *sess)
+static void		set_mlx_hooks(t_mlx_sess *sess)
 {
 	mlx_hook(sess->win, KeyPress, KeyPressMask, &keydown, (void *)sess);
 	mlx_key_hook(sess->win, &keypress, (void *)sess);
@@ -24,7 +24,7 @@ static void set_mlx_hooks(t_mlx_sess *sess)
 
 #else
 
-static void set_mlx_hooks(t_mlx_sess *sess)
+static void		set_mlx_hooks(t_mlx_sess *sess)
 {
 	mlx_hook(sess->win, KEYPRESS, KEYPRESSMASK, &keydown, (void *)sess);
 	mlx_key_hook(sess->win, &keypress, (void *)sess);
@@ -34,7 +34,7 @@ static void set_mlx_hooks(t_mlx_sess *sess)
 
 #endif
 
-void	start_mlx_sess(t_mlx_sess *sess)
+void			start_mlx_sess(t_mlx_sess *sess)
 {
 	set_mlx_hooks(sess);
 	mlx_loop(sess->sess);

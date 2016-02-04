@@ -35,13 +35,10 @@
 # define MIN_HEIGHT	100
 # define MAX_HEIGHT	900
 
-
-/*
-** BONUS
-*/
 # ifdef BONUS
 #  include <float.h>
 #  include <sys/time.h>
+#  include <limits.h>
 
 /*
 ** FPS in microseconds
@@ -49,6 +46,9 @@
 ** 33332 for 30 fps
 */
 #  define FPS 33332
+#  define EDGE_FN(a, b, c) (c.x - a.x) * (b.y - a.y) - (c.y - a.y) * (b.x - a.x)
+#  define MIN3(a, b, c) fminf(a, fmin(b, c))
+#  define MAX3(a, b, c) fmaxf(a, fmax(b, c))
 # endif
 
 # ifdef LINUX
@@ -58,6 +58,8 @@
 #  define KEY_ESCAPE	65307
 #  define KEY_NUMPAD_MORE	65451
 #  define KEY_NUMPAD_LESS	65453
+#  define KEY_Z		9999
+#  define KEY_I		9999
 #  define KEY_O		111
 #  define KEY_P		112
 #  define KEY_Q		97
@@ -85,6 +87,8 @@
 #  define KEY_ESCAPE	53
 #  define KEY_NUMPAD_MORE	69
 #  define KEY_NUMPAD_LESS	78
+#  define KEY_Z		6
+#  define KEY_I		34
 #  define KEY_O		31
 #  define KEY_P		35
 #  define KEY_Q		12
@@ -189,30 +193,36 @@ typedef struct	s_camera
 	float	right;
 }				t_camera;
 
+typedef struct	s_options
+{
+	float			map_height;
+	float			line_width;
+	int				bresenham;
+	int				zdraw;
+	int				lines_color;
+	int				faces_color;
+	int				bg_color;
+}				t_options;
+
 typedef struct	s_mlx_sess
 {
+	uint32_t		width;
+	uint32_t		height;
 	void			*sess;
 	void			*win;
 	t_image			*img;
 	float			*zbuffer;
 	t_grid			*grid;
-	struct timeval	last_tval;
-	int				col;
 	t_camera		camera;
 	t_mat4x4		*world;
-	t_mat4x4		*world_to_camera;
 	t_mat4x4		*view;
 	t_mat4x4		*projection;
-	uint32_t		width;
-	uint32_t		height;
-	int				need_update;
+	t_mat4x4		*world_to_camera;
 	t_mat4x4		m_model;
-	float			line_width;
-	int				lines_color;
-	int				faces_color;
-	int				bg_color;
-	float			map_height;
-	int				bresenham;
+	t_options		options;
+	struct timeval	last_tval;
+	int				need_update;
+	int				system_endian;
 }				t_mlx_sess;
 
 typedef struct	s_bresenham
@@ -256,7 +266,7 @@ void			rasterize(t_mlx_sess *p, t_tri *triangle);
 **	LOOPS
 */
 
-int		draw_loop(void *p);
+int				draw_loop(void *p);
 
 /*
 **	DRAWING
@@ -269,7 +279,7 @@ void			draw_picture(t_mlx_sess *sess);
 
 void			clear_canvas(t_mlx_sess *sess, int color);
 void			set_image_pixel(t_mlx_sess *sess, t_image *img, int color,
-								t_vec2ui32 xy);
+								t_vec2ui32 *xy);
 
 /*
 **	INIT
@@ -310,7 +320,7 @@ void			set_perspective_camera(t_mlx_sess *sess);
 **	WINDOW EVENTS
 */
 
-int		expose(void *p);
+int				expose(void *p);
 
 /*
 **	INPUT EVENTS

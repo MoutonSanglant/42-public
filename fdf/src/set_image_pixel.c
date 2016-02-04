@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/18 17:50:22 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/03 20:38:26 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/04 19:55:09 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 */
 
 void		set_image_pixel(t_mlx_sess *sess, t_image *img, int color,
-							t_vec2ui32 xy)
+							t_vec2ui32 *xy)
 {
 	int				opp;
 	int				dec;
@@ -28,7 +28,7 @@ void		set_image_pixel(t_mlx_sess *sess, t_image *img, int color,
 	(void)sess;
 	opp = img->bpp / 8;
 	dec = opp;
-	ptr = ((unsigned char *)img->data + xy.y * img->sl) + xy.x * opp;
+	ptr = ((unsigned char *)img->data + xy->y * img->sl) + xy->x * opp;
 	while (dec--)
 		*(ptr + dec) = ((unsigned char *)(&color))[dec];
 }
