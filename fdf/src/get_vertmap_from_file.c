@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/25 23:38:14 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/04 23:21:49 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/05 22:51:23 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static void				format_error(void)
 **	A line is bigger/smaller than another
 */
 
-static unsigned char	hex_to_dec(char *hex)
+static float			hex_to_float(char *hex)
 {
 	char	a;
 	char	b;
@@ -43,7 +43,7 @@ static unsigned char	hex_to_dec(char *hex)
 		b = hex[1] - 'a' + 10;
 	else if (hex[1] >= '0' && hex[1] <= '9')
 		b = hex[1] - '0';
-	return ((a * 16) + b);
+	return ((float)((a * 16) + b) / 255);
 }
 
 /*
@@ -67,9 +67,15 @@ static t_vert			*parse_value_array(char **ascii_values,
 		{
 			if (ft_strlen(color) < 9)
 				format_error();
-			vertices[i].color.r = hex_to_dec(&color[3]);
-			vertices[i].color.g = hex_to_dec(&color[5]);
-			vertices[i].color.b = hex_to_dec(&color[7]);
+			vertices[i].color.r = hex_to_float(&color[3]);
+			vertices[i].color.g = hex_to_float(&color[5]);
+			vertices[i].color.b = hex_to_float(&color[7]);
+		}
+		else
+		{
+			vertices[i].color.r = 1;
+			vertices[i].color.g = 1.f - ((float)fminf(ft_atoi(ascii_values[i]) * 100.f, 255.f)) / 255.f;
+			vertices[i].color.b = 1.f - ((float)fminf(ft_atoi(ascii_values[i]) * 100.f, 255.f)) / 255.f;
 		}
 		vertices[i].coord.x = i;
 		vertices[i].coord.y = line_nbr;

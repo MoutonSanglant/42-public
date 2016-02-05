@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/18 17:52:02 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/04 19:08:19 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/05 22:35:32 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ static void		draw_triangle(t_mlx_sess *sess, t_tri *triangles, t_mat4x4 *mvp,
 		inside_boundaries[i] = compute_point(sess, &vertex[i],
 												&triangle[i].coord);
 		triangle[i].coord.z = 1 / triangle[i].coord.z;
+		triangle[i].color = (*triangles)[i].color;
 		i++;
 	}
 	if (inside_boundaries[0] && inside_boundaries[1] && inside_boundaries[2])

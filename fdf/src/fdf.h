@@ -171,9 +171,12 @@ typedef struct	s_vec4f
 
 typedef struct	s_color
 {
-	unsigned char	r;
-	unsigned char	g;
-	unsigned char	b;
+	float		r;
+	float		g;
+	float		b;
+//	unsigned char	r;
+//	unsigned char	g;
+//	unsigned char	b;
 }				t_color;
 
 typedef struct	s_vert

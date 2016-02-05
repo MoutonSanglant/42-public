@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/03 14:41:41 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/05 05:09:41 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/05 19:58:24 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,14 @@ static char		*strjoinat(const char *s1, const char *s2, int idx)
 	return (dst);
 }
 
-static void		draw_image_info(void *s, void *w, t_image *img, int *line)
+static void		draw_image_info(void *s, void *w, t_image *img, int *l)
 {
 	static char	*addr = NULL;
 	static char	*bpp = NULL;
 	static char	*sl = NULL;
 	static char	*endianess = NULL;
 
-	*line = *line - 1;
+	*l = *l - 1;
 	if (!addr || !bpp || !sl || !endianess)
 	{
 		addr = strjoinat("Address:   0x             ",
@@ -40,15 +40,15 @@ static void		draw_image_info(void *s, void *w, t_image *img, int *line)
 	}
 	if (img->filename)
 	{
-		*line = *line + 1;
-		mlx_string_put(s, w, 30, *line * GUI_LINE_HEIGHT, WHITE, "Source file: ");
-		mlx_string_put(s, w, 155, *line * GUI_LINE_HEIGHT, WHITE, img->filename);
+		*l = *l + 1;
+		mlx_string_put(s, w, 30, *l * GUI_LINE_HEIGHT, WHITE, "Source file: ");
+		mlx_string_put(s, w, 155, *l * GUI_LINE_HEIGHT, WHITE, img->filename);
 	}
-	mlx_string_put(s, w, 30, (*line += 1) * GUI_LINE_HEIGHT, WHITE, addr);
-	mlx_string_put(s, w, 30, (*line += 1) * GUI_LINE_HEIGHT, WHITE, bpp);
-	mlx_string_put(s, w, 30, (*line += 1) * GUI_LINE_HEIGHT, WHITE, sl);
-	mlx_string_put(s, w, 30, (*line += 1) * GUI_LINE_HEIGHT, WHITE, endianess);
-	*line = *line + 1;
+	mlx_string_put(s, w, 30, (*l += 1) * GUI_LINE_HEIGHT, WHITE, addr);
+	mlx_string_put(s, w, 30, (*l += 1) * GUI_LINE_HEIGHT, WHITE, bpp);
+	mlx_string_put(s, w, 30, (*l += 1) * GUI_LINE_HEIGHT, WHITE, sl);
+	mlx_string_put(s, w, 30, (*l += 1) * GUI_LINE_HEIGHT, WHITE, endianess);
+	*l = *l + 1;
 }
 
 /*
@@ -93,7 +93,8 @@ void			draw_debug_gui(t_mlx_sess *sess)
 	line = 0;
 	s = sess->sess;
 	w = sess->win;
-	mlx_string_put(s, w, 5, line++ * GUI_LINE_HEIGHT, 0x00ffffff, "DEBUG CONSOLE");
+	mlx_string_put(s, w, 5, line++ * GUI_LINE_HEIGHT,
+								0x00ffffff, "DEBUG CONSOLE");
 	mlx_string_put(s, w, 5, line++ * GUI_LINE_HEIGHT, 0x00ffffff, "Image");
 	draw_image_info(s, w, sess->img, &line);
 	mlx_string_put(s, w, 5, line++ * GUI_LINE_HEIGHT, 0x00ffffff, "Camera");

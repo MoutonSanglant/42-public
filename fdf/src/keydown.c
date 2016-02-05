@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/04 14:03:16 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/05 06:59:37 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/05 19:52:37 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ int			keydown(int key, void *p)
 	else if (key == KEY_Z)
 		sess->options.zdraw = (sess->options.zdraw) ? 0 : 1;
 	else if (key == KEY_NUMPAD_STAR)
-		sess->options.line_width = (sess->options.line_width > .1f) ? .05f :
+		sess->options.line_width = (sess->options.line_width > .06f) ? .02f :
 							sess->options.line_width + .005f;
 	else if (key == KEY_I)
 	{
