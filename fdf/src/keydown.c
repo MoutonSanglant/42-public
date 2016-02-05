@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/04 14:03:16 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/04 22:26:47 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/05 06:59:37 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,11 +106,13 @@ int			keydown(int key, void *p)
 
 	sess = (t_mlx_sess *)p;
 	sess->need_update = 1;
-	if (key == KEY_B)
+	if (key == KEY_H)
+		sess->options.tooltip = (sess->options.tooltip) ? 0 : 1;
+	else if (key == KEY_B)
 		sess->options.bresenham = (sess->options.bresenham) ? 0 : 1;
-	if (key == KEY_Z)
+	else if (key == KEY_Z)
 		sess->options.zdraw = (sess->options.zdraw) ? 0 : 1;
-	if (key == KEY_NUMPAD_STAR)
+	else if (key == KEY_NUMPAD_STAR)
 		sess->options.line_width = (sess->options.line_width > .1f) ? .05f :
 							sess->options.line_width + .005f;
 	else if (key == KEY_I)

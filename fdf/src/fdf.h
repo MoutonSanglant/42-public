@@ -34,6 +34,7 @@
 # define MAX_WIDTH	1600
 # define MIN_HEIGHT	100
 # define MAX_HEIGHT	900
+# define GUI_LINE_HEIGHT 18
 
 # ifdef BONUS
 #  include <float.h>
@@ -58,14 +59,19 @@
 #  define KEY_ESCAPE	65307
 #  define KEY_NUMPAD_MORE	65451
 #  define KEY_NUMPAD_LESS	65453
-#  define KEY_NUMPAD_STAR	99999
-#  define KEY_0		9999
-#  define KEY_1		9999
-#  define KEY_2		9999
-#  define KEY_3		9999
-#  define KEY_4		9999
-#  define KEY_Z		9999
-#  define KEY_I		9999
+#  define KEY_NUMPAD_STAR	65450
+#  define KEY_0		224
+#  define KEY_1		38
+#  define KEY_2		233
+#  define KEY_3		34
+#  define KEY_4		39
+#  define KEY_5		40
+#  define KEY_6		45
+#  define KEY_7		232
+#  define KEY_8		95
+#  define KEY_9		231
+#  define KEY_Z		119
+#  define KEY_I		105
 #  define KEY_O		111
 #  define KEY_P		112
 #  define KEY_Q		97
@@ -75,6 +81,7 @@
 #  define KEY_S		115
 #  define KEY_D		100
 #  define KEY_B		98
+#  define KEY_H		104
 #  define KEY_LEFT	65361
 #  define KEY_RIGHT	65363
 #  define KEY_UP	65362
@@ -110,6 +117,7 @@
 #  define KEY_S		1
 #  define KEY_D		2
 #  define KEY_B		11
+#  define KEY_H		9999
 #  define KEY_LEFT	123
 #  define KEY_RIGHT	124
 #  define KEY_UP	126
@@ -215,6 +223,7 @@ typedef struct	s_options
 	int				faces_color;
 	int				bg_color;
 	int				distance;
+	int				tooltip;
 }				t_options;
 
 typedef struct	s_mlx_sess
@@ -368,8 +377,6 @@ void			set_color_scheme(t_mlx_sess *sess, int lines_color,
 void			change_grid_z(t_grid *grid, float factor);
 
 # ifdef DEBUG
-
-#  define LINE_HEIGHT 18
 
 void			output_image_info(t_image *image);
 void			draw_debug_gui(t_mlx_sess *sess);
