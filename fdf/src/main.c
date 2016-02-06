@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/04 14:02:46 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/06 02:57:20 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/06 07:49:05 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static void		init_vertex_grid(t_mlx_sess *sess, t_vert **vertmap,
 	loc.z = 0;
 	translation_matrix4(&trans, loc);
 	matrix4_product(&trans, &sess->m_model);
-	sess->options.distance = (int)fmax(sess->grid->width, sess->grid->height);
+	sess->options.distance = (int)fmaxf(sess->grid->width, sess->grid->height);
 }
 
 static void		get_size(int argc, char **argv, t_vec2 *screen_size)

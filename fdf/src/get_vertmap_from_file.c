@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/25 23:38:14 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/06 02:59:17 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/06 09:01:37 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,15 +39,15 @@ static void				set_vertex_attributes(t_vert *vertex,
 {
 	char	*color;
 	float	z;
+	int		len;
 
 	z = ft_atoi(ascii_values[i]);
 	if ((color = ft_strchr(ascii_values[i], ',')))
 	{
-		if (ft_strlen(color) < 9)
-			format_error();
-		vertex->color.r = hex_to_float(&color[3]);
-		vertex->color.g = hex_to_float(&color[5]);
-		vertex->color.b = hex_to_float(&color[7]);
+		len = ft_strlen(color);
+		vertex->color.r = (len > 4) ? hex_to_float(&color[3]) : 0.f;
+		vertex->color.g = (len > 6) ? hex_to_float(&color[5]) : 0.f;
+		vertex->color.b = (len > 8) ? hex_to_float(&color[7]) : 0.f;
 	}
 	else
 	{
@@ -121,8 +121,8 @@ t_vert					**get_vertmap_from_file(char *path, int *x, int *y)
 	int		i;
 
 	*y = count_file_lines(path) - 1;
-	if (!(vertex_map = (t_vert **)ft_memalloc(sizeof(t_vert *) * *y)))
-		alloc_error("vertex_map", sizeof(t_vert *) * *y);
+	if (!(vertex_map = (t_vert **)ft_memalloc(sizeof(t_vert *) * (*y + 1))))
+		alloc_error("vertex_map", sizeof(t_vert *) * (*y + 1));
 	i = 0;
 	line = NULL;
 	fd = open(path, O_RDONLY);

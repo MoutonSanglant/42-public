@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/18 20:00:56 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/04 20:54:18 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/06 07:58:06 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,13 +43,13 @@ void			init_grid(t_grid *grid, int width, int height)
 			vertmap[ij.x][ij.y].coord.x = ij.x;
 			vertmap[ij.x][ij.y].coord.y = ij.y;
 			vertmap[ij.x][ij.y].coord.z = 0;
-			vertmap[ij.x][ij.y].color.r = 0;
-			vertmap[ij.x][ij.y].color.g = 0;
-			vertmap[ij.x][ij.y].color.b = 0;
+			vertmap[ij.x][ij.y].color.r = 1;
+			vertmap[ij.x][ij.y].color.g = 1;
+			vertmap[ij.x][ij.y].color.b = 1;
 			ij.y++;
 		}
 		ij.x++;
 	}
-	init_grid_from_vertmap(grid, vertmap, width, height);
+	init_grid_from_vertmap(grid, vertmap, width - 1, height - 1);
 	clean_vertmap(vertmap, height);
 }

@@ -95,10 +95,6 @@
 #  define KEYPRESSMASK	(1L<<0)
 #  define KEYPRESS	2
 
-/*
-**	TODO
-**	Define missing OSX keybindings
-*/
 #  define KEY_ESCAPE	53
 #  define KEY_NUMPAD_MORE	69
 #  define KEY_NUMPAD_LESS	78
@@ -108,11 +104,11 @@
 #  define KEY_2		19
 #  define KEY_3		20
 #  define KEY_4		21
-#  define KEY_5		9999
-#  define KEY_6		9999
-#  define KEY_7		9999
-#  define KEY_8		9999
-#  define KEY_9		9999
+#  define KEY_5		23
+#  define KEY_6		22
+#  define KEY_7		26
+#  define KEY_8		28
+#  define KEY_9		25
 #  define KEY_Z		6
 #  define KEY_I		34
 #  define KEY_O		31
@@ -124,8 +120,8 @@
 #  define KEY_S		1
 #  define KEY_D		2
 #  define KEY_B		11
-#  define KEY_H		9999
-#  define KEY_F		9999
+#  define KEY_H		4
+#  define KEY_F		3
 #  define KEY_LEFT	123
 #  define KEY_RIGHT	124
 #  define KEY_UP	126
