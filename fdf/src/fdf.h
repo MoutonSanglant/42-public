@@ -96,7 +96,8 @@
 #  define KEYPRESS	2
 
 /*
-** the '+' key is under the '-' key on mac keyboard
+**	TODO
+**	Define missing OSX keybindings
 */
 #  define KEY_ESCAPE	53
 #  define KEY_NUMPAD_MORE	69
