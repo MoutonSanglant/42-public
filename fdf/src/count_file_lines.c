@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/03 19:52:50 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/04 20:31:49 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/14 12:27:36 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ int				count_file_lines(char *path)
 		ft_strdel(&line);
 		i++;
 	}
+	ft_strdel(&line);
 	close(fd);
 	return (i);
 }

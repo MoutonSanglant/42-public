@@ -21,7 +21,7 @@
 
 # include <includes/libft.h>
 
-# define USAGE_MSG "Usage: fdf [Width] [Height] [MapFile]"
+# define USAGE_MSG "Usage: fdf [Path] [Width] [Height]"
 
 # define BUFF_SIZE 32
 # define WHITE	0x00ffffff
@@ -55,6 +55,9 @@
 # ifdef LINUX
 #  include "../includes/linux/mlx.h"
 #  include "../includes/linux/mlx_int.h"
+
+#  define KEYPRESS KeyPress
+#  define KEYPRESSMASK KeyPressMask
 
 #  define KEY_ESCAPE	65307
 #  define KEY_NUMPAD_MORE	65451

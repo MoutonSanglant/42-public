@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/04 14:14:47 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/04 14:15:05 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/14 12:30:41 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ int		keypress(int key, void *p)
 		ft_memdel((void **)&sess->projection);
 		ft_memdel((void **)&sess->grid->triangles);
 		ft_memdel((void **)&sess->grid);
+		ft_memdel((void **)&sess->img);
 		ft_memdel((void **)&sess->sess);
 		ft_memdel((void **)&sess);
 		exit(0);

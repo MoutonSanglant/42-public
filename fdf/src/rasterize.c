@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/27 12:41:37 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/06 03:32:23 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/14 12:39:04 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 **	b = w[0] * (*triangle)[0].color.b + w[1]
 **		* (*triangle)[1].color.b + w[2] * (*triangle)[2].color.b;
 */
+
+#ifdef BONUS
 
 static void	set_pix_z(t_mlx_sess *sess, t_vec2ui32 *xy, float z)
 {
@@ -146,3 +148,13 @@ void		rasterize(t_mlx_sess *p, t_tri *triangle)
 		}
 	}
 }
+
+#else
+
+void		rasterize(t_mlx_sess *p, t_tri *triangle)
+{
+	(void) p;
+	(void) triangle;
+}
+
+#endif

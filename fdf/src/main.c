@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/04 14:02:46 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/06 07:49:05 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/06 09:17:47 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,10 +59,10 @@ static void		get_size(int argc, char **argv, t_vec2 *screen_size)
 {
 	screen_size->x = DEFAULT_WIDTH;
 	screen_size->y = DEFAULT_HEIGHT;
-	if (argc > 2)
+	if (argc > 3)
 	{
-		screen_size->x = ft_atoi(argv[1]);
-		screen_size->y = ft_atoi(argv[2]);
+		screen_size->x = ft_atoi(argv[2]);
+		screen_size->y = ft_atoi(argv[3]);
 		if (screen_size->x < MIN_WIDTH || screen_size->x > MAX_WIDTH)
 		{
 			ft_putstr_fd("Width must be a value between ", 2);
@@ -105,10 +105,10 @@ int				main(int argc, char **argv)
 	if (argc < 1 || argc > 4)
 		arguments_count_error();
 	get_size(argc, argv, &screen_size);
-	if (argc > 3)
+	if (argc > 1)
 	{
-		filepath = argv[3];
-		vertmap = get_vertmap_from_file(argv[3],
+		filepath = argv[1];
+		vertmap = get_vertmap_from_file(argv[1],
 										&vertmap_size.x, &vertmap_size.y);
 	}
 	sess = init_mlx_sess(screen_size.x, screen_size.y);
