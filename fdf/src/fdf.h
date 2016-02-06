@@ -82,6 +82,7 @@
 #  define KEY_D		100
 #  define KEY_B		98
 #  define KEY_H		104
+#  define KEY_F		102
 #  define KEY_LEFT	65361
 #  define KEY_RIGHT	65363
 #  define KEY_UP	65362
@@ -106,6 +107,11 @@
 #  define KEY_2		19
 #  define KEY_3		20
 #  define KEY_4		21
+#  define KEY_5		9999
+#  define KEY_6		9999
+#  define KEY_7		9999
+#  define KEY_8		9999
+#  define KEY_9		9999
 #  define KEY_Z		6
 #  define KEY_I		34
 #  define KEY_O		31
@@ -118,6 +124,7 @@
 #  define KEY_D		2
 #  define KEY_B		11
 #  define KEY_H		9999
+#  define KEY_F		9999
 #  define KEY_LEFT	123
 #  define KEY_RIGHT	124
 #  define KEY_UP	126
@@ -174,9 +181,6 @@ typedef struct	s_color
 	float		r;
 	float		g;
 	float		b;
-//	unsigned char	r;
-//	unsigned char	g;
-//	unsigned char	b;
 }				t_color;
 
 typedef struct	s_vert
@@ -222,6 +226,7 @@ typedef struct	s_options
 	float			line_width;
 	int				bresenham;
 	int				zdraw;
+	int				fill_faces;
 	int				lines_color;
 	int				faces_color;
 	int				bg_color;
@@ -370,6 +375,7 @@ int				get_next_line(int const fd, char **line);
 */
 
 void			alloc_error(char *error_obj, size_t alloc_size);
+void			format_error(void);
 
 /*
 **	EXTRA

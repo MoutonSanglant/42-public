@@ -6,23 +6,11 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/25 23:38:14 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/05 22:51:23 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/06 02:59:17 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
-
-static void				format_error(void)
-{
-	ft_putendl("Error: File is badly formated !'");
-	exit(16);
-}
-
-/*
-**	TODO
-**	Format error case:
-**	A line is bigger/smaller than another
-*/
 
 static float			hex_to_float(char *hex)
 {
@@ -46,6 +34,35 @@ static float			hex_to_float(char *hex)
 	return ((float)((a * 16) + b) / 255);
 }
 
+static void				set_vertex_attributes(t_vert *vertex,
+											char **ascii_values, int i, int y)
+{
+	char	*color;
+	float	z;
+
+	z = ft_atoi(ascii_values[i]);
+	if ((color = ft_strchr(ascii_values[i], ',')))
+	{
+		if (ft_strlen(color) < 9)
+			format_error();
+		vertex->color.r = hex_to_float(&color[3]);
+		vertex->color.g = hex_to_float(&color[5]);
+		vertex->color.b = hex_to_float(&color[7]);
+	}
+	else
+	{
+		vertex->color.r = (z < 0) ? 1.f
+					- ((float)fminf(-z * 30.f, 255.f)) / 255.f : 1;
+		vertex->color.g = (z > 0) ? 1.f
+					- ((float)fminf(z * 30.f, 255.f)) / 255.f : 1;
+		vertex->color.b = (z > 0) ? 1.f
+					- ((float)fminf(z * 30.f, 255.f)) / 255.f : 1;
+	}
+	vertex->coord.x = i;
+	vertex->coord.y = y;
+	vertex->coord.z = z;
+}
+
 /*
 **	a line is formated this way:
 **	1 1 1 0 0 0 0 1 1 0 0 0 1
@@ -55,33 +72,21 @@ static float			hex_to_float(char *hex)
 static t_vert			*parse_value_array(char **ascii_values,
 								t_vert *vertices, int line_nbr, int *count)
 {
-	char	*color;
-	int		i;
+	static	int last_count = -1;
+	int			i;
 
 	i = 0;
 	while (ascii_values[i])
 	{
-		if (!ft_isdigit(ascii_values[i][0]))
+		if (!ft_isdigit(ascii_values[i][0]) && ascii_values[i][0] != '-')
 			format_error();
-		if ((color = ft_strchr(ascii_values[i], ',')))
-		{
-			if (ft_strlen(color) < 9)
-				format_error();
-			vertices[i].color.r = hex_to_float(&color[3]);
-			vertices[i].color.g = hex_to_float(&color[5]);
-			vertices[i].color.b = hex_to_float(&color[7]);
-		}
-		else
-		{
-			vertices[i].color.r = 1;
-			vertices[i].color.g = 1.f - ((float)fminf(ft_atoi(ascii_values[i]) * 100.f, 255.f)) / 255.f;
-			vertices[i].color.b = 1.f - ((float)fminf(ft_atoi(ascii_values[i]) * 100.f, 255.f)) / 255.f;
-		}
-		vertices[i].coord.x = i;
-		vertices[i].coord.y = line_nbr;
-		vertices[i].coord.z = ft_atoi(ascii_values[i]);
-		*count = ++i;
+		set_vertex_attributes(&vertices[i], ascii_values, i, line_nbr);
+		*count = i++;
 	}
+	if (last_count > 0 && last_count != *count)
+		format_error();
+	else
+		last_count = *count;
 	return (vertices);
 }
 
@@ -115,7 +120,7 @@ t_vert					**get_vertmap_from_file(char *path, int *x, int *y)
 	int		fd;
 	int		i;
 
-	*y = count_file_lines(path);
+	*y = count_file_lines(path) - 1;
 	if (!(vertex_map = (t_vert **)ft_memalloc(sizeof(t_vert *) * *y)))
 		alloc_error("vertex_map", sizeof(t_vert *) * *y);
 	i = 0;

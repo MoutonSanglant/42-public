@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/27 12:41:37 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/05 22:58:38 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/06 03:32:23 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static void	set_pix_z(t_mlx_sess *sess, t_vec2ui32 *xy, float z)
 	col = ((int)r << 16) | ((int)r << 8) | (r);
 	set_image_pixel(sess, sess->img, mlx_get_color_value(sess->sess, col), xy);
 }
-#include <stdio.h>
+
 static void	set_pix(t_mlx_sess *sess, t_vec2ui32 *xy,
 								float w[3], t_tri triangle)
 {
@@ -48,7 +48,7 @@ static void	set_pix(t_mlx_sess *sess, t_vec2ui32 *xy,
 	int		col;
 
 	col = sess->options.faces_color;
-	if (!(w[0] >= sess->options.line_width
+	if (sess->options.fill_faces || !(w[0] >= sess->options.line_width
 			&& w[1] >= sess->options.line_width && w[2] >= 0))
 	{
 		r = w[0] * triangle[0].color.r + w[1] * triangle[1].color.r
