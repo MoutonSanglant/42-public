@@ -21,7 +21,7 @@
 
 # include <includes/libft.h>
 
-# define USAGE_MSG "Usage: fdf [Width] [Height] [MapFile]"
+# define USAGE_MSG "Usage: fdf [Path] [Width] [Height]"
 
 # define BUFF_SIZE 32
 # define WHITE	0x00ffffff
