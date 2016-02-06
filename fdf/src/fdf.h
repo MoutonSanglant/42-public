@@ -174,9 +174,6 @@ typedef struct	s_color
 	float		r;
 	float		g;
 	float		b;
-//	unsigned char	r;
-//	unsigned char	g;
-//	unsigned char	b;
 }				t_color;
 
 typedef struct	s_vert
@@ -370,6 +367,7 @@ int				get_next_line(int const fd, char **line);
 */
 
 void			alloc_error(char *error_obj, size_t alloc_size);
+void			format_error(void);
 
 /*
 **	EXTRA
