@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/03 13:51:35 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/05 22:58:23 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/06 03:01:22 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,22 +26,16 @@ static void		top_right_triangle_vertices(t_grid *grid, size_t idx,
 {
 	grid->triangles[idx][0].coord.x = (float)(1.f * coord.x + 1.f);
 	grid->triangles[idx][0].coord.y = (float)(1.f * coord.y + 1.f);
-	if (coord.x + 1 < grid->width && coord.y + 1 < grid->height)
-		grid->triangles[idx][0].coord.z =
-			(float)vertmap[coord.y + 1][coord.x + 1].coord.z * 0.15f;
-	else
-		grid->triangles[idx][0].coord.z = 0.f;
+	grid->triangles[idx][0].coord.z =
+		(float)vertmap[coord.y + 1][coord.x + 1].coord.z * 0.15f;
 	grid->triangles[idx][1].coord.x = (float)(1.f * coord.x);
 	grid->triangles[idx][1].coord.y = (float)(1.f * coord.y);
 	grid->triangles[idx][1].coord.z =
 		(float)vertmap[coord.y][coord.x].coord.z * 0.15f;
 	grid->triangles[idx][2].coord.x = (float)(1.f * coord.x);
 	grid->triangles[idx][2].coord.y = (float)(1.f * coord.y + 1.f);
-	if (coord.y + 1 < grid->height)
-		grid->triangles[idx][2].coord.z =
-			(float)vertmap[coord.y + 1][coord.x].coord.z * 0.15f;
-	else
-		grid->triangles[idx][2].coord.z = 0.f;
+	grid->triangles[idx][2].coord.z =
+		(float)vertmap[coord.y + 1][coord.x].coord.z * 0.15f;
 }
 
 /*
@@ -58,18 +52,12 @@ static void		bottom_left_triangle_vertices(t_grid *grid, size_t idx,
 {
 	grid->triangles[idx][1].coord.x = (float)(1.f * coord.x + 1.f);
 	grid->triangles[idx][1].coord.y = (float)(1.f * coord.y + 1.f);
-	if (coord.x + 1 < grid->width && coord.y + 1 < grid->height)
-		grid->triangles[idx][1].coord.z =
-			(float)vertmap[coord.y + 1][coord.x + 1].coord.z * 0.15f;
-	else
-		grid->triangles[idx][1].coord.z = 0.f;
+	grid->triangles[idx][1].coord.z =
+		(float)vertmap[coord.y + 1][coord.x + 1].coord.z * 0.15f;
 	grid->triangles[idx][2].coord.x = (float)(1.f * coord.x + 1.f);
 	grid->triangles[idx][2].coord.y = (float)(1.f * coord.y);
-	if (coord.x + 1 < grid->width)
-		grid->triangles[idx][2].coord.z =
-			(float)vertmap[coord.y][coord.x + 1].coord.z * 0.15f;
-	else
-		grid->triangles[idx][2].coord.z = 0.f;
+	grid->triangles[idx][2].coord.z =
+		(float)vertmap[coord.y][coord.x + 1].coord.z * 0.15f;
 	grid->triangles[idx][0].coord.x = (float)(1.f * coord.x);
 	grid->triangles[idx][0].coord.y = (float)(1.f * coord.y);
 	grid->triangles[idx][0].coord.z =
@@ -79,47 +67,19 @@ static void		bottom_left_triangle_vertices(t_grid *grid, size_t idx,
 static void		top_right_triangle_colors(t_grid *grid, size_t idx,
 											t_vert **vertmap, t_vec2 coord)
 {
-	if (coord.x + 1 < grid->width && coord.y + 1 < grid->height)
-		grid->triangles[idx][0].color = vertmap[coord.y + 1][coord.x + 1].color;
-	else
-	{
-		grid->triangles[idx][0].color.r = 1;
-		grid->triangles[idx][0].color.g = 1;
-		grid->triangles[idx][0].color.b = 1;
-	}
+	grid->triangles[idx][0].color = vertmap[coord.y + 1][coord.x + 1].color;
 	grid->triangles[idx][1].color.r = 1;
 	grid->triangles[idx][1].color.g = 1;
 	grid->triangles[idx][1].color.b = 1;
 	grid->triangles[idx][1].color = vertmap[coord.y][coord.x].color;
-	if (coord.y + 1 < grid->height)
-		grid->triangles[idx][2].color = vertmap[coord.y + 1][coord.x].color;
-	else
-	{
-		grid->triangles[idx][2].color.r = 1;
-		grid->triangles[idx][2].color.g = 1;
-		grid->triangles[idx][2].color.b = 1;
-	}
+	grid->triangles[idx][2].color = vertmap[coord.y + 1][coord.x].color;
 }
 
 static void		bottom_left_triangle_colors(t_grid *grid, size_t idx,
 											t_vert **vertmap, t_vec2 coord)
 {
-	if (coord.x + 1 < grid->width && coord.y + 1 < grid->height)
-		grid->triangles[idx][1].color = vertmap[coord.y + 1][coord.x + 1].color;
-	else
-	{
-		grid->triangles[idx][1].color.r = 1;
-		grid->triangles[idx][1].color.g = 1;
-		grid->triangles[idx][1].color.b = 1;
-	}
-	if (coord.x + 1 < grid->width)
-		grid->triangles[idx][2].color = vertmap[coord.y][coord.x + 1].color;
-	else
-	{
-		grid->triangles[idx][2].color.r = 1;
-		grid->triangles[idx][2].color.g = 1;
-		grid->triangles[idx][2].color.b = 1;
-	}
+	grid->triangles[idx][1].color = vertmap[coord.y + 1][coord.x + 1].color;
+	grid->triangles[idx][2].color = vertmap[coord.y][coord.x + 1].color;
 	grid->triangles[idx][0].color.r = 1;
 	grid->triangles[idx][0].color.g = 1;
 	grid->triangles[idx][0].color.b = 1;

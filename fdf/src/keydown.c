@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/04 14:03:16 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/05 19:52:37 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/06 03:28:45 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,8 @@ static void	color_events(t_mlx_sess *sess, int key)
 		set_color_scheme(sess, 0x00000000, 0x00046000, 0x000460ff);
 	else if (key == KEY_4)
 		set_color_scheme(sess, 0x00a34f89, 0x0009af39, 0x00394f90);
+	else if (key == KEY_F)
+		sess->options.fill_faces = (sess->options.fill_faces) ? 0 : 1;
 }
 
 /*

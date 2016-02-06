@@ -6,17 +6,11 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/25 23:38:14 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/06 01:47:04 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/06 02:59:17 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
-
-/*
-**	TODO
-**	Format error case:
-**	A line is bigger/smaller than another
-*/
 
 static float			hex_to_float(char *hex)
 {
@@ -57,9 +51,12 @@ static void				set_vertex_attributes(t_vert *vertex,
 	}
 	else
 	{
-		vertex->color.r = 1;
-		vertex->color.g = 1.f - ((float)fminf(z * 100.f, 255.f)) / 255.f;
-		vertex->color.b = 1.f - ((float)fminf(z * 100.f, 255.f)) / 255.f;
+		vertex->color.r = (z < 0) ? 1.f
+					- ((float)fminf(-z * 30.f, 255.f)) / 255.f : 1;
+		vertex->color.g = (z > 0) ? 1.f
+					- ((float)fminf(z * 30.f, 255.f)) / 255.f : 1;
+		vertex->color.b = (z > 0) ? 1.f
+					- ((float)fminf(z * 30.f, 255.f)) / 255.f : 1;
 	}
 	vertex->coord.x = i;
 	vertex->coord.y = y;
@@ -84,7 +81,7 @@ static t_vert			*parse_value_array(char **ascii_values,
 		if (!ft_isdigit(ascii_values[i][0]) && ascii_values[i][0] != '-')
 			format_error();
 		set_vertex_attributes(&vertices[i], ascii_values, i, line_nbr);
-		*count = ++i;
+		*count = i++;
 	}
 	if (last_count > 0 && last_count != *count)
 		format_error();
@@ -123,7 +120,7 @@ t_vert					**get_vertmap_from_file(char *path, int *x, int *y)
 	int		fd;
 	int		i;
 
-	*y = count_file_lines(path);
+	*y = count_file_lines(path) - 1;
 	if (!(vertex_map = (t_vert **)ft_memalloc(sizeof(t_vert *) * *y)))
 		alloc_error("vertex_map", sizeof(t_vert *) * *y);
 	i = 0;

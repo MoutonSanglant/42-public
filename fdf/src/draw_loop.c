@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/04 14:16:46 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/05 07:07:01 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/06 03:31:17 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ static void	draw_help_tooltip(void *s, void *w, int line)
 	mlx_string_put(s, w, 20, line++ * GUI_LINE_HEIGHT, WHITE,
 					"[I]nvert colors");
 	mlx_string_put(s, w, 20, line++ * GUI_LINE_HEIGHT, WHITE, "[Z]-Buffer");
+	mlx_string_put(s, w, 20, line++ * GUI_LINE_HEIGHT, WHITE, "[F]ill faces");
 	mlx_string_put(s, w, 20, line++ * GUI_LINE_HEIGHT, WHITE,
 					"[*] Line weight");
 	mlx_string_put(s, w, 20, line++ * GUI_LINE_HEIGHT, WHITE,

@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/04 14:39:50 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/05 19:52:02 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/06 03:33:17 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ static void	draw_settings(t_mlx_sess *sess)
 {
 	sess->options.tooltip = 1;
 	sess->options.bresenham = 1;
+	sess->options.fill_faces = 0;
 	sess->options.line_width = .02f;
 	sess->options.lines_color = 0x00ffffff;
 	sess->options.bg_color = 0x00000000;
