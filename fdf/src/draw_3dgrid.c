@@ -13,6 +13,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 /*   Updated: 2016/01/29 21:00:13 by tdefresn         ###   ########.fr       */
 =======
 /*   Updated: 2016/01/29 04:52:26 by tdefresn         ###   ########.fr       */
@@ -35,6 +36,9 @@
 =======
 /*   Updated: 2016/02/05 22:35:32 by tdefresn         ###   ########.fr       */
 >>>>>>> 58b245a... colors
+=======
+/*   Updated: 2016/02/06 07:59:37 by tdefresn         ###   ########.fr       */
+>>>>>>> 7bad13f... fixed a crash due to vertmap size not settled correctly + handle truncated hex color properly
 /*                                                                            */
 /* ************************************************************************** */
 
