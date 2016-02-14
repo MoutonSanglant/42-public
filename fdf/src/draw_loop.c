@@ -6,23 +6,13 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/04 14:16:46 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/14 12:53:41 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/14 16:32:40 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-#ifdef DEBUG
-
-
-static void	draw_gui(t_mlx_sess *p)
-{
-	draw_debug_gui(p);
-}
-
-#else
-
-# ifdef BONUS
+#ifdef BONUS
 
 static void	draw_help_tooltip(void *s, void *w, int line)
 {
@@ -44,9 +34,19 @@ static void	draw_help_tooltip(void *s, void *w, int line)
 	mlx_string_put(s, w, 20, line++ * GUI_LINE_HEIGHT, WHITE,
 					"[*] Line weight");
 	mlx_string_put(s, w, 20, line++ * GUI_LINE_HEIGHT, WHITE,
-					"[0-9] Color schemes");
+					"[0-4] Color schemes");
 	mlx_string_put(s, w, 20, line++ * GUI_LINE_HEIGHT, WHITE, "[ESC] Exit");
 }
+
+# ifdef DEBUG
+
+static void	draw_gui(t_mlx_sess *p)
+{
+	(void)draw_help_tooltip;
+	draw_debug_gui(p);
+}
+
+# else
 
 static void	draw_gui(t_mlx_sess *p)
 {
@@ -69,6 +69,8 @@ static void	draw_gui(t_mlx_sess *p)
 	draw_help_tooltip(s, w, line);
 }
 
+# endif
+
 int			draw_loop(void *p)
 {
 	t_mlx_sess		*sess;
@@ -90,7 +92,7 @@ int			draw_loop(void *p)
 	return (0);
 }
 
-# else
+#else
 
 int			draw_loop(void *p)
 {
@@ -105,7 +107,5 @@ int			draw_loop(void *p)
 	}
 	return (0);
 }
-
-# endif
 
 #endif

@@ -66,7 +66,7 @@ libft:
 
 $(OBJ_PREFIX)%$(SUFFIX): $(SRC_PREFIX)%.c
 	@echo "making $<"
-	@mkdir -p obj
+	@mkdir -p $(OBJ_PREFIX)
 	@$(CC) -o $@ -c $< $(CFLAGS)
 
 clean:
