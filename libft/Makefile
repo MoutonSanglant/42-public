@@ -1,22 +1,36 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2015/12/07 17:29:40 by tdefresn          #+#    #+#              #
-#    Updated: 2015/12/07 17:29:46 by tdefresn         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
-NAME	= libft.a
-
 CC		= gcc
-CFLAGS	= -Wall -Werror -Wextra -D LIBFT_EXTRA
-DFLAGS	= -g -O0 -D DEBUG
+CFLAGS	= -Wall -Werror -Wextra
+
+# Specific compilation routines
+
+ifeq ($(BUILD), Debug)
+CFLAGS	+= -g -O0 -D DEBUG
+SUFFIX	= .debug.o
+NAME	= libft.a
+else
+SUFFIX	= .o
+NAME	= libft.a
+endif
+
+# Get system and set specific flags accordingly
+
+ARCH	= $(shell uname -m)
+OS		= $(shell uname -s)
+
+ifeq ($(OS), Darwin)
+	LDLIBS +=
+endif
+
+ifeq ($(OS)_$(ARCH), Linux_x86_64)
+	CFLAGS += -D LINUX
+	LDLIBS +=
+else ifeq ($(OS), Linux)
+	CFLAGS += -D LINUX
+	LDLIBS +=
+endif
 
 SRC_PREFIX = ./src/
+OBJ_PREFIX = ./obj/
 
 SRC		= memset bzero memcpy memccpy memmove memchr memcmp strdup strcpy strncpy \
 strcat strncat strlcat strchr strrchr strstr strnstr strcmp strncmp atoi \
@@ -32,27 +46,28 @@ stacknew stackpush stackpop stacksize lstgetat putaddr itoa_base
 SRC := $(addsuffix .c, $(SRC))
 SRC := $(addprefix $(SRC_PREFIX)ft_, $(SRC))
 
-OBJ = $(SRC:.c=.o)
+OBJ = $(subst $(SRC_PREFIX), , $(SRC:.c=$(SUFFIX)))
+OBJ := $(addprefix $(OBJ_PREFIX), $(OBJ))
 
-.PHONY: all clean fclean re
-.SILENT: $(OBJ)
+.PHONY: all clean fclean re debug
 
 all: $(NAME)
 
-debug: CFLAGS += $(DFLAGS)
-debug: re
+debug:
+	@$(MAKE) BUILD=Debug all
 
 $(NAME): $(OBJ)
 	@echo "making $@"
 	@ar rc $@ $^
 	@ranlib $(NAME)
 
-%.o: %.c
+$(OBJ_PREFIX)%$(SUFFIX): $(SRC_PREFIX)%.c
 	@echo "making $@"
+	@mkdir -p $(OBJ_PREFIX)
 	@$(CC) -o $@ -c $< $(CFLAGS)
 
 clean:
-	/bin/rm -f $(OBJ)
+	/bin/rm -rf $(OBJ_PREFIX)
 
 fclean: clean
 	/bin/rm -f $(NAME)
