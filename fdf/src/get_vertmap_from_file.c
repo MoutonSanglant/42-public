@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/25 23:38:14 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/06 09:01:37 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/14 12:28:18 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,6 +137,7 @@ t_vert					**get_vertmap_from_file(char *path, int *x, int *y)
 		ft_strdel(&line);
 		i++;
 	}
+	ft_strdel(&line);
 	close(fd);
 	return (vertex_map);
 }
