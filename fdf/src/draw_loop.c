@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/04 14:16:46 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/06 07:29:25 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/14 12:53:41 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,15 @@
 
 #ifdef DEBUG
 
+
 static void	draw_gui(t_mlx_sess *p)
 {
 	draw_debug_gui(p);
 }
 
 #else
+
+# ifdef BONUS
 
 static void	draw_help_tooltip(void *s, void *w, int line)
 {
@@ -66,10 +69,6 @@ static void	draw_gui(t_mlx_sess *p)
 	draw_help_tooltip(s, w, line);
 }
 
-#endif
-
-#ifdef BONUS
-
 int			draw_loop(void *p)
 {
 	t_mlx_sess		*sess;
@@ -91,17 +90,22 @@ int			draw_loop(void *p)
 	return (0);
 }
 
-#else
-
-/*
-**	TODO
-**	Do something ?
-*/
+# else
 
 int			draw_loop(void *p)
 {
-	(void)p;
+	t_mlx_sess		*sess;
+	sess = (t_mlx_sess *)p;
+	if (sess->need_update)
+	{
+		clear_canvas(sess, sess->options.bg_color);
+		draw_3dgrid(sess);
+		mlx_put_image_to_window(sess->sess, sess->win, sess->img->img, 0, 0);
+		sess->need_update = 0;
+	}
 	return (0);
 }
+
+# endif
 
 #endif

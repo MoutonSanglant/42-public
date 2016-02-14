@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/25 23:38:14 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/14 12:28:18 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/14 13:12:10 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,12 +51,12 @@ static void				set_vertex_attributes(t_vert *vertex,
 	}
 	else
 	{
-		vertex->color.r = (z < 0) ? 1.f
-					- ((float)fminf(-z * 30.f, 255.f)) / 255.f : 1;
+		vertex->color.r = (z > 2) ? 0.f
+					+ (fmaxf(fminf(z * 30.f, 255.f), 0)) / 255.f : 0.f;
 		vertex->color.g = (z > 0) ? 1.f
-					- ((float)fminf(z * 30.f, 255.f)) / 255.f : 1;
-		vertex->color.b = (z > 0) ? 1.f
-					- ((float)fminf(z * 30.f, 255.f)) / 255.f : 1;
+					- (fminf(z * 30.f, 255.f)) / 255.f : 1.f;
+		vertex->color.b = (z < -2) ? 0.f
+					+ (fmaxf(fminf(-z * 30.f, 255.f), 0)) / 255.f : 0.f;
 	}
 	vertex->coord.x = i;
 	vertex->coord.y = y;

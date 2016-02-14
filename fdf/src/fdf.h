@@ -56,6 +56,9 @@
 #  include "../includes/linux/mlx.h"
 #  include "../includes/linux/mlx_int.h"
 
+#  define KEYPRESS KeyPress
+#  define KEYPRESSMASK KeyPressMask
+
 #  define KEY_ESCAPE	65307
 #  define KEY_NUMPAD_MORE	65451
 #  define KEY_NUMPAD_LESS	65453
