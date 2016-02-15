@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/14 15:08:07 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/15 16:44:30 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/15 18:12:56 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,17 @@
 
 static int		read_arg(va_list arg_list, const char *arg_type_str)
 {
+	// Cases:
+	// s   string of characters
+	// S   's' with 'l' (ell) modifier
+	// p   pointer adresse
+	// dD  signed decimal integer
+	// i   signed decimal integer
+	// oO  unsigned octal
+	// uU  unsigned decimal integer
+	// xX  unsigned hexadecimal integer lowercase / uppercase
+	// cC  character
+	// C   's' with 'l' (ell) modifier
 	if (arg_type_str[0] == 'i')
 		va_arg(arg_list, int);
 	else
