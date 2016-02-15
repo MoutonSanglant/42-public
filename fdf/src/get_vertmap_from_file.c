@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/25 23:38:14 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/14 13:12:10 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/15 18:20:04 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,6 @@ t_vert					**get_vertmap_from_file(char *path, int *x, int *y)
 	if (!(vertex_map = (t_vert **)ft_memalloc(sizeof(t_vert *) * (*y + 1))))
 		alloc_error("vertex_map", sizeof(t_vert *) * (*y + 1));
 	i = 0;
-	line = NULL;
 	fd = open(path, O_RDONLY);
 	while ((bcount = get_next_line(fd, &line)))
 	{
