@@ -6,24 +6,11 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/27 12:41:37 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/14 12:39:04 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/15 18:26:35 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
-
-/*
-**	Weighted-colors:
-**	===============
-**	r = w[0] * (*triangle)[0].color.r + w[1]
-**		* (*triangle)[1].color.r + w[2] * (*triangle)[2].color.r;
-**	g = w[0] * (*triangle)[0].color.g + w[1]
-**		* (*triangle)[1].color.g + w[2] * (*triangle)[2].color.g;
-**	b = w[0] * (*triangle)[0].color.b + w[1]
-**		* (*triangle)[1].color.b + w[2] * (*triangle)[2].color.b;
-*/
-
-#ifdef BONUS
 
 static void	set_pix_z(t_mlx_sess *sess, t_vec2ui32 *xy, float z)
 {
@@ -120,9 +107,8 @@ static int	compute_bb(t_mlx_sess *p,
 }
 
 /*
-**	Actually, the code doesn't check if the vertex
-**	pass the top-left rule.
-**	The test should be done just after the bb test
+**	Actually, there is no top-left rule check
+**	It should be done just after the bb test
 */
 
 void		rasterize(t_mlx_sess *p, t_tri *triangle)
@@ -148,13 +134,3 @@ void		rasterize(t_mlx_sess *p, t_tri *triangle)
 		}
 	}
 }
-
-#else
-
-void		rasterize(t_mlx_sess *p, t_tri *triangle)
-{
-	(void) p;
-	(void) triangle;
-}
-
-#endif

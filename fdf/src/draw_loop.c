@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/04 14:16:46 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/14 16:32:40 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/15 18:17:53 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ int			draw_loop(void *p)
 int			draw_loop(void *p)
 {
 	t_mlx_sess		*sess;
+
 	sess = (t_mlx_sess *)p;
 	if (sess->need_update)
 	{

@@ -47,9 +47,6 @@
 ** 33332 for 30 fps
 */
 #  define FPS 33332
-#  define EDGE_FN(a, b, c) (c.x - a.x) * (b.y - a.y) - (c.y - a.y) * (b.x - a.x)
-#  define MIN3(a, b, c) fminf(a, fmin(b, c))
-#  define MAX3(a, b, c) fmaxf(a, fmax(b, c))
 # endif
 
 # ifdef LINUX
@@ -137,6 +134,10 @@
 
 # define DEG(x) (x * 180.0 / M_PI)
 # define RAD(x) (x * M_PI / 180.0)
+
+# define EDGE_FN(a, b, c) (c.x - a.x) * (b.y - a.y) - (c.y - a.y) * (b.x - a.x)
+# define MIN3(a, b, c) fminf(a, fmin(b, c))
+# define MAX3(a, b, c) fmaxf(a, fmax(b, c))
 
 /*
 **	Matrices are in row-major columns
