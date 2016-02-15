@@ -6,15 +6,78 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/14 15:08:07 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/15 18:12:56 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/15 22:01:33 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdarg.h>
 #include "libft.h"
 
-static int		read_arg(va_list arg_list, const char *arg_type_str)
+enum printflag {
+	NONE = 0x0,
+	MINUS_SIGN = 0x1,
+	MORE_SIGN = 0x2,
+	SPACE = 0x4,
+	NUMBER_SIGN = 0x8,
+	ZERO = 0x10 };
+
+/*
+**	printf is formated such as
+**	%[flags][width][.precision][length]specifier
+*/
+
+/*
+**	flags matching table
+**	sS: -
+**	p: -
+**	cC: -
+**	xX: - # 0
+**	uU: - 0
+**	oO: - # 0
+**	i: + - 0 {space}
+**	dD: + - 0 {space}
+*/
+
+/*
+**	flags:
+**	'-'
+**	'+' works with i, d and D
+**	' ' is ignored when '+' present
+**	'#'
+**		used with o, x or X specifiers
+**		-> print '0', '0x' or '0X' before the number
+**		used with a, A, e, E, f, F, g, G
+**		-> force the output to contain a digital point,
+**			even when none is necessary
+**	'0' left pad the number with zeroes
+**		is ignored when '-' present
+*/
+
+static int		get_flags(const char *arg_type_str, int *offset)
 {
+	enum printflag	flag;
+
+	flag = 0;
+	if (arg_type_str[*offset] == '-' && ++(*offset))
+		flag |= MINUS_SIGN | get_flags(arg_type_str, offset);
+	else if (arg_type_str[*offset] == '+' && ++(*offset))
+		flag |= MORE_SIGN | get_flags(arg_type_str, offset);
+	else if (arg_type_str[*offset] == ' ' && ++(*offset))
+		flag |= SPACE | get_flags(arg_type_str, offset);
+	else if (arg_type_str[*offset] == '#' && ++(*offset))
+		flag |= NUMBER_SIGN | get_flags(arg_type_str, offset);
+	else if (arg_type_str[*offset] == '0' && ++(*offset))
+		flag |= ZERO | get_flags(arg_type_str, offset);
+	else
+		return (0);
+
+	return (flag);
+}
+
+static int		read_arg(va_list ap, const char *arg_type_str)
+{
+	int				offset;
+	enum printflag	flag;
 	// Cases:
 	// s   string of characters
 	// S   's' with 'l' (ell) modifier
@@ -26,23 +89,96 @@ static int		read_arg(va_list arg_list, const char *arg_type_str)
 	// xX  unsigned hexadecimal integer lowercase / uppercase
 	// cC  character
 	// C   's' with 'l' (ell) modifier
-	if (arg_type_str[0] == 'i')
-		va_arg(arg_list, int);
-	else
-		va_arg(arg_list, void *);
+	offset = 0;
+	flag = get_flags(arg_type_str, &offset);
 
-	return (0);
+	if (arg_type_str[offset] == 's')
+	{
+		char *str;
+		str = va_arg(ap, char *);
+		ft_putstr(str);
+		offset++;
+	}
+	else if (arg_type_str[offset] == 'p')
+	{
+		char *str;
+		str = va_arg(ap, char *);
+		ft_putaddr(str);
+		offset++;
+	}
+	else if (arg_type_str[offset] == 'i')
+	{
+		int nb;
+		nb = va_arg(ap, int);
+		if (flag & MORE_SIGN && nb > 0)
+			write(1, "+", 1);
+		else if (flag & SPACE)
+			write(1, " ", 1);
+		ft_putnbr(nb);
+		offset++;
+	}
+	else if (arg_type_str[offset] == 'd')
+	{
+		int nb;
+		nb = va_arg(ap, int);
+		if (flag & MORE_SIGN && nb > 0)
+			write(1, "+", 1);
+		else if (flag & SPACE)
+			write(1, " ", 1);
+		ft_putnbr(nb);
+		offset++;
+	}
+	else if (arg_type_str[offset] == 'o')
+	{
+		int nb;
+		char *str;
+
+		nb = va_arg(ap, int);
+		str = ft_itoa_base(nb, 8);
+		ft_putstr(str);
+		ft_strdel(&str);
+		offset++;
+	}
+	else if (arg_type_str[offset] == 'u')
+	{
+		unsigned int nb;
+		nb = va_arg(ap, unsigned int);
+		ft_putunbr(nb);
+		offset++;
+	}
+	else if (arg_type_str[offset] == 'x')
+	{
+		int nb;
+		char *str;
+		//ft_putstr("0x");
+		nb = va_arg(ap, int);
+		str = ft_itoa_base(nb, 16);
+		ft_putstr(str);
+		ft_strdel(&str);
+		offset++;
+	}
+	else if (arg_type_str[offset] == 'c')
+	{
+		char c;
+		c = (char)va_arg(ap, int);
+		ft_putchar(c);
+		offset++;
+	}
+	else
+		va_arg(ap, void *);
+
+	return (offset);
 }
 
 int				ft_printf(const char * restrict format, ...)
 {
-	va_list		arg_list;
+	va_list		ap;
 	int			i;
 	int			from_idx;
 	int			to_idx;
 	int			length;
 
-	va_start(arg_list, format);
+	va_start(ap, format);
 	i = 0;
 	from_idx = 0;
 	while (format[i])
@@ -58,18 +194,12 @@ int				ft_printf(const char * restrict format, ...)
 				from_idx = i;
 				continue;
 			}
-			read_arg(arg_list, &format[i + 1]);
-			/*
-			**	TODO
-			**	from_idx must be i + length of readen type with the symbol
-			**	(ie. %i is 2, %llu is 4, etc.)
-			*/
-			from_idx = i + 1;
+			from_idx = i + 1 + read_arg(ap, &format[i + 1]);
 		}
 		to_idx = ++i;
 	}
 	length = to_idx - from_idx;
 	write(1, &format[from_idx], length);
-	va_end(arg_list);
+	va_end(ap);
 	return (0);
 }

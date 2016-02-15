@@ -39,7 +39,7 @@ SRC		= memset bzero memcpy memccpy memmove memchr memcmp strdup strcpy strncpy \
 strcat strncat strlcat strchr strrchr strstr strnstr strcmp strncmp atoi \
 isalpha isdigit isalnum isascii isprint toupper tolower memalloc memdel strnew \
 strdel strclr striter striteri strmap strmapi strequ strnequ strsub strjoin \
-strtrim strsplit itoa strlen putchar putstr putnbr putendl putchar_fd putstr_fd \
+strtrim strsplit itoa strlen putchar putstr putnbr putunbr putendl putchar_fd putstr_fd \
 putnbr_fd putendl_fd lstnew lstdelone lstdel lstadd lstiter lstmap isupper \
 islower isspace pow lstsize dl_lstnew dl_lstfront dl_lstback dl_lstpushfront \
 dl_lstpushback dl_lstpopfront dl_lstpopback dl_lstiter dl_lstmap dl_lstsize \

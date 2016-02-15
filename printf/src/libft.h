@@ -17,8 +17,9 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <stdint.h>
+# include <limits.h>
 
-# define HEX_TABLE(x) "0123456789ABCDEF"[x]
+# define HEX_TABLE(x) "0123456789abcdef"[x]
 
 typedef struct	s_list
 {
@@ -124,6 +125,7 @@ void			ft_putchar(char c);
 void			ft_putstr(const char *s);
 void			ft_putendl(const char *s);
 void			ft_putnbr(int n);
+void			ft_putunbr(unsigned int n);
 void			ft_putchar_fd(char c, int fd);
 void			ft_putstr_fd(const char *s, int fd);
 void			ft_putendl_fd(const char *s, int fd);
