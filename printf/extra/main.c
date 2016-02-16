@@ -3,7 +3,9 @@
 
 #define EXPLICIT
 //#define SPECIFIERS
-#define FLAGS
+//#define FLAGS
+//#define WIDTH
+#define PRECISION
 
 int main(void)
 {
@@ -104,13 +106,25 @@ int main(void)
 	printf(" (%i)\n", printf("std: %+d", nb));
 	printf(" (%i)\n", ft_printf("ft_: %+d", nb));
 	ft_putendl("Specifier: %i");
-	printf(" (%i)\n", printf("std: %-+d", nb));
-	printf(" (%i)\n", ft_printf("ft_: %-+d", nb));
+	printf(" (%i)\n", printf("std: %-+-+d", nb));
+	printf(" (%i)\n", ft_printf("ft_: %-+-+d", nb));
 	ft_putstr("\n");
 
 	ft_putendl("Flag: {space}");
 	printf(" (%i)\n", printf("std: % i", nb));
 	printf(" (%i)\n", ft_printf("ft_: % i", nb));
+#endif
+#ifdef WIDTH
+	ft_putendl("Width: printf(\"%5i\", 42)");
+	printf(" (%i)\n", printf("std: %5i", 42));
+	printf(" (%i)\n", ft_printf("ft_: %5i", 42 ));
+	ft_putstr("\n");
+# endif
+#ifdef PRECISION
+	ft_putendl("Precision: printf(\"%.5i\", 42)");
+	printf(" (%i)\n", printf("std: %-9.15i", 42));
+	printf(" (%i)\n", ft_printf("ft_: %-9.15i", 42 ));
+	ft_putstr("\n");
 # endif
 #else
 
