@@ -6,20 +6,12 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/14 15:08:07 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/15 22:01:33 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/16 01:00:31 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdarg.h>
 #include "libft.h"
-
-enum printflag {
-	NONE = 0x0,
-	MINUS_SIGN = 0x1,
-	MORE_SIGN = 0x2,
-	SPACE = 0x4,
-	NUMBER_SIGN = 0x8,
-	ZERO = 0x10 };
 
 /*
 **	printf is formated such as
@@ -53,9 +45,9 @@ enum printflag {
 **		is ignored when '-' present
 */
 
-static int		get_flags(const char *arg_type_str, int *offset)
+static t_printflag		get_flags(const char *arg_type_str, int *offset)
 {
-	enum printflag	flag;
+	t_printflag	flag;
 
 	flag = 0;
 	if (arg_type_str[*offset] == '-' && ++(*offset))
@@ -74,10 +66,10 @@ static int		get_flags(const char *arg_type_str, int *offset)
 	return (flag);
 }
 
-static int		read_arg(va_list ap, const char *arg_type_str)
+static int		read_arg(va_list ap, const char *arg_type_str, int *bcount)
 {
 	int				offset;
-	enum printflag	flag;
+	t_printflag		flag;
 	// Cases:
 	// s   string of characters
 	// S   's' with 'l' (ell) modifier
@@ -96,14 +88,20 @@ static int		read_arg(va_list ap, const char *arg_type_str)
 	{
 		char *str;
 		str = va_arg(ap, char *);
-		ft_putstr(str);
+		if (!str)
+			*bcount += ft_putstr("(null)");
+		else
+			*bcount += ft_putstr(str);
 		offset++;
 	}
 	else if (arg_type_str[offset] == 'p')
 	{
 		char *str;
 		str = va_arg(ap, char *);
-		ft_putaddr(str);
+		if (!str)
+			*bcount += ft_putstr("(nil)");
+		else
+			*bcount += ft_putaddr(str);
 		offset++;
 	}
 	else if (arg_type_str[offset] == 'i')
@@ -111,10 +109,10 @@ static int		read_arg(va_list ap, const char *arg_type_str)
 		int nb;
 		nb = va_arg(ap, int);
 		if (flag & MORE_SIGN && nb > 0)
-			write(1, "+", 1);
+			*bcount += write(1, "+", 1);
 		else if (flag & SPACE)
-			write(1, " ", 1);
-		ft_putnbr(nb);
+			*bcount += write(1, " ", 1);
+		*bcount += ft_putnbr(nb);
 		offset++;
 	}
 	else if (arg_type_str[offset] == 'd')
@@ -122,10 +120,10 @@ static int		read_arg(va_list ap, const char *arg_type_str)
 		int nb;
 		nb = va_arg(ap, int);
 		if (flag & MORE_SIGN && nb > 0)
-			write(1, "+", 1);
+			*bcount += write(1, "+", 1);
 		else if (flag & SPACE)
-			write(1, " ", 1);
-		ft_putnbr(nb);
+			*bcount += write(1, " ", 1);
+		*bcount += ft_putnbr(nb);
 		offset++;
 	}
 	else if (arg_type_str[offset] == 'o')
@@ -135,7 +133,7 @@ static int		read_arg(va_list ap, const char *arg_type_str)
 
 		nb = va_arg(ap, int);
 		str = ft_itoa_base(nb, 8);
-		ft_putstr(str);
+		*bcount += ft_putstr(str);
 		ft_strdel(&str);
 		offset++;
 	}
@@ -143,17 +141,17 @@ static int		read_arg(va_list ap, const char *arg_type_str)
 	{
 		unsigned int nb;
 		nb = va_arg(ap, unsigned int);
-		ft_putunbr(nb);
+		*bcount += ft_putunbr(nb);
 		offset++;
 	}
 	else if (arg_type_str[offset] == 'x')
 	{
 		int nb;
 		char *str;
-		//ft_putstr("0x");
+		//bcount += ft_putstr("0x");
 		nb = va_arg(ap, int);
 		str = ft_itoa_base(nb, 16);
-		ft_putstr(str);
+		*bcount += ft_putstr(str);
 		ft_strdel(&str);
 		offset++;
 	}
@@ -162,6 +160,7 @@ static int		read_arg(va_list ap, const char *arg_type_str)
 		char c;
 		c = (char)va_arg(ap, int);
 		ft_putchar(c);
+		(*bcount)++;
 		offset++;
 	}
 	else
@@ -177,29 +176,32 @@ int				ft_printf(const char * restrict format, ...)
 	int			from_idx;
 	int			to_idx;
 	int			length;
+	int			bcount;
 
 	va_start(ap, format);
 	i = 0;
+	bcount = 0;
 	from_idx = 0;
 	while (format[i])
 	{
 		if (format[i] == '%')
 		{
 			length = to_idx - from_idx;
-			write(1, &format[from_idx], length);
+			bcount += write(1, &format[from_idx], length);
 			if (format[i + 1] == '%')
 			{
-				write(1, "%", 1);
+				bcount += write(1, "%", 1);
 				i += 2;
 				from_idx = i;
 				continue;
 			}
-			from_idx = i + 1 + read_arg(ap, &format[i + 1]);
+			from_idx = i + 1 + read_arg(ap, &format[i + 1], &bcount);
 		}
 		to_idx = ++i;
 	}
 	length = to_idx - from_idx;
-	write(1, &format[from_idx], length);
+	if (length > 0)
+		bcount += write(1, &format[from_idx], length);
 	va_end(ap);
-	return (0);
+	return (bcount);
 }

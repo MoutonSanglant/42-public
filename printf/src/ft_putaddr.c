@@ -6,18 +6,29 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/14 00:40:45 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/26 20:11:15 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/16 00:24:04 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_putaddr(const void *addr)
+/*
+**	NOTE
+**	This is not the standard "ft_putaddr" since
+**	it returns a value when it shouldn't.
+**	===================================
+**	void	ft_putaddr(const void *addr)
+*/
+
+int		ft_putaddr(const void *addr)
 {
 	char	*str;
+	int		bcount;
 
-	ft_putstr("0x");
+	bcount = 0;
+	bcount += ft_putstr("0x");
 	str = ft_itoa_base((uintptr_t)addr, 16);
-	ft_putstr(str);
+	bcount += ft_putstr(str);
 	ft_strdel(&str);
+	return (bcount);
 }
