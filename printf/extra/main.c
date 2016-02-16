@@ -15,7 +15,7 @@ int main(void)
 	(void)str;
 	(void)nb;
 	// sS  string of characters
-	// p   pointer adresse
+	// p   pointer address
 	// dD  signed decimal integer
 	// i   signed decimal integer
 	// oO  unsigned octal
@@ -28,84 +28,94 @@ int main(void)
 # ifdef SPECIFIERS
 
 	ft_putendl("Specifier: %%");
-	printf("std: %%\n");
-	ft_printf("ft_: %%\n");
+	printf(" (%i)\n", printf("std: %%"));
+	printf(" (%i)\n", ft_printf("ft_: %%"));
+	printf(" (%i)\n", printf("std: %%i"));
+	printf(" (%i)\n", ft_printf("ft_: %%i"));
+	printf(" (%i)\n", printf("std: %% is a percent symbol"));
+	printf(" (%i)\n", ft_printf("ft_: %% is a percent symbol"));
 	ft_putstr("\n");
 
 	ft_putendl("Specifier: %s %S");
-	printf("std: %s\n", str);
-	ft_printf("ft_: %s\n", str);
-	printf("std: %s\n", "a constant string");
-	ft_printf("ft_: %s\n", "a constant string");
-	printf("std: %S\n", wstr);
-	printf("std: %S\n", L"a constant wide string");
+	printf(" (%i)\n", printf("std: %s", str));
+	printf(" (%i)\n", ft_printf("ft_: %s", str));
+	printf(" (%i)\n", printf("std: %s", "a constant string"));
+	printf(" (%i)\n", ft_printf("ft_: %s", "a constant string"));
+	printf(" (%i)\n", printf("std: %S", wstr));
+	printf(" (%i)\n", printf("std: %S", L"a constant wide string"));
+	printf(" (%i)\n", printf("std: %s", NULL));
+	printf(" (%i)\n", ft_printf("ft_: %s", NULL));
 	//ft_printf("ft_: %%\n");
 	ft_putstr("\n");
 
 	ft_putendl("Specifier: %p");
-	printf("std: %p\n", str);
-	printf("std: %p\n", "constant");
-	ft_printf("ft_: %p\n", str);
-	ft_printf("ft_: %p\n", "constant");
+	printf(" (%i)\n", printf("std: %p", str));
+	printf(" (%i)\n", printf("std: %p", "constant"));
+	printf(" (%i)\n", ft_printf("ft_: %p", str));
+	printf(" (%i)\n", ft_printf("ft_: %p", "constant"));
+	printf(" (%i)\n", printf("std: %p", NULL));
+	printf(" (%i)\n", ft_printf("ft_: %p", NULL));
 	ft_putstr("\n");
 
 	ft_putendl("Specifier: %d %D");
-	printf("std: %d\n", nb);
-	ft_printf("ft_: %d\n", nb);
-	printf("std: %D\n", nb);
+	printf(" (%i)\n", printf("std: %d", nb));
+	printf(" (%i)\n", ft_printf("ft_: %d", nb));
+	printf(" (%i)\n", printf("std: %D", nb));
 	ft_putstr("\n");
 
 	ft_putendl("Specifier: %i");
-	printf("std: %i\n", nb);
-	ft_printf("ft_: %i\n", nb);
+	printf(" (%i)\n", printf("std: %i", nb));
+	printf(" (%i)\n", ft_printf("ft_: %i", nb));
+	printf(" (%i)\n", printf("std: %i is an int", nb));
+	printf(" (%i)\n", ft_printf("ft_: %i is an int", nb));
 	ft_putstr("\n");
 
 	ft_putendl("Specifier: %o %O");
-	printf("std: %o\n", nb);
-	ft_printf("ft_: %o\n", nb);
-	printf("std: %O\n", nb);
+	printf(" (%i)\n", printf("std: %o", nb));
+	printf(" (%i)\n", ft_printf("ft_: %o", nb));
+	printf(" (%i)\n", printf("std: %O", nb));
 	ft_putstr("\n");
 
 	ft_putendl("Specifier: %u %U");
-	printf("std: %u\n", nb);
-	ft_printf("ft_: %u\n", nb);
-	printf("std: %U\n", nb);
+	printf(" (%i)\n", printf("std: %u", nb));
+	printf(" (%i)\n", ft_printf("ft_: %u", nb));
+	printf(" (%i)\n", printf("std: %U", nb));
 	ft_putstr("\n");
 
 	ft_putendl("Specifier: %x %X");
-	printf("std: %x\n", nb);
-	ft_printf("ft_: %x\n", nb);
-	printf("std: %X\n", nb);
+	printf(" (%i)\n", printf("std: %x", nb));
+	printf(" (%i)\n", ft_printf("ft_: %x", nb));
+	printf(" (%i)\n", printf("std: %X", nb));
 	ft_putstr("\n");
 
 	ft_putendl("Specifier: %c");
-	printf("std: %c\n", nb);
-	ft_printf("ft_: %c\n", nb);
+	printf(" (%i)\n", printf("std: %c", nb));
+	printf(" (%i)\n", ft_printf("ft_: %c", nb));
 	ft_putstr("\n");
 # endif
 # ifdef FLAGS
 	ft_putendl("Flag: -");
-	printf("std: %-i\n", nb);
+	printf(" (%i)\n", printf("std: %-i", nb));
 	//ft_printf("ft_: %-i\n", nb);
 	ft_putstr("\n");
 
 	ft_putendl("Flag: +");
 	ft_putendl("Specifier: %d %D");
-	printf("std: %+d\n", nb);
-	ft_printf("ft_: %+d\n", nb);
+	printf(" (%i)\n", printf("std: %+d", nb));
+	printf(" (%i)\n", ft_printf("ft_: %+d", nb));
 	ft_putendl("Specifier: %i");
-	printf("std: %-+i\n", nb);
-	ft_printf("ft_: %-+i\n", nb);
+	printf(" (%i)\n", printf("std: %-+d", nb));
+	printf(" (%i)\n", ft_printf("ft_: %-+d", nb));
 	ft_putstr("\n");
 
 	ft_putendl("Flag: {space}");
-	printf("std: %    i\n", nb);
-	ft_printf("ft_: %    i\n", nb);
+	printf(" (%i)\n", printf("std: % i", nb));
+	printf(" (%i)\n", ft_printf("ft_: % i", nb));
 # endif
 #else
 
 	// sS  string of characters
-	// p   pointer adresse
+	// p   pointer address
 	// dD  signed decimal integer
 	// i   signed decimal integer
 	// oO  unsigned octal
