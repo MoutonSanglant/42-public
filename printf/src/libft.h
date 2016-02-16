@@ -19,12 +19,13 @@
 # include <stdint.h>
 # include <limits.h>
 
+# define ABS(x) ((x < 0) ? -x : x)
 # define HEX_TABLE(x) "0123456789abcdef"[x]
 
 typedef enum e_printflag
 {
 	NONE		= 0x0,
-	MINUS_SIGN	= 0x1,
+	LESS_SIGN	= 0x1,
 	MORE_SIGN	= 0x2,
 	SPACE		= 0x4,
 	NUMBER_SIGN	= 0x8,
