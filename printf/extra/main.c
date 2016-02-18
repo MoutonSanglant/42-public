@@ -5,8 +5,9 @@
 //#define SPECIFIERS
 //#define FLAGS
 //#define WIDTH
-#define PRECISION
-#define LENGTH
+//#define PRECISION
+//#define LENGTH
+#define UNICODE
 
 int main(void)
 {
@@ -27,11 +28,13 @@ int main(void)
 	// cC  character
 
 	//printf("itoa: %i\nft_itoa: %i\n", itoa(44200), ft_itoa(44200));
+	/*
 	printf("intmax_t: %i\n", sizeof(intmax_t));
 	printf("int64_t: %i\n", sizeof(int64_t));
 	printf("int: %i\n", sizeof(int));
 	printf("long int: %i\n", sizeof(long int));
 	printf("long long int: %i\n", sizeof(long long int));
+	*/
 
 #ifdef EXPLICIT
 
@@ -158,6 +161,12 @@ int main(void)
 	printf(" (%i)\n", ft_printf("ft_: %zi", 9223372036854775807));
 	printf(" (%i)\n", printf("std: %i", 9223372036854775807));
 	printf(" (%i)\n", ft_printf("ft_: %i", 9223372036854775807));
+	ft_putstr("\n");
+# endif
+#ifdef UNICODE
+	ft_putendl("Width: printf(\"éç\")");
+	printf(" (%i)\n", printf("std: éç"));
+	printf(" (%i)\n", ft_printf("ft_: éç"));
 	ft_putstr("\n");
 # endif
 #else
