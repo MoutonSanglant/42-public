@@ -6,11 +6,13 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/14 15:08:07 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/18 21:50:47 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/18 22:28:35 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <wchar.h>
 #include <stdarg.h>
+
 #include "libft.h"
 #include "ft_printf.h"
 
@@ -64,6 +66,13 @@ static t_fflag		get_flags(const char *format, int *offset)
 	return (flag);
 }
 
+/*
+**	.precision:
+**	d i o u x X
+**
+**	s max character printed
+*/
+
 static void		get_format_datas(const char *format, t_fdata *fdatas, int *offset)
 {
 	fdatas->flag = get_flags(format, offset);
@@ -93,12 +102,6 @@ static void		get_format_datas(const char *format, t_fdata *fdatas, int *offset)
 		(*offset)++;
 }
 
-/*
-**	.precision:
-**	d i o u x X
-**
-**	s max character printed
-*/
 
 static void		justify(char *str, t_fdata *fdatas)
 {
@@ -145,7 +148,10 @@ static int		read_arg(va_list ap, const char *format, t_fdata *fdatas)
 
 	if (format[offset] == 's')
 	{
-		str = va_arg(ap, char *);
+		if (fdatas->length == LENGTH_NONE)
+			str = va_arg(ap, char *);
+	//	else if (fdatas->length == LENGTH_L)
+	//		str = (wchar_t *)va_arg(ap, wchar_t *);
 		fdatas->bcount += (str) ? ft_putstr(str) : ft_putstr("(null)");
 		offset++;
 	}
@@ -199,6 +205,21 @@ static int		read_arg(va_list ap, const char *format, t_fdata *fdatas)
 	}
 	else if (format[offset] == 'o')
 	{
+		if (fdatas->length == LENGTH_NONE)
+			str = ft_uitoa(va_arg(ap, unsigned int));
+		else if (fdatas->length == LENGTH_HH)
+			str = ft_uitoa((unsigned char)va_arg(ap, unsigned int));
+		else if (fdatas->length == LENGTH_H)
+			str = ft_uitoa((unsigned short int)va_arg(ap, unsigned int));
+		else if (fdatas->length == LENGTH_L)
+			str = ft_uimaxtoa((unsigned long int)va_arg(ap, unsigned long int));
+		else if (fdatas->length == LENGTH_LL)
+			str = ft_uimaxtoa((unsigned long long int)va_arg(ap, unsigned long long int));
+		else if (fdatas->length == LENGTH_J)
+			str = ft_uimaxtoa((uintmax_t)va_arg(ap, uintmax_t));
+		else if (fdatas->length == LENGTH_Z)
+			str = ft_uimaxtoa((size_t)va_arg(ap, size_t));
+
 		nb = va_arg(ap, int);
 		str = ft_itoa_base(nb, 8);
 		fdatas->bcount += ft_putstr(str);
@@ -207,12 +228,43 @@ static int		read_arg(va_list ap, const char *format, t_fdata *fdatas)
 	}
 	else if (format[offset] == 'u')
 	{
+		if (fdatas->length == LENGTH_NONE)
+			str = ft_uitoa(va_arg(ap, unsigned int));
+		else if (fdatas->length == LENGTH_HH)
+			str = ft_uitoa((unsigned char)va_arg(ap, unsigned int));
+		else if (fdatas->length == LENGTH_H)
+			str = ft_uitoa((unsigned short int)va_arg(ap, unsigned int));
+		else if (fdatas->length == LENGTH_L)
+			str = ft_uimaxtoa((unsigned long int)va_arg(ap, unsigned long int));
+		else if (fdatas->length == LENGTH_LL)
+			str = ft_uimaxtoa((unsigned long long int)va_arg(ap, unsigned long long int));
+		else if (fdatas->length == LENGTH_J)
+			str = ft_uimaxtoa((uintmax_t)va_arg(ap, uintmax_t));
+		else if (fdatas->length == LENGTH_Z)
+			str = ft_uimaxtoa((size_t)va_arg(ap, size_t));
+
 		unb = va_arg(ap, unsigned int);
 		fdatas->bcount += ft_putunbr(unb);
+		ft_strdel(&str);
 		offset++;
 	}
 	else if (format[offset] == 'x')
 	{
+		if (fdatas->length == LENGTH_NONE)
+			str = ft_uitoa(va_arg(ap, unsigned int));
+		else if (fdatas->length == LENGTH_HH)
+			str = ft_uitoa((unsigned char)va_arg(ap, unsigned int));
+		else if (fdatas->length == LENGTH_H)
+			str = ft_uitoa((unsigned short int)va_arg(ap, unsigned int));
+		else if (fdatas->length == LENGTH_L)
+			str = ft_uimaxtoa((unsigned long int)va_arg(ap, unsigned long int));
+		else if (fdatas->length == LENGTH_LL)
+			str = ft_uimaxtoa((unsigned long long int)va_arg(ap, unsigned long long int));
+		else if (fdatas->length == LENGTH_J)
+			str = ft_uimaxtoa((uintmax_t)va_arg(ap, uintmax_t));
+		else if (fdatas->length == LENGTH_Z)
+			str = ft_uimaxtoa((size_t)va_arg(ap, size_t));
+
 		//bcount += ft_putstr("0x");
 		nb = va_arg(ap, int);
 		str = ft_itoa_base(nb, 16);
@@ -220,8 +272,30 @@ static int		read_arg(va_list ap, const char *format, t_fdata *fdatas)
 		ft_strdel(&str);
 		offset++;
 	}
+	else if (format[offset] == 'X')
+	{
+		if (fdatas->length == LENGTH_NONE)
+			str = ft_uitoa(va_arg(ap, unsigned int));
+		else if (fdatas->length == LENGTH_HH)
+			str = ft_uitoa((unsigned char)va_arg(ap, unsigned int));
+		else if (fdatas->length == LENGTH_H)
+			str = ft_uitoa((unsigned short int)va_arg(ap, unsigned int));
+		else if (fdatas->length == LENGTH_L)
+			str = ft_uimaxtoa((unsigned long int)va_arg(ap, unsigned long int));
+		else if (fdatas->length == LENGTH_LL)
+			str = ft_uimaxtoa((unsigned long long int)va_arg(ap, unsigned long long int));
+		else if (fdatas->length == LENGTH_J)
+			str = ft_uimaxtoa((uintmax_t)va_arg(ap, uintmax_t));
+		else if (fdatas->length == LENGTH_Z)
+			str = ft_uimaxtoa((size_t)va_arg(ap, size_t));
+
+	}
 	else if (format[offset] == 'c')
 	{
+		if (fdatas->length == LENGTH_NONE)
+			c = va_arg(ap, int);
+		else if (fdatas->length == LENGTH_L)
+			c = (wint_t)va_arg(ap, wint_t);
 		c = (char)va_arg(ap, int);
 		ft_putchar(c);
 		fdatas->bcount++;
