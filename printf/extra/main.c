@@ -6,6 +6,7 @@
 //#define FLAGS
 //#define WIDTH
 #define PRECISION
+#define LENGTH
 
 int main(void)
 {
@@ -24,6 +25,13 @@ int main(void)
 	// uU  unsigned decimal integer
 	// xX  unsigned hexadecimal integer lowercase / uppercase
 	// cC  character
+
+	//printf("itoa: %i\nft_itoa: %i\n", itoa(44200), ft_itoa(44200));
+	printf("intmax_t: %i\n", sizeof(intmax_t));
+	printf("int64_t: %i\n", sizeof(int64_t));
+	printf("int: %i\n", sizeof(int));
+	printf("long int: %i\n", sizeof(long int));
+	printf("long long int: %i\n", sizeof(long long int));
 
 #ifdef EXPLICIT
 
@@ -122,8 +130,34 @@ int main(void)
 # endif
 #ifdef PRECISION
 	ft_putendl("Precision: printf(\"%.5i\", 42)");
-	printf(" (%i)\n", printf("std: %-9.15i", 42));
-	printf(" (%i)\n", ft_printf("ft_: %-9.15i", 42 ));
+	printf(" (%i)\n", printf("std: %.5i", 42));
+	printf(" (%i)\n", ft_printf("ft_: %.5i", 42));
+	printf(" (%i)\n", printf("std: %.5i", -42));
+	printf(" (%i)\n", ft_printf("ft_: %.5i", -42));
+	printf(" (%i)\n", printf("std: % .5i", 42));
+	printf(" (%i)\n", ft_printf("ft_: % .5i", 42));
+	printf(" (%i)\n", printf("std: % .5i", -42));
+	printf(" (%i)\n", ft_printf("ft_: % .5i", -42));
+	ft_putstr("\n");
+# endif
+#ifdef LENGTH
+	ft_putendl("Length: printf(\"%hi\", 44200)");
+	printf(" (%i)\n", printf("std: %hi", 44200));
+	printf(" (%i)\n", ft_printf("ft_: %hi", 44200));
+	printf(" (%i)\n", printf("std: %hhi", 44200));
+	printf(" (%i)\n", ft_printf("ft_: %hhi", 44200));
+	printf(" (%i)\n", printf("std: %i", 2147483650));
+	printf(" (%i)\n", ft_printf("ft_: %i", 2147483650));
+	printf(" (%i)\n", printf("std: %li", 2147483650));
+	printf(" (%i)\n", ft_printf("ft_: %li", 2147483650));
+	printf(" (%i)\n", printf("std: %lli", 9223372036854775807));
+	printf(" (%i)\n", ft_printf("ft_: %lli", 9223372036854775807));
+	printf(" (%i)\n", printf("std: %ji", 9223372036854775807));
+	printf(" (%i)\n", ft_printf("ft_: %ji", 9223372036854775807));
+	printf(" (%i)\n", printf("std: %zi", 9223372036854775807));
+	printf(" (%i)\n", ft_printf("ft_: %zi", 9223372036854775807));
+	printf(" (%i)\n", printf("std: %i", 9223372036854775807));
+	printf(" (%i)\n", ft_printf("ft_: %i", 9223372036854775807));
 	ft_putstr("\n");
 # endif
 #else
