@@ -22,16 +22,6 @@
 # define ABS(x) ((x < 0) ? -x : x)
 # define HEX_TABLE(x) "0123456789abcdef"[x]
 
-typedef enum e_printflag
-{
-	NONE		= 0x0,
-	LESS_SIGN	= 0x1,
-	MORE_SIGN	= 0x2,
-	SPACE		= 0x4,
-	NUMBER_SIGN	= 0x8,
-	ZERO		= 0x10
-}				t_printflag;
-
 typedef struct	s_list
 {
 	void			*content;
@@ -111,6 +101,7 @@ char			**ft_strsplit(const char *s, char c);
 char			*ft_itoa(int n);
 
 char			*ft_itoa_base(int64_t n, int base);
+char			*ft_imaxtoa(intmax_t n);
 
 /*
 **	CHECKS
