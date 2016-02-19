@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/14 15:08:07 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/18 22:28:35 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/19 16:48:58 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -302,7 +302,21 @@ static int		read_arg(va_list ap, const char *format, t_fdata *fdatas)
 		offset++;
 	}
 	else
-		va_arg(ap, void *);
+	{
+		//va_arg(ap, void *);
+		//fdatas->precision = fdatas->precision;
+		//fdatas->precision = (fdatas->precision > 0) ? fdatas->precision : 0;
+		//fdatas->width = fdatas->width - fdatas->precision;
+		fdatas->width--;
+		while (fdatas->width > 0)
+		{
+			if (!(fdatas->flag & FLAG_MORE || fdatas->flag & FLAG_SPACE) || fdatas->width > 1)
+				fdatas->bcount += write(1, &fdatas->fill_char, 1);
+			fdatas->width--;
+		}
+		fdatas->bcount += write(1, "%", 1);
+		offset++;
+	}
 
 	return (offset);
 }
@@ -317,6 +331,7 @@ int				ft_printf(const char * restrict format, ...)
 	t_fdata		fdatas;
 
 	i = 0;
+	to_idx = 0;
 	from_idx = 0;
 	fdatas.bcount = 0;
 	va_start(ap, format);
@@ -324,16 +339,11 @@ int				ft_printf(const char * restrict format, ...)
 	{
 		if (format[i] == '%')
 		{
+			i++;
 			length = to_idx - from_idx;
-			fdatas.bcount += write(1, &format[from_idx], length);
-			if (format[i + 1] == '%')
-			{
-				fdatas.bcount += write(1, "%", 1);
-				i += 2;
-				from_idx = i;
-				continue;
-			}
-			from_idx = i + 1 + read_arg(ap, &format[i + 1], &fdatas);
+			if (length > 0)
+				fdatas.bcount += write(1, &format[from_idx], length);
+			from_idx = i + read_arg(ap, &format[i], &fdatas);
 		}
 		to_idx = ++i;
 	}
