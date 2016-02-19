@@ -7,7 +7,8 @@
 //#define WIDTH
 //#define PRECISION
 //#define LENGTH
-#define UNICODE
+//#define UNICODE
+#define NOSPEC
 
 int main(void)
 {
@@ -167,6 +168,26 @@ int main(void)
 	ft_putendl("Width: printf(\"éç\")");
 	printf(" (%i)\n", printf("std: éç"));
 	printf(" (%i)\n", ft_printf("ft_: éç"));
+	ft_putstr("\n");
+# endif
+#ifdef NOSPEC
+	ft_putendl("printf(\"\")");
+	ft_putstr("std:");
+	printf("(%i)\n", printf(""));
+	ft_putstr("ft_:");
+	printf("(%i)\n", ft_printf(""));
+	ft_putstr("\n");
+	ft_putendl("printf(\"%%\")");
+	ft_putstr("std:");
+	printf("(%i)\n", printf("%%"));
+	ft_putstr("ft_:");
+	printf("(%i)\n", ft_printf("%%"));
+	ft_putstr("\n");
+	ft_putendl("printf(\"%5%\")");
+	ft_putstr("std:");
+	printf("(%i)\n", printf("%5%"));
+	ft_putstr("ft_:");
+	printf("(%i)\n", ft_printf("%5%"));
 	ft_putstr("\n");
 # endif
 #else
