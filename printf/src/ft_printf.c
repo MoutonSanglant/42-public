@@ -6,12 +6,9 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/14 15:08:07 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/23 12:32:46 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/23 16:18:27 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#include <wchar.h>
-#include <stdarg.h>
 
 #include "libft.h"
 #include "ft_printf.h"
@@ -76,11 +73,11 @@ static t_fflag		get_flags(const char *format, int *offset)
 static void		get_format_datas(const char *format, t_fdata *fdatas, int *offset)
 {
 	fdatas->flag = get_flags(format, offset);
-	fdatas->fill_char = (fdatas->flag & FLAG_ZERO) ? '0' : ' ';
+	fdatas->fill_char = (fdatas->flag & FLAG_ZERO && !(fdatas->flag & FLAG_LESS)) ? '0' : ' ';
 	fdatas->width = ft_atoi(&format[*offset]);
 	while (ft_isdigit(format[*offset]))
 		(*offset)++;
-	fdatas->precision = 0;
+	fdatas->precision = -1;
 	if (format[*offset] == '.' && ++(*offset))
 	{
 		fdatas->precision = ft_atoi(&format[*offset]);
@@ -102,7 +99,6 @@ static void		get_format_datas(const char *format, t_fdata *fdatas, int *offset)
 		(*offset)++;
 }
 
-
 static void		justify(char *str, t_fdata *fdatas)
 {
 	if (fdatas->flag & FLAG_MORE && str[0] != '-')
@@ -122,6 +118,17 @@ static void		justify(char *str, t_fdata *fdatas)
 	fdatas->bcount += ft_putstr(str);
 }
 
+// Cases:
+// s   string of characters
+// S   's' with 'l' (ell) modifier
+// p   pointer adresse
+// dD  signed decimal integer
+// i   signed decimal integer
+// oO  unsigned octal
+// uU  unsigned decimal integer
+// xX  unsigned hexadecimal integer lowercase / uppercase
+// cC  character
+// C   's' with 'l' (ell) modifier
 static int		read_arg(va_list ap, const char *format, t_fdata *fdatas)
 {
 	char			*str;
@@ -130,17 +137,6 @@ static int		read_arg(va_list ap, const char *format, t_fdata *fdatas)
 	int				nb;
 	int				offset;
 
-	// Cases:
-	// s   string of characters
-	// S   's' with 'l' (ell) modifier
-	// p   pointer adresse
-	// dD  signed decimal integer
-	// i   signed decimal integer
-	// oO  unsigned octal
-	// uU  unsigned decimal integer
-	// xX  unsigned hexadecimal integer lowercase / uppercase
-	// cC  character
-	// C   's' with 'l' (ell) modifier
 	str = NULL;
 	offset = 0;
 	get_format_datas(format, fdatas, &offset);
@@ -148,13 +144,7 @@ static int		read_arg(va_list ap, const char *format, t_fdata *fdatas)
 //	ft_printf_format(format, fdatas);
 
 	if (fdatas->specifier == 's')
-	{
-		if (fdatas->length == LENGTH_NONE)
-			str = va_arg(ap, char *);
-	//	else if (fdatas->length == LENGTH_L)
-	//		str = (wchar_t *)va_arg(ap, wchar_t *);
-		fdatas->bcount += (str) ? ft_putstr(str) : ft_putstr("(null)");
-	}
+		ft_print_formated_string(ap, fdatas);
 	else if (fdatas->specifier == 'p')
 	{
 		str = va_arg(ap, char *);
@@ -217,8 +207,6 @@ static int		read_arg(va_list ap, const char *format, t_fdata *fdatas)
 		else if (fdatas->length == LENGTH_Z)
 			str = ft_uimaxtoa((size_t)va_arg(ap, size_t));
 
-		char *s;
-		s = str;
 		if (fdatas->flag & FLAG_NUMBERSIGN)
 			ft_strprepend(&str, "0");
 		nb = va_arg(ap, int);
@@ -264,6 +252,12 @@ static int		read_arg(va_list ap, const char *format, t_fdata *fdatas)
 		else if (fdatas->length == LENGTH_Z)
 			str = ft_uitoa_base((uintmax_t)va_arg(ap, size_t), 16);
 
+		if (str[0] == '0')
+		{
+			if (fdatas->precision == 0)
+				str[0] = '\0';
+			fdatas->flag ^= (fdatas->flag & FLAG_NUMBERSIGN) ? FLAG_NUMBERSIGN : FLAG_ZERO;
+		}
 		if (fdatas->specifier == 'X')
 		{
 			int i = 0;
@@ -273,17 +267,24 @@ static int		read_arg(va_list ap, const char *format, t_fdata *fdatas)
 				str[i] = (char)ft_toupper(str[i]);
 				i++;
 			}
-			if (fdatas->flag & FLAG_NUMBERSIGN)
-				ft_strprepend(&str, "0X");
 		}
-		else if (fdatas->flag & FLAG_NUMBERSIGN)
-			ft_strprepend(&str, "0x");
 
 		fdatas->precision = fdatas->precision - ft_strlen(str);
 		fdatas->precision = (fdatas->precision > 0) ? fdatas->precision : 0;
 		fdatas->width = fdatas->width - fdatas->precision - ft_strlen(str);
+		if (fdatas->flag & FLAG_NUMBERSIGN)
+		{
+			fdatas->width -= 2;
+			if (fdatas->flag & FLAG_ZERO)
+				fdatas->bcount += write(1, (fdatas->specifier == 'x') ? "0x" : "0X", 2);
+		}
 		if (fdatas->flag & FLAG_LESS)
+		{
+			if (fdatas->flag & FLAG_NUMBERSIGN && !(fdatas->flag & FLAG_ZERO))
+				fdatas->bcount += write(1, (fdatas->specifier == 'x') ? "0x" : "0X", 2);
 			justify(str, fdatas);
+		}
+
 		while (fdatas->width > 0)
 		{
 			if (!(fdatas->flag & FLAG_MORE || fdatas->flag & FLAG_SPACE) || fdatas->width > 1)
@@ -291,7 +292,11 @@ static int		read_arg(va_list ap, const char *format, t_fdata *fdatas)
 			fdatas->width--;
 		}
 		if (!(fdatas->flag & FLAG_LESS))
+		{
+			if (fdatas->flag & FLAG_NUMBERSIGN && !(fdatas->flag & FLAG_ZERO))
+				fdatas->bcount += write(1, (fdatas->specifier == 'x') ? "0x" : "0X", 2);
 			justify(str, fdatas);
+		}
 
 		//fdatas->bcount += ft_putstr(str);
 		ft_strdel(&str);

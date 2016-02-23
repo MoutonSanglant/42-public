@@ -13,6 +13,9 @@
 #ifndef FT_PRINTF_H
 # define FT_PRINTF_H
 
+# include <wchar.h>
+# include <stdarg.h>
+
 typedef enum	e_fflag
 {
 	FLAG_NONE		= 0x0,
@@ -21,6 +24,7 @@ typedef enum	e_fflag
 	FLAG_SPACE		= 0x4,
 	FLAG_NUMBERSIGN	= 0x8,
 	FLAG_ZERO		= 0x10
+	//FLAG_DOT		= 0x10,
 }				t_fflag;
 
 typedef enum	e_flength
@@ -46,5 +50,7 @@ typedef struct	s_fdata
 	char		specifier;
 	char		fill_char;
 }				t_fdata;
+
+void	ft_print_formated_string(va_list ap, t_fdata *fdatas);
 
 #endif
