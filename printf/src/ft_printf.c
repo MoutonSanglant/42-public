@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/14 15:08:07 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/19 16:48:58 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/23 12:32:46 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,24 +144,23 @@ static int		read_arg(va_list ap, const char *format, t_fdata *fdatas)
 	str = NULL;
 	offset = 0;
 	get_format_datas(format, fdatas, &offset);
+	fdatas->specifier = format[offset];
 //	ft_printf_format(format, fdatas);
 
-	if (format[offset] == 's')
+	if (fdatas->specifier == 's')
 	{
 		if (fdatas->length == LENGTH_NONE)
 			str = va_arg(ap, char *);
 	//	else if (fdatas->length == LENGTH_L)
 	//		str = (wchar_t *)va_arg(ap, wchar_t *);
 		fdatas->bcount += (str) ? ft_putstr(str) : ft_putstr("(null)");
-		offset++;
 	}
-	else if (format[offset] == 'p')
+	else if (fdatas->specifier == 'p')
 	{
 		str = va_arg(ap, char *);
 		fdatas->bcount += (str) ? ft_putstr(str) : ft_putstr("0x0");
-		offset++;
 	}
-	else if (format[offset] == 'i')
+	else if (fdatas->specifier == 'i')
 	{
 		if (fdatas->length == LENGTH_NONE)
 			str = ft_itoa(va_arg(ap, int));
@@ -191,9 +190,8 @@ static int		read_arg(va_list ap, const char *format, t_fdata *fdatas)
 		if (!(fdatas->flag & FLAG_LESS))
 			justify(str, fdatas);
 		ft_strdel(&str);
-		offset++;
 	}
-	else if (format[offset] == 'd')
+	else if (fdatas->specifier == 'd')
 	{
 		nb = va_arg(ap, int);
 		if (fdatas->flag & FLAG_MORE && nb > 0)
@@ -201,9 +199,8 @@ static int		read_arg(va_list ap, const char *format, t_fdata *fdatas)
 		else if (fdatas->flag & FLAG_SPACE)
 			fdatas->bcount += write(1, " ", 1);
 		fdatas->bcount += ft_putnbr(nb);
-		offset++;
 	}
-	else if (format[offset] == 'o')
+	else if (fdatas->specifier == 'o')
 	{
 		if (fdatas->length == LENGTH_NONE)
 			str = ft_uitoa(va_arg(ap, unsigned int));
@@ -220,13 +217,16 @@ static int		read_arg(va_list ap, const char *format, t_fdata *fdatas)
 		else if (fdatas->length == LENGTH_Z)
 			str = ft_uimaxtoa((size_t)va_arg(ap, size_t));
 
+		char *s;
+		s = str;
+		if (fdatas->flag & FLAG_NUMBERSIGN)
+			ft_strprepend(&str, "0");
 		nb = va_arg(ap, int);
 		str = ft_itoa_base(nb, 8);
 		fdatas->bcount += ft_putstr(str);
 		ft_strdel(&str);
-		offset++;
 	}
-	else if (format[offset] == 'u')
+	else if (fdatas->specifier == 'u')
 	{
 		if (fdatas->length == LENGTH_NONE)
 			str = ft_uitoa(va_arg(ap, unsigned int));
@@ -246,51 +246,57 @@ static int		read_arg(va_list ap, const char *format, t_fdata *fdatas)
 		unb = va_arg(ap, unsigned int);
 		fdatas->bcount += ft_putunbr(unb);
 		ft_strdel(&str);
-		offset++;
 	}
-	else if (format[offset] == 'x')
+	else if (fdatas->specifier == 'x' || fdatas->specifier == 'X')
 	{
 		if (fdatas->length == LENGTH_NONE)
-			str = ft_uitoa(va_arg(ap, unsigned int));
+			str = ft_uitoa_base((uintmax_t)va_arg(ap, unsigned int), 16);
 		else if (fdatas->length == LENGTH_HH)
-			str = ft_uitoa((unsigned char)va_arg(ap, unsigned int));
+			str = ft_uitoa_base((uintmax_t)va_arg(ap, unsigned int), 16);
 		else if (fdatas->length == LENGTH_H)
-			str = ft_uitoa((unsigned short int)va_arg(ap, unsigned int));
+			str = ft_uitoa_base((uintmax_t)va_arg(ap, unsigned int), 16);
 		else if (fdatas->length == LENGTH_L)
-			str = ft_uimaxtoa((unsigned long int)va_arg(ap, unsigned long int));
+			str = ft_uitoa_base((uintmax_t)va_arg(ap, unsigned long int), 16);
 		else if (fdatas->length == LENGTH_LL)
-			str = ft_uimaxtoa((unsigned long long int)va_arg(ap, unsigned long long int));
+			str = ft_uitoa_base((uintmax_t)va_arg(ap, unsigned long long int), 16);
 		else if (fdatas->length == LENGTH_J)
-			str = ft_uimaxtoa((uintmax_t)va_arg(ap, uintmax_t));
+			str = ft_uitoa_base((uintmax_t)va_arg(ap, uintmax_t), 16);
 		else if (fdatas->length == LENGTH_Z)
-			str = ft_uimaxtoa((size_t)va_arg(ap, size_t));
+			str = ft_uitoa_base((uintmax_t)va_arg(ap, size_t), 16);
 
-		//bcount += ft_putstr("0x");
-		nb = va_arg(ap, int);
-		str = ft_itoa_base(nb, 16);
-		fdatas->bcount += ft_putstr(str);
+		if (fdatas->specifier == 'X')
+		{
+			int i = 0;
+
+			while (str[i])
+			{
+				str[i] = (char)ft_toupper(str[i]);
+				i++;
+			}
+			if (fdatas->flag & FLAG_NUMBERSIGN)
+				ft_strprepend(&str, "0X");
+		}
+		else if (fdatas->flag & FLAG_NUMBERSIGN)
+			ft_strprepend(&str, "0x");
+
+		fdatas->precision = fdatas->precision - ft_strlen(str);
+		fdatas->precision = (fdatas->precision > 0) ? fdatas->precision : 0;
+		fdatas->width = fdatas->width - fdatas->precision - ft_strlen(str);
+		if (fdatas->flag & FLAG_LESS)
+			justify(str, fdatas);
+		while (fdatas->width > 0)
+		{
+			if (!(fdatas->flag & FLAG_MORE || fdatas->flag & FLAG_SPACE) || fdatas->width > 1)
+				fdatas->bcount += write(1, &fdatas->fill_char, 1);
+			fdatas->width--;
+		}
+		if (!(fdatas->flag & FLAG_LESS))
+			justify(str, fdatas);
+
+		//fdatas->bcount += ft_putstr(str);
 		ft_strdel(&str);
-		offset++;
 	}
-	else if (format[offset] == 'X')
-	{
-		if (fdatas->length == LENGTH_NONE)
-			str = ft_uitoa(va_arg(ap, unsigned int));
-		else if (fdatas->length == LENGTH_HH)
-			str = ft_uitoa((unsigned char)va_arg(ap, unsigned int));
-		else if (fdatas->length == LENGTH_H)
-			str = ft_uitoa((unsigned short int)va_arg(ap, unsigned int));
-		else if (fdatas->length == LENGTH_L)
-			str = ft_uimaxtoa((unsigned long int)va_arg(ap, unsigned long int));
-		else if (fdatas->length == LENGTH_LL)
-			str = ft_uimaxtoa((unsigned long long int)va_arg(ap, unsigned long long int));
-		else if (fdatas->length == LENGTH_J)
-			str = ft_uimaxtoa((uintmax_t)va_arg(ap, uintmax_t));
-		else if (fdatas->length == LENGTH_Z)
-			str = ft_uimaxtoa((size_t)va_arg(ap, size_t));
-
-	}
-	else if (format[offset] == 'c')
+	else if (fdatas->specifier == 'c')
 	{
 		if (fdatas->length == LENGTH_NONE)
 			c = va_arg(ap, int);
@@ -299,7 +305,6 @@ static int		read_arg(va_list ap, const char *format, t_fdata *fdatas)
 		c = (char)va_arg(ap, int);
 		ft_putchar(c);
 		fdatas->bcount++;
-		offset++;
 	}
 	else
 	{
@@ -307,18 +312,26 @@ static int		read_arg(va_list ap, const char *format, t_fdata *fdatas)
 		//fdatas->precision = fdatas->precision;
 		//fdatas->precision = (fdatas->precision > 0) ? fdatas->precision : 0;
 		//fdatas->width = fdatas->width - fdatas->precision;
+
+		fdatas->flag ^= (fdatas->flag & FLAG_SPACE) ? FLAG_SPACE : FLAG_NONE;
+		fdatas->flag ^= (fdatas->flag & FLAG_MORE) ? FLAG_MORE : FLAG_NONE;
+		if (fdatas->flag & FLAG_LESS)
+			justify("%", fdatas);
 		fdatas->width--;
 		while (fdatas->width > 0)
 		{
-			if (!(fdatas->flag & FLAG_MORE || fdatas->flag & FLAG_SPACE) || fdatas->width > 1)
+			if (!(fdatas->flag & FLAG_MORE) || fdatas->width > 1)
 				fdatas->bcount += write(1, &fdatas->fill_char, 1);
 			fdatas->width--;
 		}
-		fdatas->bcount += write(1, "%", 1);
-		offset++;
+		if (!(fdatas->flag & FLAG_LESS))
+			justify("%", fdatas);
+		//if (fdatas->flag & FLAG_SPACE)
+		//	fdatas->bcount++;
+		//fdatas->bcount += write(1, "%", 1);
 	}
 
-	return (offset);
+	return (++offset);
 }
 
 int				ft_printf(const char * restrict format, ...)
@@ -339,11 +352,11 @@ int				ft_printf(const char * restrict format, ...)
 	{
 		if (format[i] == '%')
 		{
-			i++;
 			length = to_idx - from_idx;
 			if (length > 0)
 				fdatas.bcount += write(1, &format[from_idx], length);
-			from_idx = i + read_arg(ap, &format[i], &fdatas);
+			i += read_arg(ap, &format[i + 1], &fdatas);
+			from_idx = i + 1;
 		}
 		to_idx = ++i;
 	}
