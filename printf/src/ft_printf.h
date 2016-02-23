@@ -43,6 +43,7 @@ typedef struct	s_fdata
 	int			width;
 	int			precision;
 	int			bcount;
+	char		specifier;
 	char		fill_char;
 }				t_fdata;
 

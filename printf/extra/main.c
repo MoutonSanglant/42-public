@@ -8,7 +8,8 @@
 //#define PRECISION
 //#define LENGTH
 //#define UNICODE
-#define NOSPEC
+//#define NOSPEC
+#define HEX
 
 int main(void)
 {
@@ -42,12 +43,18 @@ int main(void)
 # ifdef SPECIFIERS
 
 	ft_putendl("Specifier: %%");
-	printf(" (%i)\n", printf("std: %%"));
-	printf(" (%i)\n", ft_printf("ft_: %%"));
-	printf(" (%i)\n", printf("std: %%i"));
-	printf(" (%i)\n", ft_printf("ft_: %%i"));
-	printf(" (%i)\n", printf("std: %% is a percent symbol"));
-	printf(" (%i)\n", ft_printf("ft_: %% is a percent symbol"));
+	ft_putstr("std:");
+	printf(" (%i)\n", printf("%%"));
+	ft_putstr("ft_:");
+	printf(" (%i)\n", ft_printf("%%"));
+	ft_putstr("std:");
+	printf(" (%i)\n", printf("%%i"));
+	ft_putstr("ft_:");
+	printf(" (%i)\n", ft_printf("%%i"));
+	ft_putstr("std:");
+	printf(" (%i)\n", printf("%% is a percent symbol"));
+	ft_putstr("ft_:");
+	printf(" (%i)\n", ft_printf("%% is a percent symbol"));
 	ft_putstr("\n");
 
 	ft_putendl("Specifier: %s %S");
@@ -64,8 +71,8 @@ int main(void)
 
 	ft_putendl("Specifier: %p");
 	printf(" (%i)\n", printf("std: %p", str));
-	printf(" (%i)\n", printf("std: %p", "constant"));
 	printf(" (%i)\n", ft_printf("ft_: %p", str));
+	printf(" (%i)\n", printf("std: %p", "constant"));
 	printf(" (%i)\n", ft_printf("ft_: %p", "constant"));
 	printf(" (%i)\n", printf("std: %p", NULL));
 	printf(" (%i)\n", ft_printf("ft_: %p", NULL));
@@ -115,24 +122,45 @@ int main(void)
 
 	ft_putendl("Flag: +");
 	ft_putendl("Specifier: %d %D");
-	printf(" (%i)\n", printf("std: %+d", nb));
-	printf(" (%i)\n", ft_printf("ft_: %+d", nb));
+	ft_putstr("std:");
+	printf(" (%i)\n", printf("%+d", nb));
+	ft_putstr("ft_:");
+	printf(" (%i)\n", ft_printf("%+d", nb));
 	ft_putendl("Specifier: %i");
-	printf(" (%i)\n", printf("std: %-+-+d", nb));
-	printf(" (%i)\n", ft_printf("ft_: %-+-+d", nb));
+	ft_putstr("std:");
+	printf(" (%i)\n", printf("%-+-+d", nb));
+	ft_putstr("ft_:");
+	printf(" (%i)\n", ft_printf("%-+-+d", nb));
 	ft_putstr("\n");
-
 	ft_putendl("Flag: {space}");
-	printf(" (%i)\n", printf("std: % i", nb));
-	printf(" (%i)\n", ft_printf("ft_: % i", nb));
-#endif
-#ifdef WIDTH
+	ft_putstr("std:");
+	printf(" (%i)\n", printf("% i", nb));
+	ft_putstr("ft_:");
+	printf(" (%i)\n", ft_printf("% i", nb));
+	ft_putstr("\n");
+	ft_putendl("Flag: #");
+	ft_putstr("std:");
+	printf(" (%i)\n", printf("%#x", 42));
+	ft_putstr("ft_:");
+	printf(" (%i)\n", ft_printf("%#x", 42));
+	ft_putstr("std:");
+	printf(" (%i)\n", printf("%#X", 42));
+	ft_putstr("ft_:");
+	printf(" (%i)\n", ft_printf("%#X", 42));
+	ft_putstr("std:");
+	printf(" (%i)\n", printf("%#o", 42));
+	ft_putstr("ft_:");
+	printf(" (%i)\n", ft_printf("%#o", 42));
+# endif
+# ifdef WIDTH
 	ft_putendl("Width: printf(\"%5i\", 42)");
-	printf(" (%i)\n", printf("std: %5i", 42));
-	printf(" (%i)\n", ft_printf("ft_: %5i", 42 ));
+	ft_putstr("std:");
+	printf(" (%i)\n", printf("%5i", 42));
+	ft_putstr("ft_:");
+	printf(" (%i)\n", ft_printf("%5i", 42 ));
 	ft_putstr("\n");
 # endif
-#ifdef PRECISION
+# ifdef PRECISION
 	ft_putendl("Precision: printf(\"%.5i\", 42)");
 	printf(" (%i)\n", printf("std: %.5i", 42));
 	printf(" (%i)\n", ft_printf("ft_: %.5i", 42));
@@ -144,33 +172,53 @@ int main(void)
 	printf(" (%i)\n", ft_printf("ft_: % .5i", -42));
 	ft_putstr("\n");
 # endif
-#ifdef LENGTH
+# ifdef LENGTH
 	ft_putendl("Length: printf(\"%hi\", 44200)");
-	printf(" (%i)\n", printf("std: %hi", 44200));
-	printf(" (%i)\n", ft_printf("ft_: %hi", 44200));
-	printf(" (%i)\n", printf("std: %hhi", 44200));
-	printf(" (%i)\n", ft_printf("ft_: %hhi", 44200));
-	printf(" (%i)\n", printf("std: %i", 2147483650));
-	printf(" (%i)\n", ft_printf("ft_: %i", 2147483650));
-	printf(" (%i)\n", printf("std: %li", 2147483650));
-	printf(" (%i)\n", ft_printf("ft_: %li", 2147483650));
-	printf(" (%i)\n", printf("std: %lli", 9223372036854775807));
-	printf(" (%i)\n", ft_printf("ft_: %lli", 9223372036854775807));
-	printf(" (%i)\n", printf("std: %ji", 9223372036854775807));
-	printf(" (%i)\n", ft_printf("ft_: %ji", 9223372036854775807));
-	printf(" (%i)\n", printf("std: %zi", 9223372036854775807));
-	printf(" (%i)\n", ft_printf("ft_: %zi", 9223372036854775807));
-	printf(" (%i)\n", printf("std: %i", 9223372036854775807));
-	printf(" (%i)\n", ft_printf("ft_: %i", 9223372036854775807));
+	ft_putstr("std:");
+	printf(" (%i)\n", printf("%hi", 44200));
+	ft_putstr("ft_:");
+	printf(" (%i)\n", ft_printf("%hi", 44200));
+	ft_putstr("std:");
+	printf(" (%i)\n", printf("%hhi", 44200));
+	ft_putstr("ft_:");
+	printf(" (%i)\n", ft_printf("%hhi", 44200));
+	ft_putstr("std:");
+	printf(" (%i)\n", printf("%i", 2147483650));
+	ft_putstr("ft_:");
+	printf(" (%i)\n", ft_printf("%i", 2147483650));
+	ft_putstr("std:");
+	printf(" (%i)\n", printf("%li", 2147483650));
+	ft_putstr("ft_:");
+	printf(" (%i)\n", ft_printf("%li", 2147483650));
+	ft_putstr("std:");
+	printf(" (%i)\n", printf("%lli", 9223372036854775807));
+	ft_putstr("ft_:");
+	printf(" (%i)\n", ft_printf("%lli", 9223372036854775807));
+	ft_putstr("std:");
+	printf(" (%i)\n", printf("%ji", 9223372036854775807));
+	ft_putstr("ft_:");
+	printf(" (%i)\n", ft_printf("%ji", 9223372036854775807));
+	ft_putstr("std:");
+	printf(" (%i)\n", printf("%zi", 9223372036854775807));
+	ft_putstr("ft_:");
+	printf(" (%i)\n", ft_printf("%zi", 9223372036854775807));
+	ft_putstr("std:");
+	printf(" (%i)\n", printf("%i", 9223372036854775807));
+	ft_putstr("ft_:");
+	printf(" (%i)\n", ft_printf("%i", 9223372036854775807));
 	ft_putstr("\n");
+	ft_putstr("std:");
+	printf(" (%i)\n", printf("%#llx", 9223372036854775807));
+	ft_putstr("ft_:");
+	printf(" (%i)\n", ft_printf("%#llx", 9223372036854775807));
 # endif
-#ifdef UNICODE
+# ifdef UNICODE
 	ft_putendl("Width: printf(\"éç\")");
 	printf(" (%i)\n", printf("std: éç"));
 	printf(" (%i)\n", ft_printf("ft_: éç"));
 	ft_putstr("\n");
 # endif
-#ifdef NOSPEC
+# ifdef NOSPEC
 	ft_putendl("printf(\"\")");
 	ft_putstr("std:");
 	printf("(%i)\n", printf(""));
@@ -188,6 +236,56 @@ int main(void)
 	printf("(%i)\n", printf("%5%"));
 	ft_putstr("ft_:");
 	printf("(%i)\n", ft_printf("%5%"));
+	ft_putstr("\n");
+	ft_putendl("printf(\"%-5%\")");
+	ft_putstr("std:");
+	printf("(%i)\n", printf("%-5%"));
+	ft_putstr("ft_:");
+	printf("(%i)\n", ft_printf("%-5%"));
+	ft_putstr("\n");
+	ft_putendl("printf(\"%   %\")");
+	ft_putstr("std:");
+	printf("(%i)\n", printf("%   %"));
+	ft_putstr("ft_:");
+	printf("(%i)\n", ft_printf("%   %"));
+	ft_putstr("\n");
+	ft_putendl("printf(\"%+%\")");
+	ft_putstr("std:");
+	printf("(%i)\n", printf("%+%"));
+	ft_putstr("ft_:");
+	printf("(%i)\n", ft_printf("%+%"));
+	ft_putstr("\n");
+# endif
+# ifdef HEX
+	ft_putendl("printf(\"%x\", 42)");
+	ft_putstr("std:");
+	printf(" (%i)\n", printf("%x", 42));
+	ft_putstr("ft_:");
+	printf(" (%i)\n", ft_printf("%x", 42));
+	ft_putstr("\n");
+	ft_putendl("printf(\"%X\", 42)");
+	ft_putstr("std:");
+	printf(" (%i)\n", printf("%X", 42));
+	ft_putstr("ft_:");
+	printf(" (%i)\n", ft_printf("%X", 42));
+	ft_putstr("\n");
+	ft_putendl("printf(\"%10x\", 42)");
+	ft_putstr("std:");
+	printf(" (%i)\n", printf("%10x", 42));
+	ft_putstr("ft_:");
+	printf(" (%i)\n", ft_printf("%10x", 42));
+	ft_putstr("\n");
+	ft_putendl("printf(\"%-10x\", 42)");
+	ft_putstr("std:");
+	printf(" (%i)\n", printf("%-10x", 42));
+	ft_putstr("ft_:");
+	printf(" (%i)\n", ft_printf("%-10x", 42));
+	ft_putstr("\n");
+	ft_putendl("printf(\"%#08x\", 42)");
+	ft_putstr("std:");
+	printf(" (%i)\n", printf("%#8x", 42));
+	ft_putstr("ft_:");
+	printf(" (%i)\n", ft_printf("%#8x", 42));
 	ft_putstr("\n");
 # endif
 #else

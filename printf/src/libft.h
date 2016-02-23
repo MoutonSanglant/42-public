@@ -101,9 +101,12 @@ char			**ft_strsplit(const char *s, char c);
 char			*ft_itoa(int n);
 
 char			*ft_itoa_base(int64_t n, int base);
+char			*ft_uitoa_base(uintmax_t n, int base);
 char			*ft_imaxtoa(intmax_t n);
 char			*ft_uitoa(unsigned int n);
 char			*ft_uimaxtoa(uintmax_t n);
+
+void			ft_strprepend(char **str, char *prefix);
 
 /*
 **	CHECKS
