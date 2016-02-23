@@ -45,7 +45,7 @@ islower isspace pow lstsize dl_lstnew dl_lstfront dl_lstback dl_lstpushfront \
 dl_lstpushback dl_lstpopfront dl_lstpopback dl_lstiter dl_lstmap dl_lstsize \
 dl_lstclear queuenew queuefront queueback queuepush queuepop queuesize \
 stacknew stackpush stackpop stacksize lstgetat putaddr itoa_base printf imaxtoa \
-uitoa uimaxtoa uitoa_base strprepend
+uitoa uimaxtoa uitoa_base strprepend print_formated_string
 
 SRC := $(addsuffix .c, $(SRC))
 SRC := $(addprefix $(SRC_PREFIX)ft_, $(SRC))
