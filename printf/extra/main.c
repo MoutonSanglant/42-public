@@ -3,15 +3,15 @@
 
 #define EXPLICIT
 //#define SPECIFIERS
-#define FLAGS
+//#define FLAGS
 //#define WIDTH
 //#define PRECISION
 //#define LENGTH
 //#define UNICODE
-//#define NOSPEC
 //#define HEX
 //#define UNSIGNED
 //#define CHAR
+#define NOSPEC
 
 int main(void)
 {
@@ -306,6 +306,12 @@ int main(void)
 	ft_putstr("ft_:");
 	printf("(%i)\n", ft_printf("%+%"));
 	ft_putstr("\n");
+	ft_putendl("printf(\"% .3%\")");
+	ft_putstr("std:");
+	printf("(%i)\n", printf("% .3%"));
+	ft_putstr("ft_:");
+	printf("(%i)\n", ft_printf("% .3%"));
+	ft_putstr("\n");
 # endif
 # ifdef HEX
 	ft_putendl("printf(\"%x\", 42)");
@@ -524,6 +530,24 @@ int main(void)
 	printf(" (%i)\n", printf("%#5.c, %#5.0c", 0, 0));
 	ft_putstr("ft_:");
 	printf(" (%i)\n", ft_printf("%#5.c, %#5.0c", 0, 0));
+	ft_putstr("\n");
+	ft_putendl("printf(\"%#.2c, NULL)");
+	ft_putstr("std:");
+	printf(" (%i)\n", printf("%#.2c", NULL));
+	ft_putstr("ft_:");
+	printf(" (%i)\n", ft_printf("%#.2c", NULL));
+	ft_putstr("\n");
+	ft_putendl("printf(\"%# c, 42)");
+	ft_putstr("std:");
+	printf(" (%i)\n", printf("%# c", 42));
+	ft_putstr("ft_:");
+	printf(" (%i)\n", ft_printf("%# c", 42));
+	ft_putstr("\n");
+	ft_putendl("printf(\"%# .3c, 42)");
+	ft_putstr("std:");
+	printf(" (%i)\n", printf("%# .3c", 42));
+	ft_putstr("ft_:");
+	printf(" (%i)\n", ft_printf("%# .3c", 42));
 	ft_putstr("\n");
 # endif
 
