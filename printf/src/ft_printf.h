@@ -51,6 +51,13 @@ typedef struct	s_fdata
 	char		fill_char;
 }				t_fdata;
 
+void	ft_print_formated_char(va_list ap, t_fdata *fdatas);
 void	ft_print_formated_string(va_list ap, t_fdata *fdatas);
+void	ft_print_formated_pointer(va_list ap, t_fdata *fdatas);
+void	ft_print_formated_digit(va_list ap, t_fdata *fdatas);
+void	ft_print_formated_octal(va_list ap, t_fdata *fdatas);
+void	ft_print_formated_hex(va_list ap, t_fdata *fdatas);
+void	ft_print_formated_unsigned(va_list ap, t_fdata *fdatas);
+void	ft_print_formated_space(t_fdata *fdatas);
 
 #endif
