@@ -1,0 +1,62 @@
+<html>
+	<head>
+		<title>snap</title>
+	</head>
+	<body>
+		<script src="snap.svg-min.js"></script>
+		<script>
+			// SVG namespace
+			var xmlns = "http://www.w3.org/2000/svg";
+			var draw_svg;
+			window.onload = function()
+			{
+				draw_svg = Snap.select("#draw_svg");
+				Snap.load('animation_test.svg', callback);
+			}
+			function	callback(data)
+			{
+				draw_svg.append(data);
+				var timer;
+				
+				function start()
+				{
+					clearTimeout(timer);
+
+					// Place the node in last position to put the triangle
+					// at most-foreground
+					this.animate({
+						fill: "green"
+					}, 700);
+/*
+					this.animate({
+						transform: "r45," + pivots[this.idx][0] + "," + pivots[this.idx][1] + ",s2,2," + pivots[this.idx][0] + "," + pivots[this.idx][1]
+					}, 700, mina.backin);
+					//group.clear();
+*/				}
+
+				function end(elem)
+				{
+					clearTimeout(timer);
+
+					elem.animate({
+						fill: "red"
+					}, 700);
+					elem.animate({
+						transform: "r0,0,0,s1,1,0,0"
+
+					}, 700, mina.elastic);
+				}
+
+				var poly = draw_svg.selectAll("polygon");
+				console.log(poly);
+				poly.forEach(function (elem, i) {
+					elem.idx = i;
+					timer = setTimeout((function(e){end(e);}(elem)), 200);
+					elem.hover(start, function() { timer = setTimeout((function(e){end(e);})(this), 200)}, elem, elem);
+				});
+			}
+		</script>
+		<svg version="1.1" id="draw_svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" xml:space="preserve">
+		</svg>
+	</body>
+</html>
