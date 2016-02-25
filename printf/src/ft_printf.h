@@ -24,7 +24,6 @@ typedef enum	e_fflag
 	FLAG_SPACE		= 0x4,
 	FLAG_NUMBERSIGN	= 0x8,
 	FLAG_ZERO		= 0x10
-	//FLAG_DOT		= 0x10,
 }				t_fflag;
 
 typedef enum	e_flength
