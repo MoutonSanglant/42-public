@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/24 09:47:23 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/25 15:28:13 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/25 16:16:29 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,7 @@
 
 static void		justify(char *str, t_fdata *fdatas)
 {
-	if (fdatas->flag & FLAG_MORE && str[0] != '-')
-		fdatas->bcount += write(1, "+", 1);
-	else if (str[0] == '-')
+	if (str[0] == '-')
 	{
 		if (fdatas->precision > 0)
 		{
@@ -25,6 +23,8 @@ static void		justify(char *str, t_fdata *fdatas)
 			str[0] = '0';
 		}
 	}
+	else if (fdatas->flag & FLAG_MORE)
+		fdatas->bcount += write(1, "+", 1);
 	else if (fdatas->flag & FLAG_SPACE)
 		fdatas->bcount += write(1, " ", 1);
 	while (fdatas->precision-- > 0)
@@ -51,14 +51,8 @@ void	ft_print_formated_octal(va_list ap, t_fdata *fdatas)
 		str = ft_uitoa_base((uintmax_t)va_arg(ap, uintmax_t), 8);
 	else if (fdatas->length == LENGTH_Z)
 		str = ft_uitoa_base((size_t)va_arg(ap, size_t), 8);
-	if (!(fdatas->flag & FLAG_NUMBERSIGN) && str[0] == '0')
-	{
-		//if (fdatas->precision != 0)
+	if (str[0] == '0' && (fdatas->precision == 0 || fdatas->flag & FLAG_NUMBERSIGN))
 		str[0] = '\0';
-		//fdatas->flag |= FLAG_NUMBERSIGN;
-		//if (fdatas->precision == 0)
-			fdatas->flag ^= (fdatas->flag & FLAG_NUMBERSIGN) ? FLAG_NUMBERSIGN : FLAG_ZERO;
-	}
 	fdatas->precision = fdatas->precision - ft_strlen(str);
 	fdatas->precision = (fdatas->precision > 0) ? fdatas->precision : 0;
 	fdatas->width = fdatas->width - fdatas->precision - ft_strlen(str);
