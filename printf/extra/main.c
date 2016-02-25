@@ -9,9 +9,10 @@
 //#define LENGTH
 //#define UNICODE
 //#define HEX
+#define OCTAL
 //#define UNSIGNED
 //#define CHAR
-#define NOSPEC
+//#define NOSPEC
 
 int main(void)
 {
@@ -386,6 +387,98 @@ int main(void)
 	printf(" (%i)\n", ft_printf("%#5.x, %#5.0x", 0, 0));
 	ft_putstr("\n");
 # endif
+# ifdef OCTAL
+	ft_putendl("printf(\"%o\", 42)");
+	ft_putstr("std:");
+	printf(" (%i)\n", printf("%o", 42));
+	ft_putstr("ft_:");
+	printf(" (%i)\n", ft_printf("%o", 42));
+	ft_putstr("\n");
+	ft_putendl("printf(\"%o\", 42)");
+	ft_putstr("std:");
+	printf(" (%i)\n", printf("%o", 42));
+	ft_putstr("ft_:");
+	printf(" (%i)\n", ft_printf("%o", 42));
+	ft_putstr("\n");
+	ft_putendl("printf(\"%10o\", 42)");
+	ft_putstr("std:");
+	printf(" (%i)\n", printf("%10o", 42));
+	ft_putstr("ft_:");
+	printf(" (%i)\n", ft_printf("%10o", 42));
+	ft_putstr("\n");
+	ft_putendl("printf(\"%-10o\", 42)");
+	ft_putstr("std:");
+	printf(" (%i)\n", printf("%-10o", 42));
+	ft_putstr("ft_:");
+	printf(" (%i)\n", ft_printf("%-10o", 42));
+	ft_putstr("\n");
+	ft_putendl("printf(\"%#08o\", 42)");
+	ft_putstr("std:");
+	printf(" (%i)\n", printf("%#08o", 42));
+	ft_putstr("ft_:");
+	printf(" (%i)\n", ft_printf("%#08o", 42));
+	ft_putstr("\n");
+	ft_putendl("printf(\"%#-08o\", 42)");
+	ft_putstr("std:");
+	printf(" (%i)\n", printf("%#-08o", 42));
+	ft_putstr("ft_:");
+	printf(" (%i)\n", ft_printf("%#-08o", 42));
+	ft_putstr("\n");
+	ft_putendl("printf(\"%#8o\", 42)");
+	ft_putstr("std:");
+	printf(" (%i)\n", printf("%#8o", 42));
+	ft_putstr("ft_:");
+	printf(" (%i)\n", ft_printf("%#8o", 42));
+	ft_putstr("\n");
+	ft_putendl("printf(\"%#-8o\", 42)");
+	ft_putstr("std:");
+	printf(" (%i)\n", printf("%#-8o", 42));
+	ft_putstr("ft_:");
+	printf(" (%i)\n", ft_printf("%#-8o", 42));
+	ft_putstr("\n");
+	ft_putendl("printf(\"%#o\", 0)");
+	ft_putstr("std:");
+	printf(" (%i)\n", printf("%#o", 0));
+	ft_putstr("ft_:");
+	printf(" (%i)\n", ft_printf("%#o", 0));
+	ft_putstr("\n");
+	ft_putendl("printf(\"%#o\", 42)");
+	ft_putstr("std:");
+	printf(" (%i)\n", printf("%#o", 42));
+	ft_putstr("ft_:");
+	printf(" (%i)\n", ft_printf("%#o", 42));
+	ft_putstr("\n");
+	ft_putendl("printf(\"%#.o, %#.0o\", 0, 0)");
+	ft_putstr("std:");
+	printf(" (%i)\n", printf("%#.o, %#.0o", 0, 0));
+	ft_putstr("ft_:");
+	printf(" (%i)\n", ft_printf("%#.o, %#.0o", 0, 0));
+	ft_putstr("\n");
+	ft_putendl("printf(\"%#5.o, %#5.0o\", 0, 0)");
+	ft_putstr("std:");
+	printf(" (%i)\n", printf("%#5.o, %#5.0o", 0, 0));
+	ft_putstr("ft_:");
+	printf(" (%i)\n", ft_printf("%#5.o, %#5.0o", 0, 0));
+	ft_putstr("\n");
+	ft_putendl("printf(\"%.o, %.0o\", 0, 0)");
+	ft_putstr("std:");
+	printf(" (%i)\n", printf("%.o, %.0o", 0, 0));
+	ft_putstr("ft_:");
+	printf(" (%i)\n", ft_printf("%.o, %.0o", 0, 0));
+	ft_putstr("\n");
+	ft_putendl("printf(\"%5.o, %5.0o\", 0, 0)");
+	ft_putstr("std:");
+	printf(" (%i)\n", printf("%5.o, %5.0o", 0, 0));
+	ft_putstr("ft_:");
+	printf(" (%i)\n", ft_printf("%5.o, %5.0o", 0, 0));
+	ft_putstr("\n");
+	ft_putendl("printf(\"%o\", 0)");
+	ft_putstr("std:");
+	printf(" (%i)\n", printf("%o", 0));
+	ft_putstr("ft_:");
+	printf(" (%i)\n", ft_printf("%o", 0));
+	ft_putstr("\n");
+# endif
 # ifdef UNSIGNED
 	ft_putendl("printf(\"%u\", 42)");
 	ft_putstr("std:");
@@ -548,6 +641,12 @@ int main(void)
 	printf(" (%i)\n", printf("%# .3c", 42));
 	ft_putstr("ft_:");
 	printf(" (%i)\n", ft_printf("%# .3c", 42));
+	ft_putstr("\n");
+	ft_putendl("printf(\"%.2c, NULL)");
+	ft_putstr("std:");
+	printf(" (%i)\n", printf("%.2c", NULL));
+	ft_putstr("ft_:");
+	printf(" (%i)\n", ft_printf("%.2c", NULL));
 	ft_putstr("\n");
 # endif
 
