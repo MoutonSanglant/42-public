@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/24 09:32:47 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/26 03:08:09 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/26 23:00:10 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,18 +64,18 @@ static char		*str_from_arg(va_list ap, t_fdata *fdatas)
 {
 	if (fdatas->length == LENGTH_NONE)
 		return (ft_itoa(va_arg(ap, int)));
-	else if (fdatas->length == LENGTH_HH)
-		return (ft_itoa((signed char)va_arg(ap, int)));
-	else if (fdatas->length == LENGTH_H)
-		return (ft_itoa((short int)va_arg(ap, int)));
-	else if (fdatas->length == LENGTH_L)
-		return (ft_imaxtoa((long int)va_arg(ap, long int)));
-	else if (fdatas->length == LENGTH_LL)
-		return (ft_imaxtoa((long long int)va_arg(ap, long long int)));
-	else if (fdatas->length == LENGTH_J)
-		return (ft_imaxtoa((intmax_t)va_arg(ap, intmax_t)));
-	else if (fdatas->length == LENGTH_Z)
+	else if (fdatas->length & LENGTH_Z)
 		return (ft_imaxtoa((size_t)va_arg(ap, size_t)));
+	else if (fdatas->length & LENGTH_J)
+		return (ft_imaxtoa((intmax_t)va_arg(ap, intmax_t)));
+	else if (fdatas->length & LENGTH_LL)
+		return (ft_imaxtoa((long long int)va_arg(ap, long long int)));
+	else if (fdatas->length & LENGTH_L)
+		return (ft_imaxtoa((long int)va_arg(ap, long int)));
+	else if (fdatas->length & LENGTH_H)
+		return (ft_itoa((short int)va_arg(ap, int)));
+	else if (fdatas->length & LENGTH_HH)
+		return (ft_itoa((signed char)va_arg(ap, int)));
 	return (NULL);
 }
 

@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/24 09:47:23 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/25 16:16:29 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/26 22:59:20 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,25 +32,30 @@ static void		justify(char *str, t_fdata *fdatas)
 	fdatas->bcount += ft_putstr(str);
 }
 
+static char		*str_from_arg(va_list ap, t_fdata *fdatas)
+{
+	if (fdatas->length == LENGTH_NONE)
+		return (ft_itoa_base(va_arg(ap, unsigned int), 8));
+	else if (fdatas->length & LENGTH_Z)
+		return (ft_itoa_base((size_t)va_arg(ap, size_t), 8));
+	else if (fdatas->length & LENGTH_J)
+		return (ft_itoa_base((uintmax_t)va_arg(ap, uintmax_t), 8));
+	else if (fdatas->length & LENGTH_LL)
+		return (ft_itoa_base((unsigned long long int)va_arg(ap, unsigned long long int), 8));
+	else if (fdatas->length & LENGTH_L)
+		return (ft_itoa_base((unsigned long int)va_arg(ap, unsigned long int), 8));
+	else if (fdatas->length & LENGTH_H)
+		return (ft_itoa_base((unsigned short int)va_arg(ap, unsigned int), 8));
+	else if (fdatas->length & LENGTH_HH)
+		return (ft_itoa_base((unsigned char)va_arg(ap, unsigned int), 8));
+	return (NULL);
+}
+
 void	ft_print_formated_octal(va_list ap, t_fdata *fdatas)
 {
 	char	*str;
 
-	str = NULL;
-	if (fdatas->length == LENGTH_NONE)
-		str = ft_uitoa_base(va_arg(ap, unsigned int), 8);
-	else if (fdatas->length == LENGTH_HH)
-		str = ft_uitoa_base((unsigned char)va_arg(ap, unsigned int), 8);
-	else if (fdatas->length == LENGTH_H)
-		str = ft_uitoa_base((unsigned short int)va_arg(ap, unsigned int), 8);
-	else if (fdatas->length == LENGTH_L)
-		str = ft_uitoa_base((unsigned long int)va_arg(ap, unsigned long int), 8);
-	else if (fdatas->length == LENGTH_LL)
-		str = ft_uitoa_base((unsigned long long int)va_arg(ap, unsigned long long int), 8);
-	else if (fdatas->length == LENGTH_J)
-		str = ft_uitoa_base((uintmax_t)va_arg(ap, uintmax_t), 8);
-	else if (fdatas->length == LENGTH_Z)
-		str = ft_uitoa_base((size_t)va_arg(ap, size_t), 8);
+	str = str_from_arg(ap, fdatas);
 	if (str[0] == '0' && (fdatas->precision == 0 || fdatas->flag & FLAG_NUMBERSIGN))
 		str[0] = '\0';
 	fdatas->precision = fdatas->precision - ft_strlen(str);
