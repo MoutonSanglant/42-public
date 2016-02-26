@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/24 09:41:18 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/26 16:49:48 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/26 22:59:37 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,18 +35,18 @@ static char		*str_from_arg(va_list ap, t_fdata *fdatas)
 {
 	if (fdatas->length == LENGTH_NONE)
 		return (ft_uitoa((unsigned int)va_arg(ap, unsigned int)));
-	else if (fdatas->length == LENGTH_HH)
-		return (ft_uitoa((unsigned char)va_arg(ap, unsigned int)));
-	else if (fdatas->length == LENGTH_H)
-		return (ft_uitoa((unsigned short int)va_arg(ap, unsigned int)));
-	else if (fdatas->length == LENGTH_L)
-		return (ft_uitoa((unsigned long int)va_arg(ap, unsigned long int)));
-	else if (fdatas->length == LENGTH_LL)
-		return (ft_uitoa((unsigned long long int)va_arg(ap, unsigned long long int)));
-	else if (fdatas->length == LENGTH_J)
-		return (ft_uitoa((uintmax_t)va_arg(ap, uintmax_t)));
-	else if (fdatas->length == LENGTH_Z)
+	else if (fdatas->length & LENGTH_Z)
 		return(ft_uitoa((size_t)va_arg(ap, size_t)));
+	else if (fdatas->length & LENGTH_J)
+		return (ft_uitoa((uintmax_t)va_arg(ap, uintmax_t)));
+	else if (fdatas->length & LENGTH_LL)
+		return (ft_uitoa((unsigned long long int)va_arg(ap, unsigned long long int)));
+	else if (fdatas->length & LENGTH_L)
+		return (ft_uitoa((unsigned long int)va_arg(ap, unsigned long int)));
+	else if (fdatas->length & LENGTH_H)
+		return (ft_uitoa((unsigned short int)va_arg(ap, unsigned int)));
+	else if (fdatas->length & LENGTH_HH)
+		return (ft_uitoa((unsigned char)va_arg(ap, unsigned int)));
 	return (NULL);
 }
 

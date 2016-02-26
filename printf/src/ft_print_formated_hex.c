@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/24 09:37:24 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/24 09:38:24 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/26 23:00:22 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,25 +32,32 @@ static void		justify(char *str, t_fdata *fdatas)
 	fdatas->bcount += ft_putstr(str);
 }
 
-void	ft_print_formated_hex(va_list ap, t_fdata *fdatas)
+static char		*str_from_arg(va_list ap, t_fdata *fdatas)
+{
+	if (fdatas->length == LENGTH_NONE)
+		return (ft_itoa_base((unsigned int)va_arg(ap, unsigned int), 16));
+	else if (fdatas->length & LENGTH_Z)
+		return (ft_itoa_base((size_t)va_arg(ap, size_t), 16));
+	else if (fdatas->length & LENGTH_J)
+		return (ft_itoa_base((uintmax_t)va_arg(ap, uintmax_t), 16));
+	else if (fdatas->length & LENGTH_LL)
+		return (ft_itoa_base((unsigned long long int)va_arg(ap, unsigned long long int), 16));
+	else if (fdatas->length & LENGTH_L)
+		return (ft_itoa_base((unsigned long int)va_arg(ap, unsigned long int), 16));
+	else if (fdatas->length & LENGTH_H)
+		return (ft_itoa_base((unsigned int)va_arg(ap, unsigned int), 16));
+	else if (fdatas->length & LENGTH_HH)
+		return (ft_itoa_base((unsigned int)va_arg(ap, unsigned int), 16));
+	return (NULL);
+}
+
+void	ft_print_formated_hex(va_list ap, t_fdata *fdatas, char specifier)
 {
 	char	*str;
+	int		len;
+	int		i;
 
-	str = NULL;
-	if (fdatas->length == LENGTH_NONE)
-		str = ft_uitoa_base((uintmax_t)va_arg(ap, unsigned int), 16);
-	else if (fdatas->length == LENGTH_HH)
-		str = ft_uitoa_base((uintmax_t)va_arg(ap, unsigned int), 16);
-	else if (fdatas->length == LENGTH_H)
-		str = ft_uitoa_base((uintmax_t)va_arg(ap, unsigned int), 16);
-	else if (fdatas->length == LENGTH_L)
-		str = ft_uitoa_base((uintmax_t)va_arg(ap, unsigned long int), 16);
-	else if (fdatas->length == LENGTH_LL)
-		str = ft_uitoa_base((uintmax_t)va_arg(ap, unsigned long long int), 16);
-	else if (fdatas->length == LENGTH_J)
-		str = ft_uitoa_base((uintmax_t)va_arg(ap, uintmax_t), 16);
-	else if (fdatas->length == LENGTH_Z)
-		str = ft_uitoa_base((uintmax_t)va_arg(ap, size_t), 16);
+	str = str_from_arg(ap, fdatas);
 
 	if (str[0] == '0')
 	{
@@ -58,9 +65,9 @@ void	ft_print_formated_hex(va_list ap, t_fdata *fdatas)
 			str[0] = '\0';
 		fdatas->flag ^= (fdatas->flag & FLAG_NUMBERSIGN) ? FLAG_NUMBERSIGN : FLAG_ZERO;
 	}
-	if (fdatas->specifier == 'X')
+	if (specifier == 'X')
 	{
-		int i = 0;
+		i = 0;
 
 		while (str[i])
 		{
@@ -68,20 +75,20 @@ void	ft_print_formated_hex(va_list ap, t_fdata *fdatas)
 			i++;
 		}
 	}
-
-	fdatas->precision = fdatas->precision - ft_strlen(str);
+	len = ft_strlen(str);
+	fdatas->precision = fdatas->precision - len;
 	fdatas->precision = (fdatas->precision > 0) ? fdatas->precision : 0;
-	fdatas->width = fdatas->width - fdatas->precision - ft_strlen(str);
+	fdatas->width = fdatas->width - fdatas->precision - len;
 	if (fdatas->flag & FLAG_NUMBERSIGN)
 	{
 		fdatas->width -= 2;
 		if (fdatas->flag & FLAG_ZERO)
-			fdatas->bcount += write(1, (fdatas->specifier == 'x') ? "0x" : "0X", 2);
+			fdatas->bcount += write(1, (specifier == 'x') ? "0x" : "0X", 2);
 	}
 	if (fdatas->flag & FLAG_LESS)
 	{
 		if (fdatas->flag & FLAG_NUMBERSIGN && !(fdatas->flag & FLAG_ZERO))
-			fdatas->bcount += write(1, (fdatas->specifier == 'x') ? "0x" : "0X", 2);
+			fdatas->bcount += write(1, (specifier == 'x') ? "0x" : "0X", 2);
 		justify(str, fdatas);
 	}
 
@@ -94,7 +101,7 @@ void	ft_print_formated_hex(va_list ap, t_fdata *fdatas)
 	if (!(fdatas->flag & FLAG_LESS))
 	{
 		if (fdatas->flag & FLAG_NUMBERSIGN && !(fdatas->flag & FLAG_ZERO))
-			fdatas->bcount += write(1, (fdatas->specifier == 'x') ? "0x" : "0X", 2);
+			fdatas->bcount += write(1, (specifier == 'x') ? "0x" : "0X", 2);
 		justify(str, fdatas);
 	}
 
