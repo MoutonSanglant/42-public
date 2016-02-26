@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/23 10:54:58 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/23 10:56:57 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/26 00:54:06 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static char		*to_base(uintmax_t value, size_t base)
 	}
 	return (str);
 }
-
+#include<stdio.h>
 char			*ft_uitoa_base(uintmax_t value, int base)
 {
 	char	*str;
@@ -52,8 +52,8 @@ char			*ft_uitoa_base(uintmax_t value, int base)
 	else if (base < 2 || base > 16)
 		str = NULL;
 	else if (base == 10)
-		str = ft_itoa(value);
+		str = ft_uitoa(value);
 	else
-		str = to_base((uint64_t)value, (size_t)base);
+		str = to_base((uintmax_t)value, (size_t)base);
 	return (str);
 }

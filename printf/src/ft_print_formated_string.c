@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/23 16:07:37 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/23 16:17:14 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/25 23:01:57 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,8 @@ void	ft_print_formated_string(va_list ap, t_fdata *fdatas)
 		s = ft_strdup("(null)");
 	else
 		s = ft_strdup(str);
-	fdatas->precision = (fdatas->precision >= 0) ? fdatas->precision : ft_strlen(s);
-	fdatas->precision = ((size_t)fdatas->precision < ft_strlen(s)) ? fdatas->precision : ft_strlen(s);
+	fdatas->precision = (fdatas->precision >= 0) ? fdatas->precision :(int)ft_strlen(s);
+	fdatas->precision = ((size_t)fdatas->precision < ft_strlen(s)) ? fdatas->precision : (int)ft_strlen(s);
 	fdatas->width = fdatas->width - fdatas->precision;
 	if (fdatas->flag & FLAG_LESS)
 		justify(s, fdatas);
