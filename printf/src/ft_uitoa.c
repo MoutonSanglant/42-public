@@ -6,13 +6,13 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/18 22:08:44 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/23 10:54:38 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/26 16:48:51 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static size_t	nbr_length(unsigned int n)
+static size_t	nbr_length(uintmax_t n)
 {
 	size_t		i;
 
@@ -27,7 +27,7 @@ static size_t	nbr_length(unsigned int n)
 	return (i);
 }
 
-char			*ft_uitoa(unsigned int n)
+char			*ft_uitoa(uintmax_t n)
 {
 	char			*str;
 	size_t			l;

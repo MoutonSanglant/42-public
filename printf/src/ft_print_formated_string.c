@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/23 16:07:37 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/25 23:01:57 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/26 17:04:14 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,8 @@ void	ft_print_formated_string(va_list ap, t_fdata *fdatas)
 	str = NULL;
 	if (fdatas->length == LENGTH_NONE)
 		str = va_arg(ap, char *);
-	//	else if (fdatas->length == LENGTH_L)
-	//		str = (wchar_t *)va_arg(ap, wchar_t *);
+//	else if (fdatas->length == LENGTH_L)
+//		str = (wchar_t *)va_arg(ap, wchar_t *);
 	if (!str)
 		s = ft_strdup("(null)");
 	else

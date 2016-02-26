@@ -11,8 +11,8 @@
 //#define HEX
 //#define OCTAL
 //#define CHAR
-#define DIGIT
-//#define UNSIGNED
+//#define DIGIT
+#define UNSIGNED
 //#define NOSPEC
 
 int main(void)
@@ -647,6 +647,30 @@ int main(void)
 	printf(" (%i)\n", printf("%-7.4u", -42));
 	ft_putstr("ft_:");
 	printf(" (%i)\n", ft_printf("%-7.4u", -42));
+	ft_putstr("\n");
+	ft_putendl("printf(\"%u, -1)");
+	ft_putstr("std:");
+	printf(" (%i)\n", printf("%u", -1));
+	ft_putstr("ft_:");
+	printf(" (%i)\n", ft_printf("%u", -1));
+	ft_putstr("\n");
+	ft_putendl("printf(\"% u, 1)");
+	ft_putstr("std:");
+	printf(" (%i)\n", printf("% u", 1));
+	ft_putstr("ft_:");
+	printf(" (%i)\n", ft_printf("% u", 1));
+	ft_putstr("\n");
+	ft_putendl("printf(\"%lu, 4294967296)");
+	ft_putstr("std:");
+	printf(" (%i)\n", printf("%lu", 4294967296));
+	ft_putstr("ft_:");
+	printf(" (%i)\n", ft_printf("%lu", 4294967296));
+	ft_putstr("\n");
+	ft_putendl("printf(\"%ju, 4999999999)");
+	ft_putstr("std:");
+	printf(" (%i)\n", printf("%ju", 4999999999));
+	ft_putstr("ft_:");
+	printf(" (%i)\n", ft_printf("%ju", 4999999999));
 	ft_putstr("\n");
 
 # endif

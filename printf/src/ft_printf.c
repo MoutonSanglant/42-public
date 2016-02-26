@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/14 15:08:07 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/24 09:55:23 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/26 17:03:55 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,19 +120,21 @@ static int		read_arg(va_list ap, const char *format, t_fdata *fdatas)
 	fdatas->specifier = format[offset];
 
 	specifier = fdatas->specifier;
-	if (specifier == 's')
+	if (specifier == 'D' || specifier == 'O' || specifier == 'U' || specifier == 'C' || specifier == 'S')
+		fdatas->length = LENGTH_L;
+	if (specifier == 's' || specifier == 'S')
 		ft_print_formated_string(ap, fdatas);
 	else if (specifier == 'p')
 		ft_print_formated_pointer(ap, fdatas);
-	else if (specifier == 'i' || specifier == 'd')
+	else if (specifier == 'i' || specifier == 'd' || specifier == 'D')
 		ft_print_formated_digit(ap, fdatas);
-	else if (specifier == 'o')
+	else if (specifier == 'o' || specifier == 'O')
 		ft_print_formated_octal(ap, fdatas);
-	else if (specifier == 'u')
+	else if (specifier == 'u' || specifier == 'U')
 		ft_print_formated_unsigned(ap, fdatas);
 	else if (specifier == 'x' || specifier == 'X')
 		ft_print_formated_hex(ap, fdatas);
-	else if (specifier == 'c')
+	else if (specifier == 'c' || specifier == 'C')
 		ft_print_formated_char(ap, fdatas);
 	else
 		ft_print_formated_space(fdatas);
