@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/14 15:08:07 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/26 23:01:34 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/26 23:13:04 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,6 @@ static const char		*get_format_datas(const char *format, const char *specifier, 
 static const char		*read_arg(va_list ap, const char *format, t_fdata *fdatas)
 {
 	const char	*specifier;
-
 	if (!(specifier = ft_strpbrk(format, "sSpdDioOuUxXcC%")))
 		specifier = get_format_datas(format, format + ft_strlen(format), fdatas);
 	else
