@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/24 09:41:18 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/26 03:03:41 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/26 16:49:48 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,26 +24,8 @@ static void		justify_left(t_fdata *fdatas, char *str)
 
 static void		justify_right(t_fdata *fdatas, char *str)
 {
-	if (fdatas->flag & FLAG_ZERO)
-	{
-		if ((fdatas->flag & FLAG_SPACE))
-		{
-			fdatas->bcount += write(1, " ", 1);
-			fdatas->width--;
-		}
-		while (fdatas->width-- > 0)
-			fdatas->bcount += write(1, &fdatas->fill_char, 1);
-	}
-	else
-	{
-		if ((fdatas->flag & FLAG_SPACE))
-		{
-			fdatas->bcount += write(1, " ", 1);
-			fdatas->width--;
-		}
-		while (fdatas->width-- > 0)
-			fdatas->bcount += write(1, &fdatas->fill_char, 1);
-	}
+	while (fdatas->width-- > 0)
+		fdatas->bcount += write(1, &fdatas->fill_char, 1);
 	while (fdatas->precision-- > 0)
 		fdatas->bcount += write(1, "0", 1);
 	fdatas->bcount += ft_putstr(str);
@@ -74,7 +56,6 @@ void	ft_print_formated_unsigned(va_list ap, t_fdata *fdatas)
 	int				len;
 
 	str = str_from_arg(ap, fdatas);
-
 	if (str[0] == '0' && fdatas->precision == 0)
 		str[0] = '\0';
 	if (fdatas->precision >= 0)
