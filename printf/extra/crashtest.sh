@@ -11,4 +11,4 @@ make
 cd $cur_dir
 gcc -Wall -Werror -Wextra -Wno-format -o crashtest ./main.c -L../ -lftprintf -I../includes
 #gcc -Wall -Werror -Wextra -o crashtest ./main.c -L../ -lftprintf -I../includes
-./crashtest
+valgrind --leak-check=yes ./crashtest
