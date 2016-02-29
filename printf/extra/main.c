@@ -4,9 +4,9 @@
 #define EXPLICIT
 //#define SPECIFIERS
 //#define FLAGS
-#define WIDTH
+//#define WIDTH
 //#define PRECISION
-#define LENGTH
+//#define LENGTH
 //#define UNICODE
 //#define HEX
 //#define OCTAL
@@ -15,7 +15,7 @@
 //#define UNSIGNED
 //#define NOSPEC
 //#define UNSPEC
-//#define HARDCORE
+#define HARDCORE
 
 int main(void)
 {
