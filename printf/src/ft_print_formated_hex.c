@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/24 09:37:24 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/26 23:00:22 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/29 10:59:26 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,9 @@ static char		*str_from_arg(va_list ap, t_fdata *fdatas)
 	else if (fdatas->length & LENGTH_J)
 		return (ft_itoa_base((uintmax_t)va_arg(ap, uintmax_t), 16));
 	else if (fdatas->length & LENGTH_LL)
-		return (ft_itoa_base((unsigned long long int)va_arg(ap, unsigned long long int), 16));
+		return (ft_itoa_base((uint64_t)va_arg(ap, uint64_t), 16));
 	else if (fdatas->length & LENGTH_L)
-		return (ft_itoa_base((unsigned long int)va_arg(ap, unsigned long int), 16));
+		return (ft_itoa_base((unsigned long)va_arg(ap, unsigned long), 16));
 	else if (fdatas->length & LENGTH_H)
 		return (ft_itoa_base((unsigned int)va_arg(ap, unsigned int), 16));
 	else if (fdatas->length & LENGTH_HH)
@@ -58,17 +58,16 @@ void	ft_print_formated_hex(va_list ap, t_fdata *fdatas, char specifier)
 	int		i;
 
 	str = str_from_arg(ap, fdatas);
-
 	if (str[0] == '0')
 	{
 		if (fdatas->precision == 0)
 			str[0] = '\0';
-		fdatas->flag ^= (fdatas->flag & FLAG_NUMBERSIGN) ? FLAG_NUMBERSIGN : FLAG_ZERO;
+		fdatas->flag ^= (fdatas->flag & FLAG_NUMBERSIGN)
+							? FLAG_NUMBERSIGN : FLAG_ZERO;
 	}
 	if (specifier == 'X')
 	{
 		i = 0;
-
 		while (str[i])
 		{
 			str[i] = (char)ft_toupper(str[i]);
@@ -94,7 +93,8 @@ void	ft_print_formated_hex(va_list ap, t_fdata *fdatas, char specifier)
 
 	while (fdatas->width > 0)
 	{
-		if (!(fdatas->flag & FLAG_MORE || fdatas->flag & FLAG_SPACE) || fdatas->width > 1)
+		if (!(fdatas->flag & FLAG_MORE || fdatas->flag & FLAG_SPACE)
+													|| fdatas->width > 1)
 			fdatas->bcount += write(1, &fdatas->fill_char, 1);
 		fdatas->width--;
 	}
@@ -104,7 +104,5 @@ void	ft_print_formated_hex(va_list ap, t_fdata *fdatas, char specifier)
 			fdatas->bcount += write(1, (specifier == 'x') ? "0x" : "0X", 2);
 		justify(str, fdatas);
 	}
-
-	//fdatas->bcount += ft_putstr(str);
 	ft_strdel(&str);
 }

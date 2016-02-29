@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/23 16:07:37 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/26 17:04:14 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/29 10:51:11 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static void		justify(char *str, t_fdata *fdatas)
 	fdatas->bcount += write(1, str, fdatas->precision);
 }
 
-void	ft_print_formated_string(va_list ap, t_fdata *fdatas)
+void			ft_print_formated_string(va_list ap, t_fdata *fdatas)
 {
 	char	*str;
 	char	*s;
@@ -44,14 +44,17 @@ void	ft_print_formated_string(va_list ap, t_fdata *fdatas)
 		s = ft_strdup("(null)");
 	else
 		s = ft_strdup(str);
-	fdatas->precision = (fdatas->precision >= 0) ? fdatas->precision :(int)ft_strlen(s);
-	fdatas->precision = ((size_t)fdatas->precision < ft_strlen(s)) ? fdatas->precision : (int)ft_strlen(s);
+	fdatas->precision = (fdatas->precision >= 0)
+							? fdatas->precision : (int)ft_strlen(s);
+	fdatas->precision = ((size_t)fdatas->precision < ft_strlen(s))
+							? fdatas->precision : (int)ft_strlen(s);
 	fdatas->width = fdatas->width - fdatas->precision;
 	if (fdatas->flag & FLAG_LESS)
 		justify(s, fdatas);
 	while (fdatas->width > 0)
 	{
-		if (!(fdatas->flag & FLAG_MORE || fdatas->flag & FLAG_SPACE) || fdatas->width > 1)
+		if (!(fdatas->flag & FLAG_MORE || fdatas->flag & FLAG_SPACE)
+													|| fdatas->width > 1)
 			fdatas->bcount += write(1, &fdatas->fill_char, 1);
 		fdatas->width--;
 	}

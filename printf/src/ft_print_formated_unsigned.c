@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/24 09:41:18 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/26 22:59:37 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/29 11:01:40 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static char		*str_from_arg(va_list ap, t_fdata *fdatas)
 	else if (fdatas->length & LENGTH_J)
 		return (ft_uitoa((uintmax_t)va_arg(ap, uintmax_t)));
 	else if (fdatas->length & LENGTH_LL)
-		return (ft_uitoa((unsigned long long int)va_arg(ap, unsigned long long int)));
+		return (ft_uitoa((uint64_t)va_arg(ap, uint64_t)));
 	else if (fdatas->length & LENGTH_L)
 		return (ft_uitoa((unsigned long int)va_arg(ap, unsigned long int)));
 	else if (fdatas->length & LENGTH_H)
@@ -50,7 +50,7 @@ static char		*str_from_arg(va_list ap, t_fdata *fdatas)
 	return (NULL);
 }
 
-void	ft_print_formated_unsigned(va_list ap, t_fdata *fdatas)
+void			ft_print_formated_unsigned(va_list ap, t_fdata *fdatas)
 {
 	char			*str;
 	int				len;
