@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/14 15:08:07 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/29 11:33:44 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/29 18:00:21 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,29 +51,29 @@
 **	s max character printed
 */
 
-static int			get_precision_width_length(const char *f, t_fdata *d)
+static int			get_precision_width_length(const char **f, t_fdata *d)
 {
-	if (*f == '.' && f++)
+	if (**f == '.' && (*f += 1))
 	{
-		d->precision = ft_atoi(f);
-		while (ft_isdigit(*f))
-			f++;
-		f--;
+		d->precision = ft_atoi(*f);
+		while (ft_isdigit(**f))
+			*f += 1;
+		*f -= 1;
 	}
-	else if (ft_isdigit(*f))
+	else if (ft_isdigit(**f))
 	{
-		d->width = ft_atoi(f);
-		while (ft_isdigit(*f))
-			f++;
-		f--;
+		d->width = ft_atoi(*f);
+		while (ft_isdigit(**f))
+			*f += 1;
+		*f -= 1;
 	}
-	else if (*f == 'h')
-		d->length |= (*(f + 1) == 'h' && f++) ? LENGTH_HH : LENGTH_H;
-	else if (*f == 'l')
-		d->length |= (*(f + 1) == 'l' && f++) ? LENGTH_LL : LENGTH_L;
-	else if (*f == 'j')
+	else if (**f == 'h')
+		d->length |= (*(*f + 1) == 'h' && (*f += 1)) ? LENGTH_HH : LENGTH_H;
+	else if (**f == 'l')
+		d->length |= (*(*f + 1) == 'l' && (*f += 1)) ? LENGTH_LL : LENGTH_L;
+	else if (**f == 'j')
 		d->length |= LENGTH_J;
-	else if (*f == 'z')
+	else if (**f == 'z')
 		d->length |= LENGTH_Z;
 	else
 		return (0);
@@ -103,7 +103,7 @@ static const char	*get_format_datas(const char *format,
 			d->flag |= FLAG_NUMBERSIGN;
 		else if (*format == '0')
 			d->flag |= FLAG_ZERO;
-		else if (!get_precision_width_length(format, d))
+		else if (!get_precision_width_length(&format, d))
 		{
 			specifier = format;
 			break ;
