@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/24 09:47:23 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/26 22:59:20 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/29 10:49:50 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,12 +51,13 @@ static char		*str_from_arg(va_list ap, t_fdata *fdatas)
 	return (NULL);
 }
 
-void	ft_print_formated_octal(va_list ap, t_fdata *fdatas)
+void			ft_print_formated_octal(va_list ap, t_fdata *fdatas)
 {
 	char	*str;
 
 	str = str_from_arg(ap, fdatas);
-	if (str[0] == '0' && (fdatas->precision == 0 || fdatas->flag & FLAG_NUMBERSIGN))
+	if (str[0] == '0'
+			&& (fdatas->precision == 0 || fdatas->flag & FLAG_NUMBERSIGN))
 		str[0] = '\0';
 	fdatas->precision = fdatas->precision - ft_strlen(str);
 	fdatas->precision = (fdatas->precision > 0) ? fdatas->precision : 0;
@@ -75,7 +76,8 @@ void	ft_print_formated_octal(va_list ap, t_fdata *fdatas)
 	}
 	while (fdatas->width > 0)
 	{
-		if (!(fdatas->flag & FLAG_MORE || fdatas->flag & FLAG_SPACE) || fdatas->width > 1)
+		if (!(fdatas->flag & FLAG_MORE
+					|| fdatas->flag & FLAG_SPACE) || fdatas->width > 1)
 			fdatas->bcount += write(1, &fdatas->fill_char, 1);
 		fdatas->width--;
 	}

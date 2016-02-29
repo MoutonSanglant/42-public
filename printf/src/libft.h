@@ -146,7 +146,7 @@ void			ft_putnbr_fd(int n, int fd);
 int				ft_putunbr(unsigned int n);
 int				ft_putaddr(const void *addr);
 
-int				ft_printf(const char * restrict format, ...);
+int				ft_printf(const char *restrict format, ...);
 
 /*
 **	FORWARD LISTS

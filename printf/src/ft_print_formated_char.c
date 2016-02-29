@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/24 09:45:47 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/25 14:50:40 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/29 10:49:09 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static void		justify(char c, t_fdata *fdatas)
 	fdatas->bcount += write(1, &c, 1);
 }
 
-void	ft_print_formated_char(va_list ap, t_fdata *fdatas)
+void			ft_print_formated_char(va_list ap, t_fdata *fdatas)
 {
 	char	c;
 

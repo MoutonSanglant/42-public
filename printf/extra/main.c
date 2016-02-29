@@ -4,18 +4,18 @@
 #define EXPLICIT
 //#define SPECIFIERS
 //#define FLAGS
-//#define WIDTH
+#define WIDTH
 //#define PRECISION
-//#define LENGTH
+#define LENGTH
 //#define UNICODE
 //#define HEX
 //#define OCTAL
 //#define CHAR
 //#define DIGIT
 //#define UNSIGNED
-#define NOSPEC
-#define UNSPEC
-#define HARDCORE
+//#define NOSPEC
+//#define UNSPEC
+//#define HARDCORE
 
 int main(void)
 {
@@ -1210,10 +1210,10 @@ int main(void)
 	printf(" (%i)\n", ft_printf("%jhjhd", 9223372036854775807));
 	ft_putstr("\n");
 int i = 2147483647;
- long l = 2147483647;
- long long ll = 9223372036854775807;
- char c = 0;
- intmax_t im = 9223372036854775807;
+long l = 2147483647;
+long long ll = 9223372036854775807;
+char c = 0;
+intmax_t im = 9223372036854775807;
 
 	printf("\n");
 	fflush(stdout);

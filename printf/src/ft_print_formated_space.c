@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/24 09:44:05 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/26 21:41:45 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/29 10:50:05 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static int		format_error(const char *format, t_fdata *fdatas)
 	return (0);
 }
 
-void	ft_print_formated_space(const char *format, t_fdata *fdatas)
+void			ft_print_formated_space(const char *format, t_fdata *fdatas)
 {
 	if (format_error(format, fdatas))
 		return ;

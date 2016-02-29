@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/24 09:32:47 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/26 23:00:10 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/29 10:51:58 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ static void		justify_right(t_fdata *fdatas, char *str)
 	while (fdatas->precision-- > 0)
 		fdatas->bcount += write(1, "0", 1);
 	fdatas->bcount += ft_putstr(str);
-
 }
 
 static char		*str_from_arg(va_list ap, t_fdata *fdatas)
@@ -79,7 +78,7 @@ static char		*str_from_arg(va_list ap, t_fdata *fdatas)
 	return (NULL);
 }
 
-void	ft_print_formated_digit(va_list ap, t_fdata *fdatas)
+void			ft_print_formated_digit(va_list ap, t_fdata *fdatas)
 {
 	char	*str;
 	int		len;

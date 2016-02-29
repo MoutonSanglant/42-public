@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/14 15:08:07 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/26 23:13:04 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/29 11:33:44 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "ft_printf.h"
 
 /*
-**	printf is formated such as
+**	printf format usage
 **	%[flags][width][.precision][length]specifier
 */
 
@@ -46,116 +46,105 @@
 */
 
 /*
-static t_fflag		get_flags(const char *format, int *offset)
-{
-	t_fflag		flag;
-
-	flag = 0;
-	if (format[*offset] == '-' && ++(*offset))
-		flag |= FLAG_LESS | get_flags(format, offset);
-	else if (format[*offset] == '+' && ++(*offset))
-		flag |= FLAG_MORE | get_flags(format, offset);
-	else if (format[*offset] == ' ' && ++(*offset))
-		flag |= FLAG_SPACE | get_flags(format, offset);
-	else if (format[*offset] == '#' && ++(*offset))
-		flag |= FLAG_NUMBERSIGN | get_flags(format, offset);
-	else if (format[*offset] == '0' && ++(*offset))
-		flag |= FLAG_ZERO | get_flags(format, offset);
-	return (flag);
-}
-*/
-
-/*
 **	.precision:
 **	d i o u x X
-**
 **	s max character printed
 */
 
-static const char		*get_format_datas(const char *format, const char *specifier, t_fdata *fdatas)
+static int			get_precision_width_length(const char *f, t_fdata *d)
 {
-	fdatas->flag = FLAG_NONE;
-	fdatas->width = 0;
-	fdatas->precision = -1;
-	fdatas->length = LENGTH_NONE;
+	if (*f == '.' && f++)
+	{
+		d->precision = ft_atoi(f);
+		while (ft_isdigit(*f))
+			f++;
+		f--;
+	}
+	else if (ft_isdigit(*f))
+	{
+		d->width = ft_atoi(f);
+		while (ft_isdigit(*f))
+			f++;
+		f--;
+	}
+	else if (*f == 'h')
+		d->length |= (*(f + 1) == 'h' && f++) ? LENGTH_HH : LENGTH_H;
+	else if (*f == 'l')
+		d->length |= (*(f + 1) == 'l' && f++) ? LENGTH_LL : LENGTH_L;
+	else if (*f == 'j')
+		d->length |= LENGTH_J;
+	else if (*f == 'z')
+		d->length |= LENGTH_Z;
+	else
+		return (0);
+	return (1);
+}
+
+/*
+**	Problem with fill_char & problem with width...
+*/
+
+static const char	*get_format_datas(const char *format,
+									const char *specifier, t_fdata *d)
+{
+	d->flag = FLAG_NONE;
+	d->width = 0;
+	d->precision = -1;
+	d->length = LENGTH_NONE;
 	while (format < specifier)
 	{
 		if (*format == '-')
-			fdatas->flag |= FLAG_LESS;
+			d->flag |= FLAG_LESS;
 		else if (*format == '+')
-			fdatas->flag |= FLAG_MORE;
+			d->flag |= FLAG_MORE;
 		else if (*format == ' ')
-			fdatas->flag |= FLAG_SPACE;
+			d->flag |= FLAG_SPACE;
 		else if (*format == '#')
-			fdatas->flag |= FLAG_NUMBERSIGN;
+			d->flag |= FLAG_NUMBERSIGN;
 		else if (*format == '0')
-			fdatas->flag |= FLAG_ZERO;
-		else if (*format == '.')
-		{
-			format++;
-			fdatas->precision = ft_atoi(format);
-			while (ft_isdigit(*format))
-				format++;
-			format--;
-		}
-		else if (ft_isdigit(*format))
-		{
-			fdatas->width = ft_atoi(format);
-			while (ft_isdigit(*format))
-				format++;
-			format--;
-		}
-		else if (*format == 'h')
-			fdatas->length |= (*(format + 1) == 'h' && format++) ? LENGTH_HH : LENGTH_H;
-		else if (*format == 'l')
-			fdatas->length |= (*(++format + 1) == 'l' && format++) ? LENGTH_LL : LENGTH_L;
-		else if (*format == 'j')
-			fdatas->length |= LENGTH_J;
-		else if (*format == 'z')
-			fdatas->length |= LENGTH_Z;
-		else
+			d->flag |= FLAG_ZERO;
+		else if (!get_precision_width_length(format, d))
 		{
 			specifier = format;
-			break;
+			break ;
 		}
 		format++;
 	}
-	fdatas->fill_char = (fdatas->flag & FLAG_ZERO && !(fdatas->flag & FLAG_LESS)) ? '0' : ' ';
+	d->fill_char = (d->flag & FLAG_ZERO && !(d->flag & FLAG_LESS)) ? '0' : ' ';
 	return (specifier);
 }
 
-static const char		*read_arg(va_list ap, const char *format, t_fdata *fdatas)
+static const char	*read_arg(va_list ap,
+									const char *format, t_fdata *fdatas)
 {
-	const char	*specifier;
-	if (!(specifier = ft_strpbrk(format, "sSpdDioOuUxXcC%")))
-		specifier = get_format_datas(format, format + ft_strlen(format), fdatas);
+	const char	*spec;
+
+	if (!(spec = ft_strpbrk(format, "sSpdDioOuUxXcC%")))
+		spec = get_format_datas(format, format + ft_strlen(format), fdatas);
 	else
-		specifier = get_format_datas(format, specifier, fdatas);
-//	if (!specifier)
-//		return (0);
-	if (ft_strpbrk(specifier, "SDOUC"))
+		spec = get_format_datas(format, spec, fdatas);
+	if (ft_strpbrk(spec, "SDOUC"))
 		fdatas->length = LENGTH_L;
-	if (*specifier == 's' || *specifier == 'S')
+	if (*spec == 's' || *spec == 'S')
 		ft_print_formated_string(ap, fdatas);
-	else if (*specifier == 'p')
+	else if (*spec == 'p')
 		ft_print_formated_pointer(ap, fdatas);
-	else if (*specifier == 'i' || *specifier == 'd' || *specifier == 'D')
+	else if (*spec == 'i' || *spec == 'd' || *spec == 'D')
 		ft_print_formated_digit(ap, fdatas);
-	else if (*specifier == 'o' || *specifier == 'O')
+	else if (*spec == 'o' || *spec == 'O')
 		ft_print_formated_octal(ap, fdatas);
-	else if (*specifier == 'u' || *specifier == 'U')
+	else if (*spec == 'u' || *spec == 'U')
 		ft_print_formated_unsigned(ap, fdatas);
-	else if (*specifier == 'x' || *specifier == 'X')
-		ft_print_formated_hex(ap, fdatas, *specifier);
-	else if (*specifier == 'c' || *specifier == 'C')
+	else if (*spec == 'x' || *spec == 'X')
+		ft_print_formated_hex(ap, fdatas, *spec);
+	else if (*spec == 'c' || *spec == 'C')
 		ft_print_formated_char(ap, fdatas);
 	else
-		ft_print_formated_space(specifier, fdatas);
-
-	return (specifier);
+		ft_print_formated_space(spec, fdatas);
+	return (spec);
 }
 
-int				ft_printf(const char * restrict format, ...)
+int					ft_printf(const char *restrict format, ...)
 {
 	const char	*from_ptr;
 	const char	*to_ptr;
