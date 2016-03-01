@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/14 15:08:07 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/29 18:00:21 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/02/29 21:47:23 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,10 +79,6 @@ static int			get_precision_width_length(const char **f, t_fdata *d)
 		return (0);
 	return (1);
 }
-
-/*
-**	Problem with fill_char & problem with width...
-*/
 
 static const char	*get_format_datas(const char *format,
 									const char *specifier, t_fdata *d)
