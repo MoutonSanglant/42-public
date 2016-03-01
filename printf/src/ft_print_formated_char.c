@@ -21,83 +21,64 @@
 
 #include <stdio.h>
 
+//	h
+// xxxxxxx
+// |0xxxxxxx|
+//	h+1		h
+// yyy|yyxxxxxx|
+// |110yyyyy|10xxxxxx|
+//	h+1			h
+// |zzzzyyyy|yyxxxxxx|
+// |1110zzzz|10yyyyyy|10xxxxxx|
+//	h+2		h+1		h
+// wwwzz|zzzzyyyy|yyxxxxxx|
+// |11110www|10zzzzzz|10yyyyyy|10xxxxxx|
+
 static int		ft_putwchar(wint_t *wi)
 {
-	wint_t	z;
+	unsigned char	*h;
+	char			*str;
+	int				i;
+	int				len;
 
-	char *str;
-	int len;
-	int count;
-	count = 0;
-
-	*wi = L'α';
+	//*wi = L'α';
 	str = ft_itoa_base(*wi, 2);
-	len = ft_strlen(str);
-
-	printf("\nC: %C\n", *wi);
-	//ft_putchar('@');
-	//ft_putstr(ft_itoa_base(*wi, 2));
-	ft_putchar('\n');
-	ft_putchar('w');
-	ft_putchar('\n');
-	ft_putstr(str);
-	ft_putchar('\n');
-	ft_putstr("len: ");
-	ft_putnbr(len);
-	ft_putchar('\n');
-
-	ft_putchar('h');
-	ft_putchar('\n');
-	unsigned char *h;
-	h = (unsigned char *)wi;
-	ft_putstr(ft_itoa_base(*h, 2));
-	ft_putchar('\n');
-	ft_putstr(ft_itoa_base(*(h + 1), 2));
-	ft_putchar('\n');
-	//ft_putchar('M');
-	//ft_putstr(ft_itoa_base(MASK_2B, 2));
+	//ft_putendl("wi:");
+	//ft_putstr(str);
 	//ft_putchar('\n');
+	len = ft_strlen(str);
+	ft_strdel(&str);
+	h = (unsigned char *)wi;
 	if (len <= 7)
 		return (write(1, wi, 1));
 	else if (len <= 11)
 	{
-		int i;
-		/*ft_putchar('\n');
-		ft_putchar('i');
-		ft_putchar('\n');
-		ft_putstr(ft_itoa_base(i, 2));
-		ft_putchar('\n');*/
-		// Write left part, applying mask
-		i = ((((*h & 0b11000000) >> 6) |((*(h + 1) << 2) & 0b00011111)) | 0b11000000);
-		count += write(1, &i, 1);
-		/*ft_putchar('\n');
-		ft_putchar('i');
-		ft_putchar('\n');
-		ft_putstr(ft_itoa_base(i, 2));
-		ft_putchar('\n');*/
+		i = ((((*h & 0b11000000) >> 6) | ((*(h + 1) << 2) & 0b00011111)) | 0b11000000);
+		write(1, &i, 1);
 		// Write right part
 		i = ((*h & 0b00111111) | 0b10000000);
-		count += write(1, &i, 1);
-		//z &= 0b0001111100111111;
-		return (count);
+		write(1, &i, 1);
+		return (2);
 	}
 	else if (len <= 16)
 	{
-		z = *wi;
-		z &= 0b000111110011111100111111;
-		return (write(1, &z, 3));
+		i = (((*(h + 1) & 0b11110000) >> 4) | 0b11100000);
+		write(1, &i, 1);
+		i = ((((*h & 0b11000000) >> 6) | ((*(h + 1) << 2) & 0b00111111)) | 0b10000000);
+		write(1, &i, 1);
+		i = ((*h & 0b00111111) | 0b10000000);
+		write(1, &i, 1);
+		return (3);
 	}
-	else
-	{
-		z = *wi;
-		z &= 0b00011111001111110011111100111111;
-		return (write(1, &z, 4));
-	}
-//	ft_putnbr(MASK_4B);
-//	ft_putchar('\n');
-	(void)wi;
-	//return (0);
-	return (write(1, "@", 1));
+	i = (((*(h + 2) & 0b00011100) >> 2) | 0b11110000);
+	write(1, &i, 1);
+	i = ((((*(h + 1) & 0b11110000) >> 4) | ((*(h + 2) << 4) & 0b00111111)) | 0b10000000);
+	write(1, &i, 1);
+	i = ((((*h & 0b11000000) >> 6) | ((*(h + 1) << 2) & 0b00111111)) | 0b10000000);
+	write(1, &i, 1);
+	i = ((*h & 0b00111111) | 0b10000000);
+	write(1, &i, 1);
+	return (4);
 }
 
 static void		justify(wint_t *wi, t_fdata *fdatas)
