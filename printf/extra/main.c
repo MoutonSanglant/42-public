@@ -1217,9 +1217,9 @@ long long ll = 9223372036854775807;
 char c = 0;
 intmax_t im = 9223372036854775807;
 
-	//setlocale(LC_ALL, "fr_FR.UTF-8");
+	setlocale(LC_ALL, "fr_FR.UTF-8");
 	//setlocale(LC_ALL, "en_US.UTF-8");
-	setlocale(LC_ALL, "");
+	//setlocale(LC_ALL, "");
 	printf("\n");
 	fflush(stdout);
 	ft_printf("\n");
@@ -1270,10 +1270,15 @@ intmax_t im = 9223372036854775807;
 	ft_putstr("4 ft_:");
 	printf(" (%i)\n", ft_printf("%c", 75));
 	ft_putstr("4 std:");
-	printf(" (%i)\n", printf("%C", 15000));
+	printf(" (%i)\n", printf("%C", 8000));
 	fflush(stdout);
 	ft_putstr("4 ft_:");
-	printf(" (%i)\n", ft_printf("%C", 15000));
+	printf(" (%i)\n", ft_printf("%C", 8000));
+	ft_putstr("5 std:");
+	printf(" (%i)\n", printf("%C", 80000));
+	fflush(stdout);
+	ft_putstr("5 ft_:");
+	printf(" (%i)\n", ft_printf("%C", 80000));
 
 # endif
 
