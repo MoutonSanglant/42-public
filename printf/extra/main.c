@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <libft.h>
 
+#include <locale.h>
+
 #define EXPLICIT
 //#define SPECIFIERS
 //#define FLAGS
@@ -1215,6 +1217,9 @@ long long ll = 9223372036854775807;
 char c = 0;
 intmax_t im = 9223372036854775807;
 
+	//setlocale(LC_ALL, "fr_FR.UTF-8");
+	//setlocale(LC_ALL, "en_US.UTF-8");
+	setlocale(LC_ALL, "");
 	printf("\n");
 	fflush(stdout);
 	ft_printf("\n");
@@ -1239,31 +1244,36 @@ intmax_t im = 9223372036854775807;
 	printf("%x %X %p %20.15d\n", 505, 505, &ll, 54321);
 	fflush(stdout);
 	ft_printf("%x %X %p %20.15d\n", 505, 505, &ll, 54321);
-	ft_putstr("\n0 std:");
+	ft_putstr("0 std:");
 	printf("%-10d % d %+d %010d %hhd\n", 3, 3, 3, 1, c);
 	fflush(stdout);
-	ft_putstr("\n0 ft_:");
+	ft_putstr("0 ft_:");
 	ft_printf("%-10d % d %+d %010d %hhd\n", 3, 3, 3, 1, c);
-	ft_putstr("\n1 std:");
+	ft_putstr("1 std:");
 	printf("%jd %zd %u %o %#08x\n", im, (size_t)i, i, 40, 42);
 	fflush(stdout);
-	ft_putstr("\n1 ft_:");
+	ft_putstr("1 ft_:");
 	ft_printf("%jd %zd %u %o %#08x\n", im, (size_t)i, i, 40, 42);
-	ft_putstr("\n2 std:");
-	printf("%x %#X %S %s%s\n", 1000, 1000, L"ݗݜशব", "test", "test2");
+	ft_putstr("2 std:");
+	printf(" (%i)\n", printf("%x %#X %S %s%s", 1000, 1000, L"ݗݜशব", "test", "test2"));
 	fflush(stdout);
-	ft_putstr("\n2 ft_:");
-	ft_printf("%x %#X %S %s%s\n", 1000, 1000, L"ݗݜशব", "test", "test2");
-	ft_putstr("\n3 std:");
-	printf("%s%s%s\n", "test", "test", "test");
+	ft_putstr("2 ft_:");
+	printf(" (%i)\n", ft_printf("%x %#X %S %s%s", 1000, 1000, L"ݗݜशব", "test", "test2"));
+	ft_putstr("3 std:");
+	printf(" (%i)\n", printf("%s%s%s", "test", "test", "test"));
 	fflush(stdout);
-	ft_putstr("\n3 ft_:");
-	ft_printf("%s%s%s\n", "test", "test", "test");
-	ft_putstr("\n4 std:");
-	printf("%C\n", 15000);
+	ft_putstr("3 ft_:");
+	printf(" (%i)\n", ft_printf("%s%s%s", "test", "test", "test"));
+	ft_putstr("4 std:");
+	printf(" (%i)\n", printf("%c", 75));
 	fflush(stdout);
-	ft_putstr("\n4 ft_:");
-	ft_printf("%C\n", 15000);
+	ft_putstr("4 ft_:");
+	printf(" (%i)\n", ft_printf("%c", 75));
+	ft_putstr("4 std:");
+	printf(" (%i)\n", printf("%C", 15000));
+	fflush(stdout);
+	ft_putstr("4 ft_:");
+	printf(" (%i)\n", ft_printf("%C", 15000));
 
 # endif
 
