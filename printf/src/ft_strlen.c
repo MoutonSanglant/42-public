@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/01 12:35:30 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/26 22:16:18 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/01 21:47:36 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,7 @@ size_t	ft_strlen(char const *s)
 
 	if (!s)
 	{
-		ft_putendl("ft_strlen returned the following error:\n\
-					sent parameter is NULL.\n\
-					Verify your code, it is unsafe !!!");
+		ERROR_PARAM("ft_strlen");
 		return (0);
 	}
 	i = 0;

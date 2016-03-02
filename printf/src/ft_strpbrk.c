@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/26 18:55:16 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/26 19:05:00 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/01 21:52:42 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 #ifdef DEBUG
 
-static char		*strpbrk(const char *s1, const char *s2)
+static char		*debug_ft_strpbrk(const char *s1, const char *s2)
 {
 	int		i;
 
@@ -36,12 +36,10 @@ char			*ft_strpbrk(const char *s1, const char *s2)
 {
 	if (!s1 || !s2)
 	{
-		ft_putendl("ft_strpbrk returned the following error:\n\
-					sent parameter is NULL.\n\
-					Verify your code, it is unsafe !!!");
+		ERROR_PARAM("ft_strpbrk");
 		return (NULL);
 	}
-	return (strpbrk(s1, s2));
+	return (debug_ft_strpbrk(s1, s2));
 }
 
 #else

@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/23 12:19:51 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/23 12:32:15 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/01 21:53:06 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,8 @@ void			ft_strprepend(char **str, char *prefix)
 {
 	if (!str || !(*str) || !prefix)
 	{
-		ft_putendl("ft_strprepend returned the following error:\n\
-					sent parameter is NULL.\n\
-					Verify your code, it is unsafe !!!");
-		return (NULL);
+		ERROR_PARAM("ft_strprepend");
+		return ;
 	}
 	prepend(str, prefix);
 }

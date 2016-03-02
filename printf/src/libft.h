@@ -18,10 +18,16 @@
 # include <unistd.h>
 # include <stdint.h>
 # include <limits.h>
+# include <wchar.h>
 
 # define ABS(x) ((x < 0) ? -x : x)
 # define HEX_TABLE(x) "0123456789abcdef"[x]
 
+# ifdef DEBUG
+#  define ERROR_PARAM(fn_name) ft_printf("\n\x1B[31mERROR in libft.a: \
+the function %s %s\n", fn_name, "returned the following error:\n\
+Sent parameter is NULL. Verify your code, it is unsafe !!!\x1B[0m")
+# endif
 typedef struct	s_list
 {
 	void			*content;
@@ -143,6 +149,7 @@ void			ft_putstr_fd(const char *s, int fd);
 void			ft_putendl_fd(const char *s, int fd);
 void			ft_putnbr_fd(int n, int fd);
 
+int				ft_putwchar(wchar_t *unicode_point);
 int				ft_putunbr(unsigned int n);
 int				ft_putaddr(const void *addr);
 
