@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/23 16:07:37 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/02 15:34:18 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/02 18:30:41 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,26 +60,23 @@ static int		justify_long_string(wchar_t *wstr, t_fdata *fdatas, int dry)
 	n = 0;
 	r_bytes = -1;
 	w_bytes = 0;
-	while(wstr[++r_bytes])
+	while (wstr[++r_bytes])
 	{
 		if (wstr[r_bytes] < (1 << 7))
 			n = 1;
 		else if (wstr[r_bytes] < (1 << 11))
 			n = 2;
-		else  if (wstr[r_bytes] < (1 << 16))
+		else if (wstr[r_bytes] < (1 << 16))
 			n = 3;
 		else
 			n = 4;
 		w_bytes += n;
 		if (w_bytes > fdatas->precision)
-		{
-			w_bytes -= n;
 			break ;
-		}
 		else if (!dry)
 			fdatas->bcount += ft_putwchar(&wstr[r_bytes]);
 	}
-	return (w_bytes);
+	return (w_bytes - n);
 }
 
 static void		print_formated_long_string(t_fdata *fdatas, wchar_t *wstr)

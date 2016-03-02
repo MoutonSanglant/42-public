@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/24 09:37:24 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/29 17:32:32 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/02 18:25:18 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,37 @@ static char		*str_from_arg(va_list ap, t_fdata *fdatas)
 	return (NULL);
 }
 
-void	ft_print_formated_hex(va_list ap, t_fdata *fdatas, char specifier)
+static void		print_hex_string(t_fdata *fdatas, char *str, char specifier)
+{
+	if (fdatas->flag & FLAG_NUMBERSIGN)
+	{
+		fdatas->width -= 2;
+		if (fdatas->flag & FLAG_ZERO)
+			fdatas->bcount += write(1, (specifier == 'x') ? "0x" : "0X", 2);
+	}
+	if (fdatas->flag & FLAG_LESS)
+	{
+		if (fdatas->flag & FLAG_NUMBERSIGN && !(fdatas->flag & FLAG_ZERO))
+			fdatas->bcount += write(1, (specifier == 'x') ? "0x" : "0X", 2);
+		justify(str, fdatas);
+	}
+	while (fdatas->width > 0)
+	{
+		if (!(fdatas->flag & FLAG_MORE || fdatas->flag & FLAG_SPACE)
+				|| fdatas->width > 1)
+			fdatas->bcount += write(1, &fdatas->fill_char, 1);
+		fdatas->width--;
+	}
+	if (!(fdatas->flag & FLAG_LESS))
+	{
+		if (fdatas->flag & FLAG_NUMBERSIGN && !(fdatas->flag & FLAG_ZERO))
+			fdatas->bcount += write(1, (specifier == 'x') ? "0x" : "0X", 2);
+		justify(str, fdatas);
+	}
+}
+
+void			ft_print_formated_hex(va_list ap, t_fdata *fdatas,
+										char specifier)
 {
 	char	*str;
 	int		len;
@@ -65,44 +95,14 @@ void	ft_print_formated_hex(va_list ap, t_fdata *fdatas, char specifier)
 		fdatas->flag ^= (fdatas->flag & FLAG_NUMBERSIGN)
 							? FLAG_NUMBERSIGN : FLAG_ZERO;
 	}
+	i = -1;
 	if (specifier == 'X')
-	{
-		i = 0;
-		while (str[i])
-		{
+		while (str[++i])
 			str[i] = (char)ft_toupper(str[i]);
-			i++;
-		}
-	}
 	len = ft_strlen(str);
 	fdatas->precision = fdatas->precision - len;
 	fdatas->precision = (fdatas->precision > 0) ? fdatas->precision : 0;
 	fdatas->width = fdatas->width - fdatas->precision - len;
-	if (fdatas->flag & FLAG_NUMBERSIGN)
-	{
-		fdatas->width -= 2;
-		if (fdatas->flag & FLAG_ZERO)
-			fdatas->bcount += write(1, (specifier == 'x') ? "0x" : "0X", 2);
-	}
-	if (fdatas->flag & FLAG_LESS)
-	{
-		if (fdatas->flag & FLAG_NUMBERSIGN && !(fdatas->flag & FLAG_ZERO))
-			fdatas->bcount += write(1, (specifier == 'x') ? "0x" : "0X", 2);
-		justify(str, fdatas);
-	}
-
-	while (fdatas->width > 0)
-	{
-		if (!(fdatas->flag & FLAG_MORE || fdatas->flag & FLAG_SPACE)
-													|| fdatas->width > 1)
-			fdatas->bcount += write(1, &fdatas->fill_char, 1);
-		fdatas->width--;
-	}
-	if (!(fdatas->flag & FLAG_LESS))
-	{
-		if (fdatas->flag & FLAG_NUMBERSIGN && !(fdatas->flag & FLAG_ZERO))
-			fdatas->bcount += write(1, (specifier == 'x') ? "0x" : "0X", 2);
-		justify(str, fdatas);
-	}
+	print_hex_string(fdatas, str, specifier);
 	ft_strdel(&str);
 }

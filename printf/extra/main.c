@@ -17,7 +17,8 @@
 //#define UNSIGNED
 //#define NOSPEC
 //#define UNSPEC
-#define HARDCORE
+//#define HARDCORE
+#define MOULITEST
 
 int main(void)
 {
@@ -1329,13 +1330,43 @@ int main(void)
 	ft_putstr("X ft_: ");
 	printf(" (%i)\n", ft_printf("%x %#X %-17.11S %s%s", 1000, 1000, L"ݗݜशবݜ", "test", "test2"));
 	ft_putstr("X std: ");
-	printf(" (%i)\n", printf("%x %#X %-17.11S %s%s", 1000, 1000, L"বशݜݗ", "test", "test2"));
+	printf(" (%i)\n", printf("%x %#X %97.35S %s%s", 1000, 1000, L"uèéeêëēėęOবशݜݗèéeêëēėęO", "test", "test2"));
 	fflush(stdout);
 	ft_putstr("X ft_: ");
-	printf(" (%i)\n", ft_printf("%x %#X %-17.11S %s%s", 1000, 1000, L"বशݜݗ", "test", "test2"));
-	ft_putstr("X std: ");
+	printf(" (%i)\n", ft_printf("%x %#X %97.35S %s%s", 1000, 1000, L"uèéeêëēėęOবशݜݗèéeêëēėęO", "test", "test2"));
 # endif
-
+# ifdef MOULITEST
+	ft_putstr("std: ");
+	printf(" (%i)\n", printf("%.c", 0));
+	fflush(stdout);
+	ft_putstr("ft_: ");
+	printf(" (%i)\n", ft_printf("%.c", 0));
+	ft_putstr("std: ");
+	printf(" (%i)\n", printf("%.5c", 0));
+	fflush(stdout);
+	ft_putstr("ft_: ");
+	printf(" (%i)\n", ft_printf("%.5c", 0));
+	ft_putstr("std: ");
+	printf(" (%i)\n", printf("%.5c", 42));
+	fflush(stdout);
+	ft_putstr("ft_: ");
+	printf(" (%i)\n", ft_printf("%.5c", 42));
+	ft_putstr("std: ");
+	printf(" (%i)\n", printf("%.C", 0));
+	fflush(stdout);
+	ft_putstr("ft_: ");
+	printf(" (%i)\n", ft_printf("%.C", 0));
+	ft_putstr("std: ");
+	printf(" (%i)\n", printf("%.5C", 0));
+	fflush(stdout);
+	ft_putstr("ft_: ");
+	printf(" (%i)\n", ft_printf("%.5C", 0));
+	ft_putstr("std: ");
+	printf(" (%i)\n", printf("%.5C", 42));
+	fflush(stdout);
+	ft_putstr("ft_: ");
+	printf(" (%i)\n", ft_printf("%.5C", 42));
+# endif
 #else
 
 	// sS  string of characters
