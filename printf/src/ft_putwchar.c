@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/01 20:40:28 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/01 23:25:09 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/02 14:05:15 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static int		convert(unsigned char *h, char *str, wchar_t c)
 	if (c < (1 << 11))
 		str[i++] = ((((*h & 0b11000000) >> 6) | ((*(h + 1) << 2)
 						& 0b00011111)) | 0b11000000);
-	else 
+	else
 	{
 		if (c < (1 << 16))
 			str[i++] = (((*(h + 1) & 0b11110000) >> 4) | 0b11100000);
@@ -60,19 +60,20 @@ static int		debug_ft_putwchar(wchar_t *unicode_point)
 	wchar_t	c;
 	int		len;
 
+	len = 0;
 	c = *unicode_point;
 	if (c < (1 << 7))
 	{
 		str = ft_strnew(1);
 		str[0] = *((unsigned char *)unicode_point);
-		str[1] = '\0';
+		len = 1;
 	}
 	else
 	{
 		str = ft_strnew(4);
 		len = convert((unsigned char *)unicode_point, str, c);
-		str[len] = '\0';
 	}
+	str[len] = '\0';
 	ft_putstr(str);
 	ft_strdel(&str);
 	return (len);
@@ -93,9 +94,10 @@ int				ft_putwchar(wchar_t *unicode_point)
 int				ft_putwchar(wchar_t *unicode_point)
 {
 	char	*str;
-	int		len;
 	wchar_t	c;
+	int		len;
 
+	len = 0;
 	c = *unicode_point;
 	if (c < (1 << 7))
 	{
@@ -112,8 +114,6 @@ int				ft_putwchar(wchar_t *unicode_point)
 	}
 	ft_putstr(str);
 	ft_strdel(&str);
-	if (str[0] == '\0')
-		len = -1;
 	return (len);
 }
 #endif
