@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/23 16:07:37 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/02 04:23:08 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/02 15:34:18 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,68 +51,51 @@ static void		print_formated_string(t_fdata *fdatas, char *str)
 		justify(str, fdatas);
 }
 
-static void		justify_long_string(wchar_t *wstr, t_fdata *fdatas)
+static int		justify_long_string(wchar_t *wstr, t_fdata *fdatas, int dry)
 {
 	int		r_bytes;
 	int		w_bytes;
+	int		n;
 
+	n = 0;
 	r_bytes = -1;
 	w_bytes = 0;
 	while(wstr[++r_bytes])
 	{
 		if (wstr[r_bytes] < (1 << 7))
-			w_bytes += 1;
+			n = 1;
 		else if (wstr[r_bytes] < (1 << 11))
-			w_bytes += 2;
+			n = 2;
+		else  if (wstr[r_bytes] < (1 << 16))
+			n = 3;
 		else
-			w_bytes += 3;
-		if (w_bytes <= fdatas->precision)
-			fdatas->bcount += ft_putwchar(&wstr[r_bytes]);
-		else
+			n = 4;
+		w_bytes += n;
+		if (w_bytes > fdatas->precision)
+		{
+			w_bytes -= n;
 			break ;
+		}
+		else if (!dry)
+			fdatas->bcount += ft_putwchar(&wstr[r_bytes]);
 	}
+	return (w_bytes);
 }
-
-/*
-**	Issue: not justifying correctly when precision is specified
-**	with a large value...
-*/
 
 static void		print_formated_long_string(t_fdata *fdatas, wchar_t *wstr)
 {
-	int		r_bytes;
 	int		w_bytes;
-	int		noprec;
 
-	noprec = 1;
-	if (fdatas->precision > 0)
-		noprec = 0;
 	fdatas->precision = (fdatas->precision >= 0) ? fdatas->precision : INT_MAX;
-	r_bytes = -1;
-	w_bytes = 0;
-	while (wstr[++r_bytes])
-	{
-		if (wstr[r_bytes] < (1 << 7))
-			w_bytes += 1;
-		else if (wstr[r_bytes] < (1 << 11))
-			w_bytes += 2;
-		else
-			w_bytes += 3;
-		if (w_bytes > fdatas->precision)
-			break ;
-	}
-	r_bytes--;
+	w_bytes = justify_long_string(wstr, fdatas, 1);
 	if (fdatas->flag & FLAG_LESS)
-		justify_long_string(wstr, fdatas);
+		justify_long_string(wstr, fdatas, 0);
 	fdatas->width = (fdatas->width > 0) ? fdatas->width : 0;
-	if (noprec)
-		fdatas->width -= w_bytes;
-	else
-		fdatas->width += r_bytes - fdatas->precision;
+	fdatas->width -= w_bytes;
 	while (fdatas->width-- > 0)
-		fdatas->bcount += write(1, " ", 1);
+		fdatas->bcount += write(1, &fdatas->fill_char, 1);
 	if (!(fdatas->flag & FLAG_LESS))
-		justify_long_string(wstr, fdatas);
+		justify_long_string(wstr, fdatas, 0);
 }
 
 void			ft_print_formated_string(va_list ap, t_fdata *fdatas)
