@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/23 16:07:37 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/02 18:30:41 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/02 21:51:07 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,12 +71,12 @@ static int		justify_long_string(wchar_t *wstr, t_fdata *fdatas, int dry)
 		else
 			n = 4;
 		w_bytes += n;
-		if (w_bytes > fdatas->precision)
+		if (w_bytes > fdatas->precision && (w_bytes -= n))
 			break ;
 		else if (!dry)
 			fdatas->bcount += ft_putwchar(&wstr[r_bytes]);
 	}
-	return (w_bytes - n);
+	return (w_bytes);
 }
 
 static void		print_formated_long_string(t_fdata *fdatas, wchar_t *wstr)
@@ -95,17 +95,19 @@ static void		print_formated_long_string(t_fdata *fdatas, wchar_t *wstr)
 		justify_long_string(wstr, fdatas, 0);
 }
 
-void			ft_print_formated_string(va_list ap, t_fdata *fdatas)
+void			ft_print_formated_string(va_list ap, t_fdata *fdatas, char *s)
 {
 	wchar_t		*wstr;
 	char		*str;
 
 	str = NULL;
 	wstr = NULL;
-	if (fdatas->length == LENGTH_NONE)
-		str = va_arg(ap, char *);
+	if (s != NULL)
+		str = s;
 	else if (fdatas->length == LENGTH_L)
 		wstr = (wchar_t *)va_arg(ap, wchar_t *);
+	else
+		str = va_arg(ap, char *);
 	if (!str && !wstr)
 	{
 		fdatas->precision = (fdatas->precision < 0) ? 7 : fdatas->precision;

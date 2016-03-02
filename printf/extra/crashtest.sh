@@ -11,6 +11,6 @@ cd ..
 make
 cd $cur_dir
 gcc -Wall -Werror -Wextra -Wno-format -o crashtest ./main.c -L../ -lftprintf -I../includes
-valgrind --leak-check=yes ./crashtest
-#./crashtest
+#~/.brew/Cellar/valgrind/3.11.0/bin/valgrind --leak-check=yes ./crashtest
+./crashtest
 rm crashtest

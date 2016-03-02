@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/14 15:08:07 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/29 21:47:23 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/02 21:51:12 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,22 @@ static const char	*get_format_datas(const char *format,
 	return (specifier);
 }
 
+static int			is_long(const char *spec)
+{
+	char	*str;
+
+	str = ft_strnew(1);
+	str[0] = spec[0];
+	str[1] = '\0';
+	if (ft_strpbrk(str, "SDOUC"))
+	{
+		ft_strdel(&str);
+		return (1);
+	}
+	ft_strdel(&str);
+	return (0);
+}
+
 static const char	*read_arg(va_list ap,
 									const char *format, t_fdata *fdatas)
 {
@@ -119,10 +135,10 @@ static const char	*read_arg(va_list ap,
 		spec = get_format_datas(format, format + ft_strlen(format), fdatas);
 	else
 		spec = get_format_datas(format, spec, fdatas);
-	if (ft_strpbrk(spec, "SDOUC"))
+	if (is_long(spec))
 		fdatas->length = LENGTH_L;
 	if (*spec == 's' || *spec == 'S')
-		ft_print_formated_string(ap, fdatas);
+		ft_print_formated_string(ap, fdatas, NULL);
 	else if (*spec == 'p')
 		ft_print_formated_pointer(ap, fdatas);
 	else if (*spec == 'i' || *spec == 'd' || *spec == 'D')
@@ -154,7 +170,7 @@ int					ft_printf(const char *restrict format, ...)
 	{
 		fdatas.bcount += write(1, from_ptr, (to_ptr - from_ptr));
 		to_ptr = read_arg(ap, (to_ptr + 1), &fdatas) + 1;
-		if (fdatas.flag == FLAG_FORMAT_ERROR)
+		if (fdatas.flag & FLAG_FORMAT_ERROR)
 			return (fdatas.bcount);
 		from_ptr = to_ptr;
 	}

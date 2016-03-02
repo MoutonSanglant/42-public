@@ -50,7 +50,7 @@ typedef struct	s_fdata
 }				t_fdata;
 
 void			ft_print_formated_char(va_list ap, t_fdata *fdatas);
-void			ft_print_formated_string(va_list ap, t_fdata *fdatas);
+void			ft_print_formated_string(va_list ap, t_fdata *fdatas, char *s);
 void			ft_print_formated_pointer(va_list ap, t_fdata *fdatas);
 void			ft_print_formated_digit(va_list ap, t_fdata *fdatas);
 void			ft_print_formated_octal(va_list ap, t_fdata *fdatas);
