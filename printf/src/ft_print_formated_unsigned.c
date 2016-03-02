@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/24 09:41:18 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/29 17:35:05 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/02 18:18:50 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static char		*str_from_arg(va_list ap, t_fdata *fdatas)
 	if (fdatas->length == LENGTH_NONE)
 		return (ft_uitoa((unsigned int)va_arg(ap, unsigned int)));
 	else if (fdatas->length & LENGTH_Z)
-		return(ft_uitoa((size_t)va_arg(ap, size_t)));
+		return (ft_uitoa((size_t)va_arg(ap, size_t)));
 	else if (fdatas->length & LENGTH_J)
 		return (ft_uitoa((uintmax_t)va_arg(ap, uintmax_t)));
 	else if (fdatas->length & LENGTH_LL)
