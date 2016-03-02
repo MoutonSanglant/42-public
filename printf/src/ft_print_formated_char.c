@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/24 09:45:47 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/02 00:08:24 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/02 21:38:07 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,20 @@ static void		justify(wint_t *c, t_fdata *fdatas)
 		fdatas->bcount += write(1, (char *)c, 1);
 }
 
-static int		unicode_length(wint_t c)
+static int		unicode_length(t_fdata *fdatas, wint_t c)
 {
-	if (c < (1 << 11))
-		return (1);
-	else if (c < (1 << 16))
+	if (c < (1 << 7))
+	{
+		fdatas->length = LENGTH_NONE;
+		return (0);
+	}
+	else if (c < (1 << 11))
 		return (2);
-	return (1);
+	else if (c < (1 << 16))
+		return (3);
+	else
+		return (4);
+	return (0);
 }
 
 void			ft_print_formated_char(va_list ap, t_fdata *fdatas)
@@ -42,7 +49,8 @@ void			ft_print_formated_char(va_list ap, t_fdata *fdatas)
 	else if (fdatas->length == LENGTH_L)
 	{
 		c = (wint_t)va_arg(ap, wint_t);
-		fdatas->width -= unicode_length(c);
+		fdatas->width -= unicode_length(fdatas, c);
+		fdatas->width++;
 	}
 	fdatas->flag ^= (fdatas->flag & FLAG_SPACE) ? FLAG_SPACE : FLAG_NONE;
 	fdatas->flag ^= (fdatas->flag & FLAG_MORE) ? FLAG_MORE : FLAG_NONE;
