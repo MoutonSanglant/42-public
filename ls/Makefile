@@ -1,15 +1,15 @@
 CC		= gcc
 CFLAGS	= -Wall -Werror -Wextra -I./libft -D BONUS
-LDFLAGS	= -L./lib -L./libft
-LDLIBS	= -lft -lm
+LDFLAGS	= -L./libft
+LDLIBS	= -lft
 
 ifeq ($(BUILD), Debug)
-CFLAGS	+= -g -O0 -D DEBUG
-SUFFIX	= .debug.o
-NAME	= ft_ls.debug
+	CFLAGS	+= -g -O0 -D DEBUG
+	SUFFIX	= .debug.o
+	NAME	= ft_ls.debug
 else
-SUFFIX	= .o
-NAME	= ft_ls
+	SUFFIX	= .o
+	NAME	= ft_ls
 endif
 
 ARCH	= $(shell uname -m)

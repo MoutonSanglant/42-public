@@ -13,6 +13,8 @@
 #ifndef FT_LS_H
 # define FT_LS_H
 
+# include <includes/libft.h>
+
 typedef enum	e_ls_flags
 {
 	FLAG_L = 0x1,
