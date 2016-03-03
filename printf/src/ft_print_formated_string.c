@@ -6,29 +6,12 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/23 16:07:37 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/02 21:51:07 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/03 14:52:50 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "ft_printf.h"
-
-static void		justify(char *str, t_fdata *fdatas)
-{
-	if (fdatas->flag & FLAG_MORE && str[0] != '-')
-		fdatas->bcount += write(1, "+", 1);
-	else if (str[0] == '-')
-	{
-		if (fdatas->precision > 0)
-		{
-			fdatas->bcount += write(1, "-", 1);
-			str[0] = '0';
-		}
-	}
-	else if (fdatas->flag & FLAG_SPACE)
-		fdatas->bcount += write(1, " ", 1);
-	fdatas->bcount += write(1, str, fdatas->precision);
-}
 
 static void		print_formated_string(t_fdata *fdatas, char *str)
 {
@@ -39,16 +22,14 @@ static void		print_formated_string(t_fdata *fdatas, char *str)
 	fdatas->precision = (fdatas->precision < len) ? fdatas->precision : len;
 	fdatas->width = fdatas->width - fdatas->precision;
 	if (fdatas->flag & FLAG_LESS)
-		justify(str, fdatas);
+		fdatas->bcount += write(1, str, fdatas->precision);
 	while (fdatas->width > 0)
 	{
-		if (!(fdatas->flag & FLAG_MORE || fdatas->flag & FLAG_SPACE)
-													|| fdatas->width > 1)
-			fdatas->bcount += write(1, &fdatas->fill_char, 1);
+		fdatas->bcount += write(1, &fdatas->fill_char, 1);
 		fdatas->width--;
 	}
 	if (!(fdatas->flag & FLAG_LESS))
-		justify(str, fdatas);
+		fdatas->bcount += write(1, str, fdatas->precision);
 }
 
 static int		justify_long_string(wchar_t *wstr, t_fdata *fdatas, int dry)
@@ -57,22 +38,23 @@ static int		justify_long_string(wchar_t *wstr, t_fdata *fdatas, int dry)
 	int		w_bytes;
 	int		n;
 
-	n = 0;
 	r_bytes = -1;
 	w_bytes = 0;
 	while (wstr[++r_bytes])
 	{
+		n = 4;
 		if (wstr[r_bytes] < (1 << 7))
 			n = 1;
 		else if (wstr[r_bytes] < (1 << 11))
 			n = 2;
 		else if (wstr[r_bytes] < (1 << 16))
 			n = 3;
-		else
-			n = 4;
 		w_bytes += n;
-		if (w_bytes > fdatas->precision && (w_bytes -= n))
+		if (w_bytes > fdatas->precision)
+		{
+			w_bytes -= n;
 			break ;
+		}
 		else if (!dry)
 			fdatas->bcount += ft_putwchar(&wstr[r_bytes]);
 	}

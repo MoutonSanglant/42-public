@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/24 09:37:24 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/02 18:25:18 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/03 14:48:06 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,18 +15,6 @@
 
 static void		justify(char *str, t_fdata *fdatas)
 {
-	if (fdatas->flag & FLAG_MORE && str[0] != '-')
-		fdatas->bcount += write(1, "+", 1);
-	else if (str[0] == '-')
-	{
-		if (fdatas->precision > 0)
-		{
-			fdatas->bcount += write(1, "-", 1);
-			str[0] = '0';
-		}
-	}
-	else if (fdatas->flag & FLAG_SPACE)
-		fdatas->bcount += write(1, " ", 1);
 	while (fdatas->precision-- > 0)
 		fdatas->bcount += write(1, "0", 1);
 	fdatas->bcount += ft_putstr(str);
@@ -45,9 +33,9 @@ static char		*str_from_arg(va_list ap, t_fdata *fdatas)
 	else if (fdatas->length & LENGTH_L)
 		return (ft_itoa_base((unsigned long)va_arg(ap, unsigned long), 16));
 	else if (fdatas->length & LENGTH_H)
-		return (ft_itoa_base((unsigned int)va_arg(ap, unsigned int), 16));
+		return (ft_itoa_base((unsigned short)va_arg(ap, unsigned int), 16));
 	else if (fdatas->length & LENGTH_HH)
-		return (ft_itoa_base((unsigned int)va_arg(ap, unsigned int), 16));
+		return (ft_itoa_base((unsigned char)va_arg(ap, unsigned int), 16));
 	return (NULL);
 }
 

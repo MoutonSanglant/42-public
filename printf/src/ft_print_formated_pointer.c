@@ -6,14 +6,22 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/24 09:49:08 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/02 21:00:08 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/03 14:52:23 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "ft_printf.h"
 
-void	ft_print_formated_pointer(va_list ap, t_fdata *fdatas)
+static void		remove_extra_flags(t_fdata *fdatas)
+{
+	fdatas->flag ^= (fdatas->flag & FLAG_SPACE) ? FLAG_SPACE : FLAG_NONE;
+	fdatas->flag ^= (fdatas->flag & FLAG_MORE) ? FLAG_MORE : FLAG_NONE;
+	if (fdatas->flag & FLAG_ZERO)
+		fdatas->flag |= FLAG_LESS;
+}
+
+void			ft_print_formated_pointer(va_list ap, t_fdata *fdatas)
 {
 	char	*str;
 	char	*s;
@@ -26,6 +34,7 @@ void	ft_print_formated_pointer(va_list ap, t_fdata *fdatas)
 		s = ft_strdup("");
 	else
 		s = ft_strdup("0");
+	remove_extra_flags(fdatas);
 	fdatas->precision -= ft_strlen(s) + 1;
 	while (fdatas->precision >= 0)
 	{
@@ -33,6 +42,7 @@ void	ft_print_formated_pointer(va_list ap, t_fdata *fdatas)
 		ft_strdel(&s);
 		s = join;
 		fdatas->precision--;
+		fdatas->width--;
 	}
 	join = ft_strjoin("0x", s);
 	ft_print_formated_string(ap, fdatas, join);
