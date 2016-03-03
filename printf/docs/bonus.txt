@@ -1,0 +1,26 @@
+Bonus
+Conversions en plus
+
+Traitez par couple, et compter le nombre de conversions qui marchent correctement : eE, fF, gG, aA, n
+
+Rate it from 0 (failed) through 5 (excellent)
+
+Flags
+
+Nombre de flags qui fonctionnent également parmi : * $ L '
+
+Rate it from 0 (failed) through 5 (excellent)
+
+Conversions nouvelles
+
+Pour chaque conversion utile et fonctionnelle
+
+Rate it from 0 (failed) through 5 (excellent)
+
+Open bar
+
+Selon les ajouts supplémentaires proposes par le corrigé. (ajouter de la couleur par ex...)
+
+Rate it from 0 (failed) through 5 (excellent)
+
+'
