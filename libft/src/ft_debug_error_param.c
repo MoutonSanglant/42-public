@@ -1,34 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putaddr.c                                       :+:      :+:    :+:   */
+/*   ft_debug_error_param.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/01/14 00:40:45 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/16 00:24:04 by tdefresn         ###   ########.fr       */
+/*   Created: 2016/03/02 18:34:08 by tdefresn          #+#    #+#             */
+/*   Updated: 2016/03/02 18:38:25 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-/*
-**	NOTE
-**	This is not the standard "ft_putaddr" since
-**	it returns a value when it shouldn't.
-**	===================================
-**	void	ft_putaddr(const void *addr)
-*/
-
-int		ft_putaddr(const void *addr)
+void			ft_debug_error_param(const char *fn_name)
 {
-	char	*str;
-	int		bcount;
-
-	bcount = 0;
-	bcount += ft_putstr("0x");
-	str = ft_itoa_base((uintptr_t)addr, 16);
-	bcount += ft_putstr(str);
-	ft_strdel(&str);
-	return (bcount);
+	ft_printf("\n\x1B[31mERROR in libft.a: the function %s %s\n", fn_name,
+			"returned the following error:\nSent parameter is NULL. \
+			Verify your code, it is unsafe !!!\x1B[0m");
 }

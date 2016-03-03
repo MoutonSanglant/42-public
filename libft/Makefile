@@ -6,11 +6,14 @@ CFLAGS	= -Wall -Werror -Wextra
 ifeq ($(BUILD), Debug)
 CFLAGS	+= -g -O0 -D DEBUG
 SUFFIX	= .debug.o
-NAME	= libft.a
+else ifeq ($(BUILD), Bonus)
+CFLAGS	+= -D BONUS
+SUFFIX	= .bonus.o
 else
 SUFFIX	= .o
-NAME	= libft.a
 endif
+
+NAME	= libft.a
 
 # Get system and set specific flags accordingly
 
@@ -36,12 +39,15 @@ SRC		= memset bzero memcpy memccpy memmove memchr memcmp strdup strcpy strncpy \
 strcat strncat strlcat strchr strrchr strstr strnstr strcmp strncmp atoi \
 isalpha isdigit isalnum isascii isprint toupper tolower memalloc memdel strnew \
 strdel strclr striter striteri strmap strmapi strequ strnequ strsub strjoin \
-strtrim strsplit itoa strlen putchar putstr putnbr putendl putchar_fd putstr_fd \
+strtrim strsplit itoa strlen putchar putstr putnbr putunbr putendl putchar_fd putstr_fd \
 putnbr_fd putendl_fd lstnew lstdelone lstdel lstadd lstiter lstmap isupper \
 islower isspace pow lstsize dl_lstnew dl_lstfront dl_lstback dl_lstpushfront \
 dl_lstpushback dl_lstpopfront dl_lstpopback dl_lstiter dl_lstmap dl_lstsize \
 dl_lstclear queuenew queuefront queueback queuepush queuepop queuesize \
-stacknew stackpush stackpop stacksize lstgetat putaddr itoa_base
+stacknew stackpush stackpop stacksize lstgetat putaddr itoa_base printf imaxtoa \
+uitoa strprepend print_formated_string print_formated_digit print_formated_hex \
+print_formated_unsigned print_formated_space print_formated_char \
+print_formated_octal print_formated_pointer strpbrk putwchar debug_error_param
 
 SRC := $(addsuffix .c, $(SRC))
 SRC := $(addprefix $(SRC_PREFIX)ft_, $(SRC))
@@ -49,12 +55,15 @@ SRC := $(addprefix $(SRC_PREFIX)ft_, $(SRC))
 OBJ = $(subst $(SRC_PREFIX), , $(SRC:.c=$(SUFFIX)))
 OBJ := $(addprefix $(OBJ_PREFIX), $(OBJ))
 
-.PHONY: all clean fclean re debug
+.PHONY: all clean fclean re debug bonus
 
 all: $(NAME)
 
 debug:
 	@$(MAKE) BUILD=Debug all
+
+bonus:
+	@$(MAKE) BUILD=Bonus all
 
 $(NAME): $(OBJ)
 	@echo "making $@"
