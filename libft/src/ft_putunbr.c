@@ -1,43 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   ft_putunbr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/12/01 12:35:30 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/01 21:47:36 by tdefresn         ###   ########.fr       */
+/*   Created: 2016/02/15 19:39:29 by tdefresn          #+#    #+#             */
+/*   Updated: 2016/02/16 00:52:32 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-#ifdef DEBUG
-
-size_t	ft_strlen(char const *s)
+void	printnbr(unsigned int n, int *bcount)
 {
-	size_t	i;
-
-	if (!s)
-	{
-		ERROR_PARAM("ft_strlen");
-		return (0);
-	}
-	i = 0;
-	while (*s++ != '\0')
-		i++;
-	return (i);
+	if (n >= 10)
+		printnbr(n / 10, bcount);
+	ft_putchar((n % 10) + '0');
+	(*bcount)++;
 }
 
-#else
-
-size_t	ft_strlen(char const *s)
+int		ft_putunbr(unsigned int n)
 {
-	size_t	i;
+	int bcount;
 
-	i = 0;
-	while (*s++ != '\0')
-		i++;
-	return (i);
+	bcount = 0;
+	printnbr(n, &bcount);
+	return (bcount);
 }
-#endif

@@ -17,8 +17,11 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <stdint.h>
+# include <limits.h>
+# include <wchar.h>
 
-# define HEX_TABLE(x) "0123456789ABCDEF"[x]
+# define ABS(x) ((x < 0) ? -x : x)
+# define HEX_TABLE(x) "0123456789abcdef"[x]
 
 typedef struct	s_list
 {
@@ -98,7 +101,12 @@ char			*ft_strtrim(const char *s);
 char			**ft_strsplit(const char *s, char c);
 char			*ft_itoa(int n);
 
-char			*ft_itoa_base(int64_t n, int base);
+char			*ft_itoa_base(intmax_t n, int base);
+char			*ft_imaxtoa(intmax_t n);
+char			*ft_uitoa(uintmax_t n);
+
+void			ft_strprepend(char **str, char *prefix);
+char			*ft_strpbrk(const char *s1, const char *s2);
 
 /*
 **	CHECKS
@@ -120,16 +128,27 @@ int				ft_islower(int c);
 **	OUTPUT
 */
 
+/*
+**	NOTE
+**	ft_putstr, ft_putnbr, ft_putunbr and ft_putaddr
+**	have been altered to return the size of the
+**	writte output
+*/
+
 void			ft_putchar(char c);
-void			ft_putstr(const char *s);
+int				ft_putstr(const char *s);
 void			ft_putendl(const char *s);
-void			ft_putnbr(int n);
+int				ft_putnbr(int n);
 void			ft_putchar_fd(char c, int fd);
 void			ft_putstr_fd(const char *s, int fd);
 void			ft_putendl_fd(const char *s, int fd);
 void			ft_putnbr_fd(int n, int fd);
 
-void			ft_putaddr(const void *addr);
+int				ft_putwchar(wchar_t *unicode_point);
+int				ft_putunbr(unsigned int n);
+int				ft_putaddr(const void *addr);
+
+int				ft_printf(const char *restrict format, ...);
 
 /*
 **	FORWARD LISTS
@@ -185,4 +204,11 @@ int				ft_stacksize(t_stack *stack);
 */
 
 int				ft_pow(int b, int e);
+
+# ifdef DEBUG
+
+void			ft_debug_error_param(const char *fn_name);
+
+#  define ERROR_PARAM(fn_name) ft_debug_error_param(fn_name)
+# endif
 #endif
