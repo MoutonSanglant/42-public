@@ -7,6 +7,5 @@ highlight GNLTypes ctermfg=yellow
 highlight MLXTypes ctermfg=yellow
 highlight FDFTypes ctermfg=yellow
 
-
-syn keyword ForbidenFunc malloc free open close read write perror stderror exit
+syn keyword ForbidenFunc malloc free opendir readdir closedir stat lstat getpwuid getgrgid listxattr getxattr time ctime readlink open close read write perror stderror exit printf
 highlight ForbidenFunc ctermfg=white ctermbg=red
