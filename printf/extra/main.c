@@ -4,20 +4,20 @@
 #include <locale.h>
 
 #define EXPLICIT
-//#define SPECIFIERS
-//#define FLAGS
-//#define WIDTH
-//#define PRECISION
-//#define LENGTH
-//#define UNICODE
-//#define HEX
-//#define OCTAL
-//#define CHAR
-//#define DIGIT
-//#define UNSIGNED
-//#define NOSPEC
-//#define UNSPEC
-//#define HARDCORE
+#define SPECIFIERS
+#define FLAGS
+#define WIDTH
+#define PRECISION
+#define LENGTH
+#define UNICODE
+#define HEX
+#define OCTAL
+#define CHAR
+#define DIGIT
+#define UNSIGNED
+#define NOSPEC
+#define UNSPEC
+#define HARDCORE
 #define MOULITEST
 
 int main(void)
@@ -1408,15 +1408,17 @@ int main(void)
 	ft_printf("============\n");
 	printf("Haha: % s %C, % s, % s, ok.\n", "hello", L'該', NULL, "");
 	ft_printf("Haha: % s %C, % s, % s, ok.\n", "hello", L'該', NULL, "");
-	char c;
 	printf( " (%i)\n", printf("%s %C %d %p %x %% %S", "bonjour ", L'該', 42, &free, 42, L"لحم خنزير"));
 	fflush(stdout);
 	printf( " (%i)\n", ft_printf("%s %C %d %p %x %% %S", "bonjour ", L'該', 42, &free, 42, L"لحم خنزير"));
+	/*
+	char c;
 	fflush(stdout);
 	printf( " (%i)\n", printf("%s%d%p%%%S%D%i%o%O%u%U%x%X%c%C","bonjour", 42, &c, L"暖炉", LONG_MAX, 42, 42, 42, 100000, ULONG_MAX, 42, 42, 'c', L'플'));
 	fflush(stdout);
 	printf( " (%i)\n", ft_printf("%s%d%p%%%S%D%i%o%O%u%U%x%X%c%C", "bonjour", 42, &c, L"暖炉", LONG_MAX, 42, 42, 42, 100000, ULONG_MAX, 42, 42, 'c', L'플'));
 	fflush(stdout);
+	*/
 	printf( " (%i)\n", printf("% p|%+p", 42, 42));
 	fflush(stdout);
 	printf( " (%i)\n", ft_printf("% p|%+p", 42, 42));

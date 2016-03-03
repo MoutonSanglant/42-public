@@ -7,10 +7,10 @@
 #make clean
 cur_dir=${PWD}
 cd ..
-#make debug
-make
+make debug
+#make
 cd $cur_dir
-gcc -Wall -Werror -Wextra -Wno-format -o crashtest ./main.c -L../ -lftprintf -I../includes
-#~/.brew/Cellar/valgrind/3.11.0/bin/valgrind --leak-check=yes ./crashtest
-./crashtest
+gcc -g -O0 -Wall -Werror -Wextra -Wno-format -o crashtest ./main.c -L../ -lftprintf -I../includes
+~/.brew/Cellar/valgrind/3.11.0/bin/valgrind --track-origins=yes --leak-check=yes ./crashtest
+#./crashtest
 rm crashtest
