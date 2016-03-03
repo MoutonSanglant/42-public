@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/01 12:34:28 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/26 22:13:45 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/03 15:18:16 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 
 	if (!s1 || !s2)
 	{
-		ft_putendl("ft_strjoin returned the following error:\n\
-					sent parameter is NULL.\n\
-					Verify your code, it is unsafe !!!");
+		ERROR_PARAM("ft_strjoin");
 		return (NULL);
 	}
 	str_new = ft_strnew(ft_strlen(s1) + ft_strlen(s2));
@@ -34,7 +32,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 			*ptr++ = *s1++;
 		while (*s2)
 			*ptr++ = *s2++;
-		*++ptr = '\0';
+		*ptr++ = '\0';
 	}
 	return (str_new);
 }
@@ -54,7 +52,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 			*ptr++ = *s1++;
 		while (*s2)
 			*ptr++ = *s2++;
-		*++ptr = '\0';
+		*ptr++ = '\0';
 	}
 	return (str_new);
 }
