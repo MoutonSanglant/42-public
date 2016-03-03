@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/24 09:47:23 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/02 18:29:23 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/03 14:38:03 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,18 +15,6 @@
 
 static void		justify(char *str, t_fdata *fdatas)
 {
-	if (str[0] == '-')
-	{
-		if (fdatas->precision > 0)
-		{
-			fdatas->bcount += write(1, "-", 1);
-			str[0] = '0';
-		}
-	}
-	else if (fdatas->flag & FLAG_MORE)
-		fdatas->bcount += write(1, "+", 1);
-	else if (fdatas->flag & FLAG_SPACE)
-		fdatas->bcount += write(1, " ", 1);
 	while (fdatas->precision-- > 0)
 		fdatas->bcount += write(1, "0", 1);
 	fdatas->bcount += ft_putstr(str);
@@ -83,14 +71,18 @@ static void		printf_octal_string(t_fdata *fdatas, char *str)
 void			ft_print_formated_octal(va_list ap, t_fdata *fdatas)
 {
 	char	*str;
+	int		len;
 
 	str = str_from_arg(ap, fdatas);
 	if (str[0] == '0'
 			&& (fdatas->precision == 0 || fdatas->flag & FLAG_NUMBERSIGN))
 		str[0] = '\0';
-	fdatas->precision = fdatas->precision - ft_strlen(str);
+	if (fdatas->flag & FLAG_NUMBERSIGN)
+		fdatas->precision--;
+	len = ft_strlen(str);
+	fdatas->precision = fdatas->precision - len;
 	fdatas->precision = (fdatas->precision > 0) ? fdatas->precision : 0;
-	fdatas->width = fdatas->width - fdatas->precision - ft_strlen(str);
+	fdatas->width = fdatas->width - fdatas->precision - len;
 	printf_octal_string(fdatas, str);
 	ft_strdel(&str);
 }
