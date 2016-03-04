@@ -1,6 +1,9 @@
 let $USER = 'tdefresn'
 let $MAIL = $USER . '@student.42.fr'
 
+" Pathogen
+execute pathogen#infect()
+
 " Use Vim settings, rather than Vi settings.
 " Must be first, because it changes other options as a side effect.
 set nocompatible
