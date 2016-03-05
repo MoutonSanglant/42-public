@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/01 12:34:17 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/26 22:29:57 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/05 17:38:22 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,8 @@ int	ft_strequ(char const *s1, char const *s2)
 {
 	if (!s1 || !s2)
 	{
-		ft_putendl("ft_strequ returned the following error:\n\
-					sent parameter is NULL.\n\
-					Verify your code, it is unsafe !!!");
-		return (-1);
+		ERROR_PARAM("ft_strequ");
+		return (0);
 	}
 	while (*s1 && *s2)
 	{
