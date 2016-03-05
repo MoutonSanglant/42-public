@@ -163,6 +163,7 @@ t_list			*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem));
 
 int				ft_lstsize(t_list *lst);
 t_list			*ft_lstgetat(t_list *lst, int idx);
+t_list			*ft_lstsort(t_list *lst, int (*cmp)(void *, void *));
 
 /*
 **	DOUBLE LINKED LISTS
@@ -208,7 +209,9 @@ int				ft_pow(int b, int e);
 # ifdef DEBUG
 
 void			ft_debug_error_param(const char *fn_name);
+void			ft_debug_error_free(const char *fn_name);
 
 #  define ERROR_PARAM(fn_name) ft_debug_error_param(fn_name)
+#  define ERROR_FREE(fn_name) ft_debug_error_free(fn_name)
 # endif
 #endif

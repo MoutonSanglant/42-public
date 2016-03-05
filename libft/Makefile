@@ -47,7 +47,8 @@ dl_lstclear queuenew queuefront queueback queuepush queuepop queuesize \
 stacknew stackpush stackpop stacksize lstgetat putaddr itoa_base printf imaxtoa \
 uitoa strprepend print_formated_string print_formated_digit print_formated_hex \
 print_formated_unsigned print_formated_space print_formated_char \
-print_formated_octal print_formated_pointer strpbrk putwchar debug_error_param
+print_formated_octal print_formated_pointer strpbrk putwchar debug_error_param \
+lstsort
 
 SRC := $(addsuffix .c, $(SRC))
 SRC := $(addprefix $(SRC_PREFIX)ft_, $(SRC))

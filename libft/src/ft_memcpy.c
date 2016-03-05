@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/01 12:37:22 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/05 16:28:03 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/05 19:58:28 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	*ft_memcpy(void *dst, void const *src, size_t n)
 
 	if (!dst || !src)
 	{
-		ERROR_PARAM(ft_memcpy);
+		ERROR_PARAM("ft_memcpy");
 		return (NULL);
 	}
 	i = 0;
