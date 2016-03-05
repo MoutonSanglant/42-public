@@ -46,7 +46,7 @@ typedef struct	s_ls_datas
 	t_ls_flags	flags;
 }				t_ls_datas;
 
-void	error_errno();
+int		error_path(const char *s);
 void	error_usage(int c);
 
 #endif

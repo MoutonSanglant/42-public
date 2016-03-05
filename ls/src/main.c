@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/03 17:43:51 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/05 17:46:23 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/05 20:45:50 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,11 @@
 **	- read paths
 */
 
+static int	sort_lexicographic (void *s1, void *s2)
+{
+	return (ft_strcmp((const char *)s1, (const char *)s2) <= 0);
+}
+
 static int		read_flags(int argc, char **argv, t_ls_datas *ls_datas)
 {
 	int		i;
@@ -91,53 +96,101 @@ static void		read_args(int argc, char **argv, t_ls_datas *ls_datas)
 	char	*arg;
 	int		i;
 
+	path = NULL;
 	i = read_flags(argc, argv, ls_datas);
 	while (++i < argc)
 	{
 		arg = argv[i];
 		if ((tmp = ft_strdup(arg)))
 		{
-			path = ft_lstnew((void *)tmp, sizeof(char *) * (ft_strlen(tmp) + 1));
-			if (ls_datas->path)
-				ft_lstadd(&ls_datas->path, path);
+			if (path)
+			{
+				path->next = ft_lstnew((void *)tmp, sizeof(char) * (ft_strlen(tmp) + 1));
+				path = path->next;
+			}
 			else
+				path = ft_lstnew((void *)tmp, sizeof(char) * (ft_strlen(tmp) + 1));
+			if (!ls_datas->path)
 				ls_datas->path = path;
 			ft_strdel(&tmp);
 		}
 	}
 	if (!ls_datas->path)
-		ls_datas->path = ft_lstnew((void *)".", sizeof(char *) * 2);
+		ls_datas->path = ft_lstnew((void *)".", sizeof(char) * 2);
 }
 
-void	read_dir(t_list *path)
+/*
+**	Degueulasse...
+**	A reecrier, ainsi que ft_lstsort ! :)
+*/
+int		read_dir(t_list *path, t_ls_flags flags)
 {
-	DIR		*p_dir;
 	struct dirent	*p_dirent;
+	DIR				*p_dir;
+	char			*d_name;
+	t_list			*list;
+	t_list			*list_start;
 
+	list = NULL;
+	list_start = NULL;
 	p_dir = opendir((char *)path->content);
 	if (!p_dir)
-	{
-		ft_printf("Cannot open directory: %s\n", (char *)path->content);
-		return ;
-		//error();
-	}
-	ft_printf("%s: \n", (char *)path->content);
+		return (error_path((char *)path->content));
+	if (((char *)path->content)[0] != '.')
+		ft_printf("%s: \n", (char *)path->content);
 	while ((p_dirent = readdir(p_dir)))
-		ft_printf("%s\n", p_dirent->d_name);
+	{
+		d_name = p_dirent->d_name;
+		if (!list)
+		{
+			if (d_name[0] != '.')
+				list = ft_lstnew((void *)d_name, sizeof(char) * (ft_strlen(d_name) + 1));
+			else if (flags & FLAG_A)
+				list = ft_lstnew((void *)d_name, sizeof(char) * (ft_strlen(d_name) + 1));
+		}
+		else
+		{
+			if (d_name[0] != '.')
+				list->next = ft_lstnew((void *)d_name, sizeof(char) * (ft_strlen(d_name) + 1));
+			else if (flags & FLAG_A)
+				list->next = ft_lstnew((void *)d_name, sizeof(char) * (ft_strlen(d_name) + 1));
+			list = list->next;
+		}
+		if (!list_start)
+			list_start = list;
+	}
+	if (list)
+		list = ft_lstsort(list_start, &sort_lexicographic);
+	while (list)
+	{
+		ft_printf("%s\n", (char *)list->content);
+		list = list->next;
+	}
 	closedir(p_dir);
+	return (0);
 }
 
 int		main(int argc, char **argv)
 {
 	t_ls_datas		ls_datas;
 	t_list			*path;
+	int				error;
+	int				last_error;
 
+	ls_datas.flags = FLAG_NONE;
+	ls_datas.path = NULL;
+
+	ft_putchar('\n');
+	error = 0;
 	read_args(argc, argv, &ls_datas);
 	path = ls_datas.path;
 	while (path)
 	{
-		read_dir(path);
+		path = ft_lstsort(path, &sort_lexicographic);
+		last_error = read_dir(path, ls_datas.flags);
+		if (last_error)
+			error = last_error;
 		path = path->next;
 	}
-	return (0);
+	return (error);
 }
