@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/07 16:49:57 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/26 19:42:38 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/06 00:14:05 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,9 @@ void	ft_dl_lstpopfront(t_dl_list **alst)
 {
 	t_dl_list	*first;
 
-	if (!alst)
+	if (!alst || !*alst)
 	{
-		ft_putendl("ft_dl_lstpopfront error:\nsent parameter is NULL.");
-		return ;
-	}
-	if (!*alst)
-	{
-		ft_putendl("ft_dl_lstpopfront error:\n candidate for free is NULL.");
+		ERROR_PARAM("ft_dl_lstpopfront");
 		return ;
 	}
 	first = ft_dl_lstfront(*alst);

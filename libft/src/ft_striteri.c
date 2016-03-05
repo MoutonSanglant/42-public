@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/01 12:34:25 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/26 22:29:41 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/05 23:54:54 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,7 @@ void	ft_striteri(char *s, void (*f)(unsigned int, char *))
 
 	if (!s || !f)
 	{
-		ft_putendl("ft_striteri returned the following error:\n\
-					sent parameter is NULL.\n\
-					Verify your code, it is unsafe !!!");
+		ERROR_PARAM("ft_striteri");
 		return ;
 	}
 	i = 0;

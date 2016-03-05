@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/01 12:38:20 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/26 19:25:55 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/05 23:43:55 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	ft_bzero(void *s, size_t n)
 {
 	if (!s)
 	{
-		ft_putendl("ft_bzero error:\nsent parameter is NULL.");
+		ERROR_PARAM("ft_bzero");
 		return ;
 	}
 	ft_memset(s, '\0', n);

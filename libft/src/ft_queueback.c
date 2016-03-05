@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/08 14:43:55 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/26 21:17:21 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/05 23:49:55 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,7 @@ t_queue		*ft_queueback(t_queue *queue)
 {
 	if (!queue)
 	{
-		ft_putendl("ft_queueback returned the following error:\n\
-					sent parameter is NULL.\n\
-					Verify your code, it is unsafe !!!");
+		ERROR_PARAM("ft_queueback");
 		return (NULL);
 	}
 	if (queue->next)

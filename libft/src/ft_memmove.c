@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/01 12:37:16 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/03 00:30:59 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/05 23:45:21 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void			*ft_memmove(void *dst, void const *src, size_t len)
 {
 	if (!dst || !src)
 	{
-		ft_putendl("ft_memmove error:\nsent parameter is NULL.");
+		ERROR_PARAM("ft_memmove");
 		return (NULL);
 	}
 	if (len == 0 || dst == src)

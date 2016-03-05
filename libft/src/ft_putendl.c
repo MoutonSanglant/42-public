@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/01 12:37:07 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/26 20:14:22 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/05 23:47:52 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,7 @@ void	ft_putendl(char const *s)
 {
 	if (!s)
 	{
-		ft_putendl("ft_putendl returned the following error:\n\
-					sent parameter is NULL.\n\
-					Verify your code, it is unsafe !!!");
+		ERROR_PARAM("ft_putendl");
 		return ;
 	}
 	ft_putstr(s);

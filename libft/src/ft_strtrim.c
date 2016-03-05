@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/01 12:34:09 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/26 19:18:15 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/05 23:43:18 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ char	*ft_strtrim(char const *s)
 
 	if (!s)
 	{
-		ft_putendl("ft_strtrim error: sent parameter is NULL");
+		ERROR_PARAM("ft_strtrim");
 		return (NULL);
 	}
 	start = (size_t)-1;

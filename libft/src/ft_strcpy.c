@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/01 12:36:22 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/26 22:32:59 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/05 23:54:02 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,7 @@ char	*ft_strcpy(char *dst, char const *src)
 
 	if (!dst | !src)
 	{
-		ft_putendl("ft_strcpy returned the following error:\n\
-					sent parameter is NULL.\n\
-					Verify your code, it is unsafe !!!");
+		ERROR_PARAM("ft_strcpy");
 		return (NULL);
 	}
 	ptr = dst;

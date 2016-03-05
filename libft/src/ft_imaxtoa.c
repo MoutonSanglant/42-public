@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/18 21:46:45 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/18 21:47:29 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/06 00:05:26 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,7 @@ char			*ft_imaxtoa(intmax_t n)
 
 	if (n == 0)
 	{
-		str = ft_strnew(sizeof(char) * 1);
-		if (str)
+		if ((str = ft_strnew(sizeof(char))))
 			str[0] = '0';
 		return (str);
 	}

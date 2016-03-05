@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/01 12:34:06 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/26 20:05:40 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/05 23:44:30 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,7 @@ int		ft_memcmp(void const *s1, void const *s2, size_t n)
 
 	if (!s1 || !s2)
 	{
-		ft_putendl("ft_memcmp returned the following error:\n\
-					sent parameter is NULL.\n\
-					Verify your code, it is unsafe !!!");
+		ERROR_PARAM("ft_memcmp");
 		return (-1);
 	}
 	i = 0;

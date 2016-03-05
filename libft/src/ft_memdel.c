@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/01 12:37:19 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/26 03:34:55 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/05 23:45:03 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,16 +18,12 @@ void	ft_memdel(void **ap)
 {
 	if (!ap)
 	{
-		ft_putendl("ft_memdel returned the following error:\n\
-					sent parameter is NULL.\n\
-					Verify your code, it is unsafe !!!");
+		ERROR_PARAM("ft_memdel");
 		return ;
 	}
 	if (!*ap)
 	{
-		ft_putendl("ft_memdel returned the following error:\n\
-					free candidate is NULL.\n\
-					Verify your code, it is unsafe !!!");
+		ERROR_FREE("ft_memdel");
 		return ;
 	}
 	free(*ap);

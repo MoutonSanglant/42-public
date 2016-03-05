@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/01 12:34:13 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/26 22:08:36 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/05 23:54:35 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,7 @@ char	*ft_strdup(char const *s1)
 
 	if (!s1)
 	{
-		ft_putendl("ft_strdup returned the following error:\n\
-					sent parameter is NULL.\n\
-					Verify your code, it is unsafe !!!");
+		ERROR_PARAM("ft_strdup");
 		return (NULL);
 	}
 	str_new = (char *)malloc(sizeof(char) * (ft_strlen(s1) + 1));

@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/01 12:34:22 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/26 22:36:20 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/05 23:54:46 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,7 @@ void	ft_striter(char *s, void (*f)(char *))
 {
 	if (!s || !f)
 	{
-		ft_putendl("ft_striter returned the following error:\n\
-					sent parameter is NULL.\n\
-					Verify your code, it is unsafe !!!");
+		ERROR_PARAM("ft_striter");
 		return ;
 	}
 	while (*s)

@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/08 14:45:50 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/26 19:42:49 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/05 23:58:29 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,12 @@ void	ft_dl_lstclear(t_dl_list **alst)
 {
 	if (!alst)
 	{
-		ft_putendl("ft_dl_lstclear error:\nsent parameter is NULL.");
+		ERROR_PARAM("ft_dl_lstclear");
 		return ;
 	}
 	if (!*alst)
 	{
-		ft_putendl("ft_dl_lstclear error:\n candidate for free is NULL.");
+		ERROR_FREE("ft_dl_lstclear");
 		return ;
 	}
 	if ((*alst)->next)

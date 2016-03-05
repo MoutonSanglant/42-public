@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/08 14:44:16 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/26 21:20:24 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/06 00:11:24 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,18 +18,9 @@ void	ft_queuepop(t_queue **aqueue)
 {
 	t_queue	*first;
 
-	if (!aqueue)
+	if (!aqueue || !*aqueue)
 	{
-		ft_putendl("ft_queuepop returned the following error:\n\
-					sent parameter is NULL.\n\
-					Verify your code, it is unsafe !!!");
-		return ;
-	}
-	if (!*aqueue)
-	{
-		ft_putendl("ft_queuepop returned the following error:\n\
-					free candidate is NULL.\n\
-					Verify your code, it is unsafe !!!");
+		ERROR_PARAM("ft_queuepop");
 		return ;
 	}
 	first = ft_queuefront(*aqueue);

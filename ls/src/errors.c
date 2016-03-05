@@ -6,10 +6,13 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/05 17:15:49 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/05 19:34:43 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/05 23:35:22 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#ifdef LINUX
+# include <stdio.h>
+#endif
 #include <errno.h>
 #include "ft_ls.h"
 

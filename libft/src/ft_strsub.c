@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/01 12:36:17 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/26 19:22:22 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/05 23:42:57 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	*ft_strsub(char const *s, unsigned int start, size_t len)
 
 	if (!s)
 	{
-		ft_putendl("ft_strsub error:\nsent parameter is NULL.");
+		ERROR_PARAM("ft_strsub");
 		return (NULL);
 	}
 	str_new = ft_strnew(len);

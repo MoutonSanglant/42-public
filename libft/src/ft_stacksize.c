@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/08 14:44:33 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/26 22:04:44 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/05 23:53:14 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,7 @@ int		ft_stacksize(t_stack *stack)
 
 	if (!stack)
 	{
-		ft_putendl("ft_stacksize returned the following error:\n\
-					sent parameter is NULL.\n\
-					Verify your code, it is unsafe !!!");
+		ERROR_PARAM("ft_stacksize");
 		return (-1);
 	}
 	top = stack;
