@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/07 16:42:36 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/26 19:26:56 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/05 23:58:08 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ t_dl_list	*ft_dl_lstback(t_dl_list *lst)
 {
 	if (!lst)
 	{
-		ft_putendl("ft_dl_lstback error:\nsent parameter is NULL.");
+		ERROR_PARAM("ft_dl_lstback");
 		return (NULL);
 	}
 	if (lst->next)

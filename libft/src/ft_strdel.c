@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/01 12:33:25 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/26 03:36:11 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/05 23:54:24 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,16 +18,12 @@ void	ft_strdel(char **as)
 {
 	if (!as)
 	{
-		ft_putendl("ft_strdel returned the following error:\n\
-					sent parameter is NULL.\n\
-					Verify your code, it is unsafe !!!");
+		ERROR_PARAM("ft_strdel");
 		return ;
 	}
 	if (!*as)
 	{
-		ft_putendl("ft_strdel returned the following error:\n\
-					free candidate is NULL.\n\
-					Verify your code, it is unsafe !!!");
+		ERROR_FREE("ft_strdel");
 		return ;
 	}
 	free(*as);

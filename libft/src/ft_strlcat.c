@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/01 12:34:31 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/26 22:43:26 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/05 23:56:01 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ size_t	ft_strlcat(char *dst, char const *src, size_t size)
 {
 	if (!dst || !src)
 	{
-		ft_putendl("ft_strlcat error:\nsent parameter is NULL.");
+		ERROR_PARAM("ft_strlcat");
 		return (0);
 	}
 	return (cat(dst, src, size));

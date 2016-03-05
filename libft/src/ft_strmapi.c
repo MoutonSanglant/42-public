@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/01 12:35:40 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/26 22:18:00 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/05 23:56:21 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,7 @@ char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 
 	if (!s || !f)
 	{
-		ft_putendl("ft_strmapi returned the following error:\n\
-					sent parameter is NULL.\n\
-					Verify your code, it is unsafe !!!");
+		ERROR_PARAM("ft_strmapi");
 		return (NULL);
 	}
 	new_str = ft_strnew(ft_strlen(s));

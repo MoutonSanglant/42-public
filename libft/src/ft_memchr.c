@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/01 12:37:26 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/26 20:00:02 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/05 23:44:20 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,7 @@ void	*ft_memchr(void const *s, int c, size_t n)
 
 	if (!s)
 	{
-		ft_putendl("ft_memchr returned the following error:\n\
-					sent parameter is NULL.\n\
-					Verify your code, it is unsafe !!!");
+		ERROR_PARAM("ft_memchr");
 		return (NULL);
 	}
 	i = 0;

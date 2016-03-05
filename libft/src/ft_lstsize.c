@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/07 17:14:37 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/26 19:57:48 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/05 23:45:37 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,7 @@ int		ft_lstsize(t_list *lst)
 
 	if (!lst)
 	{
-		ft_putendl("ft_lstsize returned the following error:\n\
-					sent parameter is NULL.\n\
-					Verify your code, it is unsafe !!!");
+		ERROR_PARAM("ft_lstsize");
 		return (-1);
 	}
 	i = 0;

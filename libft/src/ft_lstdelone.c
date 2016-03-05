@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/03 10:30:28 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/26 22:50:26 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/06 00:16:23 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,16 +18,12 @@ void	ft_lstdelone(t_list **alst, void (*del)(void *, size_t))
 {
 	if (!alst || !del)
 	{
-		ft_putendl("ft_lstdelone returned the following error:\n\
-					sent parameter is NULL.\n\
-					Verify your code, it is unsafe !!!");
+		ERROR_PARAM("ft_lstdelone");
 		return ;
 	}
 	if (!*alst)
 	{
-		ft_putendl("ft_lstdelone returned the following error:\n\
-					free candidate is NULL.\n\
-					Verify your code, it is unsafe !!!");
+		ERROR_FREE("ft_lstdelone");
 		return ;
 	}
 	del((*alst)->content, (*alst)->content_size);

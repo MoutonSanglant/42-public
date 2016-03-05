@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/01 12:35:58 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/26 22:23:39 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/05 23:57:38 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,7 @@ char	*ft_strnstr(char const *s1, char const *s2, size_t n)
 
 	if (!s1 || !s2)
 	{
-		ft_putendl("ft_strnstr returned the following error:\n\
-					sent parameter is NULL.\n\
-					Verify your code, it is unsafe !!!");
+		ERROR_PARAM("ft_strnstr");
 		return (NULL);
 	}
 	i = 0;

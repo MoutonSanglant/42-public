@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/14 15:08:07 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/02 21:51:12 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/06 00:24:13 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,6 +156,39 @@ static const char	*read_arg(va_list ap,
 	return (spec);
 }
 
+#ifdef DEBUG
+
+int					ft_printf(const char *restrict format, ...)
+{
+	const char	*from_ptr;
+	const char	*to_ptr;
+	va_list		ap;
+	t_fdata		fdatas;
+
+	if (!format)
+	{
+		ERROR_PARAM("ft_printf");
+		return (-1);
+	}
+	fdatas.bcount = 0;
+	va_start(ap, format);
+	from_ptr = format;
+	while ((to_ptr = ft_strchr(from_ptr, '%')))
+	{
+		fdatas.bcount += write(1, from_ptr, (to_ptr - from_ptr));
+		to_ptr = read_arg(ap, (to_ptr + 1), &fdatas) + 1;
+		if (fdatas.flag & FLAG_FORMAT_ERROR)
+			return (fdatas.bcount);
+		from_ptr = to_ptr;
+	}
+	fdatas.bcount += write(1, from_ptr, ft_strlen(from_ptr));
+	va_end(ap);
+	return (fdatas.bcount);
+
+}
+
+#else
+
 int					ft_printf(const char *restrict format, ...)
 {
 	const char	*from_ptr;
@@ -178,3 +211,4 @@ int					ft_printf(const char *restrict format, ...)
 	va_end(ap);
 	return (fdatas.bcount);
 }
+#endif

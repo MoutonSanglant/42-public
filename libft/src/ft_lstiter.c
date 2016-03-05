@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/03 10:48:21 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/26 19:57:55 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/06 00:08:02 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,7 @@ void	ft_lstiter(t_list *lst, void (*f)(t_list *elem))
 {
 	if (!lst || !f)
 	{
-		ft_putendl("ft_lstiter returned the following error:\n\
-					sent parameter is NULL.\n\
-					Verify your code, it is unsafe !!!");
+		ERROR_PARAM("ft_lstiter");
 		return ;
 	}
 	f(lst);

@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/01 12:35:43 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/26 22:18:52 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/06 00:25:05 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,7 @@ char	*ft_strncat(char *s1, char const *s2, size_t n)
 
 	if (!s1 || !s2)
 	{
-		ft_putendl("ft_strncat returned the following error:\n\
-					sent parameter is NULL.\n\
-					Verify your code, it is unsafe !!!");
+		ERROR_PARAM("ft_strncat");
 		return (NULL);
 	}
 	ptr = s1;

@@ -130,8 +130,6 @@
 #  define KEY_PAGE_DOWN	121
 # endif
 
-# define ABS(x) (x < 0) ? -x : x
-
 # define DEG(x) (x * 180.0 / M_PI)
 # define RAD(x) (x * M_PI / 180.0)
 

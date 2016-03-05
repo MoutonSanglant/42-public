@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/01 12:35:45 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/01/26 22:19:48 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/05 23:56:44 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,7 @@ int	ft_strncmp(char const *s1, char const *s2, size_t n)
 
 	if (!s1 || !s2)
 	{
-		ft_putendl("ft_strncmp returned the following error:\n\
-					sent parameter is NULL.\n\
-					Verify your code, it is unsafe !!!");
+		ERROR_PARAM("ft_strncmp");
 		return (-1);
 	}
 	if (n == 0)
