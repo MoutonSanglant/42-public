@@ -1,0 +1,4 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =2
+let g:netrw_dirhist_1='/nfs/2015/t/tdefresn/p4/puissance4.dSYM'
+let g:netrw_dirhist_2='/nfs/2015/t/tdefresn/interaction/git/.git/branches'
