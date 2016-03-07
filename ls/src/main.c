@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/03 17:43:51 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/05 20:45:50 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/07 20:06:02 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,24 @@
 **	- read paths
 */
 
+void	print_detailed_line(const char *str)
+{
+	ft_printf("-rwxrwxrwx  1 tdefresn  2015_paris %6i Mar %2i 25:99 %s\n", str, 200, 0);
+}
+
+void	print_line(const char *str)
+{
+	ft_printf("%s\n", str);
+}
+
 static int	sort_lexicographic (void *s1, void *s2)
 {
 	return (ft_strcmp((const char *)s1, (const char *)s2) <= 0);
 }
+
+/*
+**	Should set a function pointer to a specific print method
+*/
 
 static int		read_flags(int argc, char **argv, t_ls_datas *ls_datas)
 {
@@ -121,9 +135,9 @@ static void		read_args(int argc, char **argv, t_ls_datas *ls_datas)
 
 /*
 **	Degueulasse...
-**	A reecrier, ainsi que ft_lstsort ! :)
+**	A reecrire, ainsi que ft_lstsort ! :)
 */
-int		read_dir(t_list *path, t_ls_flags flags)
+int		read_dir(t_list *path, t_ls_flags flags, void (*print_fn)(const char *))
 {
 	struct dirent	*p_dirent;
 	DIR				*p_dir;
@@ -143,18 +157,16 @@ int		read_dir(t_list *path, t_ls_flags flags)
 		d_name = p_dirent->d_name;
 		if (!list)
 		{
-			if (d_name[0] != '.')
-				list = ft_lstnew((void *)d_name, sizeof(char) * (ft_strlen(d_name) + 1));
-			else if (flags & FLAG_A)
+			if (d_name[0] != '.' || flags & FLAG_A)
 				list = ft_lstnew((void *)d_name, sizeof(char) * (ft_strlen(d_name) + 1));
 		}
 		else
 		{
-			if (d_name[0] != '.')
+			if (d_name[0] != '.' || flags & FLAG_A)
+			{
 				list->next = ft_lstnew((void *)d_name, sizeof(char) * (ft_strlen(d_name) + 1));
-			else if (flags & FLAG_A)
-				list->next = ft_lstnew((void *)d_name, sizeof(char) * (ft_strlen(d_name) + 1));
-			list = list->next;
+				list = list->next;
+			}
 		}
 		if (!list_start)
 			list_start = list;
@@ -163,7 +175,7 @@ int		read_dir(t_list *path, t_ls_flags flags)
 		list = ft_lstsort(list_start, &sort_lexicographic);
 	while (list)
 	{
-		ft_printf("%s\n", (char *)list->content);
+		print_fn((const char *)((char *)list->content));
 		list = list->next;
 	}
 	closedir(p_dir);
@@ -176,18 +188,21 @@ int		main(int argc, char **argv)
 	t_list			*path;
 	int				error;
 	int				last_error;
+	void			(*print)(const char *);
 
 	ls_datas.flags = FLAG_NONE;
 	ls_datas.path = NULL;
 
-	ft_putchar('\n');
 	error = 0;
 	read_args(argc, argv, &ls_datas);
 	path = ls_datas.path;
+	print = &print_line;
+	if (ls_datas.flags & FLAG_L)
+		print = &print_detailed_line;
 	while (path)
 	{
 		path = ft_lstsort(path, &sort_lexicographic);
-		last_error = read_dir(path, ls_datas.flags);
+		last_error = read_dir(path, ls_datas.flags, print);
 		if (last_error)
 			error = last_error;
 		path = path->next;

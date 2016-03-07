@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/05 17:15:49 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/05 23:35:22 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/07 19:42:55 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int		error_path(const char *s)
 {
 	ft_putstr("ft_ls: ");
 	perror(s);
-	return (errno);
+	return (1);
 }
 
 void	error_usage(int c)
