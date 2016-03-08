@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/03 17:43:51 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/08 01:15:32 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/08 10:44:38 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,14 +63,24 @@ void	print_line(const t_file_datas *file_data)
 	ft_printf("%s\n", file_data->file);
 }
 
-static int	sort_antilexicographic (void *s1, void *s2)
+static int	sort_antilexicographic (void *struct1, void *struct2)
 {
-	return (ft_strcmp((const char *)s1, (const char *)s2) > 0);
+	const char *s1;
+	const char *s2;
+
+	s1 = ((t_file_datas *)struct1)->file;
+	s2 = ((t_file_datas *)struct2)->file;
+	return (ft_strcmp(s1, s2) > 0);
 }
 
-static int	sort_lexicographic (void *s1, void *s2)
+static int	sort_lexicographic (void *struct1, void *struct2)
 {
-	return (ft_strcmp((const char *)s1, (const char *)s2) <= 0);
+	const char *s1;
+	const char *s2;
+
+	s1 = ((t_file_datas *)struct1)->file;
+	s2 = ((t_file_datas *)struct2)->file;
+	return (ft_strcmp(s1, s2) <= 0);
 }
 
 /*
@@ -141,6 +151,26 @@ static void		read_args(int argc, char **argv, t_ls_datas *ls_datas)
 		ls_datas->path = ft_lstnew((void *)".", sizeof(char) * 2);
 }
 
+static void		clear_file_list(void *node, size_t size)
+{
+	t_file_datas *file_data;
+
+	(void) size;
+	file_data = (t_file_datas *)node;
+	//ft_printf("abc: %s\n", file_data->file);
+	ft_memdel((void **)&file_data);
+	//ft_memdel(&node);
+}
+
+static void		clear_path_list(void *node, size_t size)
+{
+	char	*str;
+
+	(void)size;
+	str = (char *)node;
+	ft_strdel(&str);
+}
+
 /*
 **	Degueulasse...
 **	A reecrire, ainsi que ft_lstsort ! :)
@@ -173,6 +203,8 @@ int		read_dir(t_list *path, t_ls_flags flags,
 			if (d_name[0] != '.' || flags & FLAG_A)
 			{
 				file_data.file = d_name;
+				// Prefix is missing, so we can't read subfolders until we
+				// specify the whole path from the current directory
 				ret = stat(d_name, &file_data.stat);
 				if (ret < 0)
 					error_unimplemented();
@@ -185,6 +217,8 @@ int		read_dir(t_list *path, t_ls_flags flags,
 			if (d_name[0] != '.' || flags & FLAG_A)
 			{
 				file_data.file = d_name;
+				// Prefix is missing, so we can't read subfolders until we
+				// specify the whole path from the current directory
 				ret = stat(d_name, &file_data.stat);
 				if (ret < 0)
 					error_unimplemented();
@@ -198,6 +232,7 @@ int		read_dir(t_list *path, t_ls_flags flags,
 	}
 	if (list)
 		list = ft_lstsort(list_start, sort_fn);
+	list_start = list;
 	while (list)
 	{
 		p_file_data = (t_file_datas *)list->content;
@@ -207,6 +242,7 @@ int		read_dir(t_list *path, t_ls_flags flags,
 		**	Memory is not freed yet (should use lstdel)
 		*/
 	}
+	ft_lstdel(&list_start, &clear_file_list);
 	closedir(p_dir);
 	return (0);
 }
@@ -215,6 +251,7 @@ int		main(int argc, char **argv)
 {
 	t_ls_datas		ls_datas;
 	t_list			*path;
+	t_list			*prev;
 	int				error;
 	int				last_error;
 	void			(*print)(const t_file_datas *);
@@ -238,7 +275,9 @@ int		main(int argc, char **argv)
 		last_error = read_dir(path, ls_datas.flags, print, sort);
 		if (last_error)
 			error = last_error;
+		prev = path;
 		path = path->next;
+		ft_lstdelone(&prev, &clear_path_list);
 	}
 	return (error);
 }
