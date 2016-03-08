@@ -16,11 +16,14 @@
 # include <stdlib.h>
 # include <dirent.h>
 # include <sys/stat.h>
+# include <pwd.h>
+# include <grp.h>
+# include <time.h>
 # include <includes/libft.h>
 
 # define VALID_FLAGS "Ralrt"
 
-typedef enum	e_ls_flags
+typedef enum		e_ls_flags
 {
 	FLAG_NONE = 0x0,
 	FLAG_L = 0x1,
@@ -28,13 +31,13 @@ typedef enum	e_ls_flags
 	FLAG_BIG_R = 0x4,
 	FLAG_A = 0x8,
 	FLAG_T = 0x10
-}				t_ls_flags;
+}					t_ls_flags;
 
-typedef struct	s_file_datas
+typedef struct		s_file_datas
 {
 	char		*file;
-	struct stat	stat;
-}				t_file_datas;
+	struct stat	st_stat;
+}					t_file_datas;
 
 /*
 **	Padding: 8 (*)
@@ -46,15 +49,15 @@ typedef struct	s_file_datas
 **	(4 bytes losts)
 */
 
-typedef struct	s_ls_datas
+typedef struct		s_ls_datas
 {
 	DIR			*p_dir;
 	t_list		*path;
 	t_ls_flags	flags;
-}				t_ls_datas;
+}					t_ls_datas;
 
-void	error_unimplemented();
-int		error_path(const char *s);
-void	error_usage(int c);
+void				error_unimplemented();
+int					error_path(const char *s);
+void				error_usage(int c);
 
 #endif
