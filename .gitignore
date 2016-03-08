@@ -8,4 +8,6 @@ libft/libft.a
 .DS_Store
 vgcore.*
 
+ls/ft_ls
+
 !/School/Config/.*
