@@ -8,6 +8,8 @@ libft/libft.a
 .DS_Store
 vgcore.*
 
+*.netrwhist
+
 ls/ft_ls
 
 !/School/Config/.*
