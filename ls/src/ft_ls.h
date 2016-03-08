@@ -15,6 +15,7 @@
 
 # include <stdlib.h>
 # include <dirent.h>
+# include <sys/stat.h>
 # include <includes/libft.h>
 
 # define VALID_FLAGS "Ralrt"
@@ -28,6 +29,12 @@ typedef enum	e_ls_flags
 	FLAG_A = 0x8,
 	FLAG_T = 0x10
 }				t_ls_flags;
+
+typedef struct	s_file_datas
+{
+	char		*file;
+	struct stat	stat;
+}				t_file_datas;
 
 /*
 **	Padding: 8 (*)
@@ -46,6 +53,7 @@ typedef struct	s_ls_datas
 	t_ls_flags	flags;
 }				t_ls_datas;
 
+void	error_unimplemented();
 int		error_path(const char *s);
 void	error_usage(int c);
 
