@@ -283,6 +283,7 @@ t_vert			**get_vertmap_from_file(char *path, int *x, int *y);
 
 t_mlx_sess		*init_mlx_sess();
 void			start_mlx_sess(t_mlx_sess *sess);
+void			destroy_mlx_sess(t_mlx_sess	*sess);
 
 /*
 **	RENDERING
