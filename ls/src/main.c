@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/03 17:43:51 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/08 10:44:38 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/08 20:35:03 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,13 @@
 **	=============
 **	Authorized functions:
 **		write
-**		>> opendir (errno)
-**		>> readdir
-**		>> closedir
-**		>> stat
-**		>> lstat
-**		>> getpwuid
-**		>> getgrgid
+**		*>> opendir (errno)
+**		*>> readdir
+**		*>> closedir
+**		*>> stat
+**		>> lstat // for symbolic links
+**		*>> getpwuid
+**		*>> getgrgid
 **		>> listxattr
 **		>> getxattr
 **		time
@@ -50,12 +50,64 @@
 **	- read paths
 */
 
+static void		file_mode_to_str(mode_t mode, char *str)
+{
+	int		i;
+
+	i = 0;
+	while (i < 11)
+		str[i++] = '-';
+	str[10] = ' ';
+	str[11] = '\0';
+	if (mode & S_IFDIR)
+		str[0] = 'd';
+	if (mode & S_IRUSR)
+		str[1] = 'r';
+	if (mode & S_IWUSR)
+		str[2] = 'w';
+	if (mode & S_IXUSR)
+		str[3] = 'x';
+	if (mode & S_IRGRP)
+		str[4] = 'r';
+	if (mode & S_IWGRP)
+		str[5] = 'w';
+	if (mode & S_IXGRP)
+		str[6] = 'x';
+	if (mode & S_IROTH)
+		str[7] = 'r';
+	if (mode & S_IWOTH)
+		str[8] = 'w';
+	if (mode & S_IXOTH)
+		str[9] = 'x';
+}
+
 //void	print_detailed_line(const char *str)
+#ifdef _DARWIN_FEATURE_64_BIT_INODE
 void	print_detailed_line(const t_file_datas *file_data)
 {
-	ft_printf("-rwxrwxrwx  1 tdefresn  2015_paris %6i Mar %2i 25:99 %s\n", (size_t)file_data->stat.st_size, 0, file_data->file);
-			//ft_printf("%i: %i\n", ret, (size_t)f_stat.st_size);
+	struct passwd	*file_passwd;
+	struct group	*file_group;
+	char			mode_str[12];
+	char			*date;
+
+	//ft_printf("Darwin 64\n");
+	date = ctime(&file_data->st_stat.st_mtimespec.tv_sec);
+	file_mode_to_str(file_data->st_stat.st_mode, mode_str);
+	file_passwd = getpwuid(file_data->st_stat.st_uid);
+	file_group = getgrgid(file_data->st_stat.st_gid);
+	/*
+	**	The user & group columns need to know the biggest entry
+	**	to compute the correct padding
+	*/
+	ft_printf("%s %2i %-12.12s  %-12.12s %6i %.12s %s\n", mode_str, (unsigned)file_data->st_stat.st_nlink, file_passwd->pw_name, file_group->gr_name, (size_t)file_data->st_stat.st_size, &date[4], file_data->file);
+	/*
+	ft_memdel((void **)&file_passwd);
+	ft_memdel((void **)&file_group);
+	ft_strdel(&date);
+	*/
 }
+#else
+#endif
 
 //void	print_line(const char *str)
 void	print_line(const t_file_datas *file_data)
@@ -182,6 +234,8 @@ int		read_dir(t_list *path, t_ls_flags flags,
 	struct dirent	*p_dirent;
 	DIR				*p_dir;
 	char			*d_name;
+	char			*full_path;
+	char			*tmp;
 	t_list			*list;
 	t_list			*list_start;
 	t_file_datas	file_data;
@@ -193,8 +247,10 @@ int		read_dir(t_list *path, t_ls_flags flags,
 	p_dir = opendir((char *)path->content);
 	if (!p_dir)
 		return (error_path((char *)path->content));
-	if (((char *)path->content)[0] != '.')
-		ft_printf("%s: \n", (char *)path->content);
+	// Should output only when multiple folders
+	// are inputed
+//	if (((char *)path->content)[0] != '.')
+//		ft_printf("%s: \n", (char *)path->content);
 	while ((p_dirent = readdir(p_dir)))
 	{
 		d_name = p_dirent->d_name;
@@ -205,10 +261,15 @@ int		read_dir(t_list *path, t_ls_flags flags,
 				file_data.file = d_name;
 				// Prefix is missing, so we can't read subfolders until we
 				// specify the whole path from the current directory
-				ret = stat(d_name, &file_data.stat);
+				full_path = ft_strjoin((char *)path->content, "/");
+				tmp = full_path;
+				full_path = ft_strjoin(full_path, d_name);
+				ret = stat(full_path, &file_data.st_stat);
 				if (ret < 0)
 					error_unimplemented();
 				list = ft_lstnew((void *)&file_data, sizeof(t_file_datas));
+				ft_strdel(&tmp);
+				ft_strdel(&full_path);
 			}
 				//list = ft_lstnew((void *)d_name, sizeof(char) * (ft_strlen(d_name) + 1));
 		}
@@ -219,12 +280,18 @@ int		read_dir(t_list *path, t_ls_flags flags,
 				file_data.file = d_name;
 				// Prefix is missing, so we can't read subfolders until we
 				// specify the whole path from the current directory
-				ret = stat(d_name, &file_data.stat);
+				full_path = ft_strjoin((char *)path->content, "/");
+				tmp = full_path;
+				full_path = ft_strjoin(full_path, d_name);
+				ret = stat(full_path, &file_data.st_stat);
+				//ret = stat(d_name, &file_data.stat);
 				if (ret < 0)
 					error_unimplemented();
 				list->next = ft_lstnew((void *)&file_data, sizeof(t_file_datas));
 				//list->next = ft_lstnew((void *)d_name, sizeof(char) * (ft_strlen(d_name) + 1));
 				list = list->next;
+				ft_strdel(&tmp);
+				ft_strdel(&full_path);
 			}
 		}
 		if (!list_start)
