@@ -184,6 +184,7 @@ int				ft_dl_lstsize(t_dl_list *lst);
 /*
 **	QUEUES
 */
+
 t_queue			*ft_queuenew(const void *content, size_t content_size);
 t_queue			*ft_queuefront(t_queue *queue);
 t_queue			*ft_queueback(t_queue *queue);
