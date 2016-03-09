@@ -36,7 +36,6 @@ typedef enum		e_ls_flags
 typedef struct		s_file_datas
 {
 	char		*name;
-	//void		*datas;
 	struct stat	st_stat;
 }					t_file_datas;
 
@@ -44,28 +43,68 @@ typedef struct		s_file_datas
 **	Padding: 8 (*)
 **	  8
 **	+ 8
+**  + 8
 **	+ 4
+**  + 8
+**  + 8
 **	===
-**	 20
+**	 44 (48)
 **	(4 bytes losts)
 */
 
 typedef struct		s_ls_datas
 {
 	DIR			*p_dir;
-	t_list		*folders;
+	t_list		*directories;
+	t_list		*files;
 	t_ls_flags	flags;
 	void		(*print_fn)(const t_file_datas *);
 	int			(*sort_fn)(void *, void *);
 }					t_ls_datas;
 
-void			read_args(int argc, char **argv, t_ls_datas *ls_datas);
+void				fetch_args(int argc, char **argv, t_ls_datas *ls_datas);
+int					read_dir(const char *folder_name, t_ls_datas *ls_datas);
 
-int		read_dir(const char *folder_name, t_ls_datas *ls_datas);
+/*
+********************************************************************************
+**							:: List functions ::							   *
+********************************************************************************
+*/
 
-void	print_line(const t_file_datas *file_data);
-void	print_detailed_line(const t_file_datas *file_data);
+/*
+**								: list_fn.c :
+*/
+void				list_files(t_ls_datas *ls_datas, t_list *file_list,
+							const char *folder_name);
+int					list_directories(t_ls_datas *ls_datas);
 
+/*
+********************************************************************************
+**							:: Mutable functions ::							   *
+********************************************************************************
+*/
+
+/*
+**								: print_fn.c :
+*/
+void				print_one(const t_file_datas *file_data);
+void				print_detailed_line(const t_file_datas *file_data);
+
+/*
+**								: sort_fn.c :
+*/
+int					sort_lexicographic (void *struct1, void *struct2);
+int					sort_antilexicographic (void *struct1, void *struct2);
+
+/*
+********************************************************************************
+**							:: Error functions ::							   *
+********************************************************************************
+*/
+
+/*
+**								: errors.c :
+*/
 void				error_unimplemented();
 int					error_path(const char *s);
 void				error_usage(int c);
