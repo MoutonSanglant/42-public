@@ -30,7 +30,7 @@ endif
 SRC_PREFIX	= ./src/
 OBJ_PREFIX	= ./obj/
 
-SRC	= main errors
+SRC	= main print_line_fn read_args read_dir errors
 
 ifeq ($(BUILD), Debug)
 	SRC +=
