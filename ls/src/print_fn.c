@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/09 16:32:24 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/09 16:32:27 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/09 23:59:06 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,32 @@ void	print_detailed_line(const t_file_datas *file)
 	*/
 }
 #else
+void	print_detailed_line(const t_file_datas *file)
+{
+	struct passwd		*file_passwd;
+	struct group		*file_group;
+	char				mode_str[12];
+	char				*date;
+	const struct stat	*st_stat;
+
+	st_stat = &file->st_stat;
+	//ft_printf("Darwin 64\n");
+	date = ctime(&st_stat->st_mtim.tv_sec);
+	file_mode_to_str(st_stat->st_mode, mode_str);
+	file_passwd = getpwuid(st_stat->st_uid);
+	file_group = getgrgid(st_stat->st_gid);
+	/*
+	**	The user & group columns need to know the biggest entry
+	**	to compute the correct padding
+	*/
+	ft_printf("%s %2i %-12.12s  %-12.12s %6i %.12s %s\n", mode_str, (unsigned)st_stat->st_nlink, file_passwd->pw_name, file_group->gr_name, (size_t)st_stat->st_size, &date[4], file->name);
+	/*
+	ft_memdel((void **)&file_passwd);
+	ft_memdel((void **)&file_group);
+	ft_strdel(&date);
+	*/
+}
+
 #endif
 
 void	print_one(const t_file_datas *file)

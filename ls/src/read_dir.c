@@ -6,13 +6,13 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/09 11:41:23 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/09 22:38:10 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/09 23:59:33 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-static t_list	*(t_ls_datas *ls_datas, char *file_name,
+static t_list	*abc(t_ls_datas *ls_datas, char *file_name,
 							const char *folder_name)
 {
 	t_list			*files;
