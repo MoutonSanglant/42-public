@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print_line_fn.c                                    :+:      :+:    :+:   */
+/*   print_fn.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/03/09 11:43:49 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/09 12:57:20 by tdefresn         ###   ########.fr       */
+/*   Created: 2016/03/09 16:32:24 by tdefresn          #+#    #+#             */
+/*   Updated: 2016/03/09 16:32:27 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void	print_detailed_line(const t_file_datas *file)
 #else
 #endif
 
-void	print_line(const t_file_datas *file)
+void	print_one(const t_file_datas *file)
 {
 	ft_printf("%s\n", file->name);
 }

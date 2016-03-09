@@ -78,7 +78,9 @@ compare_err "$ls_err" "$ft_ls_err"
 # Tests to write:
 # -empty folder
 # -multiple folders
-#
+# -same name folder / file
+# -same name folder / file on reverse
+# -permission denied (/exam)
 
 #make
 #~/.brew/Cellar/valgrind/3.11.0/bin/valgrind --track-origins=yes --leak-check=yes ./crashtest
