@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/09 11:45:42 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/09 12:02:41 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/09 14:08:37 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@ static int	sort_antilexicographic (void *struct1, void *struct2)
 	const char *s1;
 	const char *s2;
 
-	s1 = ((t_file_datas *)struct1)->file;
-	s2 = ((t_file_datas *)struct2)->file;
+	s1 = ((t_file_datas *)struct1)->name;
+	s2 = ((t_file_datas *)struct2)->name;
 	return (ft_strcmp(s1, s2) > 0);
 }
 
@@ -27,8 +27,8 @@ static int	sort_lexicographic (void *struct1, void *struct2)
 	const char *s1;
 	const char *s2;
 
-	s1 = ((t_file_datas *)struct1)->file;
-	s2 = ((t_file_datas *)struct2)->file;
+	s1 = ((t_file_datas *)struct1)->name;
+	s2 = ((t_file_datas *)struct2)->name;
 	return (ft_strcmp(s1, s2) <= 0);
 }
 
@@ -74,31 +74,42 @@ static int		fetch_flags(int argc, char **argv, t_ls_datas *ls_datas)
 
 void			read_args(int argc, char **argv, t_ls_datas *ls_datas)
 {
-	t_list	*path;
+	t_list	*folder_list;
+	t_file_datas	folder;
 	char	*tmp;
 	char	*arg;
 	int		i;
 
-	path = NULL;
+	folder_list = NULL;
 	i = fetch_flags(argc, argv, ls_datas);
 	while (++i < argc)
 	{
 		arg = argv[i];
 		if ((tmp = ft_strdup(arg)))
 		{
-			if (path)
+			if (folder_list)
 			{
-				path->next = ft_lstnew((void *)tmp, sizeof(char) * (ft_strlen(tmp) + 1));
-				path = path->next;
+				folder.name = ft_strdup(tmp);
+				//folder.st_stat = NULL;
+				folder_list->next = ft_lstnew((void *)&folder, sizeof(t_file_datas));
+				folder_list = folder_list->next;
 			}
 			else
-				path = ft_lstnew((void *)tmp, sizeof(char) * (ft_strlen(tmp) + 1));
-			if (!ls_datas->path)
-				ls_datas->path = path;
+			{
+				folder.name = ft_strdup(tmp);
+				//folder.st_stat = NULL;
+				folder_list = ft_lstnew((void *)&folder, sizeof(t_file_datas));
+				if (!ls_datas->folders)
+					ls_datas->folders = folder_list;
+			}
 			ft_strdel(&tmp);
 		}
 	}
-	if (!ls_datas->path)
-		ls_datas->path = ft_lstnew((void *)".", sizeof(char) * 2);
+	if (!ls_datas->folders)
+	{
+		folder.name = ft_strdup(".");
+		//folder.st_stat = NULL;
+		ls_datas->folders = ft_lstnew((void *)&folder, sizeof(t_file_datas));
+	}
 }
 

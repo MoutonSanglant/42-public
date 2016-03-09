@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/09 11:41:23 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/09 11:58:18 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/09 14:12:46 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,7 @@ static void		clear_file_list(void *node, size_t size)
 
 	(void) size;
 	file_data = (t_file_datas *)node;
-	//ft_printf("abc: %s\n", file_data->file);
 	ft_memdel((void **)&file_data);
-	//ft_memdel(&node);
 }
 
 
@@ -28,7 +26,7 @@ static void		clear_file_list(void *node, size_t size)
 **	Degueulasse...
 **	A reecrire, ainsi que ft_lstsort ! :)
 */
-int		read_dir(t_list *path, t_ls_datas *ls_datas)
+int		read_dir(const char *folder_name, t_ls_datas *ls_datas)
 {
 	struct dirent	*p_dirent;
 	DIR				*p_dir;
@@ -41,15 +39,12 @@ int		read_dir(t_list *path, t_ls_datas *ls_datas)
 	t_file_datas	*p_file_data;
 	int				ret;
 
+	//ft_memdel(&node);
 	list = NULL;
 	list_start = NULL;
-	p_dir = opendir((char *)path->content);
+	p_dir = opendir(folder_name);
 	if (!p_dir)
-		return (error_path((char *)path->content));
-	// Should output only when multiple folders
-	// are inputed
-//	if (((char *)path->content)[0] != '.')
-//		ft_printf("%s: \n", (char *)path->content);
+		return (error_path(folder_name));
 	while ((p_dirent = readdir(p_dir)))
 	{
 		d_name = p_dirent->d_name;
@@ -57,10 +52,10 @@ int		read_dir(t_list *path, t_ls_datas *ls_datas)
 		{
 			if (d_name[0] != '.' || ls_datas->flags & FLAG_A)
 			{
-				file_data.file = d_name;
+				file_data.name = d_name;
 				// Prefix is missing, so we can't read subfolders until we
 				// specify the whole path from the current directory
-				full_path = ft_strjoin((char *)path->content, "/");
+				full_path = ft_strjoin(folder_name, "/");
 				tmp = full_path;
 				full_path = ft_strjoin(full_path, d_name);
 				ret = stat(full_path, &file_data.st_stat);
@@ -76,10 +71,10 @@ int		read_dir(t_list *path, t_ls_datas *ls_datas)
 		{
 			if (d_name[0] != '.' || ls_datas->flags & FLAG_A)
 			{
-				file_data.file = d_name;
+				file_data.name = d_name;
 				// Prefix is missing, so we can't read subfolders until we
 				// specify the whole path from the current directory
-				full_path = ft_strjoin((char *)path->content, "/");
+				full_path = ft_strjoin(folder_name, "/");
 				tmp = full_path;
 				full_path = ft_strjoin(full_path, d_name);
 				ret = stat(full_path, &file_data.st_stat);
@@ -108,7 +103,8 @@ int		read_dir(t_list *path, t_ls_datas *ls_datas)
 		**	Memory is not freed yet (should use lstdel)
 		*/
 	}
-	ft_lstdel(&list_start, &clear_file_list);
+	if (list_start)
+		ft_lstdel(&list_start, &clear_file_list);
 	closedir(p_dir);
 	return (0);
 }
