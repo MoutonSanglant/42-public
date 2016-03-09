@@ -35,7 +35,8 @@ typedef enum		e_ls_flags
 
 typedef struct		s_file_datas
 {
-	char		*file;
+	char		*name;
+	//void		*datas;
 	struct stat	st_stat;
 }					t_file_datas;
 
@@ -52,7 +53,7 @@ typedef struct		s_file_datas
 typedef struct		s_ls_datas
 {
 	DIR			*p_dir;
-	t_list		*path;
+	t_list		*folders;
 	t_ls_flags	flags;
 	void		(*print_fn)(const t_file_datas *);
 	int			(*sort_fn)(void *, void *);
@@ -60,7 +61,7 @@ typedef struct		s_ls_datas
 
 void			read_args(int argc, char **argv, t_ls_datas *ls_datas);
 
-int		read_dir(t_list *path, t_ls_datas *ls_datas);
+int		read_dir(const char *folder_name, t_ls_datas *ls_datas);
 
 void	print_line(const t_file_datas *file_data);
 void	print_detailed_line(const t_file_datas *file_data);

@@ -75,6 +75,11 @@ $exec -a
 ft_ls_err=$?
 compare_err "$ls_err" "$ft_ls_err"
 
+# Tests to write:
+# -empty folder
+# -multiple folders
+#
+
 #make
 #~/.brew/Cellar/valgrind/3.11.0/bin/valgrind --track-origins=yes --leak-check=yes ./crashtest
 #./crashtest

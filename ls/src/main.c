@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/03 17:43:51 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/09 11:57:26 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/09 14:19:46 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,26 +62,38 @@ static void		clear_path_list(void *node, size_t size)
 int		main(int argc, char **argv)
 {
 	t_ls_datas		ls_datas;
-	t_list			*path;
+	//t_file_datas			*folder;
+	t_list			*folder_list;
 	t_list			*prev;
 	int				error;
 	int				last_error;
+	const char		*folder_name;
+	int				multi_folder;
 
+	multi_folder = 0;
 	ls_datas.flags = FLAG_NONE;
-	ls_datas.path = NULL;
+	ls_datas.folders = NULL;
 
 	error = 0;
 	read_args(argc, argv, &ls_datas);
-	path = ls_datas.path;
-	while (path)
+	folder_list = ls_datas.folders;
+	prev = folder_list;
+	folder_list = ft_lstsort(prev, ls_datas.sort_fn);
+	if (folder_list->next)
+		multi_folder = 1;
+	while (folder_list)
 	{
-		path = ft_lstsort(path, ls_datas.sort_fn);
-		last_error = read_dir(path, &ls_datas);
+		folder_name = ((t_file_datas *)folder_list->content)->name;
+		if (multi_folder)
+			ft_printf("%s:\n", (folder_name[0] != '\0') ? folder_name : ".");
+		last_error = read_dir(folder_name, &ls_datas);
 		if (last_error)
 			error = last_error;
-		prev = path;
-		path = path->next;
+		prev = folder_list;
+		folder_list = folder_list->next;
 		ft_lstdelone(&prev, &clear_path_list);
+		if (folder_list)
+			ft_putchar('\n');
 	}
 	return (error);
 }
