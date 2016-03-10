@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/09 20:15:19 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/10 18:53:38 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/10 22:25:53 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,13 @@ void			list_files(t_ls_datas *ls_datas, t_list *file_list,
 	if (!file_list)
 		return ;
 	if (multi++)
-		ft_printf("\n%s:\n", (folder_name[0] != '\0') ? folder_name : ".");
+		ft_putchar('\n');
+	if (folder_name[0] != '\0')
+	{
+		ft_printf("%s:\n", (folder_name[0] != '\0') ? folder_name : ".");
+		if (ls_datas->print_fn == &print_detailed_line)
+		ft_printf("total %u\n", 42);
+	}
 	file_list = ft_lstsort(file_list, ls_datas->sort_fn);
 	prev_element = file_list;
 	while (file_list)
@@ -54,10 +60,6 @@ int				list_directories(t_ls_datas *ls_datas)
 	prev_element = directory_list;
 	while (directory_list)
 	{
-		ls_datas->col_user_width = 0;
-		ls_datas->col_group_width = 0;
-		ls_datas->col_links_width = 0;
-		ls_datas->col_size_width = 0;
 		file_name = ((t_file_datas *)directory_list->content)->name;
 		if ((read_error = read_dir(file_name, ls_datas)))
 			ret_error = read_error;
