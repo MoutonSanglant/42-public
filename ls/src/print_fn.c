@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/09 16:32:24 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/09 23:59:06 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/10 17:51:28 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,27 +43,59 @@ static void		file_mode_to_str(mode_t mode, char *str)
 		str[9] = 'x';
 }
 
+char	*indent_str(char *dst, size_t len, int c, int reverse)
+{
+	char	*str;
+	size_t	i;
+	size_t	n;
+
+	n = len - ft_strlen(dst);
+	if (n <= 0)
+		return (dst);
+
+	i = 0;
+	str = ft_strnew(n);
+	while (i < n)
+		str[i++] = c;
+	str[i] = '\0';
+	dst = (reverse) ? ft_strjoin(str, dst) : ft_strjoin(dst, str);
+	ft_strdel(&str);
+	return (dst);
+}
+
 //void	print_detailed_line(const char *str)
 #ifdef _DARWIN_FEATURE_64_BIT_INODE
-void	print_detailed_line(const t_file_datas *file)
+void	print_detailed_line(const t_ls_datas *ls_datas, const t_file_datas *file)
 {
-	struct passwd		*file_passwd;
-	struct group		*file_group;
+	char				*username;
+	char				*groupname;
+	char				*str_links;
+	char				*str_size;
 	char				mode_str[12];
 	char				*date;
 	const struct stat	*st_stat;
 
+	(void)ls_datas;
 	st_stat = &file->st_stat;
 	//ft_printf("Darwin 64\n");
 	date = ctime(&st_stat->st_mtimespec.tv_sec);
 	file_mode_to_str(st_stat->st_mode, mode_str);
-	file_passwd = getpwuid(st_stat->st_uid);
-	file_group = getgrgid(st_stat->st_gid);
+	username = getpwuid(st_stat->st_uid)->pw_name;
+	groupname = getgrgid(st_stat->st_gid)->gr_name;
+	username = indent_str(username, ls_datas->col_user_width, ' ', 0);
+	groupname = indent_str(groupname, ls_datas->col_group_width, ' ', 0);
+	str_links = ft_uitoa((unsigned)st_stat->st_nlink);
+	str_links = indent_str(str_links, ls_datas->col_links_width, ' ', 1);
+	str_size = ft_uitoa((size_t)st_stat->st_size);
+	str_size = indent_str(str_size, ls_datas->col_size_width, ' ', 1);
 	/*
 	**	The user & group columns need to know the biggest entry
 	**	to compute the correct padding
 	*/
-	ft_printf("%s %2i %-12.12s  %-12.12s %6i %.12s %s\n", mode_str, (unsigned)st_stat->st_nlink, file_passwd->pw_name, file_group->gr_name, (size_t)st_stat->st_size, &date[4], file->name);
+	ft_printf("%s %s %s  %s  %s %.12s %s\n", mode_str, str_links, username,
+			groupname, str_size, &date[4], file->name);
+	ft_strdel(&str_links);
+	ft_strdel(&str_size);
 	/*
 	ft_memdel((void **)&file_passwd);
 	ft_memdel((void **)&file_group);
@@ -71,7 +103,7 @@ void	print_detailed_line(const t_file_datas *file)
 	*/
 }
 #else
-void	print_detailed_line(const t_file_datas *file)
+void	print_detailed_line(const t_ls_datas *ls_datas, const t_file_datas *file)
 {
 	struct passwd		*file_passwd;
 	struct group		*file_group;
@@ -79,6 +111,7 @@ void	print_detailed_line(const t_file_datas *file)
 	char				*date;
 	const struct stat	*st_stat;
 
+	(void)ls_datas;
 	st_stat = &file->st_stat;
 	//ft_printf("Darwin 64\n");
 	date = ctime(&st_stat->st_mtim.tv_sec);
@@ -99,7 +132,8 @@ void	print_detailed_line(const t_file_datas *file)
 
 #endif
 
-void	print_one(const t_file_datas *file)
+void	print_one(const t_ls_datas *ls_datas, const t_file_datas *file)
 {
+	(void)ls_datas;
 	ft_printf("%s\n", file->name);
 }
