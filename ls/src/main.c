@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/03 17:43:51 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/10 00:01:26 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/10 17:25:07 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,13 @@ int				main(int argc, char **argv)
 
 	error = 0;
 	ls_datas.p_dir = NULL;
-	ls_datas.flags = FLAG_NONE;
 	ls_datas.files = NULL;
 	ls_datas.directories = NULL;
+	ls_datas.col_user_width = 0;
+	ls_datas.col_group_width = 0;
+	ls_datas.col_links_width = 0;
+	ls_datas.col_size_width = 0;
+	ls_datas.flags = FLAG_NONE;
 	ls_datas.print_fn = &print_one;
 	ls_datas.sort_fn = &sort_lexicographic;
 	fetch_args(argc, argv, &ls_datas);

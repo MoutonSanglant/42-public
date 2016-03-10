@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/09 20:15:19 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/09 20:57:41 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/10 17:20:09 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void			list_files(t_ls_datas *ls_datas, t_list *file_list,
 	while (file_list)
 	{
 		p_file_data = (t_file_datas *)file_list->content;
-		ls_datas->print_fn(p_file_data);
+		ls_datas->print_fn(ls_datas, p_file_data);
 		prev_element = file_list;
 		file_list = file_list->next;
 		ft_lstdelone(&prev_element, &remove_element);

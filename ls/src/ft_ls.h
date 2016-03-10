@@ -35,8 +35,8 @@ typedef enum		e_ls_flags
 
 typedef struct		s_file_datas
 {
-	char		*name;
-	struct stat	st_stat;
+	char			*name;
+	struct stat		st_stat;
 }					t_file_datas;
 
 /*
@@ -58,7 +58,11 @@ typedef struct		s_ls_datas
 	t_list		*directories;
 	t_list		*files;
 	t_ls_flags	flags;
-	void		(*print_fn)(const t_file_datas *);
+	int			col_user_width;
+	int			col_group_width;
+	int			col_links_width;
+	int			col_size_width;
+	void		(*print_fn)(const struct s_ls_datas *, const t_file_datas *);
 	int			(*sort_fn)(void *, void *);
 }					t_ls_datas;
 
@@ -87,8 +91,8 @@ int					list_directories(t_ls_datas *ls_datas);
 /*
 **								: print_fn.c :
 */
-void				print_one(const t_file_datas *file_data);
-void				print_detailed_line(const t_file_datas *file_data);
+void				print_one(const t_ls_datas *ls_datas, const t_file_datas *file_data);
+void				print_detailed_line(const t_ls_datas *ls_datas, const t_file_datas *file_data);
 
 /*
 **								: sort_fn.c :
