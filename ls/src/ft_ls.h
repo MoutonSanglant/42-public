@@ -68,6 +68,9 @@ typedef struct		s_ls_datas
 
 void				fetch_args(int argc, char **argv, t_ls_datas *ls_datas);
 int					read_dir(const char *folder_name, t_ls_datas *ls_datas);
+t_list				*fetch_file_datas(t_ls_datas *ls_datas,
+										const char *file_name,
+										const char *folder_name);
 
 /*
 ********************************************************************************
@@ -91,8 +94,10 @@ int					list_directories(t_ls_datas *ls_datas);
 /*
 **								: print_fn.c :
 */
-void				print_one(const t_ls_datas *ls_datas, const t_file_datas *file_data);
-void				print_detailed_line(const t_ls_datas *ls_datas, const t_file_datas *file_data);
+void				print_one(const t_ls_datas *ls_datas,
+								const t_file_datas *file_data);
+void				print_detailed_line(const t_ls_datas *ls_datas,
+										const t_file_datas *file_data);
 
 /*
 **								: sort_fn.c :

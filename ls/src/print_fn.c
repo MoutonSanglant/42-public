@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/09 16:32:24 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/10 18:38:36 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/10 22:31:07 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,12 @@ char	*indent_str(char *dst, size_t len, int c, int reverse)
 	return (dst);
 }
 
-//void	print_detailed_line(const char *str)
+/*
+** - Not printing the correct number after 'total' (look in upward function)
+** - doesn't read link files correctly
+** - doesn't treat special attributes (causes a padding, look at '/' directory)
+*/
+
 #ifdef _DARWIN_FEATURE_64_BIT_INODE
 void	print_detailed_line(const t_ls_datas *ls_datas, const t_file_datas *file)
 {
