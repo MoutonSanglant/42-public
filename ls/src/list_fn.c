@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/09 20:15:19 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/10 17:20:09 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/10 18:53:38 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,10 @@ int				list_directories(t_ls_datas *ls_datas)
 	prev_element = directory_list;
 	while (directory_list)
 	{
+		ls_datas->col_user_width = 0;
+		ls_datas->col_group_width = 0;
+		ls_datas->col_links_width = 0;
+		ls_datas->col_size_width = 0;
 		file_name = ((t_file_datas *)directory_list->content)->name;
 		if ((read_error = read_dir(file_name, ls_datas)))
 			ret_error = read_error;

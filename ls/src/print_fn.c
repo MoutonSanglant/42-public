@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/09 16:32:24 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/10 17:51:28 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/10 18:38:36 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,10 +73,11 @@ void	print_detailed_line(const t_ls_datas *ls_datas, const t_file_datas *file)
 	char				*str_size;
 	char				mode_str[12];
 	char				*date;
-	const struct stat	*st_stat;
+	const struct stat			*st_stat;
 
-	(void)ls_datas;
 	st_stat = &file->st_stat;
+	//if (!st_stat->st_mtimespec)
+	//	return ;
 	//ft_printf("Darwin 64\n");
 	date = ctime(&st_stat->st_mtimespec.tv_sec);
 	file_mode_to_str(st_stat->st_mode, mode_str);
