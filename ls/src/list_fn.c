@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/09 20:15:19 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/11 14:37:39 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/11 17:23:06 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,14 @@ void			list_files(t_ls_datas *ls_datas, t_list *file_list,
 	static int		list_count = 0;
 	t_file_datas	*p_file_data;
 	t_list			*prev_element;
+	//t_list			*file;
 
-	if (!file_list)
-		return ;
 	if (list_count++)
 		ft_putchar('\n');
 	if (ls_datas->flags & _FLAG_PRINT_FOLDERS_NAME)
 		ft_printf("%s:\n", (folder_name[0] != '\0') ? folder_name : ".");
+	if (!file_list)
+		return ;
 	if (ls_datas->print_fn == &print_detailed_line)
 		ft_printf("total %u\n", ls_datas->total_blocks_count);
 	file_list = ft_lstsort(file_list, ls_datas->sort_fn);
@@ -44,11 +45,20 @@ void			list_files(t_ls_datas *ls_datas, t_list *file_list,
 	{
 		p_file_data = (t_file_datas *)file_list->content;
 		ls_datas->print_fn(ls_datas, p_file_data);
+		file_list = file_list->next;
+	}
+	ls_datas->flags |= _FLAG_PRINT_FOLDERS_NAME;
+	file_list = prev_element;
+	while (file_list)
+	{
+		p_file_data = (t_file_datas *)file_list->content;
+		if ((ls_datas->flags & FLAG_BIG_R))
+			if (S_ISDIR(p_file_data->st_stat.st_mode))
+				read_dir(p_file_data->pathname, ls_datas);
 		prev_element = file_list;
 		file_list = file_list->next;
 		ft_lstdelone(&prev_element, &remove_element);
 	}
-	ls_datas->flags |= _FLAG_PRINT_FOLDERS_NAME;
 }
 
 int				list_directories(t_ls_datas *ls_datas)
