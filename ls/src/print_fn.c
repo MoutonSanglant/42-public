@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/09 16:32:24 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/11 10:40:26 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/11 13:59:53 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,16 @@ static void		file_mode_to_str(mode_t mode, char *str)
 	str[11] = '\0';
 	if (mode & S_IFDIR)
 		str[0] = 'd';
+	else if (S_ISLNK(mode))
+		str[0] = 'l';
+	else if (S_ISCHR(mode))
+		str[0] = 'c';
+	else if (S_ISBLK(mode))
+		str[0] = 'b';
+	else if (S_ISFIFO(mode))
+		str[0] = 'p';
+	else if (S_ISSOCK(mode))
+		str[0] = 's';
 	if (mode & S_IRUSR)
 		str[1] = 'r';
 	if (mode & S_IWUSR)
@@ -65,8 +75,6 @@ char	*indent_str(char *dst, size_t len, int c, int reverse)
 
 /*
 ** - Not printing the correct number after 'total' (look in upward function)
-** - doesn't read link files correctly
-** - doesn't treat special attributes (causes a padding, look at '/' directory)
 */
 
 #ifdef _DARWIN_FEATURE_64_BIT_INODE
@@ -80,17 +88,30 @@ void	print_detailed_line(const t_ls_datas *ls_datas, const t_file_datas *file)
 	char				*date;
 	const struct stat	*st_stat;
 	char				*lnk;
+	char				*buf;
+	ssize_t					rbytes;
+	time_t					now;
 
+	rbytes = 0;
+	buf = NULL;
 	lnk = NULL;
 	st_stat = &file->st_stat;
 	if (S_ISLNK(st_stat->st_mode))
-		lnk = ft_strdup(" ->beeeh");
+	{
+		buf = ft_strnew(st_stat->st_size);
+		if ((rbytes = readlink(file->pathname, buf, st_stat->st_size)))
+		{
+			buf[rbytes] = '\0';
+			lnk = ft_strjoin(" -> ", buf);
+		}
+		ft_strdel(&buf);
+	}
 	else
 		lnk = ft_strdup("");
-	//if (!st_stat->st_mtimespec)
-	//	return ;
-	//ft_printf("Darwin 64\n");
+	now = time(NULL);
 	date = ctime(&st_stat->st_mtimespec.tv_sec);
+	if (now - (time_t)st_stat->st_mtimespec.tv_sec > MONTH_IN_SECS * 6)
+		ft_strcpy(&date[11], &date[19]);
 	file_mode_to_str(st_stat->st_mode, mode_str);
 	username = getpwuid(st_stat->st_uid)->pw_name;
 	groupname = getgrgid(st_stat->st_gid)->gr_name;

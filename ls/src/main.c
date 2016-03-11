@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/03 17:43:51 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/10 21:38:55 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/11 14:37:45 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ int				main(int argc, char **argv)
 	ls_datas.col_group_width = 0;
 	ls_datas.col_links_width = 0;
 	ls_datas.col_size_width = 0;
+	ls_datas.total_blocks_count = 0;
 	ls_datas.flags = FLAG_NONE;
 	ls_datas.print_fn = &print_one;
 	ls_datas.sort_fn = &sort_lexicographic;

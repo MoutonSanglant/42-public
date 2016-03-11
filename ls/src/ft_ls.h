@@ -22,6 +22,7 @@
 # include <includes/libft.h>
 
 # define VALID_FLAGS "Ralrt"
+# define MONTH_IN_SECS 2628000
 
 typedef enum		e_ls_flags
 {
@@ -37,6 +38,7 @@ typedef enum		e_ls_flags
 typedef struct		s_file_datas
 {
 	char			*name;
+	char			*pathname;
 	struct stat		st_stat;
 }					t_file_datas;
 
@@ -59,11 +61,11 @@ typedef struct		s_ls_datas
 	t_list		*directories;
 	t_list		*files;
 	t_ls_flags	flags;
-	struct dirent	*p_dirent;
 	int			col_user_width;
 	int			col_group_width;
 	int			col_links_width;
 	int			col_size_width;
+	size_t		total_blocks_count;
 	void		(*print_fn)(const struct s_ls_datas *, const t_file_datas *);
 	int			(*sort_fn)(void *, void *);
 }					t_ls_datas;

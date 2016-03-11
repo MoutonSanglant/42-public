@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/09 20:15:19 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/11 10:30:38 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/11 14:37:39 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,13 @@
 
 static void		remove_element(void *element, size_t size)
 {
+	t_file_datas	*fdatas;
+
 	(void)size;
-	ft_strdel((char **)&element);
+	fdatas = (t_file_datas *)element;
+	if (fdatas->pathname)
+		ft_strdel(&fdatas->pathname);
+	ft_memdel((void **)&element);
 }
 
 void			list_files(t_ls_datas *ls_datas, t_list *file_list,
@@ -32,7 +37,7 @@ void			list_files(t_ls_datas *ls_datas, t_list *file_list,
 	if (ls_datas->flags & _FLAG_PRINT_FOLDERS_NAME)
 		ft_printf("%s:\n", (folder_name[0] != '\0') ? folder_name : ".");
 	if (ls_datas->print_fn == &print_detailed_line)
-		ft_printf("total %u\n", 42);
+		ft_printf("total %u\n", ls_datas->total_blocks_count);
 	file_list = ft_lstsort(file_list, ls_datas->sort_fn);
 	prev_element = file_list;
 	while (file_list)
