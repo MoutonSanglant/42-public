@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/09 17:07:33 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/11 10:44:06 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/11 13:28:13 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,8 @@ void			fetch_args(int argc, char **argv, t_ls_datas *ls_datas)
 	while (--argc > i)
 	{
 		file.name = ft_strdup(argv[argc]);
-		ret = stat(file.name, &st_stat);
+		file.pathname = NULL;
+		ret = lstat(file.name, &st_stat);
 		if (ret < 0)
 			error_path(file.name);
 		else if (S_ISDIR(st_stat.st_mode))
@@ -106,7 +107,7 @@ void			fetch_args(int argc, char **argv, t_ls_datas *ls_datas)
 		else if (S_ISREG(st_stat.st_mode))
 			set_args(&files_list, ls_datas, &file, 1, file.name);
 		else if (S_ISLNK(st_stat.st_mode))
-			set_args(&files_list, ls_datas, &file, 2, file.name);
+			set_args(&files_list, ls_datas, &file, 1, file.name);
 	}
 	if (!ls_datas->directories && !files_list)
 	{

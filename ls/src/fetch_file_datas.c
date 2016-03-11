@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/10 21:50:47 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/11 10:49:04 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/11 14:39:14 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ static void		store_col_width_infos(t_ls_datas *ls_datas, struct stat *st_stat)
 	char	*str_size;
 	int		len;
 
+	ls_datas->total_blocks_count += st_stat->st_blocks;
 	username = getpwuid(st_stat->st_uid)->pw_name;
 	groupname = getgrgid(st_stat->st_gid)->gr_name;
 	str_links = ft_uitoa((unsigned)st_stat->st_nlink);
@@ -44,7 +45,6 @@ t_list		*fetch_file_datas(t_ls_datas *ls_datas, const char *file_name,
 							const char *folder_name)
 {
 	t_list			*files;
-	char			*full_path;
 	char			*tmp;
 	t_file_datas	file_data;
 	int				ret;
@@ -55,24 +55,20 @@ t_list		*fetch_file_datas(t_ls_datas *ls_datas, const char *file_name,
 		file_data.name = (char *)file_name;
 		if (folder_name[0] != '\0')
 		{
-			full_path = ft_strjoin(folder_name, "/");
-			tmp = full_path;
-			full_path = ft_strjoin(full_path, file_name);
+			file_data.pathname = ft_strjoin(folder_name, "/");
+			tmp = file_data.pathname;
+			file_data.pathname = ft_strjoin(tmp, file_name);
+			ft_strdel(&tmp);
 		}
 		else
-			full_path = (char *)file_name;
-		ret = stat(full_path, &file_data.st_stat);
+			file_data.pathname = ft_strdup((char *)file_name);
+		ret = lstat(file_data.pathname, &file_data.st_stat);
 		if (ret < 0)
 			error_unimplemented();
 		store_col_width_infos(ls_datas, &file_data.st_stat);
 		if (ret < 0)
 			error_unimplemented();
 		files = ft_lstnew((void *)&file_data, sizeof(t_file_datas));
-		if (folder_name[0] != '\0')
-		{
-			ft_strdel(&tmp);
-			ft_strdel(&full_path);
-		}
 	}
 	return (files);
 }

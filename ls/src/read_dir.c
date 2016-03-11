@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/09 11:41:23 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/11 10:51:32 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/11 14:37:55 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 int				read_dir(const char *f_name, t_ls_datas *ls_datas)
 {
+	struct dirent	*p_dirent;
 	DIR				*p_dir;
 	t_list			*files;
 	t_list			*first;
@@ -27,11 +28,12 @@ int				read_dir(const char *f_name, t_ls_datas *ls_datas)
 	ls_datas->col_group_width = 0;
 	ls_datas->col_links_width = 0;
 	ls_datas->col_size_width = 0;
-	while ((ls_datas->p_dirent = readdir(p_dir)))
+	ls_datas->total_blocks_count = 0;
+	while ((p_dirent = readdir(p_dir)))
 	{
-		if (files && (files->next = fetch_file_datas(ls_datas, ls_datas->p_dirent->d_name, f_name)))
+		if (files && (files->next = fetch_file_datas(ls_datas, p_dirent->d_name, f_name)))
 			files = files->next;
-		else if (!first && (first = fetch_file_datas(ls_datas, ls_datas->p_dirent->d_name, f_name)))
+		else if (!first && (first = fetch_file_datas(ls_datas, p_dirent->d_name, f_name)))
 			files = first;
 	}
 	list_files(ls_datas, first, f_name);
