@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/05 17:15:49 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/08 01:01:12 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/11 10:19:59 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,19 +18,26 @@
 
 void	error_unimplemented()
 {
-	ft_putendl("Unimplemented error");
+	ft_putendl_fd("Unimplemented error", 2);
 	exit (1);
 }
 
 int		error_path(const char *s)
 {
-	ft_putstr("ft_ls: ");
+	char	*str;
+
+	str = ft_strjoin("ft_ls: ", s);
 	perror(s);
+	ft_strdel(&str);
 	return (1);
 }
 
 void	error_usage(int c)
 {
-	ft_printf("ft_ls: illegal option -- %c\nusage: ./ft_ls [-%s] [file ...]\n", c, VALID_FLAGS);
+	ft_putstr_fd("ft_ls: illegal option -- ", 2);
+	ft_putchar_fd(c, 2);
+	ft_putstr_fd("\nusage: ft_ls [", 2);
+	ft_putstr_fd(VALID_FLAGS, 2);
+	ft_putendl_fd("] [file ...]", 2);
 	exit(1);
 }
