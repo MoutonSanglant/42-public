@@ -81,6 +81,11 @@ compare_err "$ls_err" "$ft_ls_err"
 # -same name folder / file
 # -same name folder / file on reverse
 # -permission denied (/exam)
+# folder name should print
+#	* whenever there is at least 2 separate results
+#	ls a* docs
+#	ls docs docs
+#	* but shouldn't print for the no_folder result
 
 #make
 #~/.brew/Cellar/valgrind/3.11.0/bin/valgrind --track-origins=yes --leak-check=yes ./crashtest

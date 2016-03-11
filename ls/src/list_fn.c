@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/09 20:15:19 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/10 22:25:53 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/11 10:30:38 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,20 +21,18 @@ static void		remove_element(void *element, size_t size)
 void			list_files(t_ls_datas *ls_datas, t_list *file_list,
 							const char *folder_name)
 {
-	static int		multi = 0;
-	t_list			*prev_element;
+	static int		list_count = 0;
 	t_file_datas	*p_file_data;
+	t_list			*prev_element;
 
 	if (!file_list)
 		return ;
-	if (multi++)
+	if (list_count++)
 		ft_putchar('\n');
-	if (folder_name[0] != '\0')
-	{
+	if (ls_datas->flags & _FLAG_PRINT_FOLDERS_NAME)
 		ft_printf("%s:\n", (folder_name[0] != '\0') ? folder_name : ".");
-		if (ls_datas->print_fn == &print_detailed_line)
+	if (ls_datas->print_fn == &print_detailed_line)
 		ft_printf("total %u\n", 42);
-	}
 	file_list = ft_lstsort(file_list, ls_datas->sort_fn);
 	prev_element = file_list;
 	while (file_list)
@@ -45,19 +43,22 @@ void			list_files(t_ls_datas *ls_datas, t_list *file_list,
 		file_list = file_list->next;
 		ft_lstdelone(&prev_element, &remove_element);
 	}
+	ls_datas->flags |= _FLAG_PRINT_FOLDERS_NAME;
 }
 
 int				list_directories(t_ls_datas *ls_datas)
 {
-	const char		*file_name;
 	t_list			*directory_list;
 	t_list			*prev_element;
+	const char		*file_name;
 	int				read_error;
 	int				ret_error;
 
 	ret_error = 0;
 	directory_list = ft_lstsort(ls_datas->directories, ls_datas->sort_fn);
 	prev_element = directory_list;
+	if (directory_list->next)
+		ls_datas->flags |= _FLAG_PRINT_FOLDERS_NAME;
 	while (directory_list)
 	{
 		file_name = ((t_file_datas *)directory_list->content)->name;
