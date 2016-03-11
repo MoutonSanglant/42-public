@@ -86,6 +86,10 @@ compare_err "$ls_err" "$ft_ls_err"
 #	ls a* docs
 #	ls docs docs
 #	* but shouldn't print for the no_folder result
+#	touch -m < -6 month
+#	touch -m > +1 hour
+#	touch -m 03112342 toto  ==> create a new file 'toto' with m date mars 11 at 23:42
+
 
 #make
 #~/.brew/Cellar/valgrind/3.11.0/bin/valgrind --track-origins=yes --leak-check=yes ./crashtest

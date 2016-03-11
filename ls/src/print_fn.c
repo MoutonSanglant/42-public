@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/09 16:32:24 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/11 13:59:53 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/11 14:49:07 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,8 @@ void	print_detailed_line(const t_ls_datas *ls_datas, const t_file_datas *file)
 	now = time(NULL);
 	date = ctime(&st_stat->st_mtimespec.tv_sec);
 	if (now - (time_t)st_stat->st_mtimespec.tv_sec > MONTH_IN_SECS * 6)
+		ft_strcpy(&date[11], &date[19]);
+	else if (-(now - (time_t)st_stat->st_mtimespec.tv_sec) > 0)
 		ft_strcpy(&date[11], &date[19]);
 	file_mode_to_str(st_stat->st_mode, mode_str);
 	username = getpwuid(st_stat->st_uid)->pw_name;
