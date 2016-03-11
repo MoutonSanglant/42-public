@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/09 16:32:24 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/10 22:31:07 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/11 10:40:26 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,9 +78,15 @@ void	print_detailed_line(const t_ls_datas *ls_datas, const t_file_datas *file)
 	char				*str_size;
 	char				mode_str[12];
 	char				*date;
-	const struct stat			*st_stat;
+	const struct stat	*st_stat;
+	char				*lnk;
 
+	lnk = NULL;
 	st_stat = &file->st_stat;
+	if (S_ISLNK(st_stat->st_mode))
+		lnk = ft_strdup(" ->beeeh");
+	else
+		lnk = ft_strdup("");
 	//if (!st_stat->st_mtimespec)
 	//	return ;
 	//ft_printf("Darwin 64\n");
@@ -98,10 +104,11 @@ void	print_detailed_line(const t_ls_datas *ls_datas, const t_file_datas *file)
 	**	The user & group columns need to know the biggest entry
 	**	to compute the correct padding
 	*/
-	ft_printf("%s %s %s  %s  %s %.12s %s\n", mode_str, str_links, username,
-			groupname, str_size, &date[4], file->name);
+	ft_printf("%s %s %s  %s  %s %.12s %s%s\n", mode_str, str_links, username,
+			groupname, str_size, &date[4], file->name, lnk);
 	ft_strdel(&str_links);
 	ft_strdel(&str_size);
+	ft_strdel(&lnk);
 	/*
 	ft_memdel((void **)&file_passwd);
 	ft_memdel((void **)&file_group);
