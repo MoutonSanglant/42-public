@@ -59,6 +59,7 @@ typedef struct		s_ls_datas
 	t_list		*directories;
 	t_list		*files;
 	t_ls_flags	flags;
+	struct dirent	*p_dirent;
 	int			col_user_width;
 	int			col_group_width;
 	int			col_links_width;

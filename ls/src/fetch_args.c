@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/09 17:07:33 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/10 21:56:54 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/11 10:44:06 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@ static void		set_args(t_list **list, t_ls_datas *ls_datas,
 							t_file_datas *file, int file_type,
 							const char *file_name)
 {
-	(void)file;
 	if (*list)
 	{
 		if (file_type == 0)
@@ -101,10 +100,7 @@ void			fetch_args(int argc, char **argv, t_ls_datas *ls_datas)
 		file.name = ft_strdup(argv[argc]);
 		ret = stat(file.name, &st_stat);
 		if (ret < 0)
-		{
 			error_path(file.name);
-			ft_strdel(&file.name);
-		}
 		else if (S_ISDIR(st_stat.st_mode))
 			set_args(&dir_list, ls_datas, &file, 0, file.name);
 		else if (S_ISREG(st_stat.st_mode))
