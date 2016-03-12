@@ -1,16 +1,20 @@
 42 - Le depot du Mouton
 =======================
 
-**Disclaimer**: aucun mouton ne peut être considéré responsable de vos mauvaises manipulations lors de l'utilisation de ces outils. Utilisez les avec precaution.
+**Disclaimer**: aucun mouton ne peut etre tenu pour responsable des effets secondaires provoques par l'utilisation des programmes presents sur ce depot. Utilisez les avec precaution.
 
-**Warning**: si vous n'avez pas téléchargé ces outils directement depuis l'adresse 'https://github.com/MoutonSanglant/42votre session est peut-�tre en danger.
+**Warning**: n'utilisez ces programmes que si vous les avez recuperes directement depuis l'adresse 'https://github.com/MoutonSanglant/42'.
+
 Projets
 =======
-- Libft: la libft du Mouton
+- Libft: la lib42 du Mouton
+- Fillit: ultime, mais ne fonctionne pas sur OSX
+- GNL: une ligne apres l'autre
+- FdF: la 3d a l'etat pur
+- printf: le meme que celui de la librairie standard, mais un peu different
+- ls: optimise pour fonctionner
 
 
 Piscine C
 =========
-
-- KTFM (Kill The Fucking Machine): outil d'automatisation de la gestion
-Téléchargement: https://raw.githubusercontent.com/MoutonSanglant/42/master/KTFM.sh
+Les outils de la piscine C ne sont plus suportes, mais vous pouvez toujours recuperer le code source si vous desirez les reutiliser/ameliorer
