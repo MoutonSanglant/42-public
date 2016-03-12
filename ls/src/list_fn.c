@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/09 20:15:19 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/12 10:44:18 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/12 12:39:15 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ void			list_files(t_ls_datas *ls_datas, t_list *file_list,
 	if (ls_datas->print_fn == &print_detailed_line)
 		ft_printf("total %u\n", ls_datas->total_blocks_count);
 	file_list = ft_lstsort(file_list, ls_datas->sort_fn);
+	if (ls_datas->time_sort_fn)
+		file_list = ft_lstsort(file_list, ls_datas->time_sort_fn);
 	prev_element = file_list;
 	while (file_list)
 	{
@@ -70,6 +72,8 @@ int				list_directories(t_ls_datas *ls_datas)
 
 	ret_error = 0;
 	directory_list = ft_lstsort(ls_datas->directories, ls_datas->sort_fn);
+	if (ls_datas->time_sort_fn)
+		directory_list = ft_lstsort(ls_datas->directories, ls_datas->time_sort_fn);
 	prev_element = directory_list;
 	if (directory_list->next)
 		ls_datas->flags |= _FLAG_PRINT_FOLDERS_NAME;

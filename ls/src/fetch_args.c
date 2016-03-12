@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/09 17:07:33 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/11 13:28:13 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/12 12:27:53 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,40 +46,46 @@ static int		fetch_flags(int argc, char **argv, t_ls_datas *ls_datas)
 			else if (arg[j] == 'r')
 				reverse = 1;
 			else if (arg[j] == 't')
-				ls_datas->flags |= FLAG_T;
+				ls_datas->sort_fn = &sort_time;
 			else
 				error_usage(arg[j]);
 		}
 	}
 	if (reverse)
+	{
 		ls_datas->sort_fn = &sort_antilexicographic;
+		ls_datas->time_sort_fn = &sort_time_reverse;
+	}
 	return (i - 1);
 }
 
-static void		set_args(t_list **list, t_ls_datas *ls_datas,
-							t_file_datas *file, int file_type,
-							const char *file_name)
+static void		add_file(t_ls_datas *ls_datas, const char *filename,
+								t_list **list)
 {
 	if (*list)
 	{
-		if (file_type == 0)
-			(*list)->next = ft_lstnew((void *)file, sizeof(t_file_datas));
-		else
-			(*list)->next = fetch_file_datas(ls_datas, file_name, "");
+		(*list)->next = fetch_file_datas(ls_datas, filename, "");
 		*list = (*list)->next;
 	}
 	else
 	{
-		if (file_type == 0)
-		{
-			*list = ft_lstnew((void *)file, sizeof(t_file_datas));
-			ls_datas->directories = *list;
-		}
-		else
-		{
-			*list = fetch_file_datas(ls_datas, file_name, "");
-			ls_datas->files = *list;
-		}
+		*list = fetch_file_datas(ls_datas, filename, "");
+		ls_datas->files = *list;
+	}
+}
+
+static void		add_folder(t_ls_datas *ls_datas, t_file_datas *file,
+								t_list **list)
+{
+	if (*list)
+	{
+		(*list)->next = ft_lstnew((void *)file, sizeof(t_file_datas));
+		*list = (*list)->next;
+	}
+	else
+	{
+		*list = ft_lstnew((void *)file, sizeof(t_file_datas));
+		ls_datas->directories = *list;
 	}
 }
 
@@ -89,25 +95,21 @@ void			fetch_args(int argc, char **argv, t_ls_datas *ls_datas)
 	t_list			*files_list;
 	t_file_datas	file;
 	struct stat		st_stat;
-	int				i;
-	int				ret;
+	int				flag_count;
 
 	dir_list = NULL;
 	files_list = NULL;
-	i = fetch_flags(argc, argv, ls_datas);
-	while (--argc > i)
+	flag_count = fetch_flags(argc, argv, ls_datas);
+	while (--argc > flag_count)
 	{
 		file.name = ft_strdup(argv[argc]);
 		file.pathname = NULL;
-		ret = lstat(file.name, &st_stat);
-		if (ret < 0)
+		if (lstat(file.name, &st_stat) < 0)
 			error_path(file.name);
 		else if (S_ISDIR(st_stat.st_mode))
-			set_args(&dir_list, ls_datas, &file, 0, file.name);
-		else if (S_ISREG(st_stat.st_mode))
-			set_args(&files_list, ls_datas, &file, 1, file.name);
-		else if (S_ISLNK(st_stat.st_mode))
-			set_args(&files_list, ls_datas, &file, 1, file.name);
+			add_folder(ls_datas, &file, &dir_list);
+		else if (S_ISREG(st_stat.st_mode) || S_ISLNK(st_stat.st_mode))
+			add_file(ls_datas, file.name, &files_list);
 	}
 	if (!ls_datas->directories && !files_list)
 	{
