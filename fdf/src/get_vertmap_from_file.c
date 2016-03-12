@@ -6,32 +6,30 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/25 23:38:14 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/02/15 18:20:04 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/12 11:43:47 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-static float			hex_to_float(char *hex)
+static void			str_to_color(char *hex, t_color *color)
 {
-	char	a;
-	char	b;
+	int		len;
 
-	a = 0;
-	b = 0;
-	if (hex[0] >= 'A' && hex[0] <= 'F')
-		a = hex[0] - 'A' + 10;
-	else if (hex[0] >= 'a' && hex[0] <= 'f')
-		a = hex[0] - 'a' + 10;
-	else if (hex[0] >= '0' && hex[0] <= '9')
-		a = hex[0] - '0';
-	if (hex[1] >= 'A' && hex[1] <= 'F')
-		b = hex[1] - 'A' + 10;
-	else if (hex[1] >= 'a' && hex[1] <= 'f')
-		b = hex[1] - 'a' + 10;
-	else if (hex[1] >= '0' && hex[1] <= '9')
-		b = hex[1] - '0';
-	return ((float)((a * 16) + b) / 255);
+	len = ft_strlen(hex);
+	if (len < 3)
+		color->b = hex_to_float(&hex[0]);
+	else if (len < 5)
+	{
+		color->g = hex_to_float(&hex[0]);
+		color->b = hex_to_float(&hex[2]);
+	}
+	else
+	{
+		color->r = hex_to_float(&hex[0]);
+		color->g = hex_to_float(&hex[2]);
+		color->b = hex_to_float(&hex[4]);
+	}
 }
 
 static void				set_vertex_attributes(t_vert *vertex,
@@ -39,16 +37,10 @@ static void				set_vertex_attributes(t_vert *vertex,
 {
 	char	*color;
 	float	z;
-	int		len;
 
 	z = ft_atoi(ascii_values[i]);
 	if ((color = ft_strchr(ascii_values[i], ',')))
-	{
-		len = ft_strlen(color);
-		vertex->color.r = (len > 4) ? hex_to_float(&color[3]) : 0.f;
-		vertex->color.g = (len > 6) ? hex_to_float(&color[5]) : 0.f;
-		vertex->color.b = (len > 8) ? hex_to_float(&color[7]) : 0.f;
-	}
+		str_to_color(&color[3], &vertex->color);
 	else
 	{
 		vertex->color.r = (z > 2) ? 0.f
@@ -66,6 +58,7 @@ static void				set_vertex_attributes(t_vert *vertex,
 /*
 **	a line is formated this way:
 **	1 1 1 0 0 0 0 1 1 0 0 0 1
+**	or this way:
 **	1 1 1 -1 1 1 0 1,0xFFFFFFFF 1 1 1 0
 */
 

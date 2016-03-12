@@ -35,7 +35,8 @@ SRC	= main draw_3dgrid set_image_pixel init_grid init_grid_from_vertmap \
 	rasterize camera inverse_matrix projection_matrix identity_matrix \
 	change_grid_z draw_square draw_image clear_canvas bresenham_draw_line \
 	count_file_lines keydown keypress draw_loop expose init_mlx_sess \
-	start_mlx_sess alloc_error format_error set_color_scheme destroy_mlx_sess
+	start_mlx_sess alloc_error format_error set_color_scheme destroy_mlx_sess \
+	hex_to_float
 
 ifeq ($(BUILD), Debug)
 SRC += draw_debug_gui
