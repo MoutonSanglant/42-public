@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/09 20:15:19 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/11 17:23:06 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/12 10:44:18 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ void			list_files(t_ls_datas *ls_datas, t_list *file_list,
 	static int		list_count = 0;
 	t_file_datas	*p_file_data;
 	t_list			*prev_element;
-	//t_list			*file;
 
 	if (list_count++)
 		ft_putchar('\n');
@@ -52,7 +51,7 @@ void			list_files(t_ls_datas *ls_datas, t_list *file_list,
 	while (file_list)
 	{
 		p_file_data = (t_file_datas *)file_list->content;
-		if ((ls_datas->flags & FLAG_BIG_R))
+		if (p_file_data->name[0] != '.' && (ls_datas->flags & FLAG_BIG_R))
 			if (S_ISDIR(p_file_data->st_stat.st_mode))
 				read_dir(p_file_data->pathname, ls_datas);
 		prev_element = file_list;
