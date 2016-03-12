@@ -68,6 +68,7 @@ typedef struct		s_ls_datas
 	size_t		total_blocks_count;
 	void		(*print_fn)(const struct s_ls_datas *, const t_file_datas *);
 	int			(*sort_fn)(void *, void *);
+	int			(*time_sort_fn)(void *, void *);
 }					t_ls_datas;
 
 void				fetch_args(int argc, char **argv, t_ls_datas *ls_datas);
@@ -108,6 +109,8 @@ void				print_detailed_line(const t_ls_datas *ls_datas,
 */
 int					sort_lexicographic (void *struct1, void *struct2);
 int					sort_antilexicographic (void *struct1, void *struct2);
+int					sort_time (void *struct1, void *struct2);
+int					sort_time_reverse (void *struct1, void *struct2);
 
 /*
 ********************************************************************************
