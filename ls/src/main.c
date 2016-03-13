@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/03 17:43:51 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/12 12:25:24 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/13 17:38:12 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,5 +67,6 @@ int				main(int argc, char **argv)
 		list_files(&ls_datas, ls_datas.files, "");
 	if (ls_datas.directories)
 		error = list_directories(&ls_datas);
+	clear_ls_datas(&ls_datas);
 	return (error);
 }

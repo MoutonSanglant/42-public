@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/09 17:07:33 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/13 12:09:14 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/13 15:54:39 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static int		fetch_flags(int argc, char **argv, t_ls_datas *ls_datas)
 			else if (arg[j] == 't')
 				ls_datas->sort_fn = &sort_time;
 			else
-				error_usage(arg[j]);
+				error_usage(arg[j], ls_datas);
 		}
 	}
 	if (reverse)
@@ -114,6 +114,7 @@ void			fetch_args(int argc, char **argv, t_ls_datas *ls_datas)
 	if (!ls_datas->directories && !files_list)
 	{
 		file.name = ft_strdup(".");
-		ls_datas->directories = ft_lstnew((void *)&file, sizeof(t_file_datas));
+		file.pathname = NULL;
+		add_folder(ls_datas, &file, &dir_list);
 	}
 }

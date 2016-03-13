@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/09 16:32:24 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/13 12:08:43 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/13 17:44:50 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,11 @@
 static char		*indent_str(char *dst, size_t len, int c, int reverse)
 {
 	char	*str;
+	char	*tmp;
 	size_t	i;
 	size_t	n;
 
+	tmp = dst;
 	n = len - ft_strlen(dst);
 	if (n <= 0)
 		return (dst);
@@ -28,6 +30,7 @@ static char		*indent_str(char *dst, size_t len, int c, int reverse)
 	str[i] = '\0';
 	dst = (reverse) ? ft_strjoin(str, dst) : ft_strjoin(dst, str);
 	ft_strdel(&str);
+	ft_strdel(&tmp);
 	return (dst);
 }
 
@@ -58,10 +61,10 @@ static void		print_right(const t_ls_datas *ls_datas,
 	time_t	now;
 
 	now = time(NULL);
-	date = ctime(&st_stat->st_mtimespec.tv_sec);
-	if (now - (time_t)st_stat->st_mtimespec.tv_sec > MONTH_IN_SECS * 6)
+	date = ctime(&st_stat->ST_MTIM.tv_sec);
+	if (now - (time_t)st_stat->ST_MTIM.tv_sec > MONTH_IN_SECS * 6)
 		ft_strcpy(&date[11], &date[19]);
-	else if (-(now - (time_t)st_stat->st_mtimespec.tv_sec) > 0)
+	else if (-(now - (time_t)st_stat->ST_MTIM.tv_sec) > 0)
 		ft_strcpy(&date[11], &date[19]);
 	size_str = ft_uitoa((size_t)st_stat->st_size);
 	size_str = indent_str(size_str, ls_datas->col_size_width, ' ', 1);
@@ -70,15 +73,13 @@ static void		print_right(const t_ls_datas *ls_datas,
 }
 
 void			print_detailed_line(const t_ls_datas *ls_datas,
-										const t_file_datas *file)
+										t_file_datas *file)
 {
 	const struct stat	*st_stat;
 	char				*buf;
 	char				*tmp;
-	char				*filename;
 	ssize_t				rbytes;
 
-	filename = file->name;
 	buf = NULL;
 	rbytes = 0;
 	st_stat = &file->st_stat;
@@ -88,14 +89,15 @@ void			print_detailed_line(const t_ls_datas *ls_datas,
 		if ((rbytes = readlink(file->pathname, buf, st_stat->st_size)))
 		{
 			buf[rbytes] = '\0';
-			tmp = ft_strjoin(filename, " -> ");
-			filename = ft_strjoin(tmp, buf);
+			tmp = ft_strjoin(file->name, " -> ");
+			ft_strdel(&file->name);
+			file->name = ft_strjoin(tmp, buf);
 			ft_strdel(&tmp);
 		}
 		ft_strdel(&buf);
 	}
 	print_left(ls_datas, st_stat);
-	print_right(ls_datas, st_stat, filename);
+	print_right(ls_datas, st_stat, file->name);
 }
 
 void			print_one(const t_ls_datas *ls_datas, const t_file_datas *file)
