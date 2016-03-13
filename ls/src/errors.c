@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/05 17:15:49 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/11 10:19:59 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/13 10:53:52 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@
 #include <errno.h>
 #include "ft_ls.h"
 
-void	error_unimplemented()
+void	error_unimplemented(void)
 {
 	ft_putendl_fd("Unimplemented error", 2);
-	exit (1);
+	exit(1);
 }
 
 int		error_path(const char *s)

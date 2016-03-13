@@ -30,7 +30,8 @@ endif
 SRC_PREFIX	= ./src/
 OBJ_PREFIX	= ./obj/
 
-SRC	= main print_fn sort_fn list_fn fetch_args fetch_file_datas read_dir errors
+SRC	= main print_fn sort_fn list_fn fetch_args fetch_file_datas read_dir \
+	file_mode_str errors
 
 ifeq ($(BUILD), Debug)
 	SRC +=

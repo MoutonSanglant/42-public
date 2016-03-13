@@ -71,6 +71,7 @@ typedef struct		s_ls_datas
 	int			(*time_sort_fn)(void *, void *);
 }					t_ls_datas;
 
+void				file_mode_str(mode_t mode, char *str);
 void				fetch_args(int argc, char **argv, t_ls_datas *ls_datas);
 int					read_dir(const char *folder_name, t_ls_datas *ls_datas);
 t_list				*fetch_file_datas(t_ls_datas *ls_datas,

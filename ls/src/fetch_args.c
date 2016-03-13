@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/09 17:07:33 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/12 12:27:53 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/13 12:09:14 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,4 +117,3 @@ void			fetch_args(int argc, char **argv, t_ls_datas *ls_datas)
 		ls_datas->directories = ft_lstnew((void *)&file, sizeof(t_file_datas));
 	}
 }
-
