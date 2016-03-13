@@ -6,13 +6,14 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/10 21:50:47 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/11 14:39:14 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/13 10:57:06 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-static void		store_col_width_infos(t_ls_datas *ls_datas, struct stat *st_stat)
+static void		store_col_width_infos(t_ls_datas *ls_datas,
+										struct stat *st_stat)
 {
 	char	*username;
 	char	*groupname;
@@ -41,8 +42,8 @@ static void		store_col_width_infos(t_ls_datas *ls_datas, struct stat *st_stat)
 	ft_strdel(&str_size);
 }
 
-t_list		*fetch_file_datas(t_ls_datas *ls_datas, const char *file_name,
-							const char *folder_name)
+t_list			*fetch_file_datas(t_ls_datas *ls_datas, const char *file_name,
+								const char *folder_name)
 {
 	t_list			*files;
 	char			*tmp;
@@ -66,8 +67,6 @@ t_list		*fetch_file_datas(t_ls_datas *ls_datas, const char *file_name,
 		if (ret < 0)
 			error_unimplemented();
 		store_col_width_infos(ls_datas, &file_data.st_stat);
-		if (ret < 0)
-			error_unimplemented();
 		files = ft_lstnew((void *)&file_data, sizeof(t_file_datas));
 	}
 	return (files);
