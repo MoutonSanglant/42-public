@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/09 16:32:24 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/13 17:44:50 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/13 18:33:54 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ static char		*indent_str(char *dst, size_t len, int c, int reverse)
 	size_t	i;
 	size_t	n;
 
-	tmp = dst;
 	n = len - ft_strlen(dst);
 	if (n <= 0)
 		return (dst);
@@ -28,9 +27,10 @@ static char		*indent_str(char *dst, size_t len, int c, int reverse)
 	while (i < n)
 		str[i++] = c;
 	str[i] = '\0';
+	tmp = dst;
 	dst = (reverse) ? ft_strjoin(str, dst) : ft_strjoin(dst, str);
-	ft_strdel(&str);
 	ft_strdel(&tmp);
+	ft_strdel(&str);
 	return (dst);
 }
 
@@ -45,12 +45,14 @@ static void		print_left(const t_ls_datas *ls_datas,
 	file_mode_str(st_stat->st_mode, mode_str);
 	links_str = ft_uitoa((unsigned)st_stat->st_nlink);
 	links_str = indent_str(links_str, ls_datas->col_links_width, ' ', 1);
-	username = getpwuid(st_stat->st_uid)->pw_name;
+	username = ft_strdup(getpwuid(st_stat->st_uid)->pw_name);
 	username = indent_str(username, ls_datas->col_user_width, ' ', 0);
-	groupname = getgrgid(st_stat->st_gid)->gr_name;
+	groupname = ft_strdup(getgrgid(st_stat->st_gid)->gr_name);
 	groupname = indent_str(groupname, ls_datas->col_group_width, ' ', 0);
 	ft_printf("%s %s %s  %s  ", mode_str, links_str, username, groupname);
 	ft_strdel(&links_str);
+	ft_strdel(&groupname);
+	ft_strdel(&username);
 }
 
 static void		print_right(const t_ls_datas *ls_datas,
@@ -72,6 +74,11 @@ static void		print_right(const t_ls_datas *ls_datas,
 	ft_strdel(&size_str);
 }
 
+/*
+**	TODO
+**	Is writting an extra /
+*/
+
 void			print_detailed_line(const t_ls_datas *ls_datas,
 										t_file_datas *file)
 {
@@ -83,6 +90,7 @@ void			print_detailed_line(const t_ls_datas *ls_datas,
 	buf = NULL;
 	rbytes = 0;
 	st_stat = &file->st_stat;
+	// Problem
 	if (S_ISLNK(st_stat->st_mode))
 	{
 		buf = ft_strnew(st_stat->st_size);
@@ -100,7 +108,7 @@ void			print_detailed_line(const t_ls_datas *ls_datas,
 	print_right(ls_datas, st_stat, file->name);
 }
 
-void			print_one(const t_ls_datas *ls_datas, const t_file_datas *file)
+void			print_one(const t_ls_datas *ls_datas, t_file_datas *file)
 {
 	(void)ls_datas;
 	ft_printf("%s\n", file->name);
