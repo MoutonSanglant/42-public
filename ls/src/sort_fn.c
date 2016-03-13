@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/09 16:30:35 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/13 11:43:46 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/13 15:28:09 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,8 @@ int		sort_time(void *struct1, void *struct2)
 	struct timespec		t1;
 	struct timespec		t2;
 
-	t1 = ((struct stat)((t_file_datas *)struct1)->st_stat).st_mtimespec;
-	t2 = ((struct stat)((t_file_datas *)struct2)->st_stat).st_mtimespec;
+	t1 = ((struct stat)((t_file_datas *)struct1)->st_stat).ST_MTIM;
+	t2 = ((struct stat)((t_file_datas *)struct2)->st_stat).ST_MTIM;
 	if (t1.tv_sec == t2.tv_sec)
 	{
 		if (t1.tv_nsec == t2.tv_nsec)
@@ -53,8 +53,8 @@ int		sort_time_reverse(void *struct1, void *struct2)
 	struct timespec		t1;
 	struct timespec		t2;
 
-	t1 = ((struct stat)((t_file_datas *)struct1)->st_stat).st_mtimespec;
-	t2 = ((struct stat)((t_file_datas *)struct2)->st_stat).st_mtimespec;
+	t1 = ((struct stat)((t_file_datas *)struct1)->st_stat).ST_MTIM;
+	t2 = ((struct stat)((t_file_datas *)struct2)->st_stat).ST_MTIM;
 	if (t1.tv_sec == t2.tv_sec)
 	{
 		if (t1.tv_nsec == t2.tv_nsec)

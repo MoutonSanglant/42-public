@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/10 21:50:47 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/13 10:57:06 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/13 17:35:28 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,13 +51,12 @@ t_list			*fetch_file_datas(t_ls_datas *ls_datas, const char *file_name,
 	int				ret;
 
 	files = NULL;
-	if (file_name[0] != '.' || ls_datas->flags & FLAG_A)
+	if (ls_datas->flags & FLAG_A || file_name[0] != '.')
 	{
-		file_data.name = (char *)file_name;
+		file_data.name = ft_strdup(file_name);
 		if (folder_name[0] != '\0')
 		{
-			file_data.pathname = ft_strjoin(folder_name, "/");
-			tmp = file_data.pathname;
+			tmp = ft_strjoin(folder_name, "/");
 			file_data.pathname = ft_strjoin(tmp, file_name);
 			ft_strdel(&tmp);
 		}
@@ -65,9 +64,11 @@ t_list			*fetch_file_datas(t_ls_datas *ls_datas, const char *file_name,
 			file_data.pathname = ft_strdup((char *)file_name);
 		ret = lstat(file_data.pathname, &file_data.st_stat);
 		if (ret < 0)
-			error_unimplemented();
+			error_unimplemented(ls_datas);
 		store_col_width_infos(ls_datas, &file_data.st_stat);
 		files = ft_lstnew((void *)&file_data, sizeof(t_file_datas));
+		if (!files)
+			error_memalloc(ls_datas);
 	}
 	return (files);
 }

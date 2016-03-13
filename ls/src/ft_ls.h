@@ -24,6 +24,9 @@
 # define VALID_FLAGS "Ralrt"
 # define MONTH_IN_SECS 2628000
 
+# define ST_MTIM st_mtim
+//# define ST_MTIM st_mtimespec
+
 typedef enum		e_ls_flags
 {
 	FLAG_NONE = 0x0,
@@ -71,12 +74,49 @@ typedef struct		s_ls_datas
 	int			(*time_sort_fn)(void *, void *);
 }					t_ls_datas;
 
-void				file_mode_str(mode_t mode, char *str);
+/*
+********************************************************************************
+**							:: Init functions ::							   *
+********************************************************************************
+*/
+
+/*
+**								: fetch_file_datas.c :
+*/
 void				fetch_args(int argc, char **argv, t_ls_datas *ls_datas);
-int					read_dir(const char *folder_name, t_ls_datas *ls_datas);
+
+/*
+********************************************************************************
+**							:: Destroy functions ::							   *
+********************************************************************************
+*/
+
+/*
+**								: clear_ls_datas.c :
+*/
+void	clear_ls_datas(t_ls_datas *ls_datas);
+
+/*
+********************************************************************************
+**						:: File/Directories functions ::					   *
+********************************************************************************
+*/
+
+/*
+**								: fetch_file_datas.c :
+*/
 t_list				*fetch_file_datas(t_ls_datas *ls_datas,
 										const char *file_name,
 										const char *folder_name);
+/*
+**								: file_mode_str.c :
+*/
+void				file_mode_str(mode_t mode, char *str);
+
+/*
+**								: read_dir.c :
+*/
+int					read_dir(const char *folder_name, t_ls_datas *ls_datas);
 
 /*
 ********************************************************************************
@@ -103,7 +143,7 @@ int					list_directories(t_ls_datas *ls_datas);
 void				print_one(const t_ls_datas *ls_datas,
 								const t_file_datas *file_data);
 void				print_detailed_line(const t_ls_datas *ls_datas,
-										const t_file_datas *file_data);
+										t_file_datas *file_data);
 
 /*
 **								: sort_fn.c :
@@ -122,8 +162,9 @@ int					sort_time_reverse (void *struct1, void *struct2);
 /*
 **								: errors.c :
 */
-void				error_unimplemented();
 int					error_path(const char *s);
-void				error_usage(int c);
+void				error_unimplemented(t_ls_datas *ls_datas);
+void				error_usage(int c, t_ls_datas *ls_datas);
+void				error_memalloc(t_ls_datas *ls_datas);
 
 #endif
