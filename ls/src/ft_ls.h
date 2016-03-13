@@ -69,7 +69,7 @@ typedef struct		s_ls_datas
 	int			col_links_width;
 	int			col_size_width;
 	size_t		total_blocks_count;
-	void		(*print_fn)(const struct s_ls_datas *, const t_file_datas *);
+	void		(*print_fn)(const struct s_ls_datas *, t_file_datas *);
 	int			(*sort_fn)(void *, void *);
 	int			(*time_sort_fn)(void *, void *);
 }					t_ls_datas;
@@ -141,7 +141,7 @@ int					list_directories(t_ls_datas *ls_datas);
 **								: print_fn.c :
 */
 void				print_one(const t_ls_datas *ls_datas,
-								const t_file_datas *file_data);
+								t_file_datas *file_data);
 void				print_detailed_line(const t_ls_datas *ls_datas,
 										t_file_datas *file_data);
 
