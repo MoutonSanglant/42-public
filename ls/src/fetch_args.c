@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/09 17:07:33 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/14 21:29:54 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/14 21:37:38 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ static void		fetch_param_flags(t_ls_datas *ls_datas, char *arg,
 			*reverse = 1;
 		else if (arg[j] == 't')
 			ls_datas->sort_fn = &sort_time;
+		else if (arg[j] == '1')
+			;
 		else
 			error_usage(arg[j], ls_datas);
 	}
