@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/10 21:50:47 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/13 17:35:28 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/14 15:41:55 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,13 +36,15 @@ static void		store_col_width_infos(t_ls_datas *ls_datas,
 	if (len > ls_datas->col_links_width)
 		ls_datas->col_links_width = len;
 	len = ft_strlen(str_size);
+	if (S_ISCHR(st_stat->st_mode) || S_ISBLK(st_stat->st_mode))
+		len = 8;
 	if (len > ls_datas->col_size_width)
 		ls_datas->col_size_width = len;
 	ft_strdel(&str_links);
 	ft_strdel(&str_size);
 }
 
-t_list			*fetch_file_datas(t_ls_datas *ls_datas, const char *file_name,
+t_list			*fetch_file_datas(t_ls_datas *ls_datas, t_file_datas *file,
 								const char *folder_name)
 {
 	t_list			*files;
@@ -51,17 +53,17 @@ t_list			*fetch_file_datas(t_ls_datas *ls_datas, const char *file_name,
 	int				ret;
 
 	files = NULL;
-	if (ls_datas->flags & FLAG_A || file_name[0] != '.')
+	if (ls_datas->flags & FLAG_A || file->name[0] != '.')
 	{
-		file_data.name = ft_strdup(file_name);
+		file_data.name = ft_strdup(file->name);
 		if (folder_name[0] != '\0')
 		{
 			tmp = ft_strjoin(folder_name, "/");
-			file_data.pathname = ft_strjoin(tmp, file_name);
+			file_data.pathname = ft_strjoin(tmp, file->name);
 			ft_strdel(&tmp);
 		}
 		else
-			file_data.pathname = ft_strdup((char *)file_name);
+			file_data.pathname = ft_strdup((char *)file->name);
 		ret = lstat(file_data.pathname, &file_data.st_stat);
 		if (ret < 0)
 			error_unimplemented(ls_datas);
@@ -69,6 +71,7 @@ t_list			*fetch_file_datas(t_ls_datas *ls_datas, const char *file_name,
 		files = ft_lstnew((void *)&file_data, sizeof(t_file_datas));
 		if (!files)
 			error_memalloc(ls_datas);
+		ft_strdel(&file->name);
 	}
 	return (files);
 }

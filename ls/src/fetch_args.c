@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/09 17:07:33 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/13 15:54:39 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/14 15:39:17 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,17 +59,17 @@ static int		fetch_flags(int argc, char **argv, t_ls_datas *ls_datas)
 	return (i - 1);
 }
 
-static void		add_file(t_ls_datas *ls_datas, const char *filename,
+static void		add_file(t_ls_datas *ls_datas, t_file_datas *file,
 								t_list **list)
 {
 	if (*list)
 	{
-		(*list)->next = fetch_file_datas(ls_datas, filename, "");
+		(*list)->next = fetch_file_datas(ls_datas, file, "");
 		*list = (*list)->next;
 	}
 	else
 	{
-		*list = fetch_file_datas(ls_datas, filename, "");
+		*list = fetch_file_datas(ls_datas, file, "");
 		ls_datas->files = *list;
 	}
 }
@@ -102,14 +102,16 @@ void			fetch_args(int argc, char **argv, t_ls_datas *ls_datas)
 	flag_count = fetch_flags(argc, argv, ls_datas);
 	while (--argc > flag_count)
 	{
-		file.name = ft_strdup(argv[argc]);
 		file.pathname = NULL;
+		file.name = ft_strdup(argv[argc]);
 		if (lstat(file.name, &st_stat) < 0)
 			error_path(file.name);
 		else if (S_ISDIR(st_stat.st_mode))
 			add_folder(ls_datas, &file, &dir_list);
 		else if (S_ISREG(st_stat.st_mode) || S_ISLNK(st_stat.st_mode))
-			add_file(ls_datas, file.name, &files_list);
+			add_file(ls_datas, &file, &files_list);
+		else
+			add_file(ls_datas, &file, &files_list);
 	}
 	if (!ls_datas->directories && !files_list)
 	{

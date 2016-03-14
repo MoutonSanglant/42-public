@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/13 15:37:00 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/13 17:38:41 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/14 13:25:25 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,6 @@ static void		remove_element(void *element, size_t size)
 
 void	clear_ls_datas(t_ls_datas *ls_datas)
 {
-	if (ls_datas)
-	{
-		if (ls_datas->directories)
-			ft_lstdel(&ls_datas->directories, &remove_element);
-		if (ls_datas->files)
-			ft_lstdel(&ls_datas->files, &remove_element);
-	}
+	if (ls_datas && ls_datas->directories)
+		ft_lstdel(&ls_datas->directories, &remove_element);
 }

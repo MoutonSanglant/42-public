@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/09 20:15:19 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/13 17:48:45 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/14 15:16:39 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,17 +36,11 @@ static void		list_recursively(t_ls_datas *ls_datas, t_list *list,
 		p_file_data = (t_file_datas *)list->content;
 		if (p_file_data->name[0] != '.'
 				&& S_ISDIR(p_file_data->st_stat.st_mode))
-			read_dir(p_file_data->pathname, ls_datas);
+			read_dir(ls_datas, p_file_data, p_file_data->pathname);
 		list = list->next;
 	}
 }
 
-/*
-**	ATTENTION !! Sur linux le "total" n'apparait pas pour le dossier
-**	./includes car celui-ci est vide. Vérifier quel est le comportement
-**	de ls sur OSX et si le résultat est similaire, échanger les
-**	lignes 61-62 avec les lignes 63-64
-*/
 void			list_files(t_ls_datas *ls_datas, t_list *file_list,
 							const char *folder_name)
 {
@@ -80,24 +74,24 @@ void			list_files(t_ls_datas *ls_datas, t_list *file_list,
 
 int				list_directories(t_ls_datas *ls_datas)
 {
-	t_list			*directory_list;
-	const char		*file_name;
-	int				read_error;
-	int				ret_error;
+	t_file_datas	*file_datas;
+	t_list			*dir_list;
+	int				read_e;
+	int				ret_e;
 
-	ret_error = 0;
-	directory_list = ft_lstsort(ls_datas->directories, ls_datas->sort_fn);
+	ret_e = 0;
+	dir_list = ft_lstsort(ls_datas->directories, ls_datas->sort_fn);
 	if (ls_datas->time_sort_fn)
-		directory_list = ft_lstsort(ls_datas->directories,
+		dir_list = ft_lstsort(ls_datas->directories,
 										ls_datas->time_sort_fn);
-	if (directory_list->next)
+	if (dir_list->next)
 		ls_datas->flags |= _FLAG_PRINT_FOLDERS_NAME;
-	while (directory_list)
+	while (dir_list)
 	{
-		file_name = ((t_file_datas *)directory_list->content)->name;
-		if ((read_error = read_dir(file_name, ls_datas)))
-			ret_error = read_error;
-		directory_list = directory_list->next;
+		file_datas = (t_file_datas *)dir_list->content;
+		if ((read_e = read_dir(ls_datas, file_datas, file_datas->name)))
+			ret_e = read_e;
+		dir_list = dir_list->next;
 	}
-	return (ret_error);
+	return (ret_e);
 }
