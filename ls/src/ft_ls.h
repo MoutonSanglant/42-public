@@ -24,8 +24,31 @@
 # define VALID_FLAGS "Ralrt"
 # define MONTH_IN_SECS 2628000
 
-# define ST_MTIM st_mtim
-//# define ST_MTIM st_mtimespec
+//
+//	00101010100010
+//  01100101010010
+//  |
+//  01101111110010
+//
+//  &
+//	00100000000010
+//
+//	^
+//	01001111110000
+//
+//	01110101010110
+//	<<
+//	11101010101100
+//
+//
+
+# ifdef LINUX
+#  define ST_MTIM st_mtim
+# else
+#  define ST_MTIM st_mtimespec
+#  define MAJOR(x) (x >> 24)
+#  define MINOR(x) ((x << 8) >> 8)
+# endif
 
 typedef enum		e_ls_flags
 {
@@ -106,7 +129,7 @@ void	clear_ls_datas(t_ls_datas *ls_datas);
 **								: fetch_file_datas.c :
 */
 t_list				*fetch_file_datas(t_ls_datas *ls_datas,
-										const char *file_name,
+										t_file_datas *file,
 										const char *folder_name);
 /*
 **								: file_mode_str.c :
@@ -116,7 +139,8 @@ void				file_mode_str(mode_t mode, char *str);
 /*
 **								: read_dir.c :
 */
-int					read_dir(const char *folder_name, t_ls_datas *ls_datas);
+int					read_dir(t_ls_datas *ls_datas, t_file_datas *file_datas,
+								const char *f_name);
 
 /*
 ********************************************************************************

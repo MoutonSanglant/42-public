@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/13 11:26:55 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/13 11:27:26 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/14 14:07:41 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,18 +36,18 @@ static void		set_owner_group_user(mode_t mode, char *str)
 
 static void		set_special_flags(mode_t mode, char *str)
 {
-	if (mode & S_IFDIR)
-		str[0] = 'd';
-	else if (S_ISLNK(mode))
-		str[0] = 'l';
-	else if (S_ISCHR(mode))
-		str[0] = 'c';
-	else if (S_ISBLK(mode))
+	if (S_ISBLK(mode))
 		str[0] = 'b';
+	else if (mode & S_IFDIR)
+		str[0] = 'd';
 	else if (S_ISFIFO(mode))
 		str[0] = 'p';
 	else if (S_ISSOCK(mode))
 		str[0] = 's';
+	else if (S_ISLNK(mode))
+		str[0] = 'l';
+	else if (S_ISCHR(mode))
+		str[0] = 'c';
 }
 
 void			file_mode_str(mode_t mode, char *str)
