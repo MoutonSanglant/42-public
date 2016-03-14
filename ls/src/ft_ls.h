@@ -21,26 +21,9 @@
 # include <time.h>
 # include <includes/libft.h>
 
+# define PROGRAM_NAME "ls"
 # define VALID_FLAGS "Ralrt"
 # define MONTH_IN_SECS 2628000
-
-//
-//	00101010100010
-//  01100101010010
-//  |
-//  01101111110010
-//
-//  &
-//	00100000000010
-//
-//	^
-//	01001111110000
-//
-//	01110101010110
-//	<<
-//	11101010101100
-//
-//
 
 # ifdef LINUX
 #  define ST_MTIM st_mtim
@@ -117,7 +100,7 @@ void				fetch_args(int argc, char **argv, t_ls_datas *ls_datas);
 /*
 **								: clear_ls_datas.c :
 */
-void	clear_ls_datas(t_ls_datas *ls_datas);
+void				clear_ls_datas(t_ls_datas *ls_datas);
 
 /*
 ********************************************************************************

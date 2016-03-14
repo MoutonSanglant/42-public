@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/09 20:15:19 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/14 15:16:39 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/14 21:19:08 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,6 @@ static void		remove_element(void *element, size_t size)
 	ft_memdel((void **)&element);
 }
 
-
-
 static void		list_recursively(t_ls_datas *ls_datas, t_list *list,
 									t_file_datas *p_file_data)
 {
@@ -41,20 +39,28 @@ static void		list_recursively(t_ls_datas *ls_datas, t_list *list,
 	}
 }
 
-void			list_files(t_ls_datas *ls_datas, t_list *file_list,
-							const char *folder_name)
+static void		print_header_if_needed(t_ls_datas *ls_datas,
+											const char *folder_name)
 {
 	static int		list_count = 0;
-	t_file_datas	*p_file_data;
-	t_list			*first;
 
 	if (list_count++)
 		ft_putchar('\n');
 	if (ls_datas->flags & _FLAG_PRINT_FOLDERS_NAME)
 		ft_printf("%s:\n", (folder_name[0] != '\0') ? folder_name : ".");
+	ls_datas->flags |= _FLAG_PRINT_FOLDERS_NAME;
+}
+
+void			list_files(t_ls_datas *ls_datas, t_list *file_list,
+							const char *folder_name)
+{
+	t_file_datas	*p_file_data;
+	t_list			*first;
+
+	print_header_if_needed(ls_datas, folder_name);
 	if (!file_list)
 		return ;
-	if (ls_datas->print_fn == &print_detailed_line)
+	if (folder_name[0] != '\0' && ls_datas->print_fn == &print_detailed_line)
 		ft_printf("total %u\n", ls_datas->total_blocks_count);
 	file_list = ft_lstsort(file_list, ls_datas->sort_fn);
 	if (ls_datas->time_sort_fn)
