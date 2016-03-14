@@ -124,6 +124,9 @@ test "Test15: list / folder twice" "/ /"
 #test 16: Special encodings, params: -lR
 test "Test16: Special encodings, params: -lR" "-lR ./test_folder/special/encodings"
 
+#test 16: Hidden folders recursion, params: -lRa
+test "Test16: Hidden folders recursion, params: -lRa" "-lRa ./test_folder/"
+
 # Tests to write:
 # -same name folder / file
 # -same name folder / file on reverse

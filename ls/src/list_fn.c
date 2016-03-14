@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/09 20:15:19 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/14 21:19:08 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/14 21:54:58 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,19 @@ static void		list_recursively(t_ls_datas *ls_datas, t_list *list,
 	ls_datas->flags |= _FLAG_PRINT_FOLDERS_NAME;
 	while (list)
 	{
+		if (S_ISDIR(p_file_data->st_stat.st_mode))
+		{
+			if (p_file_data->name[0] == '.')
+			{
+				if ((ls_datas->flags & FLAG_A)
+						&& !(p_file_data->name[1] == '.'
+							|| p_file_data->name[1] == '\0'))
+					read_dir(ls_datas, p_file_data, p_file_data->pathname);
+			}
+			else
+				read_dir(ls_datas, p_file_data, p_file_data->pathname);
+		}
 		p_file_data = (t_file_datas *)list->content;
-		if (p_file_data->name[0] != '.'
-				&& S_ISDIR(p_file_data->st_stat.st_mode))
-			read_dir(ls_datas, p_file_data, p_file_data->pathname);
 		list = list->next;
 	}
 }
