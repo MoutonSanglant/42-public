@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/13 15:37:00 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/14 13:25:25 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/14 20:54:44 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static void		remove_element(void *element, size_t size)
 	ft_memdel((void **)&element);
 }
 
-void	clear_ls_datas(t_ls_datas *ls_datas)
+void			clear_ls_datas(t_ls_datas *ls_datas)
 {
 	if (ls_datas && ls_datas->directories)
 		ft_lstdel(&ls_datas->directories, &remove_element);

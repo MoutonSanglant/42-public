@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/09 11:41:23 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/14 15:47:12 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/14 21:16:40 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int				read_dir(t_ls_datas *ls_d, t_file_datas *file_datas,
 	reset_format_infos(ls_d);
 	while ((p = readdir(p_dir)))
 	{
-		file.name = p->d_name;
+		file.name = ft_strdup(p->d_name);
 		if (list && (list->next = fetch_file_datas(ls_d, &file, f_name)))
 			list = list->next;
 		else if (!first && (first = fetch_file_datas(ls_d, &file, f_name)))

@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/09 16:32:24 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/14 14:44:05 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/14 21:23:13 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static char		*indent_str(char *dst, size_t len, int c, int reverse)
 {
 	char	*str;
-	char	*tmp;
+	char	*new_dst;
 	size_t	i;
 	size_t	n;
 
@@ -27,11 +27,10 @@ static char		*indent_str(char *dst, size_t len, int c, int reverse)
 	while (i < n)
 		str[i++] = c;
 	str[i] = '\0';
-	tmp = dst;
-	dst = (reverse) ? ft_strjoin(str, dst) : ft_strjoin(dst, str);
-	ft_strdel(&tmp);
+	new_dst = (reverse) ? ft_strjoin(str, dst) : ft_strjoin(dst, str);
+	ft_strdel(&dst);
 	ft_strdel(&str);
-	return (dst);
+	return (new_dst);
 }
 
 static void		print_left(const t_ls_datas *ls_datas,
@@ -58,42 +57,40 @@ static void		print_left(const t_ls_datas *ls_datas,
 static void		print_right(const t_ls_datas *ls_datas,
 							const struct stat *st_stat, const char *filename)
 {
-	char	*major_col;
-	char	*minor_col;
+	char	*maj_col;
+	char	*min_col;
 	char	*date;
 	time_t	now;
 
-	minor_col = NULL;
+	min_col = NULL;
 	now = time(NULL);
 	date = ctime(&st_stat->ST_MTIM.tv_sec);
-	if (now - (time_t)st_stat->ST_MTIM.tv_sec > MONTH_IN_SECS * 6)
-		ft_strcpy(&date[11], &date[19]);
-	else if (-(now - (time_t)st_stat->ST_MTIM.tv_sec) > 0)
+	if (now - (time_t)st_stat->ST_MTIM.tv_sec > MONTH_IN_SECS * 6 ||
+			-(now - (time_t)st_stat->ST_MTIM.tv_sec) > 0)
 		ft_strcpy(&date[11], &date[19]);
 	if (S_ISCHR(st_stat->st_mode) || S_ISBLK(st_stat->st_mode))
 	{
-		major_col = ft_strdup(ft_itoa(MAJOR(st_stat->st_rdev)));
-		major_col = indent_str(major_col, 3, ' ', 1);
-		minor_col = ft_strdup(ft_itoa(MINOR(st_stat->st_rdev)));
-		minor_col = indent_str(minor_col, 3, ' ', 1);
-		ft_printf("%s, %s %.12s %s\n", major_col, minor_col, &date[4], filename);
-		ft_strdel(&major_col);
+		maj_col = indent_str(ft_itoa(MAJOR(st_stat->st_rdev)), 3, ' ', 1);
+		min_col = indent_str(ft_itoa(MINOR(st_stat->st_rdev)), 3, ' ', 1);
+		ft_printf("%s, %s %.12s %s\n", maj_col, min_col, &date[4], filename);
+		ft_strdel(&maj_col);
 	}
 	else
 	{
-		minor_col = ft_uitoa((size_t)st_stat->st_size);
-		minor_col = indent_str(minor_col, ls_datas->col_size_width, ' ', 1);
-		ft_printf("%s %.12s %s\n", minor_col, &date[4], filename);
+		min_col = indent_str(ft_uitoa((size_t)st_stat->st_size),
+								ls_datas->col_size_width, ' ', 1);
+		ft_printf("%s %.12s %s\n", min_col, &date[4], filename);
 	}
-	ft_strdel(&minor_col);
+	ft_strdel(&min_col);
 }
 
 void			print_detailed_line(const t_ls_datas *ls_datas,
 										t_file_datas *file)
 {
 	const struct stat	*st_stat;
-	char				buf[1024];
 	char				*tmp;
+	char				*filename;
+	char				buf[1024];
 	ssize_t				rbytes;
 
 	rbytes = 0;
@@ -103,12 +100,14 @@ void			print_detailed_line(const t_ls_datas *ls_datas,
 		if ((rbytes = readlink(file->pathname, buf, sizeof(buf) - 1)) != -1)
 			buf[rbytes] = '\0';
 		tmp = ft_strjoin(file->name, " -> ");
-		ft_strdel(&file->name);
-		file->name = ft_strjoin(tmp, buf);
+		filename = ft_strjoin(tmp, buf);
 		ft_strdel(&tmp);
 	}
+	else
+		filename = ft_strdup(file->name);
 	print_left(ls_datas, st_stat);
-	print_right(ls_datas, st_stat, file->name);
+	print_right(ls_datas, st_stat, filename);
+	ft_strdel(&filename);
 }
 
 void			print_one(const t_ls_datas *ls_datas, t_file_datas *file)
