@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/09 20:15:19 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/14 21:54:58 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/15 23:13:25 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,14 @@ static void		remove_element(void *element, size_t size)
 	ft_memdel((void **)&element);
 }
 
-static void		list_recursively(t_ls_datas *ls_datas, t_list *list,
-									t_file_datas *p_file_data)
+static void		list_recursively(t_ls_datas *ls_datas, t_list *list)
 {
+	t_file_datas	*p_file_data;
+
 	ls_datas->flags |= _FLAG_PRINT_FOLDERS_NAME;
 	while (list)
 	{
+		p_file_data = (t_file_datas *)list->content;
 		if (S_ISDIR(p_file_data->st_stat.st_mode))
 		{
 			if (p_file_data->name[0] == '.')
@@ -82,7 +84,7 @@ void			list_files(t_ls_datas *ls_datas, t_list *file_list,
 		file_list = file_list->next;
 	}
 	if (ls_datas->flags & FLAG_BIG_R)
-		list_recursively(ls_datas, first, p_file_data);
+		list_recursively(ls_datas, first);
 	if (first)
 		ft_lstdel(&first, &remove_element);
 }
@@ -95,10 +97,12 @@ int				list_directories(t_ls_datas *ls_datas)
 	int				ret_e;
 
 	ret_e = 0;
-	dir_list = ft_lstsort(ls_datas->directories, ls_datas->sort_fn);
+	ls_datas->directories =
+		ft_lstsort(ls_datas->directories, ls_datas->sort_fn);
 	if (ls_datas->time_sort_fn)
-		dir_list = ft_lstsort(ls_datas->directories,
+		ls_datas->directories = ft_lstsort(ls_datas->directories,
 										ls_datas->time_sort_fn);
+	dir_list = ls_datas->directories;
 	if (dir_list->next)
 		ls_datas->flags |= _FLAG_PRINT_FOLDERS_NAME;
 	while (dir_list)

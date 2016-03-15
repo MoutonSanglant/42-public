@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/09 17:07:33 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/14 21:37:38 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/15 23:31:12 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,10 @@ static void		fetch_param_flags(t_ls_datas *ls_datas, char *arg,
 		else if (arg[j] == 'r')
 			*reverse = 1;
 		else if (arg[j] == 't')
+		{
+			ls_datas->flags |= FLAG_T;
 			ls_datas->sort_fn = &sort_time;
+		}
 		else if (arg[j] == '1')
 			;
 		else
@@ -56,47 +59,54 @@ static int		fetch_flags(int argc, char **argv, t_ls_datas *ls_datas)
 	{
 		arg = argv[i];
 		len = ft_strlen(arg);
+		if (argv[i][1] == '-')
+		{
+			if (argv[i][2] == '-')
+				error_usage('-', ls_datas);
+			i++;
+			break;
+		}
 		if (len < 2)
 			break ;
 		fetch_param_flags(ls_datas, arg, len, &reverse);
 	}
-	if (reverse)
-	{
+	if (reverse && ls_datas->flags & FLAG_T)
+		ls_datas->sort_fn = &sort_time_reverse;
+	else if (reverse)
 		ls_datas->sort_fn = &sort_antilexicographic;
-		ls_datas->time_sort_fn = &sort_time_reverse;
-	}
 	return (i - 1);
 }
 
 static void		add_file(t_ls_datas *ls_datas, t_file_datas *file,
-								t_list **list)
+								t_list **list, int is_dir)
 {
 	if (*list)
 	{
-		(*list)->next = fetch_file_datas(ls_datas, file, "");
+		(*list)->next =
+			(is_dir) ? ft_lstnew((void *)file, sizeof(t_file_datas))
+			: fetch_file_datas(ls_datas, file, "");
 		*list = (*list)->next;
 	}
 	else
 	{
-		*list = fetch_file_datas(ls_datas, file, "");
-		ls_datas->files = *list;
+		if (is_dir)
+		{
+			*list = ft_lstnew((void *)file, sizeof(t_file_datas));
+			ls_datas->directories = *list;
+		}
+		else
+		{
+			*list = fetch_file_datas(ls_datas, file, "");
+			ls_datas->files = *list;
+		}
 	}
 }
 
-static void		add_folder(t_ls_datas *ls_datas, t_file_datas *file,
-								t_list **list)
-{
-	if (*list)
-	{
-		(*list)->next = ft_lstnew((void *)file, sizeof(t_file_datas));
-		*list = (*list)->next;
-	}
-	else
-	{
-		*list = ft_lstnew((void *)file, sizeof(t_file_datas));
-		ls_datas->directories = *list;
-	}
-}
+/*
+**	Bon, de nouveaux bug avec le test S_ISLNK (fonctionnel ?)
+**	Regarder les tests du Moulitest...
+**	+ LA NORME !
+*/
 
 void			fetch_args(int argc, char **argv, t_ls_datas *ls_datas)
 {
@@ -105,6 +115,7 @@ void			fetch_args(int argc, char **argv, t_ls_datas *ls_datas)
 	t_file_datas	file;
 	struct stat		st_stat;
 	int				flag_count;
+	DIR				*p_dir;
 
 	dir_list = NULL;
 	files_list = NULL;
@@ -114,15 +125,22 @@ void			fetch_args(int argc, char **argv, t_ls_datas *ls_datas)
 		file.pathname = NULL;
 		file.name = ft_strdup(argv[argc]);
 		lstat(file.name, &st_stat);
-		if (S_ISREG(st_stat.st_mode) || S_ISLNK(st_stat.st_mode))
-			add_file(ls_datas, &file, &files_list);
+		if (S_ISREG(st_stat.st_mode))
+			add_file(ls_datas, &file, &files_list, 1);
+		else if (S_ISLNK(st_stat.st_mode))
+		{
+			if (!(p_dir = opendir(file.name)))
+				add_file(ls_datas, &file, &files_list, 0);
+			else
+				add_file(ls_datas, &file, &dir_list, 1);
+		}
 		else
-			add_folder(ls_datas, &file, &dir_list);
+			add_file(ls_datas, &file, &dir_list, 1);
 	}
 	if (!ls_datas->directories && !files_list)
 	{
 		file.name = ft_strdup(".");
 		file.pathname = NULL;
-		add_folder(ls_datas, &file, &dir_list);
+		add_file(ls_datas, &file, &dir_list, 1);
 	}
 }
