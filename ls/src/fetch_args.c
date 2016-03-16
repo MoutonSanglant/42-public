@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/09 17:07:33 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/15 23:31:12 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/16 01:11:56 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,10 @@ void			fetch_args(int argc, char **argv, t_ls_datas *ls_datas)
 			if (!(p_dir = opendir(file.name)))
 				add_file(ls_datas, &file, &files_list, 0);
 			else
+			{
 				add_file(ls_datas, &file, &dir_list, 1);
+				closedir(p_dir);
+			}
 		}
 		else
 			add_file(ls_datas, &file, &dir_list, 1);
