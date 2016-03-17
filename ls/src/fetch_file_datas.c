@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/10 21:50:47 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/14 21:10:42 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/17 17:23:01 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,6 @@ t_list			*fetch_file_datas(t_ls_datas *ls_datas, t_file_datas *file,
 		file_data.name = file->name;
 		set_path(&file_data, folder_name);
 		ret = lstat(file_data.pathname, &file_data.st_stat);
-		if (ret < 0)
-			error_unimplemented(ls_datas);
 		store_col_width_infos(ls_datas, &file_data.st_stat);
 		files = ft_lstnew((void *)&file_data, sizeof(t_file_datas));
 		if (!files)
