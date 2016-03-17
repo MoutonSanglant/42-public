@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/05 17:15:49 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/14 20:26:56 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/17 15:40:13 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,9 @@ void	error_usage(int c, t_ls_datas *ls_datas)
 	ft_putstr_fd(PROGRAM_NAME, 2);
 	ft_putstr_fd(": illegal option -- ", 2);
 	ft_putchar_fd(c, 2);
-	ft_putstr_fd("\nusage: ft_ls [", 2);
+	ft_putstr_fd("\nusage: ", 2);
+	ft_putstr_fd(PROGRAM_NAME, 2);
+	ft_putstr_fd(" [-", 2);
 	ft_putstr_fd(VALID_FLAGS, 2);
 	ft_putendl_fd("] [file ...]", 2);
 	clear_ls_datas(ls_datas);

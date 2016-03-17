@@ -6,24 +6,11 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/09 20:15:19 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/15 23:13:25 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/17 17:12:02 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
-
-static void		remove_element(void *element, size_t size)
-{
-	t_file_datas	*fdatas;
-
-	(void)size;
-	fdatas = (t_file_datas *)element;
-	if (fdatas->name)
-		ft_strdel(&fdatas->name);
-	if (fdatas->pathname)
-		ft_strdel(&fdatas->pathname);
-	ft_memdel((void **)&element);
-}
 
 static void		list_recursively(t_ls_datas *ls_datas, t_list *list)
 {
@@ -74,8 +61,6 @@ void			list_files(t_ls_datas *ls_datas, t_list *file_list,
 	if (folder_name[0] != '\0' && ls_datas->print_fn == &print_detailed_line)
 		ft_printf("total %u\n", ls_datas->total_blocks_count);
 	file_list = ft_lstsort(file_list, ls_datas->sort_fn);
-	if (ls_datas->time_sort_fn)
-		file_list = ft_lstsort(file_list, ls_datas->time_sort_fn);
 	first = file_list;
 	while (file_list)
 	{
@@ -86,31 +71,23 @@ void			list_files(t_ls_datas *ls_datas, t_list *file_list,
 	if (ls_datas->flags & FLAG_BIG_R)
 		list_recursively(ls_datas, first);
 	if (first)
-		ft_lstdel(&first, &remove_element);
+		ft_lstdel(&first, &remove_file_element);
 }
 
-int				list_directories(t_ls_datas *ls_datas)
+void			list_directories(t_ls_datas *ls_datas)
 {
 	t_file_datas	*file_datas;
 	t_list			*dir_list;
-	int				read_e;
-	int				ret_e;
 
-	ret_e = 0;
 	ls_datas->directories =
 		ft_lstsort(ls_datas->directories, ls_datas->sort_fn);
-	if (ls_datas->time_sort_fn)
-		ls_datas->directories = ft_lstsort(ls_datas->directories,
-										ls_datas->time_sort_fn);
 	dir_list = ls_datas->directories;
 	if (dir_list->next)
 		ls_datas->flags |= _FLAG_PRINT_FOLDERS_NAME;
 	while (dir_list)
 	{
 		file_datas = (t_file_datas *)dir_list->content;
-		if ((read_e = read_dir(ls_datas, file_datas, file_datas->name)))
-			ret_e = read_e;
+		read_dir(ls_datas, file_datas, file_datas->name);
 		dir_list = dir_list->next;
 	}
-	return (ret_e);
 }

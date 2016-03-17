@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/09 16:30:35 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/15 22:38:31 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/16 16:41:11 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int		sort_time_reverse(void *struct1, void *struct2)
 	if (t1.tv_sec == t2.tv_sec)
 	{
 		if (t1.tv_nsec == t2.tv_nsec)
-			return (sort_lexicographic(struct1, struct2));
+			return (sort_antilexicographic(struct1, struct2));
 		return ((int)(t2.tv_nsec - t1.tv_nsec) >= 0);
 	}
 	return ((int)(t2.tv_sec - t1.tv_sec) >= 0);
