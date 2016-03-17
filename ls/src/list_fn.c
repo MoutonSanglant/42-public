@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/09 20:15:19 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/17 17:12:02 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/17 19:09:04 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,25 +37,13 @@ static void		list_recursively(t_ls_datas *ls_datas, t_list *list)
 	}
 }
 
-static void		print_header_if_needed(t_ls_datas *ls_datas,
-											const char *folder_name)
-{
-	static int		list_count = 0;
-
-	if (list_count++)
-		ft_putchar('\n');
-	if (ls_datas->flags & _FLAG_PRINT_FOLDERS_NAME)
-		ft_printf("%s:\n", (folder_name[0] != '\0') ? folder_name : ".");
-	ls_datas->flags |= _FLAG_PRINT_FOLDERS_NAME;
-}
-
 void			list_files(t_ls_datas *ls_datas, t_list *file_list,
 							const char *folder_name)
 {
 	t_file_datas	*p_file_data;
 	t_list			*first;
 
-	print_header_if_needed(ls_datas, folder_name);
+	ls_datas->flags |= _FLAG_SEPARATOR;
 	if (!file_list)
 		return ;
 	if (folder_name[0] != '\0' && ls_datas->print_fn == &print_detailed_line)
