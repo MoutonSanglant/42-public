@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/09 17:07:33 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/17 18:03:02 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/17 19:11:14 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,7 @@ static void		add_file(t_ls_datas *ls_datas, t_file_datas *file,
 		{
 			*list = ft_lstnew((void *)file, sizeof(t_file_datas));
 			ls_datas->invalid = *list;
+			ls_datas->flags |= _FLAG_PRINT_FOLDERS_NAME;
 		}
 	}
 }
@@ -131,21 +132,28 @@ void			fetch_args(int argc, char **argv, t_ls_datas *ls_datas)
 		file.name = ft_strdup(argv[argc]);
 		ret = lstat(file.name, &st_stat);
 		if (ret < 0)
-			add_file(ls_datas, &file, &invalid_list, 2);
-		else if (S_ISREG(st_stat.st_mode))
-			add_file(ls_datas, &file, &files_list, 0);
-		else if (S_ISLNK(st_stat.st_mode))
 		{
-			if (ls_datas->flags & FLAG_L || !(p_dir = opendir(file.name)))
-				add_file(ls_datas, &file, &files_list, 0);
-			else
-			{
-				add_file(ls_datas, &file, &dir_list, 1);
-				closedir(p_dir);
-			}
+			if (file.name[0] == '\0')
+				exit (error_path("fts_open"));
+			add_file(ls_datas, &file, &invalid_list, 2);
 		}
 		else
-			add_file(ls_datas, &file, &dir_list, 1);
+		{
+			p_dir = opendir(file.name);
+			if (S_ISREG(st_stat.st_mode))
+				add_file(ls_datas, &file, &files_list, 0);
+			else if (S_ISLNK(st_stat.st_mode))
+			{
+				if (ls_datas->flags & FLAG_L || !(p_dir = opendir(file.name)))
+					add_file(ls_datas, &file, &files_list, 0);
+				else
+					add_file(ls_datas, &file, &dir_list, 1);
+			}
+			else
+				add_file(ls_datas, &file, &dir_list, 1);
+			if (p_dir)
+				closedir(p_dir);
+		}
 	}
 	if (!ls_datas->directories && !files_list && !ls_datas->invalid)
 	{
@@ -159,7 +167,7 @@ void			fetch_args(int argc, char **argv, t_ls_datas *ls_datas)
 		invalid_list = ls_datas->invalid;
 		while (invalid_list)
 		{
-			error_path(((t_file_datas *)invalid_list->content)->name);
+			ls_datas->error = error_path(((t_file_datas *)invalid_list->content)->name);
 			invalid_list = invalid_list->next;
 		}
 		ft_lstdel(&ls_datas->invalid, &remove_file_element);

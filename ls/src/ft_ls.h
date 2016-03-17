@@ -43,7 +43,8 @@ typedef enum		e_ls_flags
 	FLAG_BIG_R = 0x4,
 	FLAG_A = 0x8,
 	FLAG_T = 0x10,
-	_FLAG_PRINT_FOLDERS_NAME = 0x20
+	_FLAG_PRINT_FOLDERS_NAME = 0x20,
+	_FLAG_SEPARATOR = 0x40
 }					t_ls_flags;
 
 typedef struct		s_file_datas
@@ -52,19 +53,6 @@ typedef struct		s_file_datas
 	char			*pathname;
 	struct stat		st_stat;
 }					t_file_datas;
-
-/*
-**	Padding: 8 (*)
-**	  8
-**	+ 8
-**  + 8
-**	+ 4
-**  + 8
-**  + 8
-**	===
-**	 44 (48)
-**	(4 bytes losts)
-*/
 
 typedef struct		s_ls_datas
 {
