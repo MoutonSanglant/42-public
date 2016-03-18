@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/09 20:15:19 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/17 19:09:04 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/18 15:53:59 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ static void		list_recursively(t_ls_datas *ls_datas, t_list *list)
 			else
 				read_dir(ls_datas, p_file_data, p_file_data->pathname);
 		}
-		p_file_data = (t_file_datas *)list->content;
 		list = list->next;
 	}
 }

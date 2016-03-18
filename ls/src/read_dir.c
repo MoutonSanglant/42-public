@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/09 11:41:23 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/17 19:08:36 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/18 16:10:03 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,4 +59,5 @@ void			read_dir(t_ls_datas *ls_d, t_file_datas *file_datas,
 			list = first;
 	}
 	list_files(ls_d, first, f_name);
+	closedir(p_dir);
 }
