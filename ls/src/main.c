@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/03 17:43:51 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/17 17:43:51 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/18 14:58:46 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,31 @@
 **		exit
 */
 
+void static		check_validity(t_ls_datas *ls_datas)
+{
+	t_file_datas	file;
+	t_list			*invalid_list;
+
+	if (!ls_datas->directories && !ls_datas->files && !ls_datas->invalid)
+	{
+		file.name = ft_strdup(".");
+		file.pathname = NULL;
+		ls_datas->directories = ft_lstnew((void **)&file, sizeof(t_file_datas));
+	}
+	if (ls_datas->invalid)
+	{
+		ls_datas->invalid = ft_lstsort(ls_datas->invalid, &sort_lexicographic);
+		invalid_list = ls_datas->invalid;
+		while (invalid_list)
+		{
+			ls_datas->error =
+				error_path(((t_file_datas *)invalid_list->content)->name);
+			invalid_list = invalid_list->next;
+		}
+		ft_lstdel(&ls_datas->invalid, &remove_file_element);
+	}
+}
+
 int				main(int argc, char **argv)
 {
 	t_ls_datas		ls_datas;
@@ -62,6 +87,7 @@ int				main(int argc, char **argv)
 	ls_datas.print_fn = &print_one;
 	ls_datas.sort_fn = &sort_lexicographic;
 	fetch_args(argc, argv, &ls_datas);
+	check_validity(&ls_datas);
 	if (ls_datas.files)
 		list_files(&ls_datas, ls_datas.files, "");
 	if (ls_datas.directories)
