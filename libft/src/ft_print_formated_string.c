@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/23 16:07:37 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/03 14:52:50 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/24 14:52:56 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ static void		print_formated_long_string(t_fdata *fdatas, wchar_t *wstr)
 		justify_long_string(wstr, fdatas, 0);
 }
 
-void			ft_print_formated_string(va_list ap, t_fdata *fdatas, char *s)
+void			ft_print_formated_string(va_list *ap, t_fdata *fdatas, char *s)
 {
 	wchar_t		*wstr;
 	char		*str;
@@ -87,9 +87,9 @@ void			ft_print_formated_string(va_list ap, t_fdata *fdatas, char *s)
 	if (s != NULL)
 		str = s;
 	else if (fdatas->length == LENGTH_L)
-		wstr = (wchar_t *)va_arg(ap, wchar_t *);
+		wstr = (wchar_t *)va_arg(*ap, wchar_t *);
 	else
-		str = va_arg(ap, char *);
+		str = va_arg(*ap, char *);
 	if (!str && !wstr)
 	{
 		fdatas->precision = (fdatas->precision < 0) ? 7 : fdatas->precision;

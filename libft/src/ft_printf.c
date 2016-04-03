@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/14 15:08:07 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/07 19:27:51 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/24 14:50:50 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ static int			is_long(const char *spec)
 	return (0);
 }
 
-static const char	*read_arg(va_list ap,
+static const char	*read_arg(va_list *ap,
 									const char *format, t_fdata *fdatas)
 {
 	const char	*spec;
@@ -169,7 +169,7 @@ int					ft_printf(const char *restrict format, ...)
 	while ((to_ptr = ft_strchr(from_ptr, '%')))
 	{
 		fdatas.bcount += write(1, from_ptr, (to_ptr - from_ptr));
-		to_ptr = read_arg(ap, (to_ptr + 1), &fdatas) + 1;
+		to_ptr = read_arg(&ap, (to_ptr + 1), &fdatas) + 1;
 		if (fdatas.flag & FLAG_FORMAT_ERROR)
 			return (fdatas.bcount);
 		from_ptr = to_ptr;
