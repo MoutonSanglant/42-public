@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/10 21:50:47 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/14 21:10:42 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/18 16:32:46 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,13 @@ static void		set_path(t_file_datas *file_data, const char *folder_name)
 
 	if (folder_name[0] != '\0')
 	{
+		if (folder_name[0] == '/' && folder_name[1] == '\0')
+		{
+			file_data->pathname = ft_strjoin("/", file_data->name);
+			return ;
+		}
+		if (folder_name[0] == '/' && folder_name[1] == '/')
+			exit(0);
 		tmp = ft_strjoin(folder_name, "/");
 		file_data->pathname = ft_strjoin(tmp, file_data->name);
 		ft_strdel(&tmp);
@@ -76,8 +83,6 @@ t_list			*fetch_file_datas(t_ls_datas *ls_datas, t_file_datas *file,
 		file_data.name = file->name;
 		set_path(&file_data, folder_name);
 		ret = lstat(file_data.pathname, &file_data.st_stat);
-		if (ret < 0)
-			error_unimplemented(ls_datas);
 		store_col_width_infos(ls_datas, &file_data.st_stat);
 		files = ft_lstnew((void *)&file_data, sizeof(t_file_datas));
 		if (!files)

@@ -124,8 +124,17 @@ test "Test15: list / folder twice" "/ /"
 #test 16: Special encodings, params: -lR
 test "Test16: Special encodings, params: -lR" "-lR ./test_folder/special/encodings"
 
-#test 16: Hidden folders recursion, params: -lRa
-test "Test16: Hidden folders recursion, params: -lRa" "-lRa ./test_folder/"
+#test 17: Hidden folders recursion, params: -lRa
+test "Test17: Hidden folders recursion, params: -lRa" "-lRa ./test_folder/"
+
+#test 18: Special flags, params: -l
+test "Test18: Special flags, params: -l" "-l ./test_folder/special_flags"
+
+#test 19: Recursive order, params: -Ra
+test "Test19: Recursive order, params: -Ra" "-Ra ./test_folder/Ra"
+
+#test 20: Symbolic link folder
+test "Test20: Symbolic link folder" "./test_folder/symbolic/symdir"
 
 # Tests to write:
 # -same name folder / file
