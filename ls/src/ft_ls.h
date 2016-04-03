@@ -22,13 +22,18 @@
 # include <includes/libft.h>
 
 # define PROGRAM_NAME "ls"
-# define VALID_FLAGS "Ralrt"
-# define MONTH_IN_SECS 2628000
+# define VALID_FLAGS "Ralrt1"
+# define MONTH_IN_SECS 2620800
 
 # ifdef LINUX
 #  define ST_MTIM st_mtim
+<<<<<<< HEAD
 #  define MAJOR(x) major(x)
 #  define MINOR(x) minor(x)
+=======
+#  define MAJOR major
+#  define MINOR minor
+>>>>>>> 7e0508311ab711b03e5e3aaecf8b63d4856202f2
 # else
 #  define ST_MTIM st_mtimespec
 #  define MAJOR(x) (x >> 24)
@@ -43,7 +48,8 @@ typedef enum		e_ls_flags
 	FLAG_BIG_R = 0x4,
 	FLAG_A = 0x8,
 	FLAG_T = 0x10,
-	_FLAG_PRINT_FOLDERS_NAME = 0x20
+	_FLAG_PRINT_FOLDERS_NAME = 0x20,
+	_FLAG_SEPARATOR = 0x40
 }					t_ls_flags;
 
 typedef struct		s_file_datas
@@ -53,24 +59,12 @@ typedef struct		s_file_datas
 	struct stat		st_stat;
 }					t_file_datas;
 
-/*
-**	Padding: 8 (*)
-**	  8
-**	+ 8
-**  + 8
-**	+ 4
-**  + 8
-**  + 8
-**	===
-**	 44 (48)
-**	(4 bytes losts)
-*/
-
 typedef struct		s_ls_datas
 {
 	DIR			*p_dir;
 	t_list		*directories;
 	t_list		*files;
+	t_list		*invalid;
 	t_ls_flags	flags;
 	int			col_user_width;
 	int			col_group_width;
@@ -79,7 +73,7 @@ typedef struct		s_ls_datas
 	size_t		total_blocks_count;
 	void		(*print_fn)(const struct s_ls_datas *, t_file_datas *);
 	int			(*sort_fn)(void *, void *);
-	int			(*time_sort_fn)(void *, void *);
+	int			error;
 }					t_ls_datas;
 
 /*
@@ -103,6 +97,7 @@ void				fetch_args(int argc, char **argv, t_ls_datas *ls_datas);
 **								: clear_ls_datas.c :
 */
 void				clear_ls_datas(t_ls_datas *ls_datas);
+void				remove_file_element(void *element, size_t size);
 
 /*
 ********************************************************************************
@@ -124,7 +119,7 @@ void				file_mode_str(mode_t mode, char *str);
 /*
 **								: read_dir.c :
 */
-int					read_dir(t_ls_datas *ls_datas, t_file_datas *file_datas,
+void				read_dir(t_ls_datas *ls_datas, t_file_datas *file_datas,
 								const char *f_name);
 
 /*
@@ -138,7 +133,7 @@ int					read_dir(t_ls_datas *ls_datas, t_file_datas *file_datas,
 */
 void				list_files(t_ls_datas *ls_datas, t_list *file_list,
 							const char *folder_name);
-int					list_directories(t_ls_datas *ls_datas);
+void				list_directories(t_ls_datas *ls_datas);
 
 /*
 ********************************************************************************

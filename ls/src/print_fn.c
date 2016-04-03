@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/09 16:32:24 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/14 21:23:13 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/17 14:26:05 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ static void		print_right(const t_ls_datas *ls_datas,
 	now = time(NULL);
 	date = ctime(&st_stat->ST_MTIM.tv_sec);
 	if (now - (time_t)st_stat->ST_MTIM.tv_sec > MONTH_IN_SECS * 6 ||
-			-(now - (time_t)st_stat->ST_MTIM.tv_sec) > 0)
+			(time_t)st_stat->ST_MTIM.tv_sec - now > 0)
 		ft_strcpy(&date[11], &date[19]);
 	if (S_ISCHR(st_stat->st_mode) || S_ISBLK(st_stat->st_mode))
 	{

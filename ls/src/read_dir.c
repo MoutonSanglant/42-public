@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/09 11:41:23 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/14 21:16:40 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/18 16:10:03 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,18 @@ static void		reset_format_infos(t_ls_datas *ls_datas)
 	ls_datas->total_blocks_count = 0;
 }
 
-int				read_dir(t_ls_datas *ls_d, t_file_datas *file_datas,
+static void		print_header_if_needed(t_ls_datas *ls_datas,
+											const char *folder_name)
+{
+	if (ls_datas->flags & _FLAG_SEPARATOR)
+		ft_putchar('\n');
+	if (ls_datas->flags & _FLAG_PRINT_FOLDERS_NAME && folder_name[0] != '\0')
+		ft_printf("%s:\n", (folder_name[0] != '\0') ? folder_name : ".");
+	ls_datas->flags |= _FLAG_PRINT_FOLDERS_NAME;
+	ls_datas->flags |= _FLAG_SEPARATOR;
+}
+
+void			read_dir(t_ls_datas *ls_d, t_file_datas *file_datas,
 							const char *f_name)
 {
 	struct dirent	*p;
@@ -32,8 +43,12 @@ int				read_dir(t_ls_datas *ls_d, t_file_datas *file_datas,
 
 	list = NULL;
 	first = NULL;
+	print_header_if_needed(ls_d, f_name);
 	if (!(p_dir = opendir(f_name)))
-		return (error_path(file_datas->name));
+	{
+		ls_d->error = error_path(file_datas->name);
+		return ;
+	}
 	reset_format_infos(ls_d);
 	while ((p = readdir(p_dir)))
 	{
@@ -45,5 +60,4 @@ int				read_dir(t_ls_datas *ls_d, t_file_datas *file_datas,
 	}
 	list_files(ls_d, first, f_name);
 	closedir(p_dir);
-	return (0);
 }
