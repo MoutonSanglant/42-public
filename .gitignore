@@ -2,7 +2,6 @@
 *.o
 *.swp
 libft/test_*
-libft/libft.a
 *._*
 *.dSYM
 .DS_Store
@@ -10,6 +9,22 @@ vgcore.*
 
 *.netrwhist
 
-ls/ft_ls
+
+### Libraries ###
+
+libft/libft.a
+printf/libftprintf.a
+
+
+### Executables ###
+
+/fillit/fillit
+/get_next_line/test_gnl
+/fdf/fdf
+/ls/ft_ls
+/minishell/minishell
+
+
+### Don't ignore ###
 
 !/School/Config/.*
