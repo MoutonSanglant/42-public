@@ -27,6 +27,8 @@
 
 # ifdef LINUX
 #  define ST_MTIM st_mtim
+#  define MAJOR(x) major(x)
+#  define MINOR(x) minor(x)
 # else
 #  define ST_MTIM st_mtimespec
 #  define MAJOR(x) (x >> 24)
