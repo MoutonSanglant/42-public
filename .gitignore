@@ -1,30 +1,40 @@
 /.*
-*.o
-*.swp
-libft/test_*
-*._*
-*.dSYM
-.DS_Store
-vgcore.*
 
+
+### Vim Files ###
+*.swp
 *.netrwhist
 
 
-### Libraries ###
+### Valgrind Files ###
+*.dSYM
+vgcore.*
 
+
+### OSX Files ###
+*._*
+.DS_Store
+
+
+### Object files ###
+*.o
+
+
+### Libraries ###
 libft/libft.a
 printf/libftprintf.a
 
 
 ### Executables ###
+/fillit/fillit*
+/get_next_line/test_gnl*
+/fdf/fdf*
+/ls/ft_ls*
+/minishell/minishell*
 
-/fillit/fillit
-/get_next_line/test_gnl
-/fdf/fdf
-/ls/ft_ls
-/minishell/minishell
+### Temporary files ###
+_*
 
 
 ### Don't ignore ###
-
 !/School/Config/.*
