@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/10 21:50:47 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/18 16:32:46 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/04/03 12:24:25 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,6 @@ t_list			*fetch_file_datas(t_ls_datas *ls_datas, t_file_datas *file,
 {
 	t_list			*files;
 	t_file_datas	file_data;
-	int				ret;
 
 	files = NULL;
 	if (ls_datas->flags & FLAG_A || !(file->name[0] == '.')
@@ -82,7 +81,7 @@ t_list			*fetch_file_datas(t_ls_datas *ls_datas, t_file_datas *file,
 	{
 		file_data.name = file->name;
 		set_path(&file_data, folder_name);
-		ret = lstat(file_data.pathname, &file_data.st_stat);
+		lstat(file_data.pathname, &file_data.st_stat);
 		store_col_width_infos(ls_datas, &file_data.st_stat);
 		files = ft_lstnew((void *)&file_data, sizeof(t_file_datas));
 		if (!files)
