@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/03 17:43:51 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/18 14:58:46 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/04/03 12:23:58 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@
 **		exit
 */
 
-void static		check_validity(t_ls_datas *ls_datas)
+static void		check_validity(t_ls_datas *ls_datas)
 {
 	t_file_datas	file;
 	t_list			*invalid_list;
