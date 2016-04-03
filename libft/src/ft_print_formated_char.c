@@ -6,7 +6,7 @@
 /*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/24 09:45:47 by tdefresn          #+#    #+#             */
-/*   Updated: 2016/03/02 21:38:07 by tdefresn         ###   ########.fr       */
+/*   Updated: 2016/03/24 14:52:04 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,16 +39,16 @@ static int		unicode_length(t_fdata *fdatas, wint_t c)
 	return (0);
 }
 
-void			ft_print_formated_char(va_list ap, t_fdata *fdatas)
+void			ft_print_formated_char(va_list *ap, t_fdata *fdatas)
 {
 	wint_t	c;
 
 	c = 0;
 	if (fdatas->length == LENGTH_NONE)
-		c = va_arg(ap, int);
+		c = va_arg(*ap, int);
 	else if (fdatas->length == LENGTH_L)
 	{
-		c = (wint_t)va_arg(ap, wint_t);
+		c = (wint_t)va_arg(*ap, wint_t);
 		fdatas->width -= unicode_length(fdatas, c);
 		fdatas->width++;
 	}
