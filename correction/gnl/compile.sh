@@ -1,0 +1,16 @@
+#!/bin/bash
+
+FLAGS="-Wall -Wextra -Werror"
+#FLAGS="-g -o0 -Wall -Wextra -Werror"
+INCLUDES_FOLDER=libft/src
+#INCLUDES_FOLDER=libft/includes
+
+make -C libft/ fclean && make -C libft/
+
+# clang -Wall -Wextra -Werror -I libft/includes -o get_next_line.o -c get_next_line.c
+# clang -Wall -Wextra -Werror -I libft/includes -o main.o -c main.c
+# clang -o test_gnl main.o get_next_line.o -I libft/includes -L libft/ -lft
+
+clang $FLAGS -I $INCLUDES_FOLDER -o get_next_line.o -c get_next_line.c
+clang $FLAGS -I $INCLUDES_FOLDER -o main.o -c main.c
+clang $FLAGS -o test_gnl main.o get_next_line.o -I $INCLUDES_FOLDER -L libft/ -lft
