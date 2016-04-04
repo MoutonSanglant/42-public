@@ -1,20 +1,24 @@
-42 - Le depot du Mouton
+42 - Le dêpot du Mouton
 =======================
-é
-**Disclaimer**: aucun mouton ne peut etre tenu pour responsable des effets secondaires provoques par l'utilisation des programmes presents sur ce depot. Utilisez les avec precaution.
+**Disclaimer**: aucun mouton ne peut être tenu pour responsable des effets secondaires qui pourraient être provoqués suite à l'utilisation des programmes présents sur ce dépôt. À utiliser à vos risques et périls.
 
-**Warning**: n'utilisez ces programmes que si vous les avez recuperes directement depuis l'adresse 'https://github.com/MoutonSanglant/42'.
 
-Projets
+Scripts
 =======
-- Libft: la lib42 du Mouton
-- Fillit: ultime, mais ne fonctionne pas sur OSX
-- GNL: une ligne apres l'autre
-- FdF: la 3d a l'etat pur
-- printf: le meme que celui de la librairie standard, mais un peu different
-- ls: optimise pour fonctionner
+* brew_install - Installe Brew, Valgrind & NodeJS
+* pathogen_install - Installe Pathogen & editorconfig
+* KTFM - Kill The Fuckin Machine
 
 
-Piscine C
+Correction
+==========
+Stuff & Crash test pour les projets 42
+
+Subjects
+========
+Les sujets des projets
+
+
+Libraries
 =========
-Les outils de la piscine C ne sont plus suportes, mais vous pouvez toujours recuperer le code source si vous desirez les reutiliser/ameliorer
+* Mlx - la MinilibX OSX
