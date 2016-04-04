@@ -1,1 +1,3 @@
-cp -r ./home/.* ~/
+#!/bin/sh
+
+cp -r ./home/ ~/
