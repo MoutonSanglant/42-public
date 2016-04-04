@@ -1,5 +1,5 @@
 # Log tracker
-echo "1" > ~/git/42/School/logs/$(hostname -s).txt
+echo "1" > ~/git42/School/logs/$(hostname -s).txt
 
 # Node
 NPM_PACKAGES="${HOME}/.npm-packages"
