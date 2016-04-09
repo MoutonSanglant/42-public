@@ -6,8 +6,10 @@
 #make
 #make clean
 
+LIBPRINTF_PATH=~/projects/printf
+LIBFT_HEADER=$LIBPRINTF_PATH/src
 
-EXEC_DIR=..
+EXEC_DIR=$LIBPRINTF_PATH
 cur_dir=${PWD}
 
 cd $EXEC_DIR
@@ -17,7 +19,7 @@ make
 
 cd $cur_dir
 
-gcc -Wall -Werror -Wextra -Wno-format -o crashtest ./main.c -L../ -lftprintf -I../includes
+gcc -Wall -Werror -Wextra -Wno-format -o crashtest ./main.c -L$LIBPRINTF_PATH -lftprintf -I$LIBFT_HEADER
 #gcc -g -O0 -Wall -Werror -Wextra -Wno-format -o crashtest ./main.c -L../ -lftprintf -I../includes
 
 ./crashtest
