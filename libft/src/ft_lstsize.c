@@ -1,19 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstadd.c                                        :+:      :+:    :+:   */
+/*   ft_lstsize.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/12/03 10:30:18 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/07 16:22:40 by tdefresn         ###   ########.fr       */
+/*   Created: 2015/12/07 17:14:37 by tdefresn          #+#    #+#             */
+/*   Updated: 2015/12/07 17:31:16 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
 
-void	ft_lstadd(t_list **alst, t_list *new)
+int		ft_lstsize(t_list *lst)
 {
-	new->next = *alst;
-	*alst = new;
+	t_list	*first;
+	int i;
+
+	first = lst;
+	i = 0;
+	while (first->next)
+	{
+		first = first->next;
+		i++;
+	}
+	return (i);
 }

@@ -6,28 +6,42 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/12/03 10:30:36 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/07 15:50:09 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/04 21:14:27 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
 
+static void		delelem(void *content, size_t content_size)
+{
+	if (content_size > 0)
+		ft_memdel(&content);
+}
+
 t_list			*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem))
 {
 	t_list	*new_list;
+	t_list	*next;
 
-	new_list = f(lst);
+	next = NULL;
+	if (lst->next)
+	{
+		next = ft_lstmap(lst->next, f);
+		if (!next)
+			return (NULL);
+	}
+	new_list = ft_lstnew(lst->content, lst->content_size);
+	new_list = f(new_list);
 	if (new_list)
 	{
-		if (lst->next)
-		{
-			new_list->next = ft_lstmap(lst->next, f);
-			if (!new_list->next)
-			{
-				free(new_list);
-				new_list = NULL;
-			}
-		}
+		if (next)
+			ft_lstadd(&next, new_list);
+	}
+	else
+	{
+		if (next)
+			ft_lstdel(&next, &delelem);
+		return (NULL);
 	}
 	return (new_list);
 }

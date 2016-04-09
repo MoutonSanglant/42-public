@@ -1,19 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstadd.c                                        :+:      :+:    :+:   */
+/*   ft_dl_lstpushfront.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/12/03 10:30:18 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/07 16:22:40 by tdefresn         ###   ########.fr       */
+/*   Created: 2015/12/07 16:25:19 by tdefresn          #+#    #+#             */
+/*   Updated: 2015/12/07 16:52:24 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
 
-void	ft_lstadd(t_list **alst, t_list *new)
+void	ft_dl_lstpushfront(t_dl_list **alst, t_dl_list *new)
 {
-	new->next = *alst;
+	t_dl_list	*first;
+
+	first = ft_dl_lstfront(*alst);
+	new->next = first;
+	first->prev = new;
 	*alst = new;
 }

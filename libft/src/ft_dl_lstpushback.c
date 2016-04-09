@@ -1,19 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstadd.c                                        :+:      :+:    :+:   */
+/*   ft_dl_lstpushback.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/12/03 10:30:18 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/07 16:22:40 by tdefresn         ###   ########.fr       */
+/*   Created: 2015/12/07 16:31:17 by tdefresn          #+#    #+#             */
+/*   Updated: 2015/12/07 17:33:27 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
 
-void	ft_lstadd(t_list **alst, t_list *new)
+void	ft_dl_lstpushback(t_dl_list *lst, t_dl_list *new)
 {
-	new->next = *alst;
-	*alst = new;
+	t_dl_list	*last;
+
+	last = ft_dl_lstback(lst);
+	last->next = new;
+	new->prev = last;
 }

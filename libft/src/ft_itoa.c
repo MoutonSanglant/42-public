@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: exam <marvin@42.fr>                        +#+  +:+       +#+        */
+/*   By: tdefresn <tdefresn@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/09/18 19:52:19 by exam              #+#    #+#             */
-/*   Updated: 2015/12/04 21:17:56 by tdefresn         ###   ########.fr       */
+/*   Created: 2015/12/07 12:52:16 by tdefresn          #+#    #+#             */
+/*   Updated: 2015/12/07 13:15:32 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <libft.h>
 
-static int		nbrlength(long long int n)
+static size_t	nbrlength(long long int n)
 {
-	int		length;
+	size_t		length;
 
 	if (n == 0)
 		return (1);
@@ -27,10 +27,10 @@ static int		nbrlength(long long int n)
 	return (length);
 }
 
-static char		getat(long long int n, int idx)
+static char		getat(long long int n, size_t idx)
 {
 	char				c;
-	int					i;
+	size_t				i;
 	long long int		lft;
 
 	i = 0;
@@ -50,28 +50,27 @@ static char		getat(long long int n, int idx)
 char			*ft_itoa(int n)
 {
 	char			*str;
-	int				size;
 	int				sign;
-	int				i;
+	size_t			size;
+	size_t			i;
+	long long int	ln;
 
+	ln = (long long int)n;
 	sign = 0;
-	if (n < 0)
+	if (ln < 0)
 	{
-		n *= -1;
+		ln *= -1;
 		sign = 1;
 	}
-	size = nbrlength((long long int)n);
-	str = malloc(sizeof(char) * (size + 1 + sign));
+	size = nbrlength(ln);
+	str = malloc(sizeof(char) * (size + sign + 1));
 	if (str == NULL)
 		return (NULL);
-	i = sign;
+	i = sign - 1;
 	if (sign)
 		str[0] = '-';
-	while (i < size + sign)
-	{
-		str[i] = getat((long long int)n, (size - 1 + sign) - i);
-		i++;
-	}
+	while (++i < size + sign)
+		str[i] = getat(ln, (size + sign - 1) - i);
 	str[i] = '\0';
 	return (str);
 }

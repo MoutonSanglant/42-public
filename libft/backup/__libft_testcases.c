@@ -6,7 +6,7 @@
 /*   By: tdefresn <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/24 17:24:21 by tdefresn          #+#    #+#             */
-/*   Updated: 2015/12/07 16:18:18 by tdefresn         ###   ########.fr       */
+/*   Updated: 2015/12/04 18:47:15 by tdefresn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -396,7 +396,7 @@ void		test_strcat()
 {
 	char	*str;
 
-	ft_putendl("== strcat / strncat / strlcat ==");
+	ft_putendl("== strcat / strncat ==");
 	ft_putendl(">> libc");
 	str = ft_strnew(sizeof(char) * 200);
 	str = strcpy(str, STRCPY_STR);
@@ -439,66 +439,6 @@ void		test_strcat()
 	ft_putchar('\n');
 	ft_putendl(str);
 	ft_strdel(&str);
-	ft_putchar('\n');
-	ft_putendl("== strlcat ==");
-
-	char    buf[10];
-
-    bzero(buf, 10);
-    strcpy(buf, "abc");
-	ft_putendl(buf);
-    ft_putnbr(strlcat(buf, "abcdefghijklmnop", 10));
-	ft_putstr(" - ");
-	ft_putendl(buf);
-    bzero(buf, 10);
-    strcpy(buf, "abc");
-    strcmp(buf, "abcabcdef");
-    ft_putnbr(strlcat(buf, "abcd", 2));
-	ft_putstr(" - ");
-	ft_putendl(buf);
-    bzero(buf, 10);
-    ft_putnbr(strlcat(buf, "abc", 10));
-	ft_putstr(" - ");
-	ft_putendl(buf);
-    ft_putnbr(strlcat(buf, "def", 10));
-	ft_putstr(" - ");
-	ft_putendl(buf);
-    bzero(buf, 10);
-    memset(buf, 'a', 10);
-    ft_putnbr(strlcat(buf, "ccc", 10));
-	ft_putstr(" - ");
-	ft_putendl(buf);
-
-	ft_putchar('\n');
-
-	char    buf2[10];
-
-    bzero(buf2, 10);
-    strcpy(buf2, "abc");
-	ft_putendl(buf2);
-    ft_putnbr(ft_strlcat(buf2, "abcdefghijklmnop", 10));
-	ft_putstr(" - ");
-	ft_putendl(buf2);
-    bzero(buf2, 10);
-    strcpy(buf2, "abc");
-    strcmp(buf2, "abcabcdef");
-    ft_putnbr(ft_strlcat(buf2, "abcd", 2));
-	ft_putstr(" - ");
-	ft_putendl(buf2);
-    bzero(buf2, 10);
-    ft_putnbr(ft_strlcat(buf2, "abc", 10));
-	ft_putstr(" - ");
-	ft_putendl(buf2);
-    ft_putnbr(ft_strlcat(buf2, "def", 10));
-	ft_putstr(" - ");
-	ft_putendl(buf2);
-    bzero(buf2, 10);
-    memset(buf2, 'a', 10);
-    ft_putnbr(ft_strlcat(buf2, "ccc", 10));
-	ft_putstr(" - ");
-	ft_putendl(buf2);
-
-	ft_putchar('\n');
 	ft_putchar('\n');
 }
 
@@ -1191,32 +1131,34 @@ void		delone(void *content, size_t content_size)
 
 void		putlst(t_list *elem)
 {
-	ft_putstr(elem->content);
-	ft_putstr(" (");
-	ft_putnbr(elem->content_size);
-	ft_putendl(")");
+	ft_putendl(elem->content);
 }
 
 int g_i;
 
 t_list		*setelem(t_list *elem)
 {
-	t_list	*l2;
+//	t_list	*new_elem;
+	int		l;
+	char	*str;
 
 	g_i++;
-	/*
-	if (g_i > 2)
-	{
-		return (NULL);
-	}
-	*/
 
-	l2 = (t_list *)malloc(sizeof(t_list));
-	bzero(l2, sizeof(t_list));
-	l2->content_size = elem->content_size * 3;
-	l2->content = (char *)malloc(sizeof(char) * l2->content_size);
-	ft_memset(l2->content, 'H', (l2->content_size) * sizeof(char));
-	return (l2);
+//	new_elem = (t_list *) malloc(sizeof(t_list));
+
+	l = ft_strlen(elem->content) + 1;
+	if (elem->content)
+	{
+		l += 4;
+		str = ft_strnew(l);
+		str = ft_strcpy(str, (char *) elem->content);
+		str = ft_strcat(str, ": ok");
+		free(elem->content);
+		elem->content = (void *) str;
+	}
+	elem->content_size = l;
+	elem->next = NULL;
+	return (elem);
 }
 
 void		test_lst()
@@ -1226,7 +1168,6 @@ void		test_lst()
 	t_list	*new_list;
 	t_list	*node2;
 	
-	g_i = 0;
 	node = (t_list *)malloc(sizeof(t_list));
 	node->content_size = 9;
 	node->content = "Bouuuh !";
@@ -1235,22 +1176,25 @@ void		test_lst()
 	ft_lstadd(&list, node);
 
 	ft_lstadd(&node, node2);
-	printf("old list (%p):\n", node);
-	ft_lstiter(node, &putlst);
+	printf("old list (%p):\n", node2);
+	ft_lstiter(node2, &putlst);
 
-	new_list = ft_lstmap(node, &setelem);
+	new_list = ft_lstmap(node2, &setelem);
 	if (new_list)
 	{
 		printf("new list (%p):\n", new_list);
 		ft_lstiter(new_list, &putlst);
 	}
 	
-	printf("old list (%p):\n", node);
-	ft_lstiter(node, &putlst);
+	printf("old list (%p):\n", node2);
+	ft_lstiter(node2, &putlst);
+	//ft_putendl(node->next->content);
+	//ft_putendl(list->content);
+	//ft_lstdelone(&list, &delone);
 
+	//ft_lstdel(&list, &delone); <<--- ca crash !!
 	if (new_list)
 		ft_lstdel(&new_list, &delone);
-//	free(node);
 }
 
 void		test_extra()
@@ -1286,7 +1230,6 @@ int		main(int argc, char **argv)
 	test_strchr();
 	test_strsearch();
 	test_atoi();
-	test_strcat();
 #endif
 #ifdef TEST_IS
 	if (argc < 2)
@@ -1312,7 +1255,7 @@ int		main(int argc, char **argv)
 	test_strjoin();
 	test_strtrim();
 	test_strsplit();	
-	test_itoa();
+	test_itoa();	
 #endif
 #ifdef TEST_PUT
 	test_putchar();
