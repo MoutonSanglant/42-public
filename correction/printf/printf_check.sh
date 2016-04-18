@@ -6,7 +6,10 @@
 #make
 #make clean
 
-LIBPRINTF_PATH=~/projects/printf
+#LIBPRINTF_PATH=~/projects/printf
+#LIBNAME=ftprintf
+LIBPRINTF_PATH=~/projects/libft
+LIBNAME=ft
 LIBFT_HEADER=$LIBPRINTF_PATH/src
 
 EXEC_DIR=$LIBPRINTF_PATH
@@ -19,7 +22,7 @@ make
 
 cd $cur_dir
 
-gcc -Wall -Werror -Wextra -Wno-format -o crashtest ./main.c -L$LIBPRINTF_PATH -lftprintf -I$LIBFT_HEADER
+gcc -Wall -Werror -Wextra -Wno-format -o crashtest ./main.c -L$LIBPRINTF_PATH -l$LIBNAME -I$LIBFT_HEADER
 #gcc -g -O0 -Wall -Werror -Wextra -Wno-format -o crashtest ./main.c -L../ -lftprintf -I../includes
 
 ./crashtest
