@@ -1,6 +1,9 @@
 /.*
 
 
+### Config Files ###
+*.cfg
+
 ### Vim Files ###
 *.swp
 *.netrwhist
