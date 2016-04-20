@@ -20,6 +20,96 @@
 #define HARDCORE
 #define MOULITEST
 
+#define PRINTF_TEST "printf_out.tmp"
+#define FT_TEST "ft_out.tmp"
+#define STD_OUT "/dev/tty"
+#define BUFF_SIZE 1024
+
+char	*to_str(int fd)
+{
+	char	buffer[BUFF_SIZE + 1];
+	char	*str = NULL;
+	int		bcount = 1;
+
+	str = ft_strnew(1);
+	while (bcount > 0)
+	{
+		bcount = read(fd, buffer, BUFF_SIZE);
+		buffer[bcount] = '\0';
+		str = ft_strjoin(str, buffer);
+		//dprintf(2, "bcount: %i\n", bcount);
+		//dprintf(2, "str: %s\n", str);
+		//return (0);
+	}
+	return (str);
+}
+
+void	test(const char *format)
+{
+	FILE	*fd_std = NULL;
+	FILE	*fd_ft = NULL;
+	char	*str_std = NULL;
+	char	*str_ft = NULL;
+	int		ret_std = 0;
+	int		ret_ft = 0;
+
+	fd_std = freopen(PRINTF_TEST, "w+", stdout);
+	ret_std = printf(format);
+	rewind(fd_std);
+	str_std = to_str(fileno(fd_std));
+	freopen(STD_OUT, "w", stdout);
+	//fclose(fd_std);
+	fd_ft = freopen(FT_TEST, "w+", stdout);
+	ret_ft = ft_printf(format);
+	rewind(fd_ft);
+	str_ft = to_str(fileno(fd_ft));
+	freopen(STD_OUT, "w", stdout);
+	//fclose(fd_ft);
+	//printf("str_std: %s\n", str_std);
+	//printf("str_ft: %s\n", str_ft);
+	if (ft_strcmp(str_std, str_ft))
+	{
+		printf("[%s]: \x1B[31mOutput doesn't match\x1B[0m\n", format);
+		printf("ft_: %s\n", str_ft);
+		printf("std: %s\n", str_std);
+	}
+	else if (ret_ft != ret_std)
+	{
+		printf("[%s]: \x1B[33mReturns doesn't match [std: %i, ft: %i]\x1B[0m\n", format, ret_std, ret_ft);
+	}
+	else
+		printf("[%s]: \x1B[32mOk\x1B[0m\n", format);
+
+}
+
+void	test_s(const char *format, const char *str)
+{
+	printf("[%s]\n", format);
+	ft_putstr("std: ");
+	printf(" (%i)\n", printf(format, str));
+	ft_putstr("ft_: ");
+	printf(" (%i)\n", ft_printf(format, str));
+}
+
+void	test_S(const char *format, const wchar_t *wstr)
+{
+	printf("[%s]\n", format);
+	ft_putstr("std: ");
+	printf(" (%i)\n", printf(format, wstr));
+	ft_putstr("ft_: ");
+	printf(" (%i)\n", ft_printf(format, wstr));
+}
+
+void	test_i(const char *format, int nb)
+{
+	printf("[%s]\n", format);
+	ft_putstr("std: ");
+	printf(" (%i)\n", printf(format, nb));
+	ft_putstr("ft_: ");
+	printf(" (%i)\n", ft_printf(format, nb));
+}
+
+
 int main(void)
 {
 	wchar_t	*wstr = L"a sample wide string";
@@ -51,50 +141,28 @@ int main(void)
 
 # ifdef SPECIFIERS
 
-	ft_putendl("Specifier: %%");
-	ft_putstr("std:");
-	printf(" (%i)\n", printf("%%"));
-	ft_putstr("ft_:");
-	printf(" (%i)\n", ft_printf("%%"));
-	ft_putstr("std:");
-	printf(" (%i)\n", printf("%%i"));
-	ft_putstr("ft_:");
-	printf(" (%i)\n", ft_printf("%%i"));
-	ft_putstr("std:");
-	printf(" (%i)\n", printf("%% is a percent symbol"));
-	ft_putstr("ft_:");
-	printf(" (%i)\n", ft_printf("%% is a percent symbol"));
-	ft_putstr("\n");
-
-	ft_putendl("Specifier: %s %S");
-	printf(" (%i)\n", printf("std: %s", str));
-	printf(" (%i)\n", ft_printf("ft_: %s", str));
-	printf(" (%i)\n", printf("std: %s", "a constant string"));
-	printf(" (%i)\n", ft_printf("ft_: %s", "a constant string"));
-	printf(" (%i)\n", printf("std: %S", wstr));
-	printf(" (%i)\n", ft_printf("ft_: %S", wstr));
-	printf(" (%i)\n", printf("std: %S", L"a constant wide string"));
-	printf(" (%i)\n", ft_printf("ft_: %S", L"a constant wide string"));
-	printf(" (%i)\n", printf("std: %s", NULL));
-	printf(" (%i)\n", ft_printf("ft_: %s", NULL));
-	//ft_printf("ft_: %%\n");
-	ft_putstr("\n");
-
-	ft_putendl("Specifier: %p");
-	printf(" (%i)\n", printf("std: %p", str));
-	printf(" (%i)\n", ft_printf("ft_: %p", str));
-	printf(" (%i)\n", printf("std: %p", "constant"));
-	printf(" (%i)\n", ft_printf("ft_: %p", "constant"));
-	printf(" (%i)\n", printf("std: %p", NULL));
-	printf(" (%i)\n", ft_printf("ft_: %p", NULL));
-	ft_putstr("\n");
-
-	ft_putendl("Specifier: %d %D");
-	printf(" (%i)\n", printf("std: %d", nb));
-	printf(" (%i)\n", ft_printf("ft_: %d", nb));
-	printf(" (%i)\n", printf("std: %D", nb));
-	printf(" (%i)\n", ft_printf("ft_: %D", nb));
-	ft_putstr("\n");
+	ft_putendl("=== %% ===");
+	test("%%");
+	test("%%i");
+	test("%% is a percent symbol");
+	return (0);
+	ft_putendl("=== %s ===");
+	test_s("%s", str);
+	test_s("%s", "a constant string");
+	test_s("%s", NULL);
+	ft_putendl("=== %S ===");
+	test_S("%S", wstr);
+	test_S("%S", L"a constant wide string");
+	test_S("%S", NULL);
+	ft_putendl("=== %p ===");
+	test_s("%p", str);
+	test_s("%p", "constant");
+	test_s("%p", NULL);
+	ft_putendl("=== %d ===");
+	test_i("%d", nb);
+	ft_putendl("=== %D ===");
+	test_i("%D", nb);
+	ft_putendl("=== %i ===");
 
 	ft_putendl("Specifier: %i");
 	printf(" (%i)\n", printf("std: %i", nb));

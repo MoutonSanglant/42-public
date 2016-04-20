@@ -1,31 +1,27 @@
-#make
-#make
-#make re
-#make all
-#make fclean
-#make
-#make clean
+#!/bin/bash
 
-#LIBPRINTF_PATH=~/projects/printf
-#LIBNAME=ftprintf
-LIBPRINTF_PATH=~/projects/libft
-LIBNAME=ft
-LIBFT_HEADER=$LIBPRINTF_PATH/src
+PROGRAM_NAME="libftprintf"
+BASE_DIR=${BASH_SOURCE%printf_check.sh}
 
-EXEC_DIR=$LIBPRINTF_PATH
-cur_dir=${PWD}
+if [[ -f ${BASE_DIR}${PROGRAM_NAME}.cfg ]]
+then
+	source ${BASE_DIR}${PROGRAM_NAME}.cfg
+else
+	while ! [[ -f ${LIB_PATH}Makefile ]]; do
+		if [[ "$LIB_PATH" != "" ]]; then
+			echo "'${LIB_PATH}Makefile' doesn't exist"
+		fi
+		read -p "set LIB_PATH (eg. '~/printf/'): " LIB_PATH
+		LIB_PATH="`eval echo ${LIB_PATH//>}`"
+	done
 
-cd $EXEC_DIR
+	echo "LIB_PATH=$LIB_PATH" >> ${BASE_DIR}${PROGRAM_NAME}.cfg
+fi
 
-make
-#make debug
+make -C $LIB_PATH
 
-cd $cur_dir
+gcc -Wall -Werror -Wextra -Wno-format -o ${BASE_DIR}test_printf ${BASE_DIR}main.c -L$LIB_PATH -lftprintf -I${LIB_PATH}src
 
-gcc -Wall -Werror -Wextra -Wno-format -o crashtest ./main.c -L$LIBPRINTF_PATH -l$LIBNAME -I$LIBFT_HEADER
-#gcc -g -O0 -Wall -Werror -Wextra -Wno-format -o crashtest ./main.c -L../ -lftprintf -I../includes
+${BASE_DIR}test_printf
 
-./crashtest
-#valgrind --track-origins=yes --leak-check=yes ./crashtest
-
-rm crashtest
+rm ${BASE_DIR}test_printf
