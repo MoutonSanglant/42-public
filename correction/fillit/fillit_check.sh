@@ -1,4 +1,33 @@
-#!/bin/sh
+#!/bin/bash
+
+PROGRAM_NAME="fillit"
+BASE_DIR=${BASH_SOURCE%fillit_check.sh}
+
+if [[ -f ${BASE_DIR}${PROGRAM_NAME}.cfg ]]
+then
+	source ${BASE_DIR}${PROGRAM_NAME}.cfg
+else
+	while ! [[ -f ${PROGRAM_PATH}Makefile ]]; do
+		if [[ "$PROGRAM_PATH" != "" ]]; then
+			echo "'${PROGRAM_PATH}Makefile' doesn't exist"
+		fi
+		read -p "set PROGRAM_PATH (eg. '~/${PROGRAM_NAME}/'): " PROGRAM_PATH
+		PROGRAM_PATH="`eval echo ${PROGRAM_PATH//>}`"
+	done
+
+	while ! [[ -f ${LIBFT_PATH}Makefile ]]; do
+		if [[ "$LIBFT_PATH" != "" ]]; then
+			echo "'${LIBFT_PATH}Makefile' doesn't exist"
+		fi
+		read -p "set LIBFT_PATH (eg. '~/libft/'): " LIBFT_PATH
+		LIBFT_PATH="`eval echo ${LIBFT_PATH//>}`"
+	done
+
+	echo "PROGRAM_PATH=$PROGRAM_PATH" >> ${BASE_DIR}${PROGRAM_NAME}.cfg
+	echo "LIBFT_PATH=$LIBFT_PATH" >> ${BASE_DIR}${PROGRAM_NAME}.cfg
+fi
+
+make -C ${PROGRAM_PATH}
 
 test_name=("empty" \
 	"invalid" \
@@ -89,8 +118,8 @@ test=($'error' `# empty` \
 #	$'AABBDD\nA.BBDD\nACCCC.\nHHEEII\nH.GEEI\nHGGG.I' `# valid` \
 for i in ${!test[@]}
 do
-	output=$(./fillit examples/${test_name[$i]}.fillit)
-	runtime=$((time (./fillit examples/${test_name[$i]}.fillit) 2>&1) | grep ^real)
+	output=$(${PROGRAM_PATH}fillit ${BASE_DIR}examples/${test_name[$i]}.fillit)
+	runtime=$((time (${PROGRAM_PATH}fillit ${BASE_DIR}examples/${test_name[$i]}.fillit) 2>&1) | grep ^real)
 	runtime=${runtime#"real"}
 	runtime="${runtime#"${runtime%%[![:space:]]*}"}"
 	if [ "$output" == "${test[$i]}" ]

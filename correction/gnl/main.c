@@ -2,7 +2,7 @@
 #include <fcntl.h>
 #include <libft.h>
 
-#include "get_next_line.h"
+#include <get_next_line.h>
 
 void	fpause()
 {
