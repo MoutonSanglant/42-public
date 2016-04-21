@@ -3,196 +3,43 @@
 
 #include <locale.h>
 
-#define SPECIFIERS
-#define MULTI_SPEC
-#define FLAGS
-#define WIDTH
-#define PRECISION
-#define LENGTH
-#define MISSING
-#define HEX
-#define OCT
-
-#define CHAR
-#define DIGIT
-#define UNSIGNED
-#define NOSPEC
-#define UNSPEC
-#define HARDCORE
-#define MOULITEST
+#ifdef ALL
+# define SPECIFIERS
+# define BASIC
+# define MULTI_SPEC
+# define FLAGS
+# define WIDTH
+# define PRECISION
+# define LENGTH
+# define MISSING
+# define HEX
+# define OCT
+# define UNSIGNED
+# define CHAR
+# define WIDE_CHAR
+# define DIGIT
+# define UNSPEC
+# define HARDCORE
+//# define MOULITEST
+#endif
 
 #define PRINTF_TEST "printf_out.tmp"
 #define FT_TEST "ft_out.tmp"
 #define STD_OUT "/dev/tty"
 #define BUFF_SIZE 1024
 
-char	*to_str(int fd)
-{
-	char	buffer[BUFF_SIZE + 1];
-	char	*str = NULL;
-	char	*tmp = NULL;
-	int		bcount = 1;
+char	*to_str(int fd);
+void	compare(char *str_std, char *str_ft, int ret_std, int ret_ft, const char *format);
 
-	str = ft_strnew(1);
-	while (bcount > 0)
-	{
-		bcount = read(fd, buffer, BUFF_SIZE);
-		buffer[bcount] = '\0';
-		tmp = str;
-		str = ft_strjoin(str, buffer);
-		ft_strdel(&tmp);
-	}
-	return (str);
-}
+void	test(const char *format);
+void	test_i(const char *format, uintmax_t nb);
+void	test_s(const char *format, const char *str);
+void	test_S(const char *format, const wchar_t *wstr);
+void	test_s_s_s(const char *format, const char *s1, const char *s2, const char *s3);
+void	test_s_S_p_d_D_i_o_O_u_U_x_X_c(const char *format, const char *str, const wchar_t *wstr, const char *ptr, int d, int D, int i, int o, int O, int u, int U, int x, int X, int c);
 
-void	compare(char *str_std, char *str_ft, int ret_std, int ret_ft, const char *format)
-{
-	if (ft_strcmp(str_std, str_ft))
-	{
-		printf("[%s]: \x1B[31mOutput doesn't match\x1B[0m\n", format);
-		printf("std: %s\n", str_std);
-		printf("ft_: %s\n", str_ft);
-	}
-	else if (ret_ft != ret_std)
-		printf("[%s]: \x1B[33mReturn values doesn't match [std: %i, ft: %i]\x1B[0m\n", format, ret_std, ret_ft);
-	else
-		printf("[%s]: \x1B[32mOk\x1B[0m\n", format);
-	ft_strdel(&str_ft);
-	ft_strdel(&str_std);
-}
-
-void	test(const char *format)
-{
-	FILE	*fd_std = NULL;
-	FILE	*fd_ft = NULL;
-	char	*str_std = NULL;
-	char	*str_ft = NULL;
-	int		ret_std = 0;
-	int		ret_ft = 0;
-
-	fd_std = freopen(PRINTF_TEST, "w+", stdout);
-	ret_std = printf(format);
-	rewind(fd_std);
-	str_std = to_str(fileno(fd_std));
-	freopen(STD_OUT, "w", stdout);
-	fd_ft = freopen(FT_TEST, "w+", stdout);
-	ret_ft = ft_printf(format);
-	rewind(fd_ft);
-	str_ft = to_str(fileno(fd_ft));
-	freopen(STD_OUT, "w", stdout);
-	compare(str_std, str_ft, ret_std, ret_ft, format);
-}
-
-void	test_s(const char *format, const char *str)
-{
-	FILE	*fd_std = NULL;
-	FILE	*fd_ft = NULL;
-	char	*str_std = NULL;
-	char	*str_ft = NULL;
-	int		ret_std = 0;
-	int		ret_ft = 0;
-
-	fd_std = freopen(PRINTF_TEST, "w+", stdout);
-	ret_std = printf(format, str);
-	rewind(fd_std);
-	str_std = to_str(fileno(fd_std));
-	freopen(STD_OUT, "w", stdout);
-	fd_ft = freopen(FT_TEST, "w+", stdout);
-	ret_ft = ft_printf(format, str);
-	rewind(fd_ft);
-	str_ft = to_str(fileno(fd_ft));
-	freopen(STD_OUT, "w", stdout);
-	compare(str_std, str_ft, ret_std, ret_ft, format);
-}
-
-void	test_S(const char *format, const wchar_t *wstr)
-{
-	FILE	*fd_std = NULL;
-	FILE	*fd_ft = NULL;
-	char	*str_std = NULL;
-	char	*str_ft = NULL;
-	int		ret_std = 0;
-	int		ret_ft = 0;
-
-	fd_std = freopen(PRINTF_TEST, "w+", stdout);
-	ret_std = printf(format, wstr);
-	rewind(fd_std);
-	str_std = to_str(fileno(fd_std));
-	freopen(STD_OUT, "w", stdout);
-	fd_ft = freopen(FT_TEST, "w+", stdout);
-	ret_ft = ft_printf(format, wstr);
-	rewind(fd_ft);
-	str_ft = to_str(fileno(fd_ft));
-	freopen(STD_OUT, "w", stdout);
-	compare(str_std, str_ft, ret_std, ret_ft, format);
-}
-
-void	test_i(const char *format, uintmax_t nb)
-{
-	FILE	*fd_std = NULL;
-	FILE	*fd_ft = NULL;
-	char	*str_std = NULL;
-	char	*str_ft = NULL;
-	int		ret_std = 0;
-	int		ret_ft = 0;
-
-	fd_std = freopen(PRINTF_TEST, "w+", stdout);
-	ret_std = printf(format, nb);
-	rewind(fd_std);
-	str_std = to_str(fileno(fd_std));
-	freopen(STD_OUT, "w", stdout);
-	fd_ft = freopen(FT_TEST, "w+", stdout);
-	ret_ft = ft_printf(format, nb);
-	rewind(fd_ft);
-	str_ft = to_str(fileno(fd_ft));
-	freopen(STD_OUT, "w", stdout);
-	compare(str_std, str_ft, ret_std, ret_ft, format);
-
-}
-
-void	test_s_s_s(const char *format, const char *s1, const char *s2, const char *s3)
-{
-	FILE	*fd_std = NULL;
-	FILE	*fd_ft = NULL;
-	char	*str_std = NULL;
-	char	*str_ft = NULL;
-	int		ret_std = 0;
-	int		ret_ft = 0;
-
-	fd_std = freopen(PRINTF_TEST, "w+", stdout);
-	ret_std = printf(format, s1, s2, s3);
-	rewind(fd_std);
-	str_std = to_str(fileno(fd_std));
-	freopen(STD_OUT, "w", stdout);
-	fd_ft = freopen(FT_TEST, "w+", stdout);
-	ret_ft = ft_printf(format, s1, s2, s3);
-	rewind(fd_ft);
-	str_ft = to_str(fileno(fd_ft));
-	freopen(STD_OUT, "w", stdout);
-	compare(str_std, str_ft, ret_std, ret_ft, format);
-}
-
-void	test_s_S_p_d_D_i_o_O_u_U_x_X_c(const char *format, const char *str, const wchar_t *wstr, const char *ptr, int d, int D, int i, int o, int O, int u, int U, int x, int X, int c)
-{
-	FILE	*fd_std = NULL;
-	FILE	*fd_ft = NULL;
-	char	*str_std = NULL;
-	char	*str_ft = NULL;
-	int		ret_std = 0;
-	int		ret_ft = 0;
-
-	fd_std = freopen(PRINTF_TEST, "w+", stdout);
-	ret_std = printf(format, str, wstr, ptr, d, D, i, o, O, u, U, x, X, c);
-	rewind(fd_std);
-	str_std = to_str(fileno(fd_std));
-	freopen(STD_OUT, "w", stdout);
-	fd_ft = freopen(FT_TEST, "w+", stdout);
-	ret_ft = ft_printf(format, str, wstr, ptr, d, D, i, o, O, u, U, x, X, c);
-	rewind(fd_ft);
-	str_ft = to_str(fileno(fd_ft));
-	freopen(STD_OUT, "w", stdout);
-	compare(str_std, str_ft, ret_std, ret_ft, format);
-}
+int test_count = 0;
+int total_test = 0;
 
 int main(void)
 {
@@ -205,6 +52,7 @@ int main(void)
 	long long	ll = 9223372036854775807;
 	intmax_t	im = 9223372036854775807;
 	char		c = 0;
+	wchar_t		C = L'α';
 
 	(void)wstr;
 	(void)str;
@@ -214,11 +62,60 @@ int main(void)
 	(void)ll;
 	(void)im;
 	(void)c;
+	(void)C;
 
 	setlocale(LC_ALL, "fr_FR.UTF-8");
 
-# ifdef SPECIFIERS
+#ifdef SPECIFIERS
+	total_test += 20;
+#endif
+#ifdef BASIC
+	total_test += 4;
+#endif
+#ifdef MULTI_SPEC
+	total_test += 2;
+#endif
+#ifdef FLAGS
+	total_test += 15;
+#endif
+#ifdef WIDTH
+	total_test += 3;
+#endif
+#ifdef PRECISION
+	total_test += 7;
+#endif
+#ifdef LENGTH
+	total_test += 11;
+#endif
+#ifdef MISSING
+	total_test += 7;
+#endif
+#ifdef HEX
+	total_test += 24;
+#endif
+#ifdef OCT
+	total_test += 24;
+#endif
+#ifdef UNSIGNED
+	total_test += 42;
+#endif
+#ifdef CHAR
+	total_test += 34;
+#endif
+#ifdef WIDE_CHAR
+	total_test += 40;
+#endif
+#ifdef DIGIT
+	total_test += 102;
+#endif
+#ifdef UNSPEC
+	total_test += 4;
+#endif
+#ifdef HARDCORE
+	total_test += 17;
+#endif
 
+# ifdef SPECIFIERS
 	ft_putendl("=== SPECIFIERS ===");
 	test("%%");
 	//ft_putendl("=== %s ===");
@@ -437,74 +334,94 @@ int main(void)
 # ifdef CHAR
 	ft_putendl("\n=== CHAR ===");
 	test_i("%10c", 42);
-	test_i("%10C", 42);
 	test_i("%-10c", 42);
-	test_i("%-10C", 42);
 	test_i("%#c", 42);
-	test_i("%#C", 42);
 	test_i("%#8c", 42);
-	test_i("%#8C", 42);
 	test_i("%#-8c", 42);
-	test_i("%#-8C", 42);
 	test_i("%#08c", 42);
-	test_i("%#08C", 42);
 	test_i("%#-08c", 42);
-	test_i("%#-08C", 42);
-	test_i("%#c", 0);
-	test_i("%#C", 0);
-	test_i("%#.c", 0);
-	test_i("%#.C", 0);
-	test_i("%#.0c", 0);
-	test_i("%#.0C", 0);
-	test_i("%#5.c", 0);
-	test_i("%#5.C", 0);
-	test_i("%#5.0c", 0);
-	test_i("%#5.0C", 0);
 	test_i("%5c", -42);
-	test_i("%5C", -42);
 
 	test_i("%+5c", 42);
-	test_i("%+5C", 42);
 	test_i("%0+5c", 42);
-	test_i("%0+5C", 42);
 	test_i("%0+5c", -42);
-	test_i("%0+5C", -42);
 	test_i("%05c", -42);
-	test_i("%05C", -42);
 	test_i("%-05c", 42);
-	test_i("%-05C", 42);
 	test_i("%-05c", -42);
-	test_i("%-05C", -42);
 	test_i("%-5c", -42);
-	test_i("%-5C", -42);
 	test_i("%-9.6c", 4242);
-	test_i("%-9.6C", 4242);
 	test_i("%9.6c", 4242);
-	test_i("%9.6C", 4242);
 	test_i("%.6c", -4242);
-	test_i("%.6C", -4242);
 	test_i("% 10.5c", 4242);
-	test_i("% 10.5C", 4242);
 	test_i("%- 10.5c", 4242);
-	test_i("%- 10.5C", 4242);
-	test_i("%07.2c", 0);
-	test_i("%07.2C", 0);
 	test_i("%-07.3c", -42);
-	test_i("%-07.3C", -42);
 	test_i("%-7.4c", -42);
-	test_i("%-7.4C", -42);
 	test_i("%c", -1);
-	test_i("%C", -1);
 	test_i("% c", -1);
-	test_i("% C", -1);
 	test_i("%# c", 42);
-	test_i("%# C", 42);
 	test_i("%# .3c", 42);
-	test_i("%# .3C", 42);
+
+	// THESE TESTS MAY RETURN A DIFFERENT VALUE
+	ft_putendl("c = 0 (ok if it doesn't work since printf will print a '\\0' character)");
 	test_i("%.2c", 0);
-	test_i("%.2C", 0);
 	test_i("%#.2c", 0);
+	test_i("%07.2c", 0);
+	test_i("%#c", 0);
+	test_i("%#.c", 0);
+	test_i("%#.0c", 0);
+	test_i("%#5.c", 0);
+	test_i("%#5.0c", 0);
+# endif
+
+# ifdef WIDE_CHAR
+	ft_putendl("\n=== WIDE_CHAR ===");
+	test_i("%10C", 42);
+	test_i("%-10C", 42);
+	test_i("%#C", 42);
+	test_i("%#8C", 42);
+	test_i("%#-8C", 42);
+	test_i("%#08C", 42);
+	test_i("%#-08C", 42);
+	test_i("%+5C", 42);
+	test_i("%0+5C", 42);
+	test_i("%-05C", 42);
+	test_i("%# C", 42);
+	test_i("%# .3C", 42);
+
+	ft_putendl("-- 2 bytes long widechar --");
+	test_i("%#13C", 129); // <-- THIS IS THE PROBLEMATIC TEST
+	test_i("%9.6C", 4242); //
+	test_i("% 10.5C", 4242); //
+	test_i("%-9.6C", 4242); //
+	test_i("%- 10.5C", 4242); //
+
+	ft_putendl("-- 6 bytes long widechar --");
+	test_i("%5C", -42); //
+	test_i("%0+5C", -42); //
+	test_i("%05C", -42); //
+	test_i("%-05C", -42); //
+	test_i("%-5C", -42); //
+	test_i("%.6C", -4242); //
+	test_i("%-07.3C", -42); //
+	test_i("%-7.4C", -42); //
+	test_i("%C", -1); //
+	test_i("% C", -1); //
+
+
+	ft_putendl("-- c = 0 (ok if it doesn't work') --");
+	test_i("%#C", 0);
+	test_i("%#.C", 0);
+	test_i("%#.0C", 0);
+	test_i("%#5.C", 0);
+	test_i("%#5.0C", 0);
+	test_i("%07.2C", 0);
+	test_i("%.2C", 0);
 	test_i("%#.2C", 0);
+	test_i("%C", L'該');
+	test_i("%C", L'ব');
+	test_i("%C", L'ݗ');
+	test_i("%C", L'ݜ');
+	test_i("%C", L'श');
 # endif
 
 # ifdef DIGIT
@@ -633,10 +550,10 @@ int main(void)
 	test_i("%zhd", 4294967296);
 	test_i("%jhd", 9223372036854775807);
 	test("\n");
-	test("%%\n");
-	test_i("%d\n", 42);
-	test_i("%ld\n", l);
-	test_i("%lld\n", ll);
+	test("%%");
+	test_i("%d", 42);
+	test_i("%ld", l);
+	test_i("%lld", ll);
 	//printf("%x %X %p %20.15d\n", 505, 505, &ll, 54321);
 	//printf("%-10d % d %+d %010d %hhd\n", 3, 3, 3, 1, c);
 	//printf("%jd %zd %u %o %#08x\n", im, (size_t)i, i, 40, 42);
@@ -851,4 +768,172 @@ int main(void)
 	// cC  character
 
 	return (0);
+}
+
+void	test(const char *format)
+{
+	FILE	*fd_std = NULL;
+	FILE	*fd_ft = NULL;
+	char	*str_std = NULL;
+	char	*str_ft = NULL;
+	int		ret_std = 0;
+	int		ret_ft = 0;
+
+	fd_std = freopen(PRINTF_TEST, "w+", stdout);
+	ret_std = printf(format);
+	rewind(fd_std);
+	str_std = to_str(fileno(fd_std));
+	freopen(STD_OUT, "w", stdout);
+	fd_ft = freopen(FT_TEST, "w+", stdout);
+	ret_ft = ft_printf(format);
+	rewind(fd_ft);
+	str_ft = to_str(fileno(fd_ft));
+	freopen(STD_OUT, "w", stdout);
+	compare(str_std, str_ft, ret_std, ret_ft, format);
+}
+
+void	test_i(const char *format, uintmax_t nb)
+{
+	FILE	*fd_std = NULL;
+	FILE	*fd_ft = NULL;
+	char	*str_std = NULL;
+	char	*str_ft = NULL;
+	int		ret_std = 0;
+	int		ret_ft = 0;
+
+	fd_std = freopen(PRINTF_TEST, "w+", stdout);
+	ret_std = printf(format, nb);
+	rewind(fd_std);
+	str_std = to_str(fileno(fd_std));
+	freopen(STD_OUT, "w", stdout);
+	fd_ft = freopen(FT_TEST, "w+", stdout);
+	ret_ft = ft_printf(format, nb);
+	rewind(fd_ft);
+	str_ft = to_str(fileno(fd_ft));
+	freopen(STD_OUT, "w", stdout);
+	compare(str_std, str_ft, ret_std, ret_ft, format);
+}
+
+void	test_s(const char *format, const char *str)
+{
+	FILE	*fd_std = NULL;
+	FILE	*fd_ft = NULL;
+	char	*str_std = NULL;
+	char	*str_ft = NULL;
+	int		ret_std = 0;
+	int		ret_ft = 0;
+
+	fd_std = freopen(PRINTF_TEST, "w+", stdout);
+	ret_std = printf(format, str);
+	rewind(fd_std);
+	str_std = to_str(fileno(fd_std));
+	freopen(STD_OUT, "w", stdout);
+	fd_ft = freopen(FT_TEST, "w+", stdout);
+	ret_ft = ft_printf(format, str);
+	rewind(fd_ft);
+	str_ft = to_str(fileno(fd_ft));
+	freopen(STD_OUT, "w", stdout);
+	compare(str_std, str_ft, ret_std, ret_ft, format);
+}
+
+void	test_S(const char *format, const wchar_t *wstr)
+{
+	FILE	*fd_std = NULL;
+	FILE	*fd_ft = NULL;
+	char	*str_std = NULL;
+	char	*str_ft = NULL;
+	int		ret_std = 0;
+	int		ret_ft = 0;
+
+	fd_std = freopen(PRINTF_TEST, "w+", stdout);
+	ret_std = printf(format, wstr);
+	rewind(fd_std);
+	str_std = to_str(fileno(fd_std));
+	freopen(STD_OUT, "w", stdout);
+	fd_ft = freopen(FT_TEST, "w+", stdout);
+	ret_ft = ft_printf(format, wstr);
+	rewind(fd_ft);
+	str_ft = to_str(fileno(fd_ft));
+	freopen(STD_OUT, "w", stdout);
+	compare(str_std, str_ft, ret_std, ret_ft, format);
+}
+
+void	test_s_s_s(const char *format, const char *s1, const char *s2, const char *s3)
+{
+	FILE	*fd_std = NULL;
+	FILE	*fd_ft = NULL;
+	char	*str_std = NULL;
+	char	*str_ft = NULL;
+	int		ret_std = 0;
+	int		ret_ft = 0;
+
+	fd_std = freopen(PRINTF_TEST, "w+", stdout);
+	ret_std = printf(format, s1, s2, s3);
+	rewind(fd_std);
+	str_std = to_str(fileno(fd_std));
+	freopen(STD_OUT, "w", stdout);
+	fd_ft = freopen(FT_TEST, "w+", stdout);
+	ret_ft = ft_printf(format, s1, s2, s3);
+	rewind(fd_ft);
+	str_ft = to_str(fileno(fd_ft));
+	freopen(STD_OUT, "w", stdout);
+	compare(str_std, str_ft, ret_std, ret_ft, format);
+}
+
+void	test_s_S_p_d_D_i_o_O_u_U_x_X_c(const char *format, const char *str, const wchar_t *wstr, const char *ptr, int d, int D, int i, int o, int O, int u, int U, int x, int X, int c)
+{
+	FILE	*fd_std = NULL;
+	FILE	*fd_ft = NULL;
+	char	*str_std = NULL;
+	char	*str_ft = NULL;
+	int		ret_std = 0;
+	int		ret_ft = 0;
+
+	fd_std = freopen(PRINTF_TEST, "w+", stdout);
+	ret_std = printf(format, str, wstr, ptr, d, D, i, o, O, u, U, x, X, c);
+	rewind(fd_std);
+	str_std = to_str(fileno(fd_std));
+	freopen(STD_OUT, "w", stdout);
+	fd_ft = freopen(FT_TEST, "w+", stdout);
+	ret_ft = ft_printf(format, str, wstr, ptr, d, D, i, o, O, u, U, x, X, c);
+	rewind(fd_ft);
+	str_ft = to_str(fileno(fd_ft));
+	freopen(STD_OUT, "w", stdout);
+	compare(str_std, str_ft, ret_std, ret_ft, format);
+}
+
+void	compare(char *str_std, char *str_ft, int ret_std, int ret_ft, const char *format)
+{
+	test_count++;
+	if (ft_strcmp(str_std, str_ft))
+	{
+		printf("%i/%i [%s]: \x1B[31mOutput doesn't match\x1B[0m\n", test_count, total_test, format);
+		printf("std: %s\n", str_std);
+		printf("ft_: %s\n", str_ft);
+	}
+	else if (ret_ft != ret_std)
+		printf("%i/%i [%s]: \x1B[33mReturn values doesn't match [std: %i, ft: %i]\x1B[0m\n", test_count, total_test, format, ret_std, ret_ft);
+	else
+		printf("%i/%i [%s]: \x1B[32mOk\x1B[0m\n", test_count, total_test, format);
+	ft_strdel(&str_ft);
+	ft_strdel(&str_std);
+}
+
+char	*to_str(int fd)
+{
+	char	buffer[BUFF_SIZE + 1];
+	char	*str = NULL;
+	char	*tmp = NULL;
+	int		bcount = 1;
+
+	str = ft_strnew(1);
+	while (bcount > 0)
+	{
+		bcount = read(fd, buffer, BUFF_SIZE);
+		buffer[bcount] = '\0';
+		tmp = str;
+		str = ft_strjoin(str, buffer);
+		ft_strdel(&tmp);
+	}
+	return (str);
 }

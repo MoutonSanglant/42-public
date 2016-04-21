@@ -1,11 +1,15 @@
 #!/bin/bash
 
+echo "WARN: If the script name is not 'fetch_correction.sh', it won't work.'"
+
 BASE_DIR=${BASH_SOURCE%fetch_correction.sh}
 
+echo $BASE_DIR
 # TODO
 #  only gnl & fillit are working
 #
-#
+
+return ;
 
 function fetch_fillit
 {
