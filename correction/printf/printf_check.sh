@@ -25,3 +25,5 @@ gcc -Wall -Werror -Wextra -Wno-format -o ${BASE_DIR}test_printf ${BASE_DIR}main.
 ${BASE_DIR}test_printf
 
 rm ${BASE_DIR}test_printf
+rm ${BASE_DIR}ft_out.tmp
+rm ${BASE_DIR}printf_out.tmp
