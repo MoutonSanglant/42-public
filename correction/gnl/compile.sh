@@ -12,7 +12,7 @@ else
 			echo "'${PROGRAM_PATH}get_next_line.c' doesn't exist"
 		fi
 		read -p "set PROGRAM_PATH (eg. '~/${PROGRAM_NAME}/'): " PROGRAM_PATH
-		PROGRAM_PATH="`eval echo ${PROGRAM_PATH//>}`"
+		PROGRAM_PATH="`eval echo ${PROGRAM_PATH//>}`/"
 	done
 
 	while ! [[ -f ${LIBFT_PATH}Makefile ]]; do
@@ -20,7 +20,7 @@ else
 			echo "'${LIBFT_PATH}Makefile' doesn't exist"
 		fi
 		read -p "set LIBFT_PATH (eg. '~/libft/'): " LIBFT_PATH
-		LIBFT_PATH="`eval echo ${LIBFT_PATH//>}`"
+		LIBFT_PATH="`eval echo ${LIBFT_PATH//>}`/"
 	done
 
 	echo "PROGRAM_PATH=$PROGRAM_PATH" >> ${BASE_DIR}${PROGRAM_NAME}.cfg

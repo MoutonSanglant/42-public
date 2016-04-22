@@ -18,7 +18,7 @@ function fetch_fillit
 	curl "https://raw.githubusercontent.com/MoutonSanglant/42-public/master/correction/fillit/fillit_check.sh" -o "${BASE_DIR}fillit/fillit_check.sh"
 	curl "https://raw.githubusercontent.com/MoutonSanglant/42-public/master/correction/fillit/examples.tar" -o "${BASE_DIR}fillit/examples.tar"
 	chmod 755 ${BASE_DIR}fillit/fillit_check.sh
-	tar -xvf ${BASE_DIR}fillit/examples.tar
+	tar -xvf ${BASE_DIR}fillit/examples.tar -C ${BASE_DIR}fillit
 }
 
 function fetch_gnl
