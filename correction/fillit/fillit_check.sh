@@ -3,6 +3,11 @@
 PROGRAM_NAME="fillit"
 BASE_DIR=${BASH_SOURCE%fillit_check.sh}
 
+PROGRAM_PATH="\\"
+LIBFT_PATH="\\"
+
+echo "${BASE_DIR}${PROGRAM_NAME}.cfg";
+
 if [[ -f ${BASE_DIR}${PROGRAM_NAME}.cfg ]]
 then
 	source ${BASE_DIR}${PROGRAM_NAME}.cfg
