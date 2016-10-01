@@ -103,6 +103,7 @@ void	test_s_d_p_S_D_i_o_O_u_U_x_X_c_C(const char *format, const char *s, intmax_
 int test_count = 0;
 int total_test = 0;
 int correct_test = 0;
+int correct_output = 0;
 
 typedef int tab[5][5];
 
@@ -691,6 +692,7 @@ int main(void)
 # endif
 
 	printf("correct tests: %i/%i\n", correct_test, total_test);
+	printf("correct outputs: %i/%i\n", correct_output, total_test);
 	return (0);
 }
 
@@ -716,6 +718,8 @@ void	compare(char *str_std, char *str_ft, int ret_std, int ret_ft, const char *f
 	}
 	if (ret_ft != ret_std)
 		printf("%i/%i [%s]: \x1B[33mReturn values doesn't match [std: %i, ft: %i]\x1B[0m\n", test_count, total_test, format, ret_std, ret_ft);
+	else
+		correct_output++;
 	ft_strdel(&str_ft);
 	ft_strdel(&str_std);
 }
