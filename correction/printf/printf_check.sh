@@ -24,14 +24,14 @@ else
 		LIB_PATH="`eval echo ${LIB_PATH//>}`/"
 	done
 
-	while ! [[ -f ${HEADER_PATH}libft.h ]]; do
+	while ! [[ -f ${HEADER_PATH}libftprintf.h ]]; do
 		read -p "set HEADER_PATH (eg. '~/printf/includes/'): " HEADER_PATH
 		HEADER_PATH="`eval echo ${HEADER_PATH//>}`/"
-		if ! [[ -f ${HEADER_PATH}libft.h ]]; then
-			echo "'${HEADER_PATH}libft.h' doesn't exist"
+		if ! [[ -f ${HEADER_PATH}libftprintf.h ]]; then
+			echo "'${HEADER_PATH}libftprintf.h' doesn't exist"
 			continue
 		fi
-		grep -E "ft_printf" "${HEADER_PATH}libft.h"
+		grep -E "ft_printf" "${HEADER_PATH}libftprintf.h"
 		if [[ "$?" != "0" ]]; then
 			echo "specified header does not contain 'ft_printf' signature"
 			HEADER_PATH=

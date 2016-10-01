@@ -37,6 +37,7 @@ printf/libftprintf.a
 
 ### Temporary files ###
 _*
+*.tmp
 
 
 ### Don't ignore ###

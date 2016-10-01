@@ -1,7 +1,13 @@
+#include <unistd.h>
+#include <stdlib.h>
+#include <stdint.h>
 #include <stdio.h>
-#include <libft.h>
-
+#include <string.h>
+#include <limits.h>
 #include <locale.h>
+
+#include <libftprintf.h>
+
 
 #ifdef ALL
 # define SPECIFIERS
@@ -31,6 +37,56 @@
 #define STD_OUT "/dev/tty"
 #define BUFF_SIZE 1024
 
+void	ft_strdel(char **as)
+{
+	free(*as);
+	*as = NULL;
+}
+
+char	*ft_strnew(size_t size)
+{
+	char	*str;
+	size_t	i;
+
+	str = (char *)malloc(sizeof(char) * size + 1);
+	if (str)
+	{
+		i = 0;
+		while (i < size)
+			str[i++] = '\0';
+		str[i] = '\0';
+	}
+	return (str);
+}
+
+size_t	ft_strlen(char const *s)
+{
+	size_t	i;
+
+	i = 0;
+	while (*s++ != '\0')
+		i++;
+	return (i);
+}
+
+char	*ft_strjoin(char const *s1, char const *s2)
+{
+	char	*str_new;
+	char	*ptr;
+
+	str_new = ft_strnew(ft_strlen(s1) + ft_strlen(s2));
+	if (str_new)
+	{
+		ptr = str_new;
+		while (*s1)
+			*ptr++ = *s1++;
+		while (*s2)
+			*ptr++ = *s2++;
+		*ptr++ = '\0';
+	}
+	return (str_new);
+}
+
 char	*to_str(int fd);
 void	compare(char *str_std, char *str_ft, int ret_std, int ret_ft, const char *format);
 
@@ -46,6 +102,7 @@ void	test_s_d_p_S_D_i_o_O_u_U_x_X_c_C(const char *format, const char *s, intmax_
 
 int test_count = 0;
 int total_test = 0;
+int correct_test = 0;
 
 typedef int tab[5][5];
 
@@ -62,8 +119,8 @@ int main(void)
 	char		c = 0;
 	wchar_t		C = L'α';
 
-	tab toto;
-	toto[0][0] = 1;
+	//tab toto;
+	//toto[0][0] = 1;
 	(void)wstr;
 	(void)str;
 	(void)nb;
@@ -135,7 +192,7 @@ int main(void)
 #endif
 
 # ifdef SPECIFIERS
-	ft_putendl("=== SPECIFIERS ===");
+	printf("=== SPECIFIERS ===\n");
 	test("%%");
 	test_s("%s", str);
 	test_S("%S", wstr);
@@ -153,7 +210,7 @@ int main(void)
 # endif
 
 # ifdef BASIC
-	ft_putendl("\n=== BASIC ===");
+	printf("\n=== BASIC ===\n");
 	test("%%i");
 	test("%% is a percent symbol");
 	test_i("%i is an int", nb);
@@ -161,14 +218,14 @@ int main(void)
 # endif
 
 # ifdef MULTI_SPEC
-	ft_putendl("\n=== MULTIPLE SPECIFIERS ===");
+	printf("\n=== MULTIPLE SPECIFIERS ===\n");
 	test_s_s_s("%s %s %s", "one", "two", "three");
 	test_s_i_s_s("-- % s %C, % s, % s, ok.", "hello", L'該', NULL, "");
 	test_s_C_d_p_x_S("%s %C %d %p %x %% %S", "bonjour ", L'該', 42, &free, 42, L"لحم خنزير");
 # endif
 
 # ifdef FLAGS
-	ft_putendl("\n=== FLAGS ===");
+	printf("\n=== FLAGS ===\n");
 	test_i("%-i", nb);
 	test_i("%+i", nb);
 	test_i("% i", nb);
@@ -187,14 +244,14 @@ int main(void)
 # endif
 
 # ifdef WIDTH
-	ft_putendl("\n=== WIDTH ===");
+	printf("\n=== WIDTH ===\n");
 	test_i("%5i", 42);
 	test_s("%10s", "this");
 	test_s("%0s", "this");
 # endif
 
 # ifdef PRECISION
-	ft_putendl("\n=== PRECISION ===");
+	printf("\n=== PRECISION ===\n");
 	test_i("%.5i", 42);
 	test_i("%.5i", -42);
 	test_i("% .5i", 42);
@@ -205,7 +262,7 @@ int main(void)
 # endif
 
 # ifdef LENGTH
-	ft_putendl("\n=== LENGTH ===");
+	printf("\n=== LENGTH ===\n");
 	test_i("%hi", 44200);
 	test_i("%hhi", 44200);
 	test_i("%i", 2147483650);
@@ -220,7 +277,7 @@ int main(void)
 # endif
 
 # ifdef MISSING
-	ft_putendl("\n=== MISSING SPECIFIER ===");
+	printf("\n=== MISSING SPECIFIER ===\n");
 	test("");
 	test("%%");
 	test("%5%");
@@ -231,7 +288,7 @@ int main(void)
 # endif
 
 # ifdef HEX
-	ft_putendl("\n=== HEXADECIMAL ===");
+	printf("\n=== HEXADECIMAL ===\n");
 	test_i("%10x", 42);
 	test_i("%10X", 42);
 	test_i("%-10x", 42);
@@ -267,7 +324,7 @@ int main(void)
 # endif
 
 # ifdef OCT
-	ft_putendl("\n=== OCTAL ===");
+	printf("\n=== OCTAL ===\n");
 	test_i("%10o", 42);
 	test_i("%10O", 42);
 	test_i("%-10o", 42);
@@ -302,7 +359,7 @@ int main(void)
 # endif
 
 # ifdef UNSIGNED
-	ft_putendl("\n=== UNSIGNED ===");
+	printf("\n=== UNSIGNED ===\n");
 	test_i("%10u", 42);
 	test_i("%10U", 42);
 	test_i("%-10u", 42);
@@ -348,7 +405,7 @@ int main(void)
 # endif
 
 # ifdef DIGIT
-	ft_putendl("\n=== DIGIT ===");
+	printf("\n=== DIGIT ===\n");
 	test_i("%10d", 42);
 	test_i("%10D", 42);
 	test_i("%-10d", 42);
@@ -455,7 +512,7 @@ int main(void)
 # endif
 
 # ifdef POINTERS
-	ft_putendl("\n=== POINTERS ===");
+	printf("\n=== POINTERS ===\n");
 	test_s("%p", "constant");
 	test_s("%.0p", 0);
 	test_s("%.p", 0);
@@ -471,7 +528,7 @@ int main(void)
 # endif
 
 # ifdef CHAR
-	ft_putendl("\n=== CHAR ===");
+	printf("\n=== CHAR ===\n");
 	test_i("%10c", 42);
 	test_i("%-10c", 42);
 	test_i("%#c", 42);
@@ -500,7 +557,7 @@ int main(void)
 	test_i("%# c", 42);
 	test_i("%# .3c", 42);
 
-	ft_putendl("-- c = 0 -- (ok if it doesn't work since printf will print a '\\0' character)");
+	printf("-- c = 0 -- (ok if it doesn't work since printf will print a '\\0' character)\n");
 	test_i("%.2c", 0);
 	test_i("%#.2c", 0);
 	test_i("%07.2c", 0);
@@ -512,7 +569,7 @@ int main(void)
 # endif
 
 # ifdef STRINGS
-	ft_putendl("\n=== STRINGS ===");
+	printf("\n=== STRINGS ===\n");
 	test_s("%s", "a constant string");
 	test_s("%s", NULL);
 	test_s("{% s}", NULL);
@@ -529,7 +586,7 @@ int main(void)
 # endif
 
 # ifdef WIDE_CHAR
-	ft_putendl("\n=== WIDE_CHAR ===");
+	printf("\n=== WIDE_CHAR ===\n");
 	test_i("%10C", 42);
 	test_i("%-10C", 42);
 	test_i("%#C", 42);
@@ -543,14 +600,14 @@ int main(void)
 	test_i("%# C", 42);
 	test_i("%# .3C", 42);
 
-	ft_putendl("-- 2 bytes long widechar --");
+	printf("-- 2 bytes long widechar --\n");
 	test_i("%#13C", 129);
 	test_i("%9.6C", 4242);
 	test_i("% 10.5C", 4242);
 	test_i("%-9.6C", 4242);
 	test_i("%- 10.5C", 4242);
 
-	ft_putendl("-- 2~4 bytes long widechar --");
+	printf("-- 2~4 bytes long widechar --\n");
 	test_i("%C", L'該');
 	test_i("%C", L'ব');
 	test_i("%C", L'ݗ');
@@ -561,7 +618,7 @@ int main(void)
 	test_i("%3C", L'ݜ');
 	test_i("%3C", L'श');
 
-	ft_putendl("-- 6 bytes long widechar --");
+	printf("-- 6 bytes long widechar --\n");
 	test_i("%5C", -42);
 	test_i("%0+5C", -42);
 	test_i("%05C", -42);
@@ -573,7 +630,7 @@ int main(void)
 	test_i("%C", -1);
 	test_i("% C", -1);
 
-	ft_putendl("-- c = 0 -- (ok if it doesn't work since printf will print a '\\0' character)");
+	printf("-- c = 0 -- (ok if it doesn't work since printf will print a '\\0' character)\n");
 	test_i("%#C", 0);
 	test_i("%#.C", 0);
 	test_i("%#.0C", 0);
@@ -585,7 +642,7 @@ int main(void)
 # endif
 
 # ifdef WIDE_STRINGS
-	ft_putendl("\n=== WIDE STRINGS ===");
+	printf("\n=== WIDE STRINGS ===\n");
 	test_S("%S", L"a constant wide string");
 	test_S("%S", NULL);
 	test_S("{% S}", NULL);
@@ -600,7 +657,7 @@ int main(void)
 # endif
 
 # ifdef UNSPEC
-	ft_putendl("\n=== UNSPECIFIED BEHAVIOUR ===");
+	printf("\n=== UNSPECIFIED BEHAVIOUR ===\n");
 	test("%");
 	test("%Z");
 	test("% hZ");
@@ -609,7 +666,7 @@ int main(void)
 # endif
 
 # ifdef HARDCORE
-	ft_putendl("\n=== HARDCORE ===");
+	printf("\n=== HARDCORE ===\n");
 	test_i("%jx", -4294967296);
 	test_i("%jx", -4294967297);
 	test_i("%010x", 542);
@@ -633,6 +690,7 @@ int main(void)
 	test_s_d_p_S_D_i_o_O_u_U_x_X_c_C("%s%d%p%%%S%D%i%o%O%u%U%x%X%c%C", "bonjour", 42, &c, L"暖炉", LONG_MAX, 42, 42, 42, 100000, ULONG_MAX, 42, 42, 'c', L'플');
 # endif
 
+	printf("correct tests: %i/%i\n", correct_test, total_test);
 	return (0);
 }
 
@@ -645,14 +703,17 @@ int main(void)
 void	compare(char *str_std, char *str_ft, int ret_std, int ret_ft, const char *format)
 {
 	test_count++;
-	if (ft_strcmp(str_std, str_ft))
+	if (strcmp(str_std, str_ft))
 	{
 		printf("%i/%i [%s]: \x1B[31mOutput doesn't match\x1B[0m\n", test_count, total_test, format);
 		printf("std: %s\n", str_std);
 		printf("ft_: %s\n", str_ft);
 	}
 	else
+	{
 		printf("%i/%i [%s]: \x1B[32mOk\x1B[0m\n", test_count, total_test, format);
+		correct_test++;
+	}
 	if (ret_ft != ret_std)
 		printf("%i/%i [%s]: \x1B[33mReturn values doesn't match [std: %i, ft: %i]\x1B[0m\n", test_count, total_test, format, ret_std, ret_ft);
 	ft_strdel(&str_ft);
