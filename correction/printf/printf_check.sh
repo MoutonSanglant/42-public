@@ -139,6 +139,7 @@ else
 fi
 
 gcc ${CFLAGS} -Wall -Werror -Wextra -Wno-format -o ${BASE_DIR}test_printf ${BASE_DIR}main.c -L$LIB_PATH -lftprintf -I${HEADER_PATH} $DEFINE
+#gcc ${CFLAGS} -o ${BASE_DIR}test_printf ${BASE_DIR}main.c -L$LIB_PATH -lftprintf -I${HEADER_PATH} $DEFINE
 
 ${COMMAND_LINE}
 

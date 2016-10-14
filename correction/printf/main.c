@@ -141,7 +141,7 @@ int main(void)
 	total_test += 4;
 #endif
 #ifdef MULTI_SPEC
-	total_test += 4;
+	total_test += 3;
 #endif
 #ifdef FLAGS
 	total_test += 15;
@@ -221,7 +221,7 @@ int main(void)
 # ifdef MULTI_SPEC
 	printf("\n=== MULTIPLE SPECIFIERS ===\n");
 	test_s_s_s("%s %s %s", "one", "two", "three");
-	test_s_i_s_s("-- % s %C, % s, % s, ok.", "hello", L'該', NULL, "");
+	test_s_i_s_s("-- %s %C, %s, %s, ok.", "hello", L'該', NULL, "");
 	test_s_C_d_p_x_S("%s %C %d %p %x %% %S", "bonjour ", L'該', 42, &free, 42, L"لحم خنزير");
 # endif
 
