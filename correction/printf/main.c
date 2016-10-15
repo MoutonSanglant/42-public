@@ -100,6 +100,8 @@ void	test_s_C_d_p_x_S(const char *format, const char *s, uintmax_t C, intmax_t d
 void	test_s_S_p_d_D_i_o_O_u_U_x_X_c(const char *format, const char *str, const wchar_t *wstr, const char *ptr, int d, int D, int i, int o, int O, int u, int U, int x, int X, int c);
 void	test_s_d_p_S_D_i_o_O_u_U_x_X_c_C(const char *format, const char *s, intmax_t d, const char *p, const wchar_t *S, intmax_t D, intmax_t i, uintmax_t o, uintmax_t O, uintmax_t u, uintmax_t U, uintmax_t x, uintmax_t X, intmax_t c, intmax_t C);
 
+void	full_test(char specifier, int value);
+
 int test_count = 0;
 int total_test = 0;
 int correct_test = 0;
@@ -120,8 +122,6 @@ int main(void)
 	char		c = 0;
 	wchar_t		C = L'α';
 
-	//tab toto;
-	//toto[0][0] = 1;
 	(void)wstr;
 	(void)str;
 	(void)nb;
@@ -227,14 +227,21 @@ int main(void)
 
 # ifdef FLAGS
 	printf("\n=== FLAGS ===\n");
+	test_i("%i", nb);
+	test_i("%i", -nb);
 	test_i("%-i", nb);
+	test_i("%-i", -nb);
 	test_i("%+i", nb);
+	test_i("%+i", -nb);
 	test_i("% i", nb);
+	test_i("% i", -nb);
 	test_i("%+d", nb);
 	test_i("%-+-+d", nb);
+	test_i("%+-+-d", nb);
 	test_i("%#x", 42);
 	test_i("%#X", 42);
 	test_i("%#o", 42);
+	/*
 	test_s("%-10s is a string", "this");
 	test_s("%-2.s is a string", "this");
 	test_s("%#-2.s is a string", "this");
@@ -242,11 +249,13 @@ int main(void)
 	test_s("%#-10s is a string", "");
 	test_s("%-5.2s is a string", "");
 	test_s("%#-5.2s is a string", "");
+	*/
 # endif
 
 # ifdef WIDTH
 	printf("\n=== WIDTH ===\n");
 	test_i("%5i", 42);
+	test_i("%5i", -42);
 	test_s("%10s", "this");
 	test_s("%0s", "this");
 # endif
@@ -258,8 +267,10 @@ int main(void)
 	test_i("% .5i", 42);
 	test_i("% .5i", -42);
 	test_s("%.2s is a string", "this");
+	/*
 	test_s("%5.2s is a string", "this");
 	test_s("%5.0s is a string", "this");
+	*/
 # endif
 
 # ifdef LENGTH
@@ -290,226 +301,55 @@ int main(void)
 
 # ifdef HEX
 	printf("\n=== HEXADECIMAL ===\n");
-	test_i("%10x", 42);
-	test_i("%10X", 42);
-	test_i("%-10x", 42);
-	test_i("%-10X", 42);
-	test_i("%#x", 42);
-	test_i("%#X", 42);
-	test_i("%#8x", 42);
-	test_i("%#8X", 42);
-	test_i("%#-8x", 42);
-	test_i("%#-8X", 42);
-	test_i("%#08x", 42);
-	test_i("%#08X", 42);
-	test_i("%#-08x", 42);
-	test_i("%#-08X", 42);
-	test_i("%#x", 0);
-	test_i("%#X", 0);
-	test_i("%#.x", 0);
-	test_i("%#.X", 0);
-	test_i("%#.0x", 0);
-	test_i("%#.0X", 0);
-	test_i("%#5.x", 0);
-	test_i("%#5.X", 0);
-	test_i("%#5.0x", 0);
-	test_i("%#5.0X", 0);
-	test_i("%hhx", 0);
-	test_i("%hhX", 0);
-	test_i("%hhx",UCHAR_MAX + 42);
-	test_i("%hhX", UCHAR_MAX + 42);
-	test_i("% x", 42);
-	test_i("% X", 42);
-	test_i("%+x", 42);
-	test_i("%+X", 42);
+	full_test('x', 42);
+	full_test('x', -42);
+	full_test('x', 0);
+	full_test('x', UCHAR_MAX + 42);
+	full_test('X', 42);
+	full_test('X', -42);
+	full_test('X', 0);
+	full_test('X', UCHAR_MAX + 42);
 # endif
 
 # ifdef OCT
 	printf("\n=== OCTAL ===\n");
-	test_i("%10o", 42);
-	test_i("%10O", 42);
-	test_i("%-10o", 42);
-	test_i("%-10O", 42);
-	test_i("%#o", 42);
-	test_i("%#O", 42);
-	test_i("%#8o", 42);
-	test_i("%#8O", 42);
-	test_i("%#-8o", 42);
-	test_i("%#-8O", 42);
-	test_i("%#08o", 42);
-	test_i("%#08O", 42);
-	test_i("%#-08o", 42);
-	test_i("%#-08O", 42);
-	test_i("%#o", 0);
-	test_i("%#O", 0);
-	test_i("%#.o", 0);
-	test_i("%#.O", 0);
-	test_i("%#.0o", 0);
-	test_i("%#.0O", 0);
-	test_i("%#5.o", 0);
-	test_i("%#5.O", 0);
-	test_i("%#5.0o", 0);
-	test_i("%#5.0O", 0);
-	test_i("%#.3o", 1);
-	test_i("%+o", 0);
-	test_i("%+o", 42);
-	test_i("% o", 42);
-	test_i("%+O", 0);
-	test_i("%+O", 42);
-	test_i("%+O", 1);
+	full_test('o', 42);
+	full_test('o', -42);
+	full_test('o', 0);
+	full_test('o', UCHAR_MAX + 42);
+	full_test('O', 42);
+	full_test('O', -42);
+	full_test('O', 0);
+	full_test('O', UCHAR_MAX + 42);
 # endif
 
 # ifdef UNSIGNED
 	printf("\n=== UNSIGNED ===\n");
-	test_i("%10u", 42);
-	test_i("%10U", 42);
-	test_i("%-10u", 42);
-	test_i("%-10U", 42);
-	test_i("%#u", 42);
-	test_i("%#U", 42);
-	test_i("%#8u", 42);
-	test_i("%#8U", 42);
-	test_i("%#-8u", 42);
-	test_i("%#-8U", 42);
-	test_i("%#08u", 42);
-	test_i("%#08U", 42);
-	test_i("%#-08u", 42);
-	test_i("%#-08U", 42);
-	test_i("%#u", 0);
-	test_i("%#U", 0);
-	test_i("%#.u", 0);
-	test_i("%#.U", 0);
-	test_i("%#.0u", 0);
-	test_i("%#.0U", 0);
-	test_i("%#5.u", 0);
-	test_i("%#5.U", 0);
-	test_i("%#5.0u", 0);
-	test_i("%#5.0U", 0);
-	test_i("%5u", -42);
-	test_i("%+5u", 42);
-	test_i("%0+5u", 42);
-	test_i("%0+5u", -42);
-	test_i("%05u", -42);
-	test_i("%-05u", 42);
-	test_i("%-05u", -42);
-	test_i("%-5u", -42);
-	test_i("%-9.6u", 4242);
-	test_i("%9.6u", 4242);
-	test_i("%.6u", -4242);
-	test_i("% 10.5u", 4242);
-	test_i("%- 10.5u", 4242);
-	test_i("%07.2u", 0);
-	test_i("%-07.3u", -42);
-	test_i("%-7.4u", -42);
-	test_i("%u", -1);
-	test_i("% u", -1);
+	full_test('u', 42);
+	full_test('u', -42);
+	full_test('u', 0);
+	full_test('u', UCHAR_MAX + 42);
+	full_test('U', 42);
+	full_test('U', -42);
+	full_test('U', 0);
+	full_test('U', UCHAR_MAX + 42);
 # endif
 
 # ifdef DIGIT
 	printf("\n=== DIGIT ===\n");
-	test_i("%10d", 42);
-	test_i("%10D", 42);
-	test_i("%-10d", 42);
-	test_i("%-10D", 42);
-	test_i("%#d", 42);
-	test_i("%#D", 42);
-	test_i("%#8d", 42);
-	test_i("%#8D", 42);
-	test_i("%#-8d", 42);
-	test_i("%#-8D", 42);
-	test_i("%#08d", 42);
-	test_i("%#08D", 42);
-	test_i("%#-08d", 42);
-	test_i("%#-08D", 42);
-	test_i("%#d", 0);
-	test_i("%#D", 0);
-	test_i("%#.d", 0);
-	test_i("%#.D", 0);
-	test_i("%#.0d", 0);
-	test_i("%#.0D", 0);
-	test_i("%#5.d", 0);
-	test_i("%#5.D", 0);
-	test_i("%#5.0d", 0);
-	test_i("%#5.0D", 0);
-	test_i("%5d", -42);
-	test_i("%5D", -42);
-	test_i("%+5d", 42);
-	test_i("%+5D", 42);
-	test_i("%0+5d", 42);
-	test_i("%0+5D", 42);
-	test_i("%0+5d", -42);
-	test_i("%0+5D", -42);
-	test_i("%05d", -42);
-	test_i("%05D", -42);
-	test_i("%-05d", 42);
-	test_i("%-05D", 42);
-	test_i("%-05d", -42);
-	test_i("%-05D", -42);
-	test_i("%-5d", -42);
-	test_i("%-5D", -42);
-	test_i("%-9.6d", 4242);
-	test_i("%-9.6D", 4242);
-	test_i("%9.6d", 4242);
-	test_i("%9.6D", 4242);
-	test_i("%.6d", -4242);
-	test_i("%.6D", -4242);
-	test_i("% 10.5d", 4242);
-	test_i("% 10.5D", 4242);
-	test_i("%- 10.5d", 4242);
-	test_i("%- 10.5D", 4242);
-	test_i("%07.2d", 0);
-	test_i("%07.2D", 0);
-	test_i("%-07.3d", -42);
-	test_i("%-07.3D", -42);
-	test_i("%-7.4d", -42);
-	test_i("%-7.4D", -42);
-	test_i("%d", -1);
-	test_i("%D", -1);
-	test_i("% d", -1);
-	test_i("% D", -1);
-	test_i("%# d", 42);
-	test_i("%# D", 42);
-	test_i("%# .3d", 42);
-	test_i("%# .3D", 42);
-	test_i("%.2d", 0);
-	test_i("%.2D", 0);
-	test_i("%#.2d", 0);
-	test_i("%#.2D", 0);
+	full_test('d', 42);
+	full_test('d', -42);
+	full_test('d', 0);
+	full_test('d', UCHAR_MAX + 42);
+	full_test('D', 42);
+	full_test('D', -42);
+	full_test('D', 0);
+	full_test('D', UCHAR_MAX + 42);
 
-	test_i("%10i", 42);
-	test_i("%-10i", 42);
-	test_i("%#i", 42);
-	test_i("%#8i", 42);
-	test_i("%#-8i", 42);
-	test_i("%#08i", 42);
-	test_i("%#-08i", 42);
-	test_i("%#i", 0);
-	test_i("%#.i", 0);
-	test_i("%#.0i", 0);
-	test_i("%#5.i", 0);
-	test_i("%#5.0i", 0);
-	test_i("%5i", -42);
-	test_i("%+5i", 42);
-	test_i("%0+5i", 42);
-	test_i("%0+5i", -42);
-	test_i("%05i", -42);
-	test_i("%-05i", 42);
-	test_i("%-05i", -42);
-	test_i("%-5i", -42);
-	test_i("%-9.6i", 4242);
-	test_i("%9.6i", 4242);
-	test_i("%.6i", -4242);
-	test_i("% 10.5i", 4242);
-	test_i("%- 10.5i", 4242);
-	test_i("%07.2i", 0);
-	test_i("%-07.3i", -42);
-	test_i("%-7.4i", -42);
-	test_i("%i", -1);
-	test_i("% i", -1);
-	test_i("%# i", 42);
-	test_i("%# .3i", 42);
-	test_i("%.2i", 0);
-	test_i("%#.2i", 0);
+	full_test('i', 42);
+	full_test('i', -42);
+	full_test('i', 0);
+	full_test('i', UCHAR_MAX + 42);
 # endif
 
 # ifdef POINTERS
@@ -708,8 +548,8 @@ void	compare(char *str_std, char *str_ft, int ret_std, int ret_ft, const char *f
 	if (strcmp(str_std, str_ft))
 	{
 		printf("%i/%i [%s]: \x1B[31mOutput doesn't match\x1B[0m\n", test_count, total_test, format);
-		printf("std: %s\n", str_std);
-		printf("ft_: %s\n", str_ft);
+		printf("std: '%s'\n", str_std);
+		printf("ft_: '%s'\n", str_ft);
 	}
 	else
 	{
@@ -951,4 +791,99 @@ void	test_s_d_p_S_D_i_o_O_u_U_x_X_c_C(const char *format, const char *s, intmax_
 	str_ft = to_str(fileno(fd_ft));
 	freopen(STD_OUT, "w", stdout);
 	compare(str_std, str_ft, ret_std, ret_ft, format);
+}
+
+char	*_sp(char *dst, const char *src, char c)
+{
+	int		i;
+	int		len;
+
+	i = 0;
+	len = ft_strlen(src);
+	while (i < len)
+	{
+		dst[i] = src[i];
+		i++;
+	}
+	dst[i] = c;
+	dst[i + 1] = '\0';
+
+	return (dst);
+}
+
+void	full_test(char specifier, int value)
+{
+	char	*str = malloc(10);
+
+	// DEFINED
+
+	test_i(_sp(str, "%", specifier), value);
+	// WIDTH
+	test_i(_sp(str, "%20", specifier), value);
+	// PRECISION
+	test_i(_sp(str, "%.", specifier), value);
+	// +
+	test_i(_sp(str, "%+", specifier), value);
+	// -
+	test_i(_sp(str, "%-", specifier), value);
+	// ' '
+	test_i(_sp(str, "% ", specifier), value);
+	// 0
+	test_i(_sp(str, "%0", specifier), value);
+
+	// MIXED WIDTH
+	test_i(_sp(str, "%9.6", specifier), value);
+
+	// MIXED PRECISION
+	test_i(_sp(str, "%.6", specifier), value);
+
+	// MIXED + -
+	test_i(_sp(str, "%+20", specifier), value);
+	test_i(_sp(str, "%-20", specifier), value);
+	test_i(_sp(str, "%+9.6", specifier), value);
+	test_i(_sp(str, "%-9.6", specifier), value);
+	test_i(_sp(str, "%+05", specifier), value);
+	test_i(_sp(str, "%-05", specifier), value); // NOT UNDEFINED, BUT '0' IS IGNORED BECAUSE OF '-'
+	test_i(_sp(str, "%+07.3", specifier), value);
+	test_i(_sp(str, "%-07.3", specifier), value); // NOT UNDEFINED, BUT '0' IS IGNORED BECAUSE OF '-'
+
+	// MIXED ' '
+	test_i(_sp(str, "% 10", specifier), value);
+	test_i(_sp(str, "% -10", specifier), value);
+	test_i(_sp(str, "% .5", specifier), value);
+	test_i(_sp(str, "% -.5", specifier), value);
+	test_i(_sp(str, "% 10.5", specifier), value);
+	test_i(_sp(str, "% -10.5", specifier), value);
+
+	// MIXED 0
+	test_i(_sp(str, "%05", specifier), value);
+	test_i(_sp(str, "%0+5", specifier), value);
+	test_i(_sp(str, "%07.2", specifier), value);
+
+	if (specifier == 'i' || specifier == 'd' || specifier == 'D')
+	{
+		ft_strdel(&str);
+		return;
+	}
+
+	// #
+	test_i(_sp(str, "%#", specifier), value); // UNDEFINED with 'i'
+
+	// MIXED #
+	test_i(_sp(str, "%#8", specifier), value);
+	test_i(_sp(str, "%#-8", specifier), value);
+	test_i(_sp(str, "%#08", specifier), value);
+	test_i(_sp(str, "%#-08", specifier), value);
+	test_i(_sp(str, "%#.", specifier), value);
+	test_i(_sp(str, "%#.0", specifier), value);
+	test_i(_sp(str, "%#.3", specifier), value);
+	test_i(_sp(str, "%#5.", specifier), value);
+	test_i(_sp(str, "%#5.0", specifier), value);
+	test_i(_sp(str, "%#5.3", specifier), value);
+
+	// UNDEFINED
+	// LENGTH
+	//test_i(_sp(str, "%hh", specifier), value); // UNDEFINED, not same type as value
+
+	ft_strdel(&str);
 }
