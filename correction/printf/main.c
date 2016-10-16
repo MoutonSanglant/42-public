@@ -27,7 +27,6 @@
 # define STRINGS
 # define WIDE_CHAR
 # define WIDE_STRINGS
-# define UNSPEC
 # define HARDCORE
 //# define MOULITEST
 #endif
@@ -122,6 +121,9 @@ int main(void)
 	char		c = 0;
 	wchar_t		C = L'α';
 
+	int full_test_count = 26;
+	int full_test_extra = 11;
+
 	(void)wstr;
 	(void)str;
 	(void)nb;
@@ -131,8 +133,11 @@ int main(void)
 	(void)im;
 	(void)c;
 	(void)C;
+	(void)full_test_count;
+	(void)full_test_extra;
 
 	setlocale(LC_ALL, "fr_FR.UTF-8");
+
 
 #ifdef SPECIFIERS
 	total_test += 14;
@@ -144,13 +149,13 @@ int main(void)
 	total_test += 3;
 #endif
 #ifdef FLAGS
-	total_test += 15;
+	total_test += 14;
 #endif
 #ifdef WIDTH
-	total_test += 3;
+	total_test += 4;
 #endif
 #ifdef PRECISION
-	total_test += 7;
+	total_test += 5;
 #endif
 #ifdef LENGTH
 	total_test += 11;
@@ -159,19 +164,19 @@ int main(void)
 	total_test += 7;
 #endif
 #ifdef HEX
-	total_test += 32;
+	total_test += (full_test_count + full_test_extra) * 8;
 #endif
 #ifdef OCT
-	total_test += 31;
+	total_test += (full_test_count + full_test_extra) * 8;
 #endif
 #ifdef UNSIGNED
-	total_test += 42;
+	total_test += (full_test_count + full_test_extra) * 8;
 #endif
 #ifdef DIGIT
-	total_test += 102;
+	total_test += full_test_count * 12;
 #endif
 #ifdef POINTERS
-	total_test += 12;
+	total_test += 11;
 #endif
 #ifdef CHAR
 	total_test += 34;
@@ -180,12 +185,12 @@ int main(void)
 	total_test += 12;
 #endif
 #ifdef WIDE_CHAR
-	total_test += 44;
+	total_test += 84;
 #endif
 #ifdef WIDE_STRINGS
-	total_test += 11;
+	total_test += 5;
 #endif
-#ifdef UNSPEC
+#ifdef UNDEFINED
 	total_test += 4;
 #endif
 #ifdef HARDCORE
@@ -364,7 +369,6 @@ int main(void)
 	test_i("%2.9p", 1234567);
 	test_i("% p", 42);
 	test_i("%+p", 42);
-	test_s("{%05p}", 0);
 	test_s("{%5p}", 0);
 # endif
 
@@ -428,6 +432,8 @@ int main(void)
 
 # ifdef WIDE_CHAR
 	printf("\n=== WIDE_CHAR ===\n");
+
+	printf("-- [0x00000000-0x0000007f] (1 byte) --\n");
 	test_i("%10C", 42);
 	test_i("%-10C", 42);
 	test_i("%#C", 42);
@@ -441,14 +447,35 @@ int main(void)
 	test_i("%# C", 42);
 	test_i("%# .3C", 42);
 
-	printf("-- 2 bytes long widechar --\n");
+	printf("-- [0x00000080-0x000007ff] (2 bytes) --\n");
 	test_i("%#13C", 129);
 	test_i("%9.6C", 4242);
 	test_i("% 10.5C", 4242);
 	test_i("%-9.6C", 4242);
 	test_i("%- 10.5C", 4242);
 
-	printf("-- 2~4 bytes long widechar --\n");
+	printf("-- [0x00000800-00000xffff] (3 bytes)--\n");
+	test_i("%5C", 0x0955);
+	test_i("%0+5C", 0x0955);
+	test_i("%05C", 0x0955);
+	test_i("%-05C", 0x0955);
+	test_i("%-5C", 0x0955);
+	test_i("%.6C", 0x0955);
+	test_i("%-07.3C", 0x0955);
+	test_i("%-7.4C", 0x0955);
+	test_i("%C",  0x0955);
+	test_i("% C",  0x0955);
+	printf("-- [0x00010000-0x001fffff] (4 bytes)--\n");
+	test_i("%5C", 0x10ffff);
+	test_i("%0+5C", 0x10ffff);
+	test_i("%05C", 0x10ffff);
+	test_i("%-05C", 0x10ffff);
+	test_i("%-5C", 0x10ffff);
+	test_i("%.6C", 0x10ffff);
+	test_i("%-07.3C", 0x10ffff);
+	test_i("%-7.4C", 0x10ffff);
+	test_i("%C",  0x10ffff);
+	test_i("% C",  0x10ffff);
 	test_i("%C", L'該');
 	test_i("%C", L'ব');
 	test_i("%C", L'ݗ');
@@ -459,17 +486,39 @@ int main(void)
 	test_i("%3C", L'ݜ');
 	test_i("%3C", L'श');
 
-	printf("-- 6 bytes long widechar --\n");
-	test_i("%5C", -42);
-	test_i("%0+5C", -42);
-	test_i("%05C", -42);
-	test_i("%-05C", -42);
-	test_i("%-5C", -42);
-	test_i("%.6C", -4242);
-	test_i("%-07.3C", -42);
-	test_i("%-7.4C", -42);
-	test_i("%C", -1);
-	test_i("% C", -1);
+	printf("-- [0x00200000-0x03ffffff] (5 bytes)--\n");
+	test_i("%5C", 0x00200045);
+	test_i("%0+5C", 0x00200045);
+	test_i("%05C", 0x00200045);
+	test_i("%-05C", 0x00200045);
+	test_i("%-5C", 0x00200045);
+	test_i("%.6C", 0x00200045);
+	test_i("%-07.3C", 0x00200045);
+	test_i("%-7.4C", 0x00200045);
+	test_i("%C",  0x00200045);
+	test_i("% C",  0x00200045);
+	printf("-- [0x04000000-0x7fffffff] (6 bytes)--\n");
+	test_i("%5C", 0x04000045);
+	test_i("%0+5C", 0x04000045);
+	test_i("%05C", 0x04000045);
+	test_i("%-05C", 0x04000045);
+	test_i("%-5C", 0x04000045);
+	test_i("%.6C", 0x04000045);
+	test_i("%-07.3C", 0x04000045);
+	test_i("%-7.4C", 0x04000045);
+	test_i("%C",  0x04000045);
+	test_i("% C",  0x04000045);
+	printf("-- [0x80000000-0xffffffff] (forbidden)--\n");
+	test_i("%5C", 0x80000000);
+	test_i("%0+5C", 0x80000000);
+	test_i("%05C", 0x80000000);
+	test_i("%-05C", 0x80000000);
+	test_i("%-5C", 0x80000000);
+	test_i("%.6C", 0x80000000);
+	test_i("%-07.3C", 0x80000000);
+	test_i("%-7.4C", 0x80000000);
+	test_i("%C",  0x80000000);
+	test_i("% C",  0x80000000);
 
 	printf("-- c = 0 -- (ok if it doesn't work since printf will print a '\\0' character)\n");
 	test_i("%#C", 0);
@@ -486,24 +535,9 @@ int main(void)
 	printf("\n=== WIDE STRINGS ===\n");
 	test_S("%S", L"a constant wide string");
 	test_S("%S", NULL);
-	test_S("{% S}", NULL);
 	test_S("{%30S}", L"我是一只猫。");
 	test_S("{%-30S}", L"我是一只猫。");
-	test_S("{%+05.S}", L"42 c est cool");
 	test_S("%-17S", L"বशݜݗ");
-	test_S("% 017.9S", L"ݗݜशব");
-	test_S("%4.2S", L"ݗݜशব");
-	test_S("%-17.11S", L"ݗݜशবݜ");
-	test_S("%97.35S", L"uèéeêëēėęOবशݜݗèéeêëēėęO");
-# endif
-
-# ifdef UNSPEC
-	printf("\n=== UNSPECIFIED BEHAVIOUR ===\n");
-	test("%");
-	test("%Z");
-	test("% hZ");
-	test_s("% Z%s", "test");
-	test_s_S_p_d_D_i_o_O_u_U_x_X_c("%s %S %p %d %D %i %o %O %u %U %x %X %c", "one", L"two", str, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42);
 # endif
 
 # ifdef HARDCORE
@@ -529,6 +563,22 @@ int main(void)
 	test_s("{%-15p}", 0);
 	test("{%10RN}");
 	test_s_d_p_S_D_i_o_O_u_U_x_X_c_C("%s%d%p%%%S%D%i%o%O%u%U%x%X%c%C", "bonjour", 42, &c, L"暖炉", LONG_MAX, 42, 42, 42, 100000, ULONG_MAX, 42, 42, 'c', L'플');
+# endif
+
+# ifdef UNDEFINED
+	printf("\n=== UNDEFINED BEHAVIOUR ===\n");
+	test_S("% 017.9S", L"ݗݜशব");
+	test_S("{% S}", NULL); // ' ' => UNDEFINED
+	test_S("{%+05.S}", L"42 c est cool"); // '+', '0' => UNDEFINED
+	test_S("%4.2S", L"ݗݜशব");
+	test_S("%-17.11S", L"ݗݜशবݜ");
+	test_S("%97.35S", L"uèéeêëēėęOবशݜݗèéeêëēėęO");
+	test_s("{%05p}", 0);
+	test("%");
+	test("%Z");
+	test("% hZ");
+	test_s("% Z%s", "test");
+	test_s_S_p_d_D_i_o_O_u_U_x_X_c("%s %S %p %d %D %i %o %O %u %U %x %X %c", "one", L"two", str, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42);
 # endif
 
 	printf("correct tests: %i/%i\n", correct_test, total_test);

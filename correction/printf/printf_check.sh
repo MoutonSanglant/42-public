@@ -48,7 +48,7 @@ DEFINE="-D ALL"
 
 echo ""
 echo "Select Unit Test"
-echo "[1] ALL"
+echo "[1] ALL (except undefined)"
 echo "[2] Specifiers"
 echo "[3] Basic tests"
 echo "[4] Multiple specifiers"
@@ -66,8 +66,9 @@ echo "[15] Char"
 echo "[16] Strings"
 echo "[17] Wide Char"
 echo "[18] Wide Strings"
-echo "[19] *Unspecified Behaviour"
-echo "[20] *HARDCORE"
+echo "[19] *HARDCORE"
+echo "--------------"
+echo "[20] *Unspecified Behaviour"
 echo "=============="
 echo "(?) tests with an * are optionnals"
 echo ""
@@ -130,10 +131,10 @@ then
 	DEFINE="-D WIDE_STRINGS"
 elif  [[ "$user_input" == "19" ]]
 then
-	DEFINE="-D UNSPEC"
+	DEFINE="-D HARDCORE"
 elif  [[ "$user_input" == "20" ]]
 then
-	DEFINE="-D HARDCORE"
+	DEFINE="-D UNSPEC"
 else
 	exit
 fi
