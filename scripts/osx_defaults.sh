@@ -12,10 +12,10 @@ defaults -currentHost write -g com.apple.swipescrolldirection -bool false
 defaults write -g InitialKeyRepeat -int 10
 
 # Set key repeat to very fast -- settings minimum is 2 (30ms)
-defaults write -g KeyRepeat -int 2
+defaults write -g KeyRepeat -int 4
 
 # Set mouse speed to very fast (min: 1.0, max: 5.0)
-defaults -currentHost write -g com.apple.mouse.scaling 5.0
+defaults -currentHost write -g com.apple.mouse.scaling 1.0
 
 # Require password immediatly after sleep or screen saver
 defaults write com.apple.screensaver askForPassword -int 1

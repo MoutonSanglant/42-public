@@ -1,0 +1,12 @@
+list process:
+ps -aux
+
+convert to xml:
+plutil -convert xml1 ~/Library/Preferences/*.plist
+
+convert to binary:
+plutil -convert binary1 ~/Library/Preferences/*.plist
+
+
+Mouse buttons:
+com.apple.driver.AppleHIDMouse.plist
