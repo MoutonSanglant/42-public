@@ -5,22 +5,37 @@
 
 # `-g` and `NSGlobalDomain` are equivalent
 
+#osascript -e "tell application \"System Preferences\" to quit"
+
 # Disable "natural" scrolling
+defaults write -g com.apple.swipescrolldirection -bool false
 defaults -currentHost write -g com.apple.swipescrolldirection -bool false
 
 # Set Initial key repeat to very fast -- settings minimum is 15 (225ms)
-defaults write -g InitialKeyRepeat -int 10
+defaults write -g InitialKeyRepeat -int 95
+defaults -currentHost write -g InitialKeyRepeat -int 95
 
 # Set key repeat to very fast -- settings minimum is 2 (30ms)
-defaults write -g KeyRepeat -int 4
+defaults write -g KeyRepeat -int 5
+defaults -currentHost write -g KeyRepeat -int 5
 
 # Set mouse speed to very fast (min: 1.0, max: 5.0)
+defaults write -g com.apple.mouse.scaling 1.0
 defaults -currentHost write -g com.apple.mouse.scaling 1.0
 
 # Require password immediatly after sleep or screen saver
 defaults write com.apple.screensaver askForPassword -int 1
 defaults write com.apple.screensaver askForPasswordDelay -int 0
 
+#launchctl stop com.apple.syncdefaultsd && launchctl start com.apple.syncdefaultsd
+
+#find ~/Library/Application\ Support/Dock -name "*.db" -maxdepth 1 -delete
+
+#for app in "Activity Monitor" "Address Book" "Calendar" "Contacts" "cfprefsd" \
+#  "Dock" "Finder" "Mail" "Messages" "Safari" "SystemUIServer" \
+#  "Terminal" "Transmission"; do
+#  killall "${app}" > /dev/null 2>&1
+#done
 
 ###############################################################################
 # Terminal                                                                    #

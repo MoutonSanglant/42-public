@@ -34,7 +34,7 @@ INCLUDES_FOLDERS="-I ${LIBFT_PATH}src -I ${PROGRAM_PATH}"
 #FLAGS="-g -o0 -Wall -Wextra -Werror"
 #INCLUDES_FOLDERS="-I libft/includes -I"
 
-make -C ${LIBFT_PATH} fclean && make -C ${LIBFT_PATH}
+#make -C ${LIBFT_PATH} fclean && make -C ${LIBFT_PATH}
 
 clang $FLAGS $INCLUDES_FOLDERS -o ${BASE_DIR}get_next_line.o -c ${PROGRAM_PATH}get_next_line.c
 clang $FLAGS $INCLUDES_FOLDERS -o ${BASE_DIR}main.o -c ${BASE_DIR}main.c

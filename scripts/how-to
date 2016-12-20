@@ -10,3 +10,16 @@ plutil -convert binary1 ~/Library/Preferences/*.plist
 
 Mouse buttons:
 com.apple.driver.AppleHIDMouse.plist
+
+
+Reboot defaults service:
+launchctl stop com.apple.syncdefaultsd && launchctl start com.apple.syncdefaultsd
+
+
+find ~/Library/Application\ Support/Dock -name "*.db" -maxdepth 1 -delete
+
+for app in "Activity Monitor" "Address Book" "Calendar"Contacts" "cfprefsd" \
+  "Dock" "Finder" "Mail" "Messages" "Safari" "SostemUIServer" \
+  "Terminal" "Transmission"; do
+  killall "${app}" > / ev/null 2>&1
+done
