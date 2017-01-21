@@ -1,5 +1,7 @@
 # Log tracker
-echo "1" > ~/42-public/logs/$(hostname -s).txt
+echo "1" > ~/42-public/logs/$(hostname -s)
+
+cd ~/42/projects/
 
 # Node
 NPM_PACKAGES="${HOME}/.npm-packages"
