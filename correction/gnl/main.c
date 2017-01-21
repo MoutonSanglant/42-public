@@ -30,6 +30,7 @@ int		main(int argc, char **argv)
 		printf("\x1B[33mTest on stdin\x1B[0m\n(press CTRL+D to stop the test)\n");
 		while ((r = get_next_line(fileno(stdin), &line)))
 		{
+			printf("[r = %i, line = %s]\n", r, line);
 			if (r > 0)
 			{
 				ft_putnbr(r);
@@ -37,18 +38,16 @@ int		main(int argc, char **argv)
 				ft_putendl(line);
 				ft_memdel((void **)&line);
 			}
-			else if (r == 0)
-			{
-				ft_putendl("EOF");
-				ft_memdel((void **)&line);
-				break;
-			}
 			else
 			{
-				ft_putendl("Memory error");
-				return (1);
+				ft_putstr("\033[31mERROR: get_next_line sent error ");
+				ft_putnbr(r);
+				ft_putendl("\033[0m");
+				break ;
 			}
 		}
+		if (r == 0)
+			ft_putendl("EOF");
 		if (line)
 			ft_memdel((void **)&line);
 		ft_putendl("======================\n");
@@ -117,7 +116,9 @@ int		main(int argc, char **argv)
 				}
 				else
 				{
-					ft_putendl("Memory error");
+					ft_putstr("\033[31mERROR: get_next_line sent error ");
+					ft_putnbr(r);
+					ft_putendl("\033[0m");
 					return (1);
 				}
 				i++;
@@ -169,15 +170,18 @@ int		main(int argc, char **argv)
 	write(1, str, strlen(str));
 	close(p[1]);
 	dup2(out, 1);
+	ft_putendl_fd("\033[37m-------------------------", 2);
 	gnl_ret = get_next_line(p[0], &line);
+	//if (gnl_ret == 0 || gnl_ret == 1)
+	if (gnl_ret > 0)
+		ft_putendl("gnl return: \x1B[32mok\x1B[0m !");
+	else
+		printf("gnl return: \x1B[31mnot ok\x1B[0m !\n-> expected: > 0\n-> yours: %i\n", gnl_ret);
 	if (strcmp(line, str) == 0)
 		ft_putendl("line match: \x1B[32mok\x1B[0m !");
 	else
 		printf("line match: \x1B[31mnot ok\x1B[0m !\n-> expected: %s\n yours: %s\n", str, line);
-	if (gnl_ret == 0 || gnl_ret == 1)
-		ft_putendl("gnl return: \x1B[32mok\x1B[0m !");
-	else
-		printf("gnl return: \x1B[31mnot ok\x1B[0m !\n-> expected: 0 || 1\n-> yours: %i\n", gnl_ret);
+	ft_putendl("============");
 	ft_memdel((void **)&line);
 	ft_memdel((void **)&str);
 
@@ -203,7 +207,8 @@ int		main(int argc, char **argv)
 	dup2(out, ffd);
 
 	gnl_ret = get_next_line(p[0], &line);
-	if (gnl_ret == 1)
+	//if (gnl_ret == 1)
+	if (gnl_ret > 0)
 		ft_putendl("gnl return: \x1B[32mok\x1B[0m !");
 	else
 		printf("gnl return: \x1B[31mnot ok\x1B[0m !\n-> expected: 1\n-> yours: %i\n", gnl_ret);
@@ -212,6 +217,8 @@ int		main(int argc, char **argv)
 	else
 		printf("line match: \x1B[31mnot ok\x1B[0m !\n-> expected: abc\n yours: %s\n", line);
 	ft_memdel((void **)&line);
+
+
 	gnl_ret = get_next_line(p[0], &line);
 	if (gnl_ret == 1)
 		ft_putendl("gnl return: \x1B[32mok\x1B[0m !");
@@ -222,6 +229,8 @@ int		main(int argc, char **argv)
 	else
 		printf("line match: \x1B[31mnot ok\x1B[0m !\n-> expected: NULL\n yours: %s\n", line);
 	ft_memdel((void **)&line);
+
+
 	gnl_ret = get_next_line(p[0], &line);
 	if (gnl_ret == 0)
 		ft_putendl("gnl return: \x1B[32mok\x1B[0m !");
@@ -232,6 +241,8 @@ int		main(int argc, char **argv)
 	else
 		printf("line match: \x1B[31mnot ok\x1B[0m !\n-> expected: NULL\n yours: %s\n", line);
 	ft_memdel((void **)&line);
+
+
 	gnl_ret = get_next_line(p[0], &line);
 	if (gnl_ret == 0)
 		ft_putendl("gnl return: \x1B[32mok\x1B[0m !");
