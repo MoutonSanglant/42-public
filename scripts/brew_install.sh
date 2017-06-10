@@ -6,6 +6,7 @@ source ~/.zshrc
 
 brew update
 brew install valgrind
+brew install nasm
 #brew install node
 
 alias valgrind="~/.brew/bin/valgrind"
